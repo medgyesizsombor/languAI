@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguAI.Backend", "LanguAI.Services\LanguAI.Backend.csproj", "{73C0155A-5220-4888-AE72-ED85A697CBF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguAI.Backend", "LanguAI.Backend\LanguAI.Backend.csproj", "{EC6E1831-6116-418A-8675-9441E1A162D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{73C0155A-5220-4888-AE72-ED85A697CBF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73C0155A-5220-4888-AE72-ED85A697CBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73C0155A-5220-4888-AE72-ED85A697CBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73C0155A-5220-4888-AE72-ED85A697CBF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC6E1831-6116-418A-8675-9441E1A162D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC6E1831-6116-418A-8675-9441E1A162D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC6E1831-6116-418A-8675-9441E1A162D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC6E1831-6116-418A-8675-9441E1A162D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {967A0FAD-46BA-44F6-B8DD-9FD840612E54}
+		SolutionGuid = {7AD83C65-A958-4175-9F4C-F3F7CF17C277}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,4 @@
-namespace LanguAI.Services
+namespace LanguAI.Backend
 {
     public class WeatherForecast
     {

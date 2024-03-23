@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace LanguAI.Services.Controllers
+namespace LanguAI.Backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
