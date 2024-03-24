@@ -1,0 +1,5 @@
+{
+    "$schema": "./node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
+    "input": "https://trivium-service.azurewebsites.net/swagger/v1/swagger.json",
+    "output": "src/api"
+  }

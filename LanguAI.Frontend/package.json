@@ -9,7 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "gen-openapi": "ng-openapi-gen -i http://localhost:49655/swagger/v1/swagger.json -o src/api"
   },
   "private": true,
   "dependencies": {
@@ -26,8 +27,9 @@
     "@capacitor/haptics": "5.0.7",
     "@capacitor/keyboard": "5.0.8",
     "@capacitor/status-bar": "5.0.7",
-    "@ionic/angular": "^7.5.0",
-    "ionicons": "^7.2.1",
+    "@ionic/angular": "^7.0.0",
+    "ionicons": "^7.0.0",
+    "ng-openapi-gen": "^0.51.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

@@ -1,6 +1,0 @@
-@LanguAI.Backend_HostAddress = http://localhost:5287
-
-GET {{LanguAI.Backend_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
