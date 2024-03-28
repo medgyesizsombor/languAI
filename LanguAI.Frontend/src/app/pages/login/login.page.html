@@ -1,0 +1,46 @@
+<ion-content class="ion-padding" [fullscreen]="true">
+  <h1 class="ion-text-center">LanguAI</h1>
+  <form *ngIf="loginForm" [formGroup]="loginForm">
+    <ion-row>
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          formControlName="username"
+          placeholder="{{ 'USERNAME' | translate}}"
+        >
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding-bottom">
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          class="custom"
+          formControlName="password"
+          placeholder="{{ 'PASSWORD' | translate}}"
+        >
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          class="ion-padding-horizontal primary-button"
+          (click)="login()"
+        >
+          {{'SIGN_IN' | translate}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button class="ion-padding-horizontal secondary-button w-100" [routerLink]="['/register']">
+          {{'SIGN_UP' | translate }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-label>{{'CONTINUE_WITHOUT_SIGN_IN' | translate}}</ion-label>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
