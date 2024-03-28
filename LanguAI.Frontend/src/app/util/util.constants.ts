@@ -1,0 +1,5 @@
+export const PROFILE_TITLE = "PROFILE_TITLE";
+export const MESSAGES_TITLE = "MESSAGES_TITLE";
+export const FORUM_TITLE = "FORUM_TITLE";
+export const CARDS_TITLE = "CARDS_TITLE";
+export const LESSONS_TITLE = "LESSONS_TITLE";

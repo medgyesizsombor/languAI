@@ -1,0 +1,72 @@
+<ion-content class="ion-padding" [fullscreen]="true">
+  <h1 class="ion-text-center">LanguAI</h1>
+  <form *ngIf="registerForm" [formGroup]="registerForm">
+    <ion-row>
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          type="text"
+          formControlName="username"
+          placeholder="{{ 'USERNAME' | translate}}"
+        >
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          type="email"
+          formControlName="email"
+          placeholder="{{ 'EMAIL' | translate}}"
+        >
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          type="password"
+          class="custom"
+          formControlName="password"
+          placeholder="{{ 'PASSWORD' | translate}}"
+        >
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding-bottom">
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          type="password"
+          class="custom"
+          formControlName="confirmPassword"
+          placeholder="{{ 'CONFIRM_PASSWORD' | translate}}"
+        >
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          class="ion-padding-horizontal primary-button"
+          (click)="register()"
+        >
+          {{'REGISTER' | translate}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          class="ion-padding-horizontal secondary-button w-100"
+          [routerLink]="['/login']"
+        >
+          {{'SIGN_IN' | translate }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-label>{{'CONTINUE_WITHOUT_SIGN_IN' | translate}}</ion-label>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
