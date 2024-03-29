@@ -6,13 +6,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../components/header/header.component';
 import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 @NgModule({
   declarations: [HeaderComponent],
-  imports: [IonicModule.forRoot(), TranslateModule, FontAwesomeModule, ReactiveFormsModule],
+  imports: [CommonModule, IonicModule.forRoot(), TranslateModule, FontAwesomeModule, ReactiveFormsModule],
   exports: [TranslateModule, FontAwesomeModule, ReactiveFormsModule, HeaderComponent],
 })
 export class UtilModule {}

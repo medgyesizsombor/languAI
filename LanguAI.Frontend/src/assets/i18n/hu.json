@@ -1,3 +1,17 @@
 {
-    "LESSONS": "Leckék"
+    "LESSONS": "Leckék",
+    "CARDS": "Kártyák",
+    "FORUM": "Fórum",
+    "MESSAGES": "Üzenetek",
+    "PROFILE": "Profil",
+    "MY_PROFILE": "Saját profil",
+    "SETTINGS": "Beállítások",
+    "NOTIFICATION": "Értesítések",
+    "DARK_MODE": "Sötét mód",
+    "PROFILE_TITLE": "Saját Profil",
+    "SETTINGS_TITLE": "Beállítások",
+    "MESSAGES_TITLE": "Üzenetek",
+    "FORUM_TITLE": "Fórum",
+    "CARDS_TITLE": "Szókártyák",
+    "LESSONS_TITLE": "Leckék"
 }

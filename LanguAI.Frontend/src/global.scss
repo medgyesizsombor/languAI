@@ -64,3 +64,18 @@ ion-input {
 .line-color {
   --border-color: #a6b1e1;
 }
+
+.align-item-center {
+  display: flex;
+  align-items: center;
+}
+
+.d-grid {
+  display: grid;
+}
+
+.fs {
+  &-24 {
+    font-size: 24px;
+  }
+}

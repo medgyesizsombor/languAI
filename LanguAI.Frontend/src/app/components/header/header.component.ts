@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -7,13 +8,18 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent  implements OnInit {
-  @Input() title: string = ''; 
+  @Input() title: string = '';
+  @Input() navigationLink: string = '';
 
-  constructor(private translateService: TranslateService) {  
+  constructor(private translateService: TranslateService, private router: Router) {  
   }
 
   ngOnInit() {
     this.title = this.translateService.instant(this.title);
+  }
+
+  navigateBack() {
+    this.router.navigate(['/', this.navigationLink])
   }
 
 }

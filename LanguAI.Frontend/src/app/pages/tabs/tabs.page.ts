@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
-import { faArrowLeft, faCheckSquare, faSquare } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheckSquare, faSquare, faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-tabs',
@@ -18,7 +18,8 @@ export class TabsPage {
       faMedium,
       faStackOverflow,
       faGithub,
-      faArrowLeft
+      faArrowLeft,
+      faUser
     );
   }
 }
