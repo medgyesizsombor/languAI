@@ -1,0 +1,38 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <app-header [title]="title"></app-header>
+
+  <ion-row>
+    <ion-col size="3">
+      <ion-avatar>
+        <ion-img
+          src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
+          alt="The Wisconsin State Capitol building in Madison, WI at night"
+        >
+        </ion-img>
+      </ion-avatar>
+    </ion-col>
+    <ion-col class="ion-justify-content-between ion-align-items-center d-grid">
+      <ion-row> {{profile.username}} </ion-row>
+      <ion-row> {{ profile.email}} </ion-row>
+    </ion-col>
+  </ion-row>
+
+  <ion-row [routerLink]="['/', 'profile']">
+    <ion-col size="1.5" class="align-item-center fs-24">
+      <ion-icon name="person-outline"></ion-icon>
+    </ion-col>
+    <ion-col> {{ 'MY_PROFILE' | translate }} </ion-col>
+  </ion-row>
+  <ion-row (click)="openNotificationModal()">
+    <ion-col size="1.5" class="align-item-center fs-24">
+      <ion-icon name="settings-outline"></ion-icon>
+    </ion-col>
+    <ion-col> {{ 'NOTIFICATION' | translate }} </ion-col>
+  </ion-row>
+  <ion-row (click)="openDarkModeModal()">
+    <ion-col size="1.5" class="align-item-center fs-24">
+      <ion-icon name="contrast-outline"></ion-icon>
+    </ion-col>
+    <ion-col> {{ 'DARK_MODE' | translate }} </ion-col>
+  </ion-row>
+</ion-content>
