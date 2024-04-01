@@ -1,5 +1,5 @@
 using LanguAI.Backend.Services;
-using LanguAI.Backend.ViewModels;
+using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers
@@ -19,9 +19,25 @@ namespace LanguAI.Backend.Controllers
         }
 
         [HttpGet(Name = "GetAllUsers")]
-        public ActionResult<List<User>> GetAllUsers()
+        public ActionResult<List<UserViewModel>> GetAllUsers()
         {
             return _userServices.GetAllUsers();
+        }
+
+        [HttpGet(Name = "GetUserById")]
+        public ActionResult<UserViewModel> GetUserById(int userId)
+        {
+            return _userServices.GetUserById(userId);
+        }
+
+        [HttpPost(Name = "SaveUser")]
+        public ActionResult<bool> SaveUser(UserViewModel request)
+        {
+            bool success = false;
+
+            success = _userServices.SaveUser(request);
+
+            return success;
         }
     }
 }
