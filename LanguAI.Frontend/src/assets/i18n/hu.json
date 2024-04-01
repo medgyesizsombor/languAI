@@ -13,5 +13,7 @@
     "MESSAGES_TITLE": "Üzenetek",
     "FORUM_TITLE": "Fórum",
     "CARDS_TITLE": "Szókártyák",
-    "LESSONS_TITLE": "Leckék"
+    "LESSONS_TITLE": "Leckék",
+    "SIGN_OUT": "Kijelentkezés",
+    "DELETE_PROFILE": "Profil törlése"
 }

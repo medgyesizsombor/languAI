@@ -1,0 +1,36 @@
+ion-avatar {
+    min-width: 125px;
+    min-height: 125px;
+    max-width: 125px;
+    max-height: 125px;
+}
+
+ion-img {
+    height: 100%;
+    width: 100%;
+}
+
+.avatar-container {
+    height: 125px;
+}
+
+.line {
+    border-bottom: 2px solid #a6b1e1;
+}
+
+.date-active {
+    background: none;
+    --color: none !important;
+}
+
+ion-datetime-button {
+    --ripple-color: transparent;
+}
+
+ion-datetime-button::part(native) {
+    background: none;
+    padding-left: 0;
+    margin-left: 0;
+    padding-bottom: 5px;
+    color: black;
+}

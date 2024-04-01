@@ -43,8 +43,6 @@ ion-input {
   --highlight-color-invalid: none !important;
   --highlight-color-valid: none !important;
   --highlight-color: none !important;
-
-  border-bottom: 2px solid #a6b1e1;
 }
 
 .header-icon {
@@ -74,8 +72,31 @@ ion-input {
   display: grid;
 }
 
+.d-flex {
+  display: flex;
+}
+
 .fs {
   &-24 {
     font-size: 24px;
   }
+}
+
+.p {
+  &b-0 {
+    padding-bottom: 0;
+  }
+
+  &t-0 {
+    padding-top: 0;
+  }
+
+  &v-0 {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+}
+
+.icon-col {
+  padding-left: 0;
 }

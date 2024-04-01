@@ -1,4 +1,4 @@
-﻿using LanguAI.Backend.ViewModels;
+﻿using LanguAI.Backend.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Core
