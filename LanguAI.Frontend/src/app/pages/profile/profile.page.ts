@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PROFILE_TITLE, SETTINGS_NAVIGATION } from '../../util/util.constants';
+import { PROFILE_TITLE, SETTINGS_NAVIGATION, SIGN_UP_NAVIGATION } from '../../util/util.constants';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { LocalStorageService } from 'src/app/util/services/localstorage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +20,7 @@ export class ProfilePage implements OnInit {
   };
   isEdit = false;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private localStorageService: LocalStorageService, private router: Router) { }
 
   ngOnInit() {
     this.loadData();
@@ -28,6 +30,11 @@ export class ProfilePage implements OnInit {
 
   changeEditMode() {
     this.isEdit != this.isEdit;
+  }
+
+  logout() {
+    this.localStorageService.removeJwtToken();
+    this.router.navigate(['/' + SIGN_UP_NAVIGATION]);
   }
 
   private loadData() {

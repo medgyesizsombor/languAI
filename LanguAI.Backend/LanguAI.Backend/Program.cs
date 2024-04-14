@@ -1,6 +1,5 @@
 using LanguAI.Backend.Core;
 using LanguAI.Backend.Services;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddDbContext<LanguAIDataContext>(options => options.UseSqlServer(EnvironmentSettings.ConnectionString));
 
@@ -27,6 +25,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 
 var app = builder.Build();
 
@@ -36,6 +36,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+var appSettings = app.Configuration;
+var settings = appSettings.Get<AppSettings>();
+
+EnvironmentSettings.RootUrl = settings.RootUrl;
+EnvironmentSettings.SecretKey = "IPQVrG6k29ISDb3Q5EXcIUq99b0oEtZs8VwkMgCMrdPNGT4eOMom9X6yghqlYzxy";
 
 app.UseHttpsRedirection();
 

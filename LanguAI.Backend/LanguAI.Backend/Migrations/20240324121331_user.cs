@@ -15,10 +15,11 @@ namespace LanguAI.Backend.Migrations
             columns: table => new
             {
                 Id = table.Column<int>(nullable: false).Annotation("SqlServer:Identity", "1, 1"),
-                Name = table.Column<string>(nullable: false),
+                Username = table.Column<string>(nullable: false),
+                Email = table.Column<string>(nullable: false),
                 DateOfBirth = table.Column<DateTime>(nullable: false),
-                Password = table.Column<string>(nullable: false),
-                Country = table.Column<int>(nullable: false)
+                PasswordHash = table.Column<string>(nullable: false),
+                Country = table.Column<int>(nullable: false),
             },
             constraints: table =>
             {
@@ -27,12 +28,12 @@ namespace LanguAI.Backend.Migrations
 
             migrationBuilder.InsertData(
             table: "User",
-            columnTypes: new [] { "string", "DateTime", "string", "int" },
-            columns: new[] { "Name", "DateOfBirth", "Password", "Country" },
+            columnTypes: new [] { "string", "DateTime", "string", "string", "int" },
+            columns: new[] { "Username", "DateOfBirth", "Email", "PasswordHash", "Country" },
             values: new object[,]
             {
-                { "Chuck Norris", new DateTime(1998, 04, 20), "asdasd", 1 },
-                { "Harry Potter", new DateTime(1997, 07, 11), "asdasd", 2 }
+                { "Chuck Norris", new DateTime(1998, 04, 20), "asd@asd.com", "asdasd", 1 },
+                { "Harry Potter", new DateTime(1997, 07, 11), "asd@asd.com", "asdasd", 2 }
             });
         }
 

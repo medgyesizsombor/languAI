@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://languai.azurewebsites.net"
+  apiUrl: "http://localhost:49655"
 };
 
 /*

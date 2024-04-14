@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LanguAI.Backend.Migrations
 {
     [DbContext(typeof(LanguAIDataContext))]
-    [Migration("20240324121331_aSD")]
+    [Migration("20240324121331_user")]
     partial class user
     {
         /// <inheritdoc />

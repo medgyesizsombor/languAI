@@ -8,7 +8,7 @@ public interface IUserServices
 {
     List<UserViewModel> GetAllUsers();
     UserViewModel GetUserById(int userId);
-    bool SaveUser(UserViewModel request);
+    bool EditUser(UserViewModel request);
 }
 
 public class UserServices : BaseService, IUserServices
@@ -23,7 +23,7 @@ public class UserServices : BaseService, IUserServices
         var asd = _context.User.Select(u => new UserViewModel()
         {
             Id = u.Id,
-            Name = u.Name,
+            Username = u.Username,
             DateOfBirth = u.DateOfBirth,
             Country = u.Country,
         }).ToList();
@@ -42,7 +42,7 @@ public class UserServices : BaseService, IUserServices
         return new UserViewModel
         {
             Id = user.Id,
-            Name = user.Name,
+            Username = user.Username,
             Country = user.Country,
             DateOfBirth = user.DateOfBirth
         };
@@ -52,8 +52,7 @@ public class UserServices : BaseService, IUserServices
     {
         try
         {
-            bool success = false;
-            User user = _context.User.FirstOrDefault(u => u.Id == request.Id);
+            User user = _context.User.Where(u => u.Id == request.Id).FirstOrDefault();
 
             if (user != null)
             {
@@ -61,7 +60,7 @@ public class UserServices : BaseService, IUserServices
             }
 
             user.DateOfBirth = request.DateOfBirth;
-            user.Name = request.Name;
+            user.Username = request.Username;
             user.Country = request.Country;
 
             _context.SaveChanges();

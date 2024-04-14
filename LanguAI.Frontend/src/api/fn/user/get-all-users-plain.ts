@@ -6,12 +6,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { User } from '../../models/user';
+import { UserViewModel } from '../../models/user-view-model';
 
 export interface GetAllUsers$Plain$Params {
 }
 
-export function getAllUsers$Plain(http: HttpClient, rootUrl: string, params?: GetAllUsers$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<User>>> {
+export function getAllUsers$Plain(http: HttpClient, rootUrl: string, params?: GetAllUsers$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserViewModel>>> {
   const rb = new RequestBuilder(rootUrl, getAllUsers$Plain.PATH, 'get');
   if (params) {
   }
@@ -21,7 +21,7 @@ export function getAllUsers$Plain(http: HttpClient, rootUrl: string, params?: Ge
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<User>>;
+      return r as StrictHttpResponse<Array<UserViewModel>>;
     })
   );
 }

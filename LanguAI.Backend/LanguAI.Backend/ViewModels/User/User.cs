@@ -1,11 +1,24 @@
-﻿namespace LanguAI.Backend.ViewModels.User
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LanguAI.Backend.ViewModels.User;
+
+public class User
 {
-    public class User
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string Password { get; set; }
-        public int Country { get; set; }
-    }
+    [Required]
+    public int Id { get; set; }
+
+    [Required]
+    public string Username { get; set; }
+
+    [Required]
+    public string Email { get; set; }
+
+    [Required]
+    public DateTime DateOfBirth { get; set; }
+
+    [Required]
+    public string PasswordHash { get; set; }
+
+    [Required]
+    public int Country { get; set; }
 }

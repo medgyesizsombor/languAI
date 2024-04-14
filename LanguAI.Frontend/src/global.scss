@@ -100,3 +100,19 @@ ion-input {
 .icon-col {
   padding-left: 0;
 }
+
+.error-text {
+  font-size: 10px;
+}
+
+.error-toastr {
+  --background: #D20062;
+  color: #000;
+}
+
+.success-toastr {
+  --background: #83C0C1;
+  --color: #4b4a50;
+  text-align: center;
+
+}
