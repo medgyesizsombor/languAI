@@ -1,8 +1,8 @@
 ﻿using LanguAI.Backend.Core;
+using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.Utils;
 using LanguAI.Backend.ViewModels.Registration;
-using LanguAI.Backend.ViewModels.User;
 
 namespace LanguAI.Backend.Services;
 

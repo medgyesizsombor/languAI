@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LanguAI.Backend.ViewModels.User;
+namespace LanguAI.Backend.Core.Models;
 
 public class User
 {

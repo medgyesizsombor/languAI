@@ -1,12 +1,11 @@
 ﻿using LanguAI.Backend.Core;
+using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.Utils;
 using LanguAI.Backend.ViewModels.Authentication;
-using LanguAI.Backend.ViewModels.User;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace LanguAI.Backend.Services;
