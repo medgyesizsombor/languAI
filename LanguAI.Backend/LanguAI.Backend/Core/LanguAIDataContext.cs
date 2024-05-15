@@ -1,4 +1,4 @@
-﻿using LanguAI.Backend.ViewModels.User;
+﻿using LanguAI.Backend.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Core
@@ -13,6 +13,7 @@ namespace LanguAI.Backend.Core
         }
 
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Post> Post { get; set; }
     }
 
 }

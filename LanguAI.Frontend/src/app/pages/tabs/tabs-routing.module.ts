@@ -32,6 +32,10 @@ const routes: Routes = [
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
+        path: 'post',
+        loadChildren: () => import('../post/post.module').then(m => m.PostPageModule)
+      },
+      {
         path: '',
         redirectTo: '/lessons',
         pathMatch: 'full'

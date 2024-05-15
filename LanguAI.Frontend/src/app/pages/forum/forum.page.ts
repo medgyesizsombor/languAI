@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PostViewModel } from 'src/api/models';
 import { FORUM_TITLE } from 'src/app/util/util.constants';
 
 @Component({
@@ -9,9 +10,22 @@ import { FORUM_TITLE } from 'src/app/util/util.constants';
 export class ForumPage implements OnInit {
   title = FORUM_TITLE;
 
-  constructor() { }
+  models: PostViewModel[] = [
+    {
+      content: 'assdasdasd',
+      id: 1,
+      username: 'zsombi',
+      created: '2024.05.15 19:37',
+    },
+    {
+      content: 'assdasdasd',
+      id: 1,
+      username: 'zsombi',
+      created: '2024.05.15 19:37',
+    },
+  ];
 
-  ngOnInit() {
-  }
+  constructor() {}
 
+  ngOnInit() {}
 }

@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { AuthenticationService } from './services/authentication.service';
+import { PostService } from './services/post.service';
 import { RegistrationService } from './services/registration.service';
 import { UserService } from './services/user.service';
 
@@ -17,6 +18,7 @@ import { UserService } from './services/user.service';
   declarations: [],
   providers: [
     AuthenticationService,
+    PostService,
     RegistrationService,
     UserService,
     ApiConfiguration
