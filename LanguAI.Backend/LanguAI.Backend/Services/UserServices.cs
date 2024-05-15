@@ -44,7 +44,8 @@ public class UserServices : BaseService, IUserServices
             Id = user.Id,
             Username = user.Username,
             Country = user.Country,
-            DateOfBirth = user.DateOfBirth
+            DateOfBirth = user.DateOfBirth,
+            Email = user.Email,
         };
     }
 

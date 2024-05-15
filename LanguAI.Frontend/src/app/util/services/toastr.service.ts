@@ -13,7 +13,7 @@ export class ToastrService {
   async presentSuccessToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 1000,
+      duration: 2000,
       position: 'bottom',
       cssClass: 'success-toastr',
     });
@@ -27,7 +27,7 @@ export class ToastrService {
   async presentErrorToast(message: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 10000,
+      duration: 2000,
       position: 'bottom',
       cssClass: 'error-toastr',
     });

@@ -47,7 +47,7 @@ export class LoginPage implements OnInit {
   login() {
     if (this.isValid()) {
       this.loadingService
-        .showLoading(this.translateService.instant('LOGIN'))
+        .showLoading(this.translateService.instant('LOGGING_IN'))
         .then(() => {
           this.authenticationService
             .authenticationAuthenticatePost$Plain({

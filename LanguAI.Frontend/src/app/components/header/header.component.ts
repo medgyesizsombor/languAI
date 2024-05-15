@@ -7,19 +7,24 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent  implements OnInit {
+export class HeaderComponent implements OnInit {
   @Input() title: string = '';
   @Input() navigationLink: string = '';
+  @Input() useNavController = false;
+  @Input() showBackArrow = false;
 
-  constructor(private translateService: TranslateService, private router: Router) {  
-  }
+  constructor(
+    private translateService: TranslateService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.title = this.translateService.instant(this.title);
   }
 
   navigateBack() {
-    this.router.navigate(['/', this.navigationLink])
+    if (this.navigationLink.length) {
+      this.router.navigate(['/', this.navigationLink]);
+    }
   }
-
 }

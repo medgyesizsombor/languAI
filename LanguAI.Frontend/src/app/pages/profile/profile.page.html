@@ -1,5 +1,10 @@
 <ion-content [fullscreen]="true" class="ion-padding">
-  <app-header [navigationLink]="navigationLink" [title]="title"></app-header>
+  <app-header
+    [useNavController]="true"
+    [showBackArrow]="true"
+    (click)="navigateBack()"
+    [title]="title"
+  ></app-header>
 
   <ion-row class="avatar-container ion-justify-content-center">
     <ion-avatar>
@@ -19,7 +24,8 @@
           </ion-col>
           <ion-col>
             <ion-input
-              [disabled]="!isEdit"
+              [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
+              [readonly]="!isEdit"
               type="text"
               formControlName="username"
               placeholder="{{ 'USERNAME' | translate}}"
@@ -31,13 +37,14 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-margin-horizontal">
-        <ion-row class="line d-flex">
+        <ion-row class="line">
           <ion-col size="1.5" class="align-item-center fs-24 icon-col">
             <ion-icon name="mail-outline"></ion-icon>
           </ion-col>
           <ion-col>
             <ion-input
-              [disabled]="!isEdit"
+              [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
+              [readonly]="!isEdit"
               type="email"
               formControlName="email"
               placeholder="{{ 'EMAIL' | translate}}"
@@ -55,7 +62,12 @@
           </ion-col>
           <ion-col class="ion-align-content-start">
             <div class="d-flex">
-              <ion-datetime-button [disabled]="!isEdit" datetime="datetime"></ion-datetime-button>
+              <ion-datetime-button
+                [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
+                [disabled]="!isEdit"
+                datetime="datetime"
+              >
+              </ion-datetime-button>
 
               <ion-modal [keepContentsMounted]="true">
                 <ng-template>
@@ -70,29 +82,40 @@
         </ion-row>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col>
+    <ng-container *ngIf="!isEdit; else edit">
+      <ion-row>
         <ion-button
           (click)="changeEditMode()"
           class="ion-padding-horizontal primary-button"
         >
           {{'EDIT_PROFILE' | translate}}
         </ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-button (click)="logout()">{{'SIGN_OUT' | translate}}</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-button>{{'DELETE_PROFILE' | translate}}</ion-button>
-      </ion-col>
-    </ion-row>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-button (click)="logout()">{{'SIGN_OUT' | translate}}</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-button>{{'DELETE_PROFILE' | translate}}</ion-button>
+        </ion-col>
+      </ion-row>
+    </ng-container>
   </form>
   <ion-row> </ion-row>
   <ion-row> </ion-row>
   <ion-row> </ion-row>
   <ion-row> </ion-row>
 </ion-content>
+
+<ng-template #edit>
+  <ion-row>
+    <ion-button (click)="save()" class="ion-padding-horizontal primary-button">
+      {{'EDIT_PROFILE' | translate}}
+    </ion-button>
+  </ion-row>
+  <ion-row>
+    <ion-button (click)="changeEditMode()">{{'CANCEL' | translate}}</ion-button>
+  </ion-row>
+</ng-template>
