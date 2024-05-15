@@ -37,12 +37,21 @@ ion-tab-bar {
   border-radius: 24px;
 }
 
+ion-button {
+  margin: 0;
+}
+
 ion-input {
   --highlight-color-focused: none !important;
   --highlight-background: none !important;
   --highlight-color-invalid: none !important;
   --highlight-color-valid: none !important;
   --highlight-color: none !important;
+}
+
+ion-card {
+  margin: 0;
+
 }
 
 .header-icon {
@@ -77,6 +86,14 @@ ion-input {
 }
 
 .fs {
+  &-11 {
+    font-size: 11px;
+  }
+
+  &-14 {
+    font-size: 14px;
+  }
+
   &-24 {
     font-size: 24px;
   }
@@ -95,6 +112,10 @@ ion-input {
     padding-bottom: 0;
     padding-top: 0;
   }
+}
+
+.w-100 {
+  width: 100%;
 }
 
 .icon-col {
