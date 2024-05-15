@@ -17,7 +17,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row [routerLink]="['/', 'profile']">
+  <ion-row (click)="navigate('profile', true )">
     <ion-col size="1.5" class="align-item-center fs-24">
       <ion-icon name="person-outline"></ion-icon>
     </ion-col>

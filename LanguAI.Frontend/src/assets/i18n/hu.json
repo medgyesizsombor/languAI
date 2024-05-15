@@ -17,11 +17,17 @@
     "SIGN_OUT": "Kijelentkezés",
     "DELETE_PROFILE": "Profil törlése",
     "USERNAME": "Felhasználónév",
+    "EMAIL": "Email",
     "PASSWORD": "Jelszó",
+    "CONFIRM_PASSWORD": "Jelszó mégegyszer",
     "LOGIN": "Bejelentkezés",
     "SIGN_IN": "Bejelentkezés",
     "SIGN_UP": "Regisztrálás",
     "CONTINUE_WITHOUT_SIGN_IN": "Bejelentkezés nélkül folytatás",
     "SUCCESSFULLY_SIGNED_IN": "Sikeres bejelentkezés",
-    "UNSUCCESSFULLY_SIGNED_IN": "Sikertelen bejelentkezés"
+    "UNSUCCESSFULLY_SIGNED_IN": "Sikertelen bejelentkezés",
+    "LOGGING_IN": "Bejelentkezés",
+    "DATA_ERROR": "Hiba az adat betöltése közben",
+    "EDIT_PROFILE": "Profil módosítása",
+    "CANCEL": "Mégse"
 }

@@ -1,59 +1,126 @@
-import { Component, OnInit } from '@angular/core';
-import { PROFILE_TITLE, SETTINGS_NAVIGATION, SIGN_UP_NAVIGATION } from '../../util/util.constants';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  PROFILE_TITLE,
+  SETTINGS_NAVIGATION,
+  SIGN_UP_NAVIGATION,
+} from '../../util/util.constants';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { Router } from '@angular/router';
+import { UserService } from 'src/api/services';
+import { UserViewModel } from 'src/api/models';
+import { LoadingService } from 'src/app/util/services/loading.service';
+import { ToastrService } from 'src/app/util/services/toastr.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage implements OnInit, OnDestroy {
   profileForm: FormGroup | undefined;
   title = PROFILE_TITLE;
-  navigationLink = SETTINGS_NAVIGATION;
-  profile = {
-    image: 'asd',
-    username: 'asd1',
-    email: 'asd@asdMASD.com'
-  };
+  profileModel: UserViewModel = {};
   isEdit = false;
+  originalProfileModel: UserViewModel = {};
+  getUserSub: Subscription | undefined;
 
-  constructor(private formBuilder: FormBuilder, private localStorageService: LocalStorageService, private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private localStorageService: LocalStorageService,
+    private router: Router,
+    private userService: UserService,
+    private loadingService: LoadingService,
+    private toastrService: ToastrService,
+    private translateService: TranslateService,
+    private navController: NavController
+  ) {}
 
   ngOnInit() {
-    this.loadData();
-    this.createForm();
-    this.fillForm();
+    this.initialize();
   }
 
+  ngOnDestroy() {
+    this.getUserSub?.unsubscribe();
+  }
+
+  /**
+   * Change to edit mode
+   */
   changeEditMode() {
-    this.isEdit != this.isEdit;
+    this.isEdit = !this.isEdit;
   }
 
+  /**
+   * Logout
+   */
   logout() {
     this.localStorageService.removeJwtToken();
     this.router.navigate(['/' + SIGN_UP_NAVIGATION]);
   }
 
-  private loadData() {
-    //TODO ide az api hívás
+  /**
+   * Save the profile
+   */
+  save() {
+
   }
 
+  navigateBack() {
+    this.navController.back();
+  }
+
+  /**
+   * Initialize
+   */
+  private initialize() {
+    this.loadingService
+      .showLoading(this.translateService.instant('DATA_IS_LOADING'))
+      .then(() => {
+        this.createForm();
+        this.loadData();
+      });
+  }
+
+  /**
+   * Load user's data
+   */
+  private loadData() {
+    this.getUserSub = this.userService.getUserById$Json({ userId: 3 }).subscribe((res) => {
+      if (res) {
+        this.profileModel = res;
+        this.originalProfileModel = { ...this.profileModel };
+        this.fillForm();
+      } else {
+        this.toastrService.presentErrorToast('DATA_ERROR');
+      }
+    });
+  }
+
+  /**
+   * Create the form
+   */
   private createForm() {
     this.profileForm = this.formBuilder.group({
-      username: new FormControl({value: this.profile.username, disabled: true}),
+      username: new FormControl(''),
       email: [''],
-      dateOfBirth: ['']
+      dateOfBirth: [''],
     });
   }
 
+  /**
+   * Fill the form
+   */
   private fillForm() {
     this.profileForm?.patchValue({
-      username: this.profile.username,
-      email: this.profile.email
+      username: this.profileModel.username,
+      email: this.profileModel.email,
+      dateOfBirth: this.profileModel.dateOfBirth,
     });
-  }
 
+    this.loadingService.hideLoading();
+  }
 }
