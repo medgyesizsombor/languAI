@@ -18,9 +18,11 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "baseHref": "/",
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
+              "src/web.config",
               {
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",

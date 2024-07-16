@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { PostViewModel } from 'src/api/models';
+import { PostService } from 'src/api/services';
+import { LoadingService } from 'src/app/util/services/loading.service';
 import { FORUM_TITLE } from 'src/app/util/util.constants';
 
 @Component({
@@ -10,22 +13,52 @@ import { FORUM_TITLE } from 'src/app/util/util.constants';
 export class ForumPage implements OnInit {
   title = FORUM_TITLE;
 
-  models: PostViewModel[] = [
-    {
-      content: 'assdasdasd',
-      id: 1,
-      username: 'zsombi',
-      created: '2024.05.15 19:37',
-    },
-    {
-      content: 'assdasdasd',
-      id: 1,
-      username: 'zsombi',
-      created: '2024.05.15 19:37',
-    },
-  ];
+  posts: Array<PostViewModel> = [];
 
-  constructor() {}
+  constructor(
+    private postService: PostService,
+    private loadingService: LoadingService,
+    private translateService: TranslateService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadingService
+      .showLoading(this.translateService.instant('FORUM_IS_LOADING'))
+      .then(() => {
+        this.loadPosts();
+      });
+  }
+
+  /**
+   * Searching for friend
+   */
+  searchForFriend() {
+    console.log('asd');
+  }
+
+  /**
+   * Refresh the posts
+   */
+  refresh(event: any) {
+    this.loadPosts(event);
+  }
+
+  /**
+   * Loading posts for the user
+   */
+  private loadPosts(event?: any) {
+    this.postService.getPosts$Json({ Username: 'zsombi' }).subscribe({
+      next: (res) => {
+        if (res) {
+          this.posts = res;
+          event?.target?.complete();
+        }
+        this.loadingService.hideLoading();
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+        this.loadingService.hideLoading();
+      },
+    });
+  }
 }

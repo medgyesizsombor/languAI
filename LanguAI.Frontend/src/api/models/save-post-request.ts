@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface PostViewModel {
+export interface SavePostRequest {
   content?: string | null;
   created?: string;
   id?: number | null;
-  username?: string | null;
+  userId?: number;
 }

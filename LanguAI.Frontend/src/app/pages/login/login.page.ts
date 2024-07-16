@@ -59,7 +59,7 @@ export class LoginPage implements OnInit {
             .subscribe(res => {
               if (res?.length) {
                 this.toastrService.presentSuccessToast(
-                  'SUCCESSFULLY_SIGNED_IN'
+                  this.translateService.instant('SUCCESSFULLY_SIGNED_IN')
                 );
                 this.localStorageService.setJwtToken(res);
                 this.loadingService.hideLoading();
@@ -67,7 +67,7 @@ export class LoginPage implements OnInit {
               } else {
                 this.loadingService.hideLoading();
                 this.toastrService.presentErrorToast(
-                  'ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN'
+                  this.translateService.instant('ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN')
                 );
                 this.loadingService.hideLoading();
               }

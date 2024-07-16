@@ -1,26 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { PostViewModel } from 'src/api/models';
-import { FORUM_TITLE } from 'src/app/util/util.constants';
+import { PostService } from 'src/api/services';
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.page.html',
-  styleUrls: ['./post.page.scss'],
+  styleUrls: ['./post.page.scss']
 })
 export class PostPage implements OnInit {
+  models: Array<PostViewModel> = [];
 
-  title = FORUM_TITLE;
-
-  models: PostViewModel[] = [{
-    content: 'assdasdasd',
-    id: 1,
-    username: 'zsombi',
-    created: '2024.05.15 19:37'
-  }];
-
-  constructor() { }
+  constructor(private postService: PostService) {}
 
   ngOnInit() {
+    this.loadPost();
   }
 
+  private loadPost(){
+  }
 }
