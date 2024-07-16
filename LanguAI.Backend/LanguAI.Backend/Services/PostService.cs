@@ -1,4 +1,5 @@
 ﻿using LanguAI.Backend.Core;
+using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Post;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +8,10 @@ namespace LanguAI.Backend.Services;
 
 public interface IPostService
 {
-    List<PostViewModel> GetAllPost(GetPostRequest request);
+    List<PostViewModel> GetAllPost();
+    List<PostViewModel> GetPosts(GetPostRequest request);
     PostViewModel GetPostById(int id);
+    bool SavePost(SavePostRequest request);
 }
 
 public class PostService : BaseService, IPostService
@@ -20,12 +23,32 @@ public class PostService : BaseService, IPostService
     /// </summary>
     /// <param name="request">Filter</param>
     /// <returns></returns>
-    public List<PostViewModel> GetAllPost(GetPostRequest request)
+    public List<PostViewModel> GetAllPost()
+    {
+        List<PostViewModel> postList = _context.Post.Include(p => p.User)
+            .Select(p => new PostViewModel
+            {
+                Id = p.Id,
+                Username = p.User.Username,
+                Content = p.Content,
+                Created = p.Created
+            }).ToList();
+
+        return postList;
+    }
+
+    /// <summary>
+    /// Get all post
+    /// </summary>
+    /// <param name="request">Filter</param>
+    /// <returns></returns>
+    public List<PostViewModel> GetPosts(GetPostRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
         List<PostViewModel> postList = _context.Post.Include(p => p.User)
-            .Where(p => request.Username == p.User.Username)
+            .Where(p => string.IsNullOrEmpty(request.Username) || request.Username == p.User.Username
+                )
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
@@ -57,6 +80,46 @@ public class PostService : BaseService, IPostService
         if (postList == null) return null;
 
         return postList;
+    }
+
+    /// <summary>
+    /// Save post
+    /// </summary>
+    /// <param name="request">The request</param>
+    /// <returns></returns>
+    public bool SavePost(SavePostRequest request)
+    {
+        bool isEdit = false;
+
+        Post post;
+
+        if (request.Id != null)
+        {
+            isEdit = true;
+            post = _context.Post.FirstOrDefault(p => p.Id == request.Id);
+
+            if (post == null)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            post = new Post();
+        }
+
+        post.Content = request.Content;
+        post.Created = request.Created;
+        post.UserId = request.UserId;
+
+        if (!isEdit)
+        {
+            _context.Post.Add(post);
+        }
+
+        _context.SaveChanges();
+
+        return true;
     }
 }
 

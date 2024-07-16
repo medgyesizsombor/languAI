@@ -1,39 +1,70 @@
+<ion-header> <app-header [title]="title"></app-header></ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <app-header [title]="title"></app-header>
+ 
 
-  <div *ngFor="let model of models">
-    <ion-row class="d-flex ion-align-items-center avatar-row">
-      <ion-avatar>
-        <ion-img
-          src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
-          alt="The Wisconsin State Capitol building in Madison, WI at night"
-        >
-        </ion-img>
-      </ion-avatar>
-      <ion-label class="fs-14">{{ model.username }}</ion-label>
-    </ion-row>
-    <ion-row>
-      <ion-card class="w-100">
-        <ion-card-header>
-          <ion-label>image</ion-label>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-row>
-            <ion-label> {{ model.content }} </ion-label>
-          </ion-row>
-          <ion-row class="d-flex ion-justify-content-end">
-            <ion-label class="fs-11">{{ model.created }}</ion-label>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
-    </ion-row>
-    <ion-row class="button-row">
-      <ion-chip class="action-button">
-        <ion-icon name="heart-outline"></ion-icon>
-      </ion-chip>
-      <ion-chip class="action-button">
-        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-      </ion-chip>
-    </ion-row>
-  </div>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="posts.length; else missingPosts">
+    <div *ngFor="let post of posts">
+      <ion-row class="d-flex ion-align-items-center avatar-row">
+        <ion-avatar>
+          <ion-img
+            src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
+            alt="The Wisconsin State Capitol building in Madison, WI at night"
+          >
+          </ion-img>
+        </ion-avatar>
+        <ion-label class="fs-14">{{ post.username }}</ion-label>
+      </ion-row>
+      <ion-row>
+        <ion-card class="w-100">
+          <ion-card-header>
+            <ion-label>image</ion-label>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row>
+              <ion-label> {{ post.content }} </ion-label>
+            </ion-row>
+            <ion-row class="d-flex ion-justify-content-end">
+              <ion-label class="fs-11">
+                {{ post.created | date:'YYYY. MM. dd HH:mm.' }}
+              </ion-label>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row class="button-row">
+        <ion-chip class="action-button">
+          <ion-icon name="heart-outline"></ion-icon>
+        </ion-chip>
+        <ion-chip class="action-button">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+        </ion-chip>
+      </ion-row>
+    </div>
+  </ng-container>
 </ion-content>
+
+<ng-template #missingPosts>
+  <div class="w-100">
+    <p class="ion-no-margin ion-padding-bottom ion-text-center">
+      {{ 'MISSING_POSTS' | translate }}
+    </p>
+    <p class="ion-no-margin ion-padding-bottom">
+      {{ 'IF_YOU_WOULD_LIKE_TO_SEE_MORE_POSTS_SEARCH_FOR_FRIEND' | translate }}
+    </p>
+    <div class="ion-text-center">
+      <ion-button (click)="searchForFriend()">
+        <ion-icon name="search-outline"></ion-icon>
+        {{ 'SEARCH_FOR_FRIEND' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ng-template>

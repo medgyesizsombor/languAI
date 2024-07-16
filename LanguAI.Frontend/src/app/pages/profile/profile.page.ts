@@ -66,7 +66,7 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Save the profile
    */
   save() {
-
+    //TODO
   }
 
   navigateBack() {
@@ -89,15 +89,17 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Load user's data
    */
   private loadData() {
-    this.getUserSub = this.userService.getUserById$Json({ userId: 3 }).subscribe((res) => {
-      if (res) {
-        this.profileModel = res;
-        this.originalProfileModel = { ...this.profileModel };
-        this.fillForm();
-      } else {
-        this.toastrService.presentErrorToast('DATA_ERROR');
-      }
-    });
+    this.getUserSub = this.userService
+      .getUserById$Json({ userId: 3 })
+      .subscribe((res) => {
+        if (res) {
+          this.profileModel = res;
+          this.originalProfileModel = { ...this.profileModel };
+          this.fillForm();
+        } else {
+          this.toastrService.presentErrorToast('DATA_ERROR');
+        }
+      });
   }
 
   /**

@@ -9,12 +9,15 @@ export class LoadingService {
   loading: HTMLIonLoadingElement | undefined;
 
   constructor(
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private translateService: TranslateService
   ) {}
 
-  async showLoading(message: string): Promise<void> {
+  async showLoading(message?: string): Promise<void> {
     this.loading = await this.loadingController.create({
-      message
+      message: message?.length
+        ? message
+        : this.translateService.instant('DATA_IS_LOADING'),
     });
 
     this.loading.present();

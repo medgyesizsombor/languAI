@@ -8,14 +8,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PostViewModel } from '../../models/post-view-model';
 
-export interface PostGetPostByIdGet$Json$Params {
-  id?: number;
+export interface GetAllPost$Json$Params {
 }
 
-export function postGetPostByIdGet$Json(http: HttpClient, rootUrl: string, params?: PostGetPostByIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<PostViewModel>> {
-  const rb = new RequestBuilder(rootUrl, postGetPostByIdGet$Json.PATH, 'get');
+export function getAllPost$Json(http: HttpClient, rootUrl: string, params?: GetAllPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PostViewModel>>> {
+  const rb = new RequestBuilder(rootUrl, getAllPost$Json.PATH, 'get');
   if (params) {
-    rb.query('id', params.id, {});
   }
 
   return http.request(
@@ -23,9 +21,9 @@ export function postGetPostByIdGet$Json(http: HttpClient, rootUrl: string, param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PostViewModel>;
+      return r as StrictHttpResponse<Array<PostViewModel>>;
     })
   );
 }
 
-postGetPostByIdGet$Json.PATH = '/Post/GetPostById';
+getAllPost$Json.PATH = '/Post/GetAllPost';

@@ -6,15 +6,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { GetPostRequest } from '../../models/get-post-request';
-import { PostViewModel } from '../../models/post-view-model';
+import { SavePostRequest } from '../../models/save-post-request';
 
-export interface PostGetAllPostsGet$Json$Params {
-      body?: GetPostRequest
+export interface SavePost$Json$Params {
+      body?: SavePostRequest
 }
 
-export function postGetAllPostsGet$Json(http: HttpClient, rootUrl: string, params?: PostGetAllPostsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PostViewModel>>> {
-  const rb = new RequestBuilder(rootUrl, postGetAllPostsGet$Json.PATH, 'get');
+export function savePost$Json(http: HttpClient, rootUrl: string, params?: SavePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, savePost$Json.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
@@ -24,9 +23,9 @@ export function postGetAllPostsGet$Json(http: HttpClient, rootUrl: string, param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<PostViewModel>>;
+      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
     })
   );
 }
 
-postGetAllPostsGet$Json.PATH = '/Post/GetAllPosts';
+savePost$Json.PATH = '/Post/SavePost';

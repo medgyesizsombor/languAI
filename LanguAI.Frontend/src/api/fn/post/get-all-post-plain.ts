@@ -8,14 +8,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PostViewModel } from '../../models/post-view-model';
 
-export interface PostGetPostByIdGet$Plain$Params {
-  id?: number;
+export interface GetAllPost$Plain$Params {
 }
 
-export function postGetPostByIdGet$Plain(http: HttpClient, rootUrl: string, params?: PostGetPostByIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<PostViewModel>> {
-  const rb = new RequestBuilder(rootUrl, postGetPostByIdGet$Plain.PATH, 'get');
+export function getAllPost$Plain(http: HttpClient, rootUrl: string, params?: GetAllPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PostViewModel>>> {
+  const rb = new RequestBuilder(rootUrl, getAllPost$Plain.PATH, 'get');
   if (params) {
-    rb.query('id', params.id, {});
   }
 
   return http.request(
@@ -23,9 +21,9 @@ export function postGetPostByIdGet$Plain(http: HttpClient, rootUrl: string, para
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PostViewModel>;
+      return r as StrictHttpResponse<Array<PostViewModel>>;
     })
   );
 }
 
-postGetPostByIdGet$Plain.PATH = '/Post/GetPostById';
+getAllPost$Plain.PATH = '/Post/GetAllPost';

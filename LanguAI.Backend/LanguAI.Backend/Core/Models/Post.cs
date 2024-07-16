@@ -12,7 +12,7 @@ public class Post
     public string Content { get; set; }
 
     [Required]
-    public Guid UserId { get; set; }
+    public int UserId { get; set; }
 
     [ForeignKey(nameof(UserId))]
     public virtual User User { get; set; }

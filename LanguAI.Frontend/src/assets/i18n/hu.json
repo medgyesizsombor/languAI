@@ -29,5 +29,9 @@
     "LOGGING_IN": "Bejelentkezés",
     "DATA_ERROR": "Hiba az adat betöltése közben",
     "EDIT_PROFILE": "Profil módosítása",
-    "CANCEL": "Mégse"
+    "CANCEL": "Mégse",
+    "FORUM_IS_LOADING": "Fórum betöltése",
+    "MISSING_POSTS": "Nem található számodra bejegyzés",
+    "IF_YOU_WOULD_LIKE_TO_SEE_MORE_POSTS_SEARCH_FOR_FRIEND": "Ha posztokat szeretnél látni, jelölj ismerősnek embereket.",
+    "SEARCH_FOR_FRIEND": "Ismerősök keresése"
 }
