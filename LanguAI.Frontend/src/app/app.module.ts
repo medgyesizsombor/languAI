@@ -6,7 +6,11 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HttpClient,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ApiModule } from 'src/api/api.module';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -18,11 +22,11 @@ export function createTranslateLoader(http: HttpClient) {
 }
 @NgModule({
   declarations: [AppComponent],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -31,9 +35,11 @@ export function createTranslateLoader(http: HttpClient) {
       },
     }),
     ApiModule.forRoot({ rootUrl: environment.apiUrl }),
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
 })
 export class AppModule {}
