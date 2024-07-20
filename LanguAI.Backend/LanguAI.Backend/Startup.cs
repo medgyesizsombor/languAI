@@ -1,50 +1,55 @@
-﻿//using LanguAI.Backend.Configuration;
-//using LanguAI.Backend.Core;
-//using Microsoft.AspNetCore.Hosting;
-//using Microsoft.EntityFrameworkCore;
+﻿using LanguAI.Backend.Configuration;
+using LanguAI.Backend.Core;
+using Microsoft.EntityFrameworkCore;
 
-//namespace LanguAI;
+namespace LanguAI;
 
-//public class Startup
-//{
-//    public Startup(IConfiguration configuration, IWebHostEnvironment env)
-//    {
-//        configuration.ConfigureAppSettings();
-//    }
+public class Startup
+{
+    public Startup(IConfiguration configuration)
+    {
+        configuration.ConfigureAppSettings();
+    }
 
-//    public void ConfigureServices(IServiceCollection services)
-//    {
-//        services.ConfigureDependencyInjection();
+    public IConfiguration Configuration { get; }
 
-//        services.ConfigureCors();
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllers();
 
-//        services.AddMvc();
-//    }
+        services.AddDbContext<LanguAIDataContext>(options =>
+            options.UseSqlServer(EnvironmentSettings.ConnectionString));
 
-//    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LanguAIDataContext languAIDataContext, IConfiguration config)
-//    {
-//        if (env.IsDevelopment())
-//        {
-//            app.UseDeveloperExceptionPage();
-//        }
-//        else
-//        {
-//            app.UseHsts();
-//        }
+        services.ConfigureDependencyInjection();
 
-//        app.EnableCors();
+        services.AddEndpointsApiExplorer();
 
-//        //app.UseMiddleware<GlobalExceptionMiddleware>();
+        services.AddSwaggerGen();
 
-//        app.UseRouting();
+        services.ConfigureCors();
+    }
 
-//        app.UseAuthentication();
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+        else
+        {
+            app.UseHsts();
+        }
 
-//        app.UseAuthorization();
+        app.UseHttpsRedirection();
+        app.UseRouting();
 
-//        ////
-//        //// Automatic database migration on startup
-//        ////
-//        //languAIDataContext.Database.Migrate();
-//    }
-//}
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+    }
+}
