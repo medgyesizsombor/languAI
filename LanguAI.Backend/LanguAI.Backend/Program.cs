@@ -24,10 +24,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 
 var app = builder.Build();
 

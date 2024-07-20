@@ -5,30 +5,29 @@ using LanguAI.Backend.ViewModels.User;
 
 namespace LanguAI.Backend.Services;
 
-public interface IUserServices
+public interface IUserService
 {
     List<UserViewModel> GetAllUsers();
     UserViewModel GetUserById(int userId);
     bool EditUser(UserViewModel request);
 }
 
-public class UserServices : BaseService, IUserServices
+public class UserService : BaseService, IUserService
 {
 
-    public UserServices(LanguAIDataContext context) : base(context)
+    public UserService(LanguAIDataContext context) : base(context)
     {
     }
 
     public List<UserViewModel> GetAllUsers()
     {
-        var asd = _context.User.Select(u => new UserViewModel()
+       return _context.User.Select(u => new UserViewModel()
         {
             Id = u.Id,
             Username = u.Username,
             DateOfBirth = u.DateOfBirth,
             Country = u.Country,
         }).ToList();
-        return asd;
     }
 
     public UserViewModel GetUserById(int userId)
