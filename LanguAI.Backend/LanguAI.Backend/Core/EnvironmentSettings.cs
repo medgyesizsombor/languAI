@@ -7,4 +7,6 @@ public class EnvironmentSettings
     public static string SecretKey { get; set; }
 
     public static string RootUrl { get; set; }
+
+    public static string ChatGPTApiKey { get; set; }
 }
