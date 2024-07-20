@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LanguAI.Backend.Migrations
 {
     [DbContext(typeof(LanguAIDataContext))]
-    [Migration("20240515145459_posts")]
+    [Migration("20240515145459_post")]
     partial class post
     {
         /// <inheritdoc />

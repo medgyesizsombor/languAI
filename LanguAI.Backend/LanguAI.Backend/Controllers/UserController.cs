@@ -8,26 +8,26 @@ namespace LanguAI.Backend.Controllers;
 [Route("[controller]/[action]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserServices _userServices;
+    private readonly IUserService _userService;
 
     private readonly ILogger<UserController> _logger;
 
-    public UserController(ILogger<UserController> logger, IUserServices userServices)
+    public UserController(ILogger<UserController> logger, IUserService userService)
     {
         _logger = logger;
-        _userServices = userServices;
+        _userService = userService;
     }
 
     [HttpGet(Name = "GetAllUsers")]
     public ActionResult<List<UserViewModel>> GetAllUsers()
     {
-        return _userServices.GetAllUsers();
+        return _userService.GetAllUsers();
     }
 
     [HttpGet(Name = "GetUserById")]
     public ActionResult<UserViewModel> GetUserById(int userId)
     {
-        return _userServices.GetUserById(userId);
+        return _userService.GetUserById(userId);
     }
 
     [HttpPost(Name = "EditUser")]
@@ -35,7 +35,7 @@ public class UserController : ControllerBase
     {
         bool success = false;
 
-        success = _userServices.EditUser(request);
+        success = _userService.EditUser(request);
 
         return success;
     }
