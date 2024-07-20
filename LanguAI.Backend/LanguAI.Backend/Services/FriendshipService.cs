@@ -7,7 +7,7 @@ namespace LanguAI.Backend.Services;
 public interface IFriendshipService
 {
     bool RequestFriendship(int requesterId, int receiverId);
-    bool ReceivingFriendshipRequest(bool isAccepting);
+    bool ReceivingFriendshipRequest(int friendshipRequestId, int status);
     int ChangeFriendshipStatus(int previousStatus, int newStatus);
 }
 
@@ -71,9 +71,6 @@ public class FriendshipService : BaseService, IFriendshipService
             }
 
             friendshipRequest.Status = status;
-
-            if ()
-
             _context.SaveChanges();
 
             return true;
@@ -86,6 +83,4 @@ public class FriendshipService : BaseService, IFriendshipService
     {
         return 0;
     }
-
-    private void CreateFriendship();
 }
