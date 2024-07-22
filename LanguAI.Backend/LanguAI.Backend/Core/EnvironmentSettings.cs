@@ -8,5 +8,5 @@ public class EnvironmentSettings
 
     public static string RootUrl { get; set; }
 
-    public static string ChatGPTApiKey { get; set; }
+    public static string ChatGPTApiKey { get; set; } = "sk-proj-iyHY5nGFuHa5eUuAF3tnT3BlbkFJGxM6QJWbkhztqZC8khwE";
 }

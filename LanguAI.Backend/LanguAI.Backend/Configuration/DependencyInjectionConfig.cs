@@ -23,5 +23,6 @@ public static class DependencyInjectionConfig
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<IFriendshipService, FriendshipService>();
         services.AddScoped<IChatGPTService, ChatGPTService>();
+        services.AddScoped<ICardService, CardService>();
     }
 }
