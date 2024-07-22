@@ -15,6 +15,9 @@ namespace LanguAI.Backend.Core
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<FriendshipRequest> FriendshipRequest { get; set;}
+        public virtual DbSet<Friendship> Friendship { get; set; }
+        public virtual DbSet<Card> Card { get; set; }
+        public virtual DbSet<CardList> CardList { get; set; }
     }
 
 }

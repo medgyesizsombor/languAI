@@ -29,13 +29,13 @@ namespace LanguAI.Backend.Migrations
                         column: x => x.FirstUserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Friendship_SecondUser_SecondUserId",
                         column: x => x.SecondUserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,38 +53,38 @@ namespace LanguAI.Backend.Migrations
                 {
                     table.PrimaryKey("PK_FriendshipRequest", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FriendshipRequest_Requester_RequesterId",
+                        name: "FK_FriendshipRequest_User_RequesterId",
                         column: x => x.RequesterId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_FriendshipRequest_Receiver_ReceiverId",
+                        name: "FK_FriendshipRequest_User_ReceiverId",
                         column: x => x.ReceiverId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Friendship_FirstUserId",
-                table: "Friendship",
-                column: "FirstUserId");
+                migrationBuilder.CreateIndex(
+                    name: "IX_Friendship_FirstUserId",
+                    table: "Friendship",
+                    column: "FirstUserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Friendship_SecondUserId",
-                table: "Friendship",
-                column: "SecondUserId");
+                migrationBuilder.CreateIndex(
+                    name: "IX_Friendship_SecondUserId",
+                    table: "Friendship",
+                    column: "SecondUserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_FriendshipRequest_RequesterId",
-                table: "FriendshipRequest",
-                column: "RequesterId");
+                migrationBuilder.CreateIndex(
+                    name: "IX_FriendshipRequest_RequesterId",
+                    table: "FriendshipRequest",
+                    column: "RequesterId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_FriendshipRequest_ReceiverId",
-                table: "FriendshipRequest",
-                column: "ReceiverId");
+                migrationBuilder.CreateIndex(
+                    name: "IX_FriendshipRequest_ReceiverId",
+                    table: "FriendshipRequest",
+                    column: "ReceiverId");
         }
 
         /// <inheritdoc />

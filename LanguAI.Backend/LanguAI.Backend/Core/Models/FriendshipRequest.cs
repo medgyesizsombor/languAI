@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LanguAI.Backend.Core.Models;
 
@@ -21,7 +21,7 @@ public class FriendshipRequest
     public virtual User Receiver { get; set; }
 
     [Required]
-    public DateTime RequestedAt { get; set; }
+    public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
 
     [Required]
     public int Status { get; set; } = 1;
