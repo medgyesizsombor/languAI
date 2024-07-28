@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -16,13 +16,15 @@ import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
   loginForm: FormGroup | undefined;
 
   isUsernameDirty = false;
   isPasswordDirty = false;
 
   isLoading = false;
+
+  authenticationSub: Subscription | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,6 +43,10 @@ export class LoginPage implements OnInit {
     this.createForm();
   }
 
+  ngOnDestroy() {
+    this.authenticationSub?.unsubscribe();
+  }
+
   /**
    * login
    */
@@ -49,27 +55,37 @@ export class LoginPage implements OnInit {
       this.loadingService
         .showLoading(this.translateService.instant('LOGGING_IN'))
         .then(() => {
-          this.authenticationService
+          this.authenticationSub = this.authenticationService
             .authenticationAuthenticatePost$Plain({
               body: {
                 username: this.loginForm?.controls['username'].value,
                 password: this.loginForm?.controls['password'].value,
               },
             })
-            .subscribe(res => {
-              if (res?.length) {
-                this.toastrService.presentSuccessToast(
-                  this.translateService.instant('SUCCESSFULLY_SIGNED_IN')
-                );
-                this.localStorageService.setJwtToken(res);
-                this.loadingService.hideLoading();
-                this.router.navigate(['/' + LESSONS_NAVIGATION]);
-              } else {
+            .subscribe({
+              next: res => {
+                if (res?.length) {
+                  this.toastrService.presentSuccessToast(
+                    this.translateService.instant('SUCCESSFULLY_SIGNED_IN')
+                  );
+                  this.localStorageService.setJwtToken(res);
+                  this.loadingService.hideLoading();
+                  this.router.navigate(['/' + LESSONS_NAVIGATION]);
+                } else {
+                  this.loadingService.hideLoading();
+                  this.toastrService.presentErrorToast(
+                    this.translateService.instant(
+                      'ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN'
+                    )
+                  );
+                }
+              }, error: () => {
                 this.loadingService.hideLoading();
                 this.toastrService.presentErrorToast(
-                  this.translateService.instant('ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN')
+                  this.translateService.instant(
+                    'ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN'
+                  )
                 );
-                this.loadingService.hideLoading();
               }
             });
         });

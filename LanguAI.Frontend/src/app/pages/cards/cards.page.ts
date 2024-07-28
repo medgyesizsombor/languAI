@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { CardListViewModel } from 'src/api/models';
+import { CardService } from 'src/api/services';
+import { LoadingService } from 'src/app/util/services/loading.service';
+import { LocalStorageService } from 'src/app/util/services/localstorage.service';
+import { ToastrService } from 'src/app/util/services/toastr.service';
 import { CARDS_TITLE } from 'src/app/util/util.constants';
 
 @Component({
@@ -6,12 +13,53 @@ import { CARDS_TITLE } from 'src/app/util/util.constants';
   templateUrl: './cards.page.html',
   styleUrls: ['./cards.page.scss'],
 })
-export class CardsPage implements OnInit {
+export class CardsPage implements OnInit, OnDestroy {
   title = CARDS_TITLE;
 
-  constructor() { }
+  getCardListsSub: Subscription | undefined;
+  userId: number | null | undefined;
+  cardLists: Array<CardListViewModel> = [];
+
+  constructor(
+    private cardService: CardService,
+    private localStorageService: LocalStorageService,
+    private loadingService: LoadingService,
+    private toastrService: ToastrService,
+    private translateService: TranslateService
+  ) {}
 
   ngOnInit() {
+    this.userId = this.localStorageService.getUserId();
+    this.loadCardLists();
   }
 
+  ngOnDestroy() {
+    this.getCardListsSub?.unsubscribe();
+  }
+
+  /**
+   * Loading the list of card lists
+   */
+  private loadCardLists() {
+    if (this.userId) {
+      this.loadingService.showLoading().then(() => {
+        this.getCardListsSub = this.cardService
+          .getListOfCardList$Plain({
+            userId: this.userId!,
+          })
+          .subscribe({
+            next: res => {
+              this.loadingService.hideLoading();
+              this.cardLists = res;
+            },
+            error: () => {
+              this.loadingService.hideLoading();
+              this.toastrService.presentErrorToast(
+                this.translateService.instant('DATA_ERROR')
+              );
+            },
+          });
+      });
+    }
+  }
 }

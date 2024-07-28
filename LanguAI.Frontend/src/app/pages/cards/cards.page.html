@@ -1,3 +1,16 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <app-header [title]="title"></app-header>
+    <ion-list *ngIf="cardLists?.length; else missingCardList">
+      <ion-card *ngFor="let cardList of cardLists">
+        <!--TODO folytatni a listát-->
+        <ion-card-header>{{ cardList.name}}</ion-card-header>
+        <ion-card-content>asd</ion-card-content>
+      </ion-card>
+    </ion-list>
 </ion-content>
+
+<ng-template #missingCardList>
+  <ion-label>
+    {{ 'YOU_DONT_HAVE_ANY_CARD_LIST' | translate }}
+  </ion-label>
+</ng-template>

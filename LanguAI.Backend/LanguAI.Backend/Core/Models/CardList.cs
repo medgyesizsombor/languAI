@@ -25,4 +25,9 @@ public class CardList
 
     [Required]
     public DateTime Modified { get; set; } = DateTime.Now;
+
+    [Required]
+    public string Name { get; set; }
+
+    public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
 }
