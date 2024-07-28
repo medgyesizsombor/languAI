@@ -22,11 +22,7 @@ export class ForumPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadingService
-      .showLoading(this.translateService.instant('FORUM_IS_LOADING'))
-      .then(() => {
-        this.loadPosts();
-      });
+    this.loadPosts();
   }
 
   /**
@@ -47,18 +43,22 @@ export class ForumPage implements OnInit {
    * Loading posts for the user
    */
   private loadPosts(event?: any) {
-    this.postService.getPosts$Json({ Username: 'zsombi' }).subscribe({
-      next: (res) => {
-        if (res) {
-          this.posts = res;
-          event?.target?.complete();
-        }
-        this.loadingService.hideLoading();
-      },
-      error: (err: Error) => {
-        console.log(err.message);
-        this.loadingService.hideLoading();
-      },
-    });
+    this.loadingService
+      .showLoading(this.translateService.instant('FORUM_IS_LOADING'))
+      .then(() => {
+        this.postService.getPosts$Json({ Username: 'zsombi' }).subscribe({
+          next: res => {
+            if (res) {
+              this.posts = res;
+              event?.target?.complete();
+            }
+            this.loadingService.hideLoading();
+          },
+          error: (err: Error) => {
+            console.log(err.message);
+            this.loadingService.hideLoading();
+          },
+        });
+      });
   }
 }

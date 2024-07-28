@@ -21,4 +21,16 @@ public class User
 
     [Required]
     public int Country { get; set; }
+
+    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+
+    public virtual ICollection<CardList> CardLists { get; set; } = new List<CardList>();
+
+    public virtual ICollection<Friendship> SentFriendships { get; set; } = new List<Friendship>();
+
+    public virtual ICollection<Friendship> ReceivedFriendships { get; set; } = new List<Friendship>();
+
+    public virtual ICollection<FriendshipRequest> SentFriendshipRequests { get; set; } = new List<FriendshipRequest>();
+
+    public virtual ICollection<FriendshipRequest> ReceivedFriendshipRequests { get; set; } = new List<FriendshipRequest>();
 }

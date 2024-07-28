@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { JWT_TOKEN } from '../util.constants';
+import { JWT_TOKEN, USER_ID } from '../util.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class LocalStorageService {
     const jwtToken = localStorage.getItem(JWT_TOKEN);
 
     if (jwtToken?.length) {
-      JSON.stringify(jwtToken);
+      return JSON.parse(jwtToken);
     }
 
     return jwtToken;
@@ -38,4 +38,36 @@ export class LocalStorageService {
   removeJwtToken() {
     localStorage.removeItem(JWT_TOKEN);
   }
+
+  /**
+   * Set User Id to localStorage
+   */
+  setUserId(userId: number): boolean {
+    if (userId) {
+      localStorage.setItem(USER_ID, userId.toString());
+      return true;
+    }
+
+    return false;
+  }
+
+    /**
+   * Get User Id from localStorage
+   */
+    getUserId(): number | null {
+      const userId = localStorage.getItem(USER_ID);
+  
+      if (userId?.length) {
+        return +userId;
+      }
+  
+      return null;
+    }
+  
+    /**
+     * Remove User Id from localStorage
+     */
+    removeUserId() {
+      localStorage.removeItem(USER_ID);
+    }
 }

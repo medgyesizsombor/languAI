@@ -43,6 +43,9 @@ public class Startup
         }
 
         app.UseHttpsRedirection();
+
+        app.EnableCors();
+
         app.UseRouting();
 
         app.UseAuthorization();

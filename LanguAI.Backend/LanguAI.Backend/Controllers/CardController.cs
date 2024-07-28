@@ -54,6 +54,23 @@ public class CardController : ControllerBase
         {
             return false;
         }
+    }
 
+    /// <summary>
+    /// Get all the CardList that the user has
+    /// </summary>
+    /// <param name="userId">User Id</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetListOfCardList")]
+    public List<CardListViewModel> GetListOfCardList(int userId)
+    {
+        try
+        {
+            return _cardService.GetListOfCardList(userId);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 }

@@ -33,5 +33,6 @@
     "FORUM_IS_LOADING": "Fórum betöltése",
     "MISSING_POSTS": "Nem található számodra bejegyzés",
     "IF_YOU_WOULD_LIKE_TO_SEE_MORE_POSTS_SEARCH_FOR_FRIEND": "Ha posztokat szeretnél látni, jelölj ismerősnek embereket.",
-    "SEARCH_FOR_FRIEND": "Ismerősök keresése"
+    "SEARCH_FOR_FRIEND": "Ismerősök keresése",
+    "YOU_DONT_HAVE_ANY_CARD_LIST": "Nem rendelkezel szókártya gyűjteménnyel!"
 }

@@ -9,6 +9,7 @@ public interface ICardService
 {
     Task<List<CardViewModel>> GetWordListAsync(string systemLanguage, string learningLanguage, string level);
     bool SaveCardList(SaveCardListRequest request);
+    List<CardListViewModel> GetListOfCardList(int userId);
 }
 
 public class CardService : BaseService, ICardService
@@ -63,11 +64,13 @@ public class CardService : BaseService, ICardService
         cardList.UserId = request.UserId;
         cardList.LearningLanguage = request.LearningLanguage;
         cardList.NativeLanguage = request.NativeLanguage;
+        cardList.Name = request.Name;
 
         if (isEdit)
         {
             cardList.Modified = DateTime.Now;
-        } else
+        }
+        else
         {
             _context.CardList.Add(cardList);
         }
@@ -75,5 +78,35 @@ public class CardService : BaseService, ICardService
         _context.SaveChanges();
 
         return true;
+    }
+
+    public List<CardListViewModel> GetListOfCardList(int userId)
+    {
+        if (userId == 0) throw new ArgumentNullException("userId");
+
+        return _context.CardList
+            .Where(c => c.UserId == userId)
+            .Select(c => new CardListViewModel
+            {
+                UserId = c.UserId,
+                Id = c.Id,
+                LearningLanguage = c.LearningLanguage,
+                NativeLanguage = c.NativeLanguage,
+                Name = c.Name,
+                CardViewModelList = ConvertCardToCardViewModel(c.Cards.ToList())
+            }).ToList();
+    }
+
+    private List<CardViewModel> ConvertCardToCardViewModel(List<Card> cardList)
+    {
+        List<CardViewModel> cardViewModelList = new List<CardViewModel>() { };
+
+        cardList.ForEach(c => cardViewModelList.Add(new CardViewModel
+        {
+            WordInNativeLanguage = c.WordInNativeLanguage,
+            WordInLearningLanguage = c.WordInLearningLanguage
+        }));
+
+        return cardViewModelList;
     }
 }

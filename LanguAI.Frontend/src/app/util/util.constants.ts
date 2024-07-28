@@ -12,3 +12,4 @@ export const FORUM_NAVIGATION = "forum";
 export const CARDS_NAVIGATION = "cards";
 export const LESSONS_NAVIGATION = "lessons";
 export const JWT_TOKEN = "jwt-token";
+export const USER_ID = "user-id";
