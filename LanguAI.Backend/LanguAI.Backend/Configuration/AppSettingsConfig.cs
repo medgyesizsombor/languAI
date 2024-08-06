@@ -11,6 +11,6 @@ public static class AppSettingsConfig
 
         EnvironmentSettings.RootUrl = settings.RootUrl;
         EnvironmentSettings.SecretKey = settings.SecretKey;
-        EnvironmentSettings.ChatGPTApiKey = settings.ChatGPTApiKey;
+        EnvironmentSettings.ChatGPTApiKey = Environment.GetEnvironmentVariable("ChatGPTApiKey");
     }
 }
