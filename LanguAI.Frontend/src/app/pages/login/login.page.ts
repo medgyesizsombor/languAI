@@ -14,7 +14,7 @@ import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  styleUrls: ['./login.page.scss']
 })
 export class LoginPage implements OnInit, OnDestroy {
   loginForm: FormGroup | undefined;
@@ -59,27 +59,27 @@ export class LoginPage implements OnInit, OnDestroy {
             .authenticationAuthenticatePost$Plain({
               body: {
                 username: this.loginForm?.controls['username'].value,
-                password: this.loginForm?.controls['password'].value,
-              },
+                password: this.loginForm?.controls['password'].value
+              }
             })
             .subscribe({
               next: res => {
+                this.loadingService.hideLoading();
                 if (res?.length) {
                   this.toastrService.presentSuccessToast(
                     this.translateService.instant('SUCCESSFULLY_SIGNED_IN')
                   );
                   this.localStorageService.setJwtToken(res);
-                  this.loadingService.hideLoading();
                   this.router.navigate(['/' + LESSONS_NAVIGATION]);
                 } else {
-                  this.loadingService.hideLoading();
                   this.toastrService.presentErrorToast(
                     this.translateService.instant(
                       'ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN'
                     )
                   );
                 }
-              }, error: () => {
+              },
+              error: () => {
                 this.loadingService.hideLoading();
                 this.toastrService.presentErrorToast(
                   this.translateService.instant(
@@ -109,7 +109,7 @@ export class LoginPage implements OnInit, OnDestroy {
   private createForm() {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(6)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 

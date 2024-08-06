@@ -10,7 +10,7 @@ namespace LanguAI.Backend.Services;
 
 public interface IChatGPTService
 {
-    Task<List<CardViewModel>> GetWordsForCardsAsync(string systemLanguage, string learningLanguage, string level);
+    Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level);
 }
 
 public class ChatGPTService : BaseService, IChatGPTService
@@ -24,7 +24,7 @@ public class ChatGPTService : BaseService, IChatGPTService
     /// </summary>
     /// <param name="language"></param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordsForCardsAsync(string systemLanguage, string learningLanguage, string level)
+    public async Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level)
     {
         List<CardViewModel> cards = new List<CardViewModel>();
 
@@ -70,13 +70,14 @@ public class ChatGPTService : BaseService, IChatGPTService
         };
 
         ChatResult result = new ChatResult();
+
         try
         {
             result = await openai.Chat.CreateChatCompletionAsync(request);
         }
         catch (Exception e)
         {
-            var asd = e.Message;
+            throw new Exception(e.Message);
         }
 
         return result.Choices[0].Message;

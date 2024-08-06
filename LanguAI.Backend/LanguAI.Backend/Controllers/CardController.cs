@@ -26,11 +26,11 @@ public class CardController : ControllerBase
     /// <param name="level">In which language the words are needed</param>
     /// <returns></returns>
     [HttpPost(Name = "GetWordList")]
-    public async Task<List<CardViewModel>> GetWordListAsync(string nativeLanguage, string learningLanguage, string level)
+    public async Task<List<CardViewModel>> GetWordList(string nativeLanguage, string learningLanguage, string level)
     {
         try
         {
-            return await _cardService.GetWordListAsync(nativeLanguage, learningLanguage, level);
+            return await _cardService.GetWordList(nativeLanguage, learningLanguage, level);
         }
         catch (Exception)
         {

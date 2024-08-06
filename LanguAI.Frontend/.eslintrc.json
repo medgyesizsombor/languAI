@@ -1,3 +1,5 @@
+
+
 {
   "root": true,
   "ignorePatterns": ["projects/**/*"],
@@ -8,11 +10,16 @@
         "project": ["tsconfig.json"],
         "createDefaultProgram": true
       },
+      "plugins": ["@stylistic"],
       "extends": [
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "prettier",
+        "plugin:prettier/recommended"
       ],
       "rules": {
+        "linebreak-style": ["error", "windows"],
+        "@stylistic/js/comma-dangle": ["error", "never"],
         "@angular-eslint/component-class-suffix": [
           "error",
           {
@@ -40,7 +47,25 @@
     {
       "files": ["*.html"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
-      "rules": {}
+      "rules": {
+        "@stylistic/object-curly-spacing": ["error", "always"]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "excludedFiles": ["*inline-template-*.component.html"],
+      "extends": ["plugin:prettier/recommended"],
+      "rules": {
+        "prettier/prettier": ["error", { "parser": "angular" }]
+      }
+    },
+    {
+      "files": ["*.scss, *.css, *.json"],
+      "extends": ["plugin:prettier/recommended"],
+      "rules": {
+        "prettier/prettier": ["error", { "parser": "angular" }]
+      }
     }
   ]
 }
+

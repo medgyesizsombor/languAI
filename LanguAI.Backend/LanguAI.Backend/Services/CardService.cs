@@ -7,7 +7,7 @@ namespace LanguAI.Backend.Services;
 
 public interface ICardService
 {
-    Task<List<CardViewModel>> GetWordListAsync(string systemLanguage, string learningLanguage, string level);
+    Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level);
     bool SaveCardList(SaveCardListRequest request);
     List<CardListViewModel> GetListOfCardList(int userId);
 }
@@ -28,9 +28,9 @@ public class CardService : BaseService, ICardService
     /// <param name="learningLanguage"></param>
     /// <param name="level"></param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordListAsync(string systemLanguage, string learningLanguage, string level)
+    public async Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level)
     {
-        List<CardViewModel> result = await _chatGPTService.GetWordsForCardsAsync(systemLanguage, learningLanguage, level);
+        List<CardViewModel> result = await _chatGPTService.GetWordsForCards(systemLanguage, learningLanguage, level);
 
         return result;
     }

@@ -26,7 +26,7 @@ export class LocalStorageService {
     const jwtToken = localStorage.getItem(JWT_TOKEN);
 
     if (jwtToken?.length) {
-      return JSON.parse(jwtToken);
+      return JSON.stringify(jwtToken);
     }
 
     return jwtToken;
@@ -51,23 +51,23 @@ export class LocalStorageService {
     return false;
   }
 
-    /**
+  /**
    * Get User Id from localStorage
    */
-    getUserId(): number | null {
-      const userId = localStorage.getItem(USER_ID);
-  
-      if (userId?.length) {
-        return +userId;
-      }
-  
-      return null;
+  getUserId(): number | null {
+    const userId = localStorage.getItem(USER_ID);
+
+    if (userId?.length) {
+      return +userId;
     }
-  
-    /**
-     * Remove User Id from localStorage
-     */
-    removeUserId() {
-      localStorage.removeItem(USER_ID);
-    }
+
+    return null;
+  }
+
+  /**
+   * Remove User Id from localStorage
+   */
+  removeUserId() {
+    localStorage.removeItem(USER_ID);
+  }
 }

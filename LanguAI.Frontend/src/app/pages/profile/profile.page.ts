@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   PROFILE_TITLE,
   SETTINGS_NAVIGATION,
-  SIGN_UP_NAVIGATION,
+  LOGIN_NAVIGATION,
 } from '../../util/util.constants';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -59,7 +59,7 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   logout() {
     this.localStorageService.removeJwtToken();
-    this.router.navigate(['/' + SIGN_UP_NAVIGATION]);
+    this.router.navigate(['/' + LOGIN_NAVIGATION]);
   }
 
   /**

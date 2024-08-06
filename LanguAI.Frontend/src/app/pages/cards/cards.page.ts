@@ -11,7 +11,7 @@ import { CARDS_TITLE } from 'src/app/util/util.constants';
 @Component({
   selector: 'app-cards',
   templateUrl: './cards.page.html',
-  styleUrls: ['./cards.page.scss'],
+  styleUrls: ['./cards.page.scss']
 })
 export class CardsPage implements OnInit, OnDestroy {
   title = CARDS_TITLE;
@@ -45,10 +45,10 @@ export class CardsPage implements OnInit, OnDestroy {
       this.loadingService.showLoading().then(() => {
         this.getCardListsSub = this.cardService
           .getListOfCardList$Plain({
-            userId: this.userId!,
+            userId: this.userId!
           })
           .subscribe({
-            next: res => {
+            next: (res: Array<CardListViewModel>) => {
               this.loadingService.hideLoading();
               this.cardLists = res;
             },
@@ -57,7 +57,7 @@ export class CardsPage implements OnInit, OnDestroy {
               this.toastrService.presentErrorToast(
                 this.translateService.instant('DATA_ERROR')
               );
-            },
+            }
           });
       });
     }

@@ -9,19 +9,15 @@
           class="form-control"
           formControlName="username"
           placeholder="{{ 'USERNAME' | translate}}"
-          (ionChange)="modelChange()"
-        >
-        </ion-input>
+          (ionChange)="modelChange()"></ion-input>
         <span
           *ngIf="isUsernameDirty && loginForm.get('username')?.hasError('required')"
-          class="error-text"
-        >
+          class="error-text">
           Username is required.
         </span>
         <span
           *ngIf="isUsernameDirty && loginForm.get('username')?.hasError('minlength')"
-          class="error-text"
-        >
+          class="error-text">
           Username has to be at least 6 characters.
         </span>
       </ion-col>
@@ -34,19 +30,15 @@
           class="form-control"
           formControlName="password"
           placeholder="{{ 'PASSWORD' | translate}}"
-          (ionChange)="modelChange(false)"
-        >
-        </ion-input>
+          (ionChange)="modelChange(false)"></ion-input>
         <span
           *ngIf="isPasswordDirty && loginForm.get('password')?.hasError('required')"
-          class="error-text"
-        >
-          Password is required.
+          class="error-text">
+          {{ 'PASSWORD_IS_REQUIRED' | translate }}
         </span>
         <span
           *ngIf="isPasswordDirty && loginForm.get('password')?.hasError('minlength')"
-          class="error-text"
-        >
+          class="error-text">
           Username has to be at least 6 characters.
         </span>
       </ion-col>
@@ -55,8 +47,7 @@
       <ion-col>
         <ion-button
           class="ion-padding-horizontal primary-button"
-          (click)="login()"
-        >
+          (click)="login()">
           {{'SIGN_IN' | translate}}
         </ion-button>
       </ion-col>
@@ -65,8 +56,7 @@
       <ion-col>
         <ion-button
           class="ion-padding-horizontal secondary-button w-100"
-          [routerLink]="['/register']"
-        >
+          [routerLink]="['/register']">
           {{'SIGN_UP' | translate }}
         </ion-button>
       </ion-col>

@@ -3,16 +3,13 @@
     [useNavController]="true"
     [showBackArrow]="true"
     (click)="navigateBack()"
-    [title]="title"
-  ></app-header>
+    [title]="title"></app-header>
 
   <ion-row class="avatar-container ion-justify-content-center">
     <ion-avatar>
       <ion-img
         src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
-        alt="The Wisconsin State Capitol building in Madison, WI at night"
-      >
-      </ion-img>
+        alt="The Wisconsin State Capitol building in Madison, WI at night"></ion-img>
     </ion-avatar>
   </ion-row>
   <form *ngIf="profileForm" [formGroup]="profileForm">
@@ -28,9 +25,7 @@
               [readonly]="!isEdit"
               type="text"
               formControlName="username"
-              placeholder="{{ 'USERNAME' | translate}}"
-            >
-            </ion-input>
+              placeholder="{{ 'USERNAME' | translate}}"></ion-input>
           </ion-col>
         </ion-row>
       </ion-col>
@@ -47,9 +42,7 @@
               [readonly]="!isEdit"
               type="email"
               formControlName="email"
-              placeholder="{{ 'EMAIL' | translate}}"
-            >
-            </ion-input>
+              placeholder="{{ 'EMAIL' | translate}}"></ion-input>
           </ion-col>
         </ion-row>
       </ion-col>
@@ -65,16 +58,13 @@
               <ion-datetime-button
                 [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
                 [disabled]="!isEdit"
-                datetime="datetime"
-              >
-              </ion-datetime-button>
+                datetime="datetime"></ion-datetime-button>
 
               <ion-modal [keepContentsMounted]="true">
                 <ng-template>
                   <ion-datetime
                     presentation="date"
-                    id="datetime"
-                  ></ion-datetime>
+                    id="datetime"></ion-datetime>
                 </ng-template>
               </ion-modal>
             </div>
@@ -86,31 +76,26 @@
       <ion-row>
         <ion-button
           (click)="changeEditMode()"
-          class="ion-padding-horizontal primary-button"
-        >
+          class="ion-padding-horizontal primary-button">
           {{'EDIT_PROFILE' | translate}}
         </ion-button>
       </ion-row>
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-button (click)="logout()">
-            {{'SIGN_OUT' | translate}}
-          </ion-button>
+          <ion-button (click)="logout()">{{'SIGN_OUT' | translate}}</ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-button>
-            {{'DELETE_PROFILE' | translate}}
-          </ion-button>
+          <ion-button>{{'DELETE_PROFILE' | translate}}</ion-button>
         </ion-col>
       </ion-row>
     </ng-container>
   </form>
-  <ion-row> </ion-row>
-  <ion-row> </ion-row>
-  <ion-row> </ion-row>
-  <ion-row> </ion-row>
+  <ion-row></ion-row>
+  <ion-row></ion-row>
+  <ion-row></ion-row>
+  <ion-row></ion-row>
 </ion-content>
 
 <ng-template #edit>
@@ -120,8 +105,6 @@
     </ion-button>
   </ion-row>
   <ion-row>
-    <ion-button (click)="changeEditMode()">
-      {{'CANCEL' | translate}}
-    </ion-button>
+    <ion-button (click)="changeEditMode()">{{'CANCEL' | translate}}</ion-button>
   </ion-row>
 </ng-template>

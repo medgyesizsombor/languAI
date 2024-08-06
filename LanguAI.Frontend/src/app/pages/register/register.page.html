@@ -6,9 +6,7 @@
         <ion-input
           type="text"
           formControlName="username"
-          placeholder="{{ 'USERNAME' | translate}}"
-        >
-        </ion-input>
+          placeholder="{{ 'USERNAME' | translate}}"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -16,9 +14,7 @@
         <ion-input
           type="email"
           formControlName="email"
-          placeholder="{{ 'EMAIL' | translate}}"
-        >
-        </ion-input>
+          placeholder="{{ 'EMAIL' | translate}}"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -27,9 +23,7 @@
           type="password"
           class="custom"
           formControlName="password"
-          placeholder="{{ 'PASSWORD' | translate}}"
-        >
-        </ion-input>
+          placeholder="{{ 'PASSWORD' | translate}}"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row class="ion-padding-bottom">
@@ -38,18 +32,15 @@
           type="password"
           class="custom"
           formControlName="confirmPassword"
-          placeholder="{{ 'CONFIRM_PASSWORD' | translate}}"
-        >
-        </ion-input>
+          placeholder="{{ 'CONFIRM_PASSWORD' | translate}}"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-button
           class="ion-padding-horizontal primary-button"
-          (click)="register()"
-        >
-          {{'SIGN_UP' | translate}}
+          (click)="register()">
+          {{ 'REGISTRATION' | translate }}
         </ion-button>
       </ion-col>
     </ion-row>
@@ -57,15 +48,14 @@
       <ion-col>
         <ion-button
           class="ion-padding-horizontal secondary-button w-100"
-          [routerLink]="['/login']"
-        >
-          {{'SIGN_IN' | translate }}
+          [routerLink]="['/login']">
+          {{ 'SIGN_IN' | translate }}
         </ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-center">
-        <ion-label>{{'CONTINUE_WITHOUT_SIGN_IN' | translate}}</ion-label>
+        <ion-label>{{ 'CONTINUE_WITHOUT_SIGN_IN' | translate }}</ion-label>
       </ion-col>
     </ion-row>
   </form>
