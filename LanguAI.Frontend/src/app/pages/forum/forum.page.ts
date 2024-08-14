@@ -11,7 +11,7 @@ import { FORUM_TITLE } from 'src/app/util/util.constants';
   styleUrls: ['./forum.page.scss'],
 })
 export class ForumPage implements OnInit {
-  title = FORUM_TITLE;
+  title = this.translateService.instant(FORUM_TITLE);
 
   posts: Array<PostViewModel> = [];
 

@@ -1,56 +1,75 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuardFunction, LoginGuardFunction } from './util/util.guard';
+import {
+  CARD_LIST_NAVIGATION,
+  CARD_LISTS_NAVIGATION,
+  CARD_NAVIGATION,
+  FORUM_NAVIGATION,
+  LESSONS_NAVIGATION,
+  LOGIN_NAVIGATION,
+  MESSAGES_NAVIGATION,
+  PROFILE_NAVIGATION,
+  REGISTER_NAVIGATION,
+  SETTINGS_NAVIGATION
+} from './util/util.constants';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: 'lessons',
-    loadChildren: () => import('./pages/lessons/lessons.module').then( m => m.LessonsPageModule),
+    path: LESSONS_NAVIGATION,
+    loadChildren: () => import('./pages/lessons/lessons.module').then(m => m.LessonsPageModule)
   },
   {
-    path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule),
+    path: LOGIN_NAVIGATION,
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule),
     canActivate: [LoginGuardFunction]
   },
   {
-    path: 'register',
-    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule),
+    path: REGISTER_NAVIGATION,
+    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule),
     canActivate: [LoginGuardFunction]
   },
   {
-    path: 'cards',
-    loadChildren: () => import('./pages/cards/cards.module').then( m => m.CardsPageModule),
+    path: CARD_LISTS_NAVIGATION,
+    loadChildren: () => import('./pages/card-lists/card-lists.module').then(m => m.CardListsPageModule)
   },
   {
-    path: 'forum',
-    loadChildren: () => import('./pages/forum/forum.module').then( m => m.ForumPageModule),
+    path: FORUM_NAVIGATION,
+    loadChildren: () => import('./pages/forum/forum.module').then(m => m.ForumPageModule)
   },
   {
-    path: 'messages',
-    loadChildren: () => import('./pages/messages/messages.module').then( m => m.MessagesPageModule),
+    path: MESSAGES_NAVIGATION,
+    loadChildren: () => import('./pages/messages/messages.module').then(m => m.MessagesPageModule)
   },
   {
-    path: 'settings',
-    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule),
+    path: SETTINGS_NAVIGATION,
+    loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
   },
   {
-    path: 'profile',
-    loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule),
+    path: PROFILE_NAVIGATION,
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
     canActivate: [AuthGuardFunction]
   },
+  //TODO postnak navigation
   {
     path: 'post',
-    loadChildren: () => import('./pages/post/post.module').then( m => m.PostPageModule)
+    loadChildren: () => import('./pages/post/post.module').then(m => m.PostPageModule)
+  },
+  {
+    path: CARD_NAVIGATION,
+    loadChildren: () => import('./pages/card/card.module').then(m => m.CardPageModule)
+  },
+  {
+    path: CARD_LIST_NAVIGATION + '/:id',
+    loadChildren: () => import('./pages/card-list/card-list.module').then(m => m.CardListPageModule)
   }
 ];
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
-  ],
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

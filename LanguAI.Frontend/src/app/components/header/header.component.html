@@ -1,8 +1,35 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-text-center">
-    <ion-buttons *ngIf="showBackArrow" slot="start" class="ion-no-margin">
-      <fa-icon (click)="navigateBack()" class="header-icon" [icon]="['fas', 'arrow-left']"></fa-icon>
-    </ion-buttons>
-    <ion-title>{{ title | translate}}</ion-title>
+  <ion-toolbar class="ion-text-center ion-no-padding">
+    <div class="absolute" *ngIf="showBackArrow">
+      <ion-fab class="left-fab">
+        <ion-fab-button
+          size="small"
+          class="no-shadow ion-no-margin"
+          (click)="navigateBack()">
+          <ion-icon class="fs-28" name="arrow-back-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
+    <ion-title>{{ title }}</ion-title>
+    <div class="absolute right-fab-container" *ngIf="showSaveButton">
+      <ion-fab class="right-fab" horizontal="end">
+        <ion-fab-button
+          size="small"
+          class="no-shadow ion-no-margin"
+          (click)="saveButtonEmit.emit()">
+          <ion-icon class="fs-28" name="save-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
+    <div class="absolute right-fab-container" *ngIf="showAddButton">
+      <ion-fab class="right-fab" horizontal="end">
+        <ion-fab-button
+          size="small"
+          class="no-shadow ion-no-margin"
+          (click)="addButtonEmit.emit()">
+          <ion-icon class="fs-28" name="add-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
   </ion-toolbar>
 </ion-header>

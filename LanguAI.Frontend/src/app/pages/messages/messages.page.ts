@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MESSAGES_TITLE } from '../../util/util.constants';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-messages',
@@ -7,9 +8,9 @@ import { MESSAGES_TITLE } from '../../util/util.constants';
   styleUrls: ['./messages.page.scss'],
 })
 export class MessagesPage implements OnInit {
-  title = MESSAGES_TITLE;
+  title = this.translateService.instant(MESSAGES_TITLE);
 
-  constructor() { }
+  constructor(private translateService: TranslateService) { }
 
   ngOnInit() {
   }

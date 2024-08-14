@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  PROFILE_TITLE,
-  SETTINGS_NAVIGATION,
-  SIGN_UP_NAVIGATION,
-} from '../../util/util.constants';
+import { PROFILE_TITLE, LOGIN_NAVIGATION } from '../../util/util.constants';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { Router } from '@angular/router';
@@ -18,11 +14,11 @@ import { NavController } from '@ionic/angular';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss'],
+  styleUrls: ['./profile.page.scss']
 })
 export class ProfilePage implements OnInit, OnDestroy {
   profileForm: FormGroup | undefined;
-  title = PROFILE_TITLE;
+  title = this.translateService.instant(PROFILE_TITLE);
   profileModel: UserViewModel = {};
   isEdit = false;
   originalProfileModel: UserViewModel = {};
@@ -59,7 +55,7 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   logout() {
     this.localStorageService.removeJwtToken();
-    this.router.navigate(['/' + SIGN_UP_NAVIGATION]);
+    this.router.navigate(['/' + LOGIN_NAVIGATION]);
   }
 
   /**
@@ -91,12 +87,13 @@ export class ProfilePage implements OnInit, OnDestroy {
   private loadData() {
     this.getUserSub = this.userService
       .getUserById$Json({ userId: 3 })
-      .subscribe((res) => {
+      .subscribe(res => {
         if (res) {
           this.profileModel = res;
           this.originalProfileModel = { ...this.profileModel };
           this.fillForm();
         } else {
+          this.loadingService.hideLoading();
           this.toastrService.presentErrorToast('DATA_ERROR');
         }
       });
@@ -109,7 +106,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.profileForm = this.formBuilder.group({
       username: new FormControl(''),
       email: [''],
-      dateOfBirth: [''],
+      dateOfBirth: ['']
     });
   }
 
@@ -120,7 +117,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.profileForm?.patchValue({
       username: this.profileModel.username,
       email: this.profileModel.email,
-      dateOfBirth: this.profileModel.dateOfBirth,
+      dateOfBirth: this.profileModel.dateOfBirth
     });
 
     this.loadingService.hideLoading();

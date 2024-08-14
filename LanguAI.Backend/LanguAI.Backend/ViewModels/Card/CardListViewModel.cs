@@ -12,5 +12,9 @@ public class CardListViewModel
 
     public string Name { get; set; }
 
+    public DateTime Created { get; set; }
+
+    public DateTime Modified { get; set; }
+
     public List<CardViewModel> CardViewModelList { get; set; } = new List<CardViewModel>();
 }

@@ -1,32 +1,84 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { RegistrationService } from 'src/api/services';
+import { LoadingService } from 'src/app/util/services/loading.service';
+import { ToastrService } from 'src/app/util/services/toastr.service';
+import { LOGIN_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage implements OnInit, OnDestroy {
   registerForm: FormGroup | undefined;
 
-  constructor(private formBuilder: FormBuilder, library: FaIconLibrary) {
+  registerSub: Subscription | undefined;
 
-    library.addIcons(
-      faUser
-    );
+  constructor(
+    private formBuilder: FormBuilder,
+    library: FaIconLibrary,
+    private loadingService: LoadingService,
+    private registrationService: RegistrationService,
+    private translateService: TranslateService,
+    private toastrService: ToastrService,
+    private router: Router
+  ) {
+    library.addIcons(faUser);
   }
 
   ngOnInit() {
     this.createForm();
   }
 
-  register() {
+  ngOnDestroy() {
+    this.registerSub?.unsubscribe();
   }
 
-  openModal(){
+  register() {
+    if (this.isValid()) {
+      this.loadingService.showLoading(this.translateService.instant('REGISTRATION')).then(() => {
+        //TODO: Ország selecttel majd kipótolni
+        this.registerSub = this.registrationService
+          .register$Json({
+            body: {
+              username: this.registerForm?.get('username')?.value,
+              email: this.registerForm?.get('email')?.value,
+              dateOfBirth: '1998-04-20',
+              password: this.registerForm?.get('password')?.value,
+              country: 1,
+            },
+          })
+          .subscribe({
+            next: res => {
+              this.loadingService.hideLoading();
+              if (res) {
+                //TODO: Bejelentkeztetni
+                this.toastrService.presentSuccessToast(this.translateService.instant('SUCCESSFULLY_REGISTERED'));
+                this.router.navigate(['/' + LOGIN_NAVIGATION]);
+              } else {
+                this.toastrService.presentErrorToast(
+                  this.translateService.instant('ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER')
+                );
+              }
+            },
+            error: () => {
+              this.loadingService.hideLoading();
+              this.toastrService.presentErrorToast(
+                this.translateService.instant('ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER')
+              );
+            },
+          });
+      });
+    }
   }
+
+  openModal() {}
 
   private createForm() {
     this.registerForm = this.formBuilder.group({
@@ -34,7 +86,21 @@ export class RegisterPage implements OnInit {
       email: [''],
       dateOfBirth: [''],
       password: [''],
-      confirmPassword: ['']
+      confirmPassword: [''],
     });
+  }
+
+  /**
+   * Check if model is valid
+   */
+  private isValid(): boolean {
+    return (
+      !this.registerForm?.get('username')?.errors &&
+      !this.registerForm?.get('email')?.errors &&
+      !this.registerForm?.get('dateOfBirth')?.errors &&
+      !this.registerForm?.get('password')?.errors &&
+      !this.registerForm?.get('confirmPassword')?.errors &&
+      this.registerForm?.get('confirmPassword')?.value === this.registerForm?.get('password')?.value
+    );
   }
 }

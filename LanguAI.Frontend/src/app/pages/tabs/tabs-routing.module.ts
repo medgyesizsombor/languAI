@@ -1,6 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import {
+  CARD_LIST_NAVIGATION,
+  CARD_LISTS_NAVIGATION,
+  FORUM_NAVIGATION,
+  LESSONS_NAVIGATION,
+  MESSAGES_NAVIGATION,
+  PROFILE_NAVIGATION,
+  SETTINGS_NAVIGATION
+} from 'src/app/util/util.constants';
 
 const routes: Routes = [
   {
@@ -8,27 +17,27 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'lessons',
+        path: LESSONS_NAVIGATION,
         loadChildren: () => import('../lessons/lessons.module').then(m => m.LessonsPageModule)
       },
       {
-        path: 'cards',
-        loadChildren: () => import('../cards/cards.module').then(m => m.CardsPageModule)
+        path: CARD_LISTS_NAVIGATION,
+        loadChildren: () => import('../card-lists/card-lists.module').then(m => m.CardListsPageModule)
       },
       {
-        path: 'forum',
+        path: FORUM_NAVIGATION,
         loadChildren: () => import('../forum/forum.module').then(m => m.ForumPageModule)
       },
       {
-        path: 'messages',
+        path: MESSAGES_NAVIGATION,
         loadChildren: () => import('../messages/messages.module').then(m => m.MessagesPageModule)
       },
       {
-        path: 'settings',
+        path: SETTINGS_NAVIGATION,
         loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
       },
       {
-        path: 'profile',
+        path: PROFILE_NAVIGATION,
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
@@ -50,6 +59,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes)]
 })
 export class TabsPageRoutingModule {}

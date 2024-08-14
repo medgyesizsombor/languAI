@@ -6,5 +6,6 @@ export { CardViewModel } from './models/card-view-model';
 export { PostViewModel } from './models/post-view-model';
 export { RegisterRequestViewModel } from './models/register-request-view-model';
 export { SaveCardListRequest } from './models/save-card-list-request';
+export { SaveCardRequest } from './models/save-card-request';
 export { SavePostRequest } from './models/save-post-request';
 export { UserViewModel } from './models/user-view-model';

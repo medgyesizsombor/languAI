@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import {
   HttpClient,
   provideHttpClient,
-  withInterceptorsFromDi,
+  withInterceptorsFromDi
 } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ApiModule } from 'src/api/api.module';
@@ -25,21 +25,23 @@ export function createTranslateLoader(http: HttpClient) {
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      rippleEffect: false
+    }),
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient],
-      },
+        deps: [HttpClient]
+      }
     }),
     ApiModule.forRoot({ rootUrl: environment.apiUrl }),
-    FontAwesomeModule,
+    FontAwesomeModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideHttpClient(withInterceptorsFromDi()),
-  ],
+    provideHttpClient(withInterceptorsFromDi())
+  ]
 })
 export class AppModule {}

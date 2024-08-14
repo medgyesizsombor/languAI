@@ -1,0 +1,17 @@
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button size="small" class="border-2-circle">
+    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <!-- TODO tanulni-->
+    <ion-fab-button *ngIf="" size="small" class="border-2-circle">
+      <ion-icon name="copy-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button
+      size="small"
+      (click)="addButtonEmit.emit()"
+      class="border-2-circle">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>

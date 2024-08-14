@@ -6,15 +6,15 @@ import { CardService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import { CARDS_TITLE } from 'src/app/util/util.constants';
+import { CARD_LISTS_TITLE } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-cards',
   templateUrl: './cards.page.html',
-  styleUrls: ['./cards.page.scss'],
+  styleUrls: ['./cards.page.scss']
 })
 export class CardsPage implements OnInit, OnDestroy {
-  title = CARDS_TITLE;
+  title = this.translateService.instant(CARD_LISTS_TITLE);
 
   getCardListsSub: Subscription | undefined;
   userId: number | null | undefined;
@@ -44,11 +44,11 @@ export class CardsPage implements OnInit, OnDestroy {
     if (this.userId) {
       this.loadingService.showLoading().then(() => {
         this.getCardListsSub = this.cardService
-          .getListOfCardList$Plain({
-            userId: this.userId!,
+          .getListOfCardList$Json({
+            userId: this.userId!
           })
           .subscribe({
-            next: res => {
+            next: (res: Array<CardListViewModel>) => {
               this.loadingService.hideLoading();
               this.cardLists = res;
             },
@@ -57,7 +57,7 @@ export class CardsPage implements OnInit, OnDestroy {
               this.toastrService.presentErrorToast(
                 this.translateService.instant('DATA_ERROR')
               );
-            },
+            }
           });
       });
     }

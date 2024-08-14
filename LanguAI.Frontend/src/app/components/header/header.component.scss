@@ -1,0 +1,36 @@
+$a: 100%;
+$b: 16px;
+
+ion-title {
+  margin: 0 12px;
+}
+
+ion-fab {
+  &-button::part(native) {
+    background-color: #f4eeff;
+    color: #424242;
+
+    > ion-icon {
+      display: none;
+    }
+  }
+}
+
+.left-fab {
+  top: -1px;
+}
+
+.right-fab {
+  top: 0;
+  left: calc(#{$a} - #{$b});
+
+  &-container {
+    top: 12px;
+    left: calc(#{$a} - #{$b});
+  }
+}
+
+.fab-button-small {
+    height: 32px;
+    width: 32px;
+}

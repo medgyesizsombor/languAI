@@ -10,7 +10,7 @@ namespace LanguAI.Backend.Services;
 
 public interface IChatGPTService
 {
-    Task<List<CardViewModel>> GetWordsForCardsAsync(string systemLanguage, string learningLanguage, string level);
+    Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level, string topic);
 }
 
 public class ChatGPTService : BaseService, IChatGPTService
@@ -24,12 +24,12 @@ public class ChatGPTService : BaseService, IChatGPTService
     /// </summary>
     /// <param name="language"></param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordsForCardsAsync(string systemLanguage, string learningLanguage, string level)
+    public async Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level, string topic)
     {
         List<CardViewModel> cards = new List<CardViewModel>();
 
         string messageFromSystem = $"Answer in JSON where the format is like {{{systemLanguage} : {learningLanguage}}}";
-        string messageFromUser = $"Give 50 words in {learningLanguage} at {level} level";
+        string messageFromUser = $"Give me 4 one- or two-word phrases in {learningLanguage} dictionary form at {level} level related to the topic of {topic}";
         ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
         ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, messageFromUser);
 
@@ -70,13 +70,14 @@ public class ChatGPTService : BaseService, IChatGPTService
         };
 
         ChatResult result = new ChatResult();
+
         try
         {
             result = await openai.Chat.CreateChatCompletionAsync(request);
         }
         catch (Exception e)
         {
-            var asd = e.Message;
+            throw new Exception(e.Message);
         }
 
         return result.Choices[0].Message;
