@@ -12,7 +12,7 @@ export interface SaveCardList$Plain$Params {
       body?: SaveCardListRequest
 }
 
-export function saveCardList$Plain(http: HttpClient, rootUrl: string, params?: SaveCardList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+export function saveCardList$Plain(http: HttpClient, rootUrl: string, params?: SaveCardList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
   const rb = new RequestBuilder(rootUrl, saveCardList$Plain.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
@@ -23,7 +23,7 @@ export function saveCardList$Plain(http: HttpClient, rootUrl: string, params?: S
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }

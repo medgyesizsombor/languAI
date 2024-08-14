@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { LESSONS_TITLE } from 'src/app/util/util.constants';
 
 @Component({
@@ -7,9 +8,9 @@ import { LESSONS_TITLE } from 'src/app/util/util.constants';
   styleUrls: ['./lessons.page.scss'],
 })
 export class LessonsPage implements OnInit {
-  title = LESSONS_TITLE;
+  title = this.translateService.instant(LESSONS_TITLE);
 
-  constructor() { }
+  constructor(private translateService: TranslateService) { }
 
   ngOnInit() {
   }

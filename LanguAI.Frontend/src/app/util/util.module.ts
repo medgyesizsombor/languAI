@@ -7,13 +7,28 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../components/header/header.component';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { CardSwiperComponent } from '../components/card-swiper/card-swiper.component';
+import { EditFabComponent } from '../components/edit-fab/edit-fab.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 @NgModule({
-  declarations: [HeaderComponent],
-  imports: [CommonModule, IonicModule.forRoot(), TranslateModule, FontAwesomeModule, ReactiveFormsModule],
-  exports: [TranslateModule, FontAwesomeModule, ReactiveFormsModule, HeaderComponent],
+  declarations: [HeaderComponent, CardSwiperComponent, EditFabComponent],
+  imports: [
+    CommonModule,
+    IonicModule.forRoot(),
+    TranslateModule,
+    FontAwesomeModule,
+    ReactiveFormsModule
+  ],
+  exports: [
+    TranslateModule,
+    FontAwesomeModule,
+    ReactiveFormsModule,
+    HeaderComponent,
+    CardSwiperComponent,
+    EditFabComponent
+  ]
 })
 export class UtilModule {}

@@ -1,0 +1,46 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <app-header
+    [title]="title"
+    [showSaveButton]="hasCardChanged"
+    (saveButtonEmit)="saveCards()"
+    [showBackArrow]="true"
+    [showSavingMissed]="hasCardChanged"
+    (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
+  <div *ngIf="!showSwiper">
+    <ion-list *ngIf="cards?.length; else missingCards">
+      <ion-item
+        *ngFor="let word of cards; let index = index"
+        lines="none"
+        class="border-bottom-line ion-no-padding ion-item-no-padding-end p-inner-v-2">
+        <ion-col class="word-col">
+          <span class="me-1">{{ word.wordInNativeLanguage }}</span>
+          -
+          <span class="ms-1">{{ word.wordInLearningLanguage }}</span>
+        </ion-col>
+        <ion-col class="pe-0" size="auto">
+          <ion-icon
+            class="align-item-center fs-24 error-color"
+            (click)="removeFromList(index)"
+            name="trash-bin"></ion-icon>
+        </ion-col>
+      </ion-item>
+    </ion-list>
+  </div>
+  <ng-container *ngIf="showSwiper">
+    <app-card-swiper [generatedCards]="generatedCards" (addCardsEmit)="addCards($event)"></app-card-swiper>
+  </ng-container>
+  <app-edit-fab [showPlayButton]="false" (addButtonEmit)="generateCards()"></app-edit-fab>
+</ion-content>
+
+<ng-template #missingCards>
+  <ion-row>
+    <ion-label class="w-100 ion-text-center">
+      {{ 'THERE_ARE_NO_CREATED_CARDS_YET' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row>
+    <ion-label class="w-100 ion-text-center">
+      {{ 'PRESS_ADD_BUTTON_TO_GENERATE_CARDS_WITH_CHATGPT' | translate }}
+    </ion-label>
+  </ion-row>
+</ng-template>

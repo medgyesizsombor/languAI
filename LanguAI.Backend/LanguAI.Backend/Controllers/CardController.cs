@@ -1,4 +1,5 @@
-﻿using LanguAI.Backend.Services;
+﻿using LanguAI.Backend.Core.Models;
+using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Card;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,15 +27,36 @@ public class CardController : ControllerBase
     /// <param name="level">In which language the words are needed</param>
     /// <returns></returns>
     [HttpPost(Name = "GetWordList")]
-    public async Task<List<CardViewModel>> GetWordList(string nativeLanguage, string learningLanguage, string level)
+    public async Task<List<CardViewModel>> GetWordList(string nativeLanguage, string learningLanguage, string level, string topic)
     {
         try
         {
-            return await _cardService.GetWordList(nativeLanguage, learningLanguage, level);
+            return await _cardService.GetWordList(nativeLanguage, learningLanguage, level, topic);
         }
         catch (Exception)
         {
             return null;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost(Name = "SaveCards")]
+    public bool SaveCards(SaveCardRequest request)
+    {
+        try
+        {
+            if (request.CardListId == 0) throw new ArgumentNullException();
+            
+            return _cardService.SaveCards(request);
+        }
+        catch (Exception)
+        {
+            //TODO: logolás
+            return false;
         }
     }
 
@@ -44,7 +66,7 @@ public class CardController : ControllerBase
     /// <param name="request">Request of saving list of cards</param>
     /// <returns></returns>
     [HttpPost(Name = "SaveCardList")]
-    public bool SaveCardList(SaveCardListRequest request)
+    public int? SaveCardList(SaveCardListRequest request)
     {
         try
         {
@@ -52,7 +74,7 @@ public class CardController : ControllerBase
         }
         catch (Exception)
         {
-            return false;
+            return null;
         }
     }
 
@@ -67,6 +89,42 @@ public class CardController : ControllerBase
         try
         {
             return _cardService.GetListOfCardList(userId);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Get all the cards by the cardListId
+    /// </summary>
+    /// <param name="cardListId">cardList Id</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetCardsOfCardList")]
+    public List<CardViewModel> GetCardsOfCardList(int cardListId)
+    {
+        try
+        {
+            return _cardService.GetCardsOfCardList(cardListId);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Get cardList by Id
+    /// </summary>
+    /// <param name="cardListId">Id of the cardList</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetCardListById")]
+    public CardListViewModel GetCardListById(int cardListId)
+    {
+        try
+        {
+            return _cardService.GetCardListById(cardListId);
         }
         catch (Exception)
         {

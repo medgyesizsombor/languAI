@@ -1,0 +1,30 @@
+ion-icon {
+  color: #a6b1e1;
+  --ionicon-stroke-width: 40px;
+}
+
+ion-fab-list {
+  margin-bottom: 52px;
+}
+
+.close-icon {
+  color: #a6b1e1;
+  --ionicon-stroke-width: 40px;
+}
+
+ion-fab-button::part(native) {
+  background-color: #f4eeff;
+  color: #a6b1e1;
+
+  > ion-icon {
+    --ionicon-stroke-width: 40px;
+  }
+}
+
+ion-fab-button.fab-button-close-active {
+  color: #a6b1e1;
+
+  > ion-icon {
+    --ionicon-stroke-width: 40px;
+  }
+}

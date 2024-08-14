@@ -10,35 +10,38 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+@import '@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
 
 ion-app {
   --ion-background-color: #f4eeff;
-  --ion-font-family: "Poppins";
+  --ion-font-family: 'Poppins';
 }
 
 ion-tab-bar {
   --background: #424872;
   --color: #eef9ff;
-  padding: 10px;
   border-radius: 24px;
 }
 
 ion-button {
   margin: 0;
+}
+
+.ion-item-no-padding-end {
+  --inner-padding-end: 0 !important;
 }
 
 ion-input {
@@ -51,7 +54,10 @@ ion-input {
 
 ion-card {
   margin: 0;
+}
 
+.medium-color {
+  color: #a6b1e1;
 }
 
 .header-icon {
@@ -66,6 +72,26 @@ ion-card {
 .secondary-button {
   --background: #424872;
   width: 100%;
+}
+
+.border {
+  &-1 {
+    &-bottom-line {
+      border-bottom: 1px solid #a6b1e1;
+    }
+  }
+
+  &-2 {
+    border: 2px solid #a6b1e1;
+    &-bottom-line {
+      border-bottom: 2px solid #a6b1e1;
+    }
+
+    &-circle {
+      border: 2px solid #a6b1e1;
+      border-radius: 36px;
+    }
+  }
 }
 
 .line-color {
@@ -85,6 +111,16 @@ ion-card {
   display: flex;
 }
 
+.m {
+  &e-1 {
+    margin-right: 4px;
+  }
+
+  &s-1 {
+    margin-left: 4px;
+  }
+}
+
 .fs {
   &-11 {
     font-size: 11px;
@@ -94,8 +130,20 @@ ion-card {
     font-size: 14px;
   }
 
+  &-18 {
+    font-size: 18px;
+  }
+
   &-24 {
     font-size: 24px;
+  }
+
+  &-28 {
+    font-size: 28px;
+  }
+
+  &-32 {
+    font-size: 32px;
   }
 }
 
@@ -112,14 +160,29 @@ ion-card {
     padding-bottom: 0;
     padding-top: 0;
   }
+
+  &s-0 {
+    padding-left: 0;
+  }
+
+  &e-0 {
+    padding-right: 0;
+  }
+
+  &-inner-v-2 {
+    --inner-padding-end: 8px !important;
+    --inner-padding-start: 8px !important;
+  }
 }
 
-.w-100 {
-  width: 100%;
-}
+.w {
+  &-50 {
+    width: 50%;
+  }
 
-.icon-col {
-  padding-left: 0;
+  &-100 {
+    width: 100%;
+  }
 }
 
 .error-text {
@@ -127,13 +190,73 @@ ion-card {
 }
 
 .error-toastr {
-  --background: #D20062;
+  --background: #d20062;
   color: #000;
 }
 
 .success-toastr {
-  --background: #83C0C1;
+  --background: #83c0c1;
   --color: #4b4a50;
   text-align: center;
+}
 
+.error-color {
+  color: #d20062;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.absolute-back-button {
+  position: absolute;
+  // left: 22px;
+  // --padding-start: 0px;
+  // margin-top: 8px;
+}
+
+.no-shadow,
+.no-shadow::part(native) {
+  box-shadow: none;
+}
+
+.alert {
+  &-input-group {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  &-input,
+  &-input:focus {
+    padding-bottom: 8px !important;
+    margin: 0 !important;
+    padding-top: 16px !important;
+    border-bottom: 1px solid #a6b1e1 !important;
+  }
+
+  &-head {
+    padding-top: 24px !important;
+    padding-bottom: 8px !important;
+  }
+
+  &-button-group {
+    padding-top: 16px !important;
+    padding-bottom: 14px !important;
+  }
+
+  &-button {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  &-button:last-child {
+    margin-right: 0 !important;
+  }
+}
+
+ion-fab {
+  > ion-fab-button::part(native) {
+    background-color: #f4eeff;
+    color: #424242;
+  }
 }

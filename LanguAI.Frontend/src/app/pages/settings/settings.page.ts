@@ -3,25 +3,31 @@ import { SETTINGS_TITLE } from '../../util/util.constants';
 import { UserService } from 'src/api/services';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
-  styleUrls: ['./settings.page.scss'],
+  styleUrls: ['./settings.page.scss']
 })
 export class SettingsPage implements OnInit {
-  title = SETTINGS_TITLE;
+  title = this.translateService.instant(SETTINGS_TITLE);
 
   profile = {
     image: 'asd',
     username: 'asd1',
-    email: 'asd@asd.com',
+    email: 'asd@asd.com'
   };
 
-  constructor(private userService: UserService, private router: Router, private navController: NavController) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private navController: NavController,
+    private translateService: TranslateService
+  ) {}
 
   ngOnInit() {
-    this.userService.getUserById$Json({ userId: 3 }).subscribe((res) => {
+    this.userService.getUserById$Json({ userId: 3 }).subscribe(res => {
       if (res) {
         console.log(res);
         // patchModel();
@@ -35,15 +41,13 @@ export class SettingsPage implements OnInit {
 
   navigate(page: string, useNavController = false) {
     if (useNavController) {
-      console.log('this')
+      console.log('this');
       this.navController.navigateForward('/' + page);
     } else {
-      console.log('that')
+      console.log('that');
       this.router.navigateByUrl('/' + page);
     }
   }
 
-  private patchModel() {
-
-  }
+  private patchModel() {}
 }

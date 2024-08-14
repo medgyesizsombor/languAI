@@ -23,7 +23,7 @@ export class LoadingService {
     this.loading.present();
   }
 
-  hideLoading() {
-    this.loading?.dismiss();
+  async hideLoading() {
+    await this.loading?.dismiss();
   }
 }

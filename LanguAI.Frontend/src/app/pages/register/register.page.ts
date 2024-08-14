@@ -45,7 +45,7 @@ export class RegisterPage implements OnInit, OnDestroy {
       this.loadingService.showLoading(this.translateService.instant('REGISTRATION')).then(() => {
         //TODO: Ország selecttel majd kipótolni
         this.registerSub = this.registrationService
-          .register$Plain({
+          .register$Json({
             body: {
               username: this.registerForm?.get('username')?.value,
               email: this.registerForm?.get('email')?.value,

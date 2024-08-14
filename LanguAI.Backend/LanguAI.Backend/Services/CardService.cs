@@ -2,14 +2,18 @@
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Card;
+using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
 
 public interface ICardService
 {
-    Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level);
-    bool SaveCardList(SaveCardListRequest request);
+    Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level, string topic);
+    int? SaveCardList(SaveCardListRequest request);
     List<CardListViewModel> GetListOfCardList(int userId);
+    bool SaveCards(SaveCardRequest request);
+    List<CardViewModel> GetCardsOfCardList(int cardListId);
+    CardListViewModel GetCardListById(int  cardListId);
 }
 
 public class CardService : BaseService, ICardService
@@ -28,19 +32,19 @@ public class CardService : BaseService, ICardService
     /// <param name="learningLanguage"></param>
     /// <param name="level"></param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level)
+    public async Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level, string topic)
     {
-        List<CardViewModel> result = await _chatGPTService.GetWordsForCards(systemLanguage, learningLanguage, level);
+        List<CardViewModel> result = await _chatGPTService.GetWordsForCards(systemLanguage, learningLanguage, level, topic);
 
         return result;
     }
 
     /// <summary>
-    /// Save post
+    /// Save card list
     /// </summary>
     /// <param name="request">The request</param>
     /// <returns></returns>
-    public bool SaveCardList(SaveCardListRequest request)
+    public int? SaveCardList(SaveCardListRequest request)
     {
         bool isEdit = false;
 
@@ -53,7 +57,7 @@ public class CardService : BaseService, ICardService
 
             if (cardList == null)
             {
-                return false;
+                return null;
             }
         }
         else
@@ -77,14 +81,15 @@ public class CardService : BaseService, ICardService
 
         _context.SaveChanges();
 
-        return true;
+        return cardList.Id;
     }
 
     public List<CardListViewModel> GetListOfCardList(int userId)
     {
         if (userId == 0) throw new ArgumentNullException("userId");
 
-        return _context.CardList
+        var asd = _context.CardList
+            .Include(c => c.Cards)
             .Where(c => c.UserId == userId)
             .Select(c => new CardListViewModel
             {
@@ -93,12 +98,79 @@ public class CardService : BaseService, ICardService
                 LearningLanguage = c.LearningLanguage,
                 NativeLanguage = c.NativeLanguage,
                 Name = c.Name,
-                CardViewModelList = ConvertCardToCardViewModel(c.Cards.ToList())
+                CardViewModelList = ConvertCardListToCardViewModelList(c.Cards.ToList()),
+                Created = c.Created,
+                Modified = c.Modified
             }).ToList();
+
+        return asd;
     }
 
-    private List<CardViewModel> ConvertCardToCardViewModel(List<Card> cardList)
+    public bool SaveCards(SaveCardRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
+        List<Card> oldCards = _context.Card.Where(c => c.CardListId == request.CardListId).ToList();
+
+        if (request.Cards.Count == 0)
+        {
+            _context.RemoveRange(oldCards);
+            _context.SaveChanges();
+            return true;
+        }
+
+        List<Card> newCards = ConvertCardViewModelListToCardList(request.CardListId, request.Cards);
+
+        if (oldCards.Count == 0)
+        {
+            _context.Card.AddRange(newCards);
+            _context.SaveChanges();
+            return true;
+        }
+
+        List<Card> cardsToBeRemoved = new List<Card>();
+        List<Card> cardsToBeAdded = new List<Card>();
+
+        //Using hashset to determine which card should it remove or add to the cards
+        var oldCardSet = new HashSet<Card>(oldCards);
+        var newCardSet = new HashSet<Card>(newCards);
+
+        cardsToBeAdded.AddRange(newCardSet.Except(oldCardSet));
+        cardsToBeRemoved.AddRange(oldCardSet.Except(newCardSet));
+
+        _context.Card.RemoveRange(cardsToBeRemoved);
+        _context.Card.AddRange(cardsToBeAdded);
+        _context.SaveChanges();
+
+        return true;
+    }
+
+    /// <summary>
+    /// Get all the cards by the cardListId
+    /// </summary>
+    /// <param name="cardListId">cardList Id</param>
+    public List<CardViewModel> GetCardsOfCardList(int cardListId)
+    {
+        ArgumentNullException.ThrowIfNull(cardListId);
+
+        return ConvertCardListToCardViewModelList(_context.Card
+            .Where(c => c.CardListId == cardListId)
+            .ToList());
+    }
+
+    public CardListViewModel GetCardListById(int cardListId)
+    {
+        ArgumentNullException.ThrowIfNull(cardListId);
+
+        var cardList = _context.CardList.Include(c => c.Cards).Where(c => c.Id == cardListId).FirstOrDefault();
+
+        return ConvertCardListToCardListViewModel(cardList);
+    }
+
+    private static List<CardViewModel> ConvertCardListToCardViewModelList(List<Card> cardList)
+    {
+        if (cardList == null) { return null; }
+
         List<CardViewModel> cardViewModelList = new List<CardViewModel>() { };
 
         cardList.ForEach(c => cardViewModelList.Add(new CardViewModel
@@ -108,5 +180,51 @@ public class CardService : BaseService, ICardService
         }));
 
         return cardViewModelList;
+    }
+
+    private List<Card> ConvertCardViewModelListToCardList(int cardListId, List<CardViewModel> cardViewModelList)
+    {
+        List<Card> cards = new List<Card>();
+
+        cardViewModelList.ForEach(c =>
+        {
+            if (c.Id != null)
+            {
+                cards.Add(_context.Card.FirstOrDefault(card => card.Id == c.Id));
+            }
+            else
+            {
+                cards.Add(new Card()
+                {
+                    CardListId = cardListId,
+                    WordInLearningLanguage = c.WordInLearningLanguage,
+                    WordInNativeLanguage = c.WordInNativeLanguage
+                });
+            }
+        });
+
+        return cards;
+    }
+
+    /// <summary>
+    /// Convert a CardList to CardListViewModel
+    /// </summary>
+    private static CardListViewModel ConvertCardListToCardListViewModel(CardList cardList)
+    {
+        ArgumentNullException.ThrowIfNull(cardList);
+
+        return new CardListViewModel()
+        {
+            CardViewModelList = ConvertCardListToCardViewModelList(cardList.Cards.ToList()),
+            Created = cardList.Created,
+            Id = cardList.Id,
+            LearningLanguage = cardList.LearningLanguage,
+            Modified = cardList.Modified,
+            Name = cardList.Name,
+            NativeLanguage = cardList.NativeLanguage,
+            UserId = cardList.UserId
+        };
+
+
     }
 }

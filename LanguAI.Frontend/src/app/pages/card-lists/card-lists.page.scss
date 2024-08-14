@@ -1,0 +1,27 @@
+ion-card {
+  width: 200px;
+  margin: 8px;
+
+  &-header {
+    height: 39px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #dfe3f4;
+     
+    > #add-card-container {
+      height: 100%;
+    }
+  }
+
+  &-content {
+
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
+
+ion-list {
+  max-width: 520px;
+}

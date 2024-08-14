@@ -1,15 +1,11 @@
-<ion-header> <app-header [title]="title"></app-header></ion-header>
+<ion-header><app-header [title]="title"></app-header></ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
- 
-
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content
       pullingIcon="chevron-down-circle-outline"
       pullingText="Pull to refresh"
       refreshingSpinner="circles"
-      refreshingText="Refreshing..."
-    >
-    </ion-refresher-content>
+      refreshingText="Refreshing..."></ion-refresher-content>
   </ion-refresher>
   <ng-container *ngIf="posts.length; else missingPosts">
     <div *ngFor="let post of posts">
@@ -17,9 +13,7 @@
         <ion-avatar>
           <ion-img
             src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
-            alt="The Wisconsin State Capitol building in Madison, WI at night"
-          >
-          </ion-img>
+            alt="The Wisconsin State Capitol building in Madison, WI at night"></ion-img>
         </ion-avatar>
         <ion-label class="fs-14">{{ post.username }}</ion-label>
       </ion-row>
@@ -30,7 +24,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-row>
-              <ion-label> {{ post.content }} </ion-label>
+              <ion-label>{{ post.content }}</ion-label>
             </ion-row>
             <ion-row class="d-flex ion-justify-content-end">
               <ion-label class="fs-11">
