@@ -3,25 +3,10 @@
     [showAddButton]="true"
     [title]="title"
     (addButtonEmit)="addCardList()"></app-header>
-    <!-- TODO Középre igazítani majd a listát -->
+  <!-- TODO Középre igazítani majd a listát -->
   <ion-list
     *ngIf="!isLoading"
     class="d-flex ion-wrap ion-justify-content-center ion-no-padding">
-    <!-- <ion-card class="border-2" (click)="addCardList()">
-      <ion-card-header class="ion-text-center border-2-bottom-line">
-        <div
-          class="d-flex ion-align-items-center ion-justify-content-center"
-          id="add-card-container">
-          <ion-icon
-            class="fs-32 medium-color"
-            name="add-circle-outline"></ion-icon>
-        </div>
-      </ion-card-header>
-      <ion-card-content class="ion-text-center">
-        {{ 'CREATE_CARD_LIST' | translate }}
-      </ion-card-content>
-    </ion-card> -->
-
     <ion-card
       class="border-2"
       *ngFor="let cardList of cardLists"
