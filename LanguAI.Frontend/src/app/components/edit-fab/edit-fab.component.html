@@ -3,8 +3,10 @@
     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
   </ion-fab-button>
   <ion-fab-list side="top">
-    <!-- TODO tanulni-->
-    <ion-fab-button *ngIf="" size="small" class="border-2-circle">
+    <ion-fab-button
+      size="small"
+      class="border-2-circle"
+      (click)="playButtonEmit.emit()">
       <ion-icon name="copy-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-button

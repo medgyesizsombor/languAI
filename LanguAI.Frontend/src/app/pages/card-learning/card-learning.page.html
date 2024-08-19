@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+    <div class="container" *ngFor="let card of cards; let i = index">
+      <ion-card
+        *ngIf="i === currentCardIndex"
+        [ngClass]="{ 'flipped': isFlipped }"
+        (click)="flipCard()">
+        <ion-card-content class="front">
+          {{ card?.wordInLearningLanguage }}
+        </ion-card-content>
+        <ion-card-content class="back">
+          {{ card?.wordInNativeLanguage }}
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="button-container">
+      <div class="buttons">
+        <ion-button (click)="setScore(false)">
+          {{ 'MISSED' | translate }}
+        </ion-button>
+        <ion-button (click)="setScore()">
+          {{ 'SUCCESS' | translate }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -151,6 +151,9 @@ export class AlertService {
     });
   }
 
+  /**
+   * Show Alert if saving was missed
+   */
   async showSavingMissedAlert(): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
@@ -182,7 +185,32 @@ export class AlertService {
   }
 
   /**
-   * Is the name valid
+   * Show Alert if there are too few cards to learn
+   */
+  async showTooFewCardsAlert(): Promise<void> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('TOO_FEW_OF_THE_CARDS'),
+        subHeader: this.translateService.instant(
+          'TO_LEARN_THIS_CARDS_THERE_HAS_TO_BE_AT_LEAST_30_CARDS'
+        ),
+        buttons: [
+          {
+            text: this.translateService.instant('OK'),
+            role: 'confirm',
+            handler: () => {
+              resolve();
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * The name is not taken
    */
   private isNameValid(title: string, namesOfCardLists: Array<string>): boolean {
     return !namesOfCardLists.includes(title);

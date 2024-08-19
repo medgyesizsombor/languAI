@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { combineLatest, EMPTY, Subscription, switchMap } from 'rxjs';
+import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { CardListViewModel, CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
+import { CARD_LEARNING_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-card-list',
@@ -75,6 +76,11 @@ export class CardListPage implements OnInit, OnDestroy {
               this.cards = [...cardList?.cardViewModelList];
               this.originalCards = [...cardList?.cardViewModelList];
             }
+          },
+          error: () => {
+            this.toastrService.presentErrorToast(
+              this.translateService.instant('DATA_ERROR')
+            );
           }
         });
     });
@@ -151,8 +157,8 @@ export class CardListPage implements OnInit, OnDestroy {
           }
         )
       )
-      .then(res => {
-        if (res) {
+      .then((remove: boolean) => {
+        if (remove) {
           this.hasCardChanged = true;
           this.cards = this.cards.filter((word, index) => i !== index);
         }
@@ -206,6 +212,34 @@ export class CardListPage implements OnInit, OnDestroy {
   navigateBackWithoutSaving(quit: boolean) {
     if (quit) {
       this.navController.back();
+    }
+  }
+
+  /**
+   * Navigate to learn cards if there are at least 30 cards
+   */
+  async learnCards() {
+    if (this.hasCardChanged) {
+      await this.alertService.showSavingMissedAlert().then((quit: boolean) => {
+        if (quit) {
+          console.log(this.cards.length)
+          if (this.cards.length >= 2) {
+            this.navController.navigateForward(
+              CARD_LEARNING_NAVIGATION + '/' + this.cardListId
+            );
+          } else {
+            this.alertService.showTooFewCardsAlert();
+          }
+        }
+      });
+    }
+
+    if (this.cards.length >= 30) {
+      this.navController.navigateForward(
+        CARD_LEARNING_NAVIGATION + '/' + this.cardListId
+      );
+    } else {
+      this.alertService.showTooFewCardsAlert();
     }
   }
 }
