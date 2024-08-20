@@ -1,0 +1,19 @@
+.progress-bar-container {
+  display: flex;
+  justify-content: start;
+  width: 75%;
+  height: 12px;
+  background-color: #e4d5ff;
+  border-radius: 36px;
+}
+
+.progress-bar {
+  background-color: #d4bcff;
+  height: 12px;
+  border-radius: 36px;
+}
+
+.toolbar-content {
+  display: flex;
+  justify-content: center;
+}

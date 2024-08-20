@@ -9,12 +9,18 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { CardSwiperComponent } from '../components/card-swiper/card-swiper.component';
 import { EditFabComponent } from '../components/edit-fab/edit-fab.component';
+import { ProgressBarComponent } from '../components/progress-bar/progress-bar.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 @NgModule({
-  declarations: [HeaderComponent, CardSwiperComponent, EditFabComponent],
+  declarations: [
+    HeaderComponent,
+    CardSwiperComponent,
+    EditFabComponent,
+    ProgressBarComponent
+  ],
   imports: [
     CommonModule,
     IonicModule.forRoot(),
@@ -28,7 +34,8 @@ export function createTranslateLoader(http: HttpClient) {
     ReactiveFormsModule,
     HeaderComponent,
     CardSwiperComponent,
-    EditFabComponent
+    EditFabComponent,
+    ProgressBarComponent
   ]
 })
 export class UtilModule {}
