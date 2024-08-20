@@ -27,15 +27,15 @@ public class CardController : ControllerBase
     /// <param name="level">In which language the words are needed</param>
     /// <returns></returns>
     [HttpPost(Name = "GetWordList")]
-    public async Task<List<CardViewModel>> GetWordList(string nativeLanguage, string learningLanguage, string level, string topic)
+    public async Task<ActionResult<List<CardViewModel>>> GetWordList(string nativeLanguage, string learningLanguage, string level, string topic)
     {
         try
         {
-            return await _cardService.GetWordList(nativeLanguage, learningLanguage, level, topic);
+            return Ok(await _cardService.GetWordList(nativeLanguage, learningLanguage, level, topic));
         }
         catch (Exception)
         {
-            return null;
+            return BadRequest(null);
         }
     }
 
@@ -45,18 +45,18 @@ public class CardController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost(Name = "SaveCards")]
-    public bool SaveCards(SaveCardRequest request)
+    public ActionResult<bool> SaveCards(SaveCardRequest request)
     {
         try
         {
             if (request.CardListId == 0) throw new ArgumentNullException();
             
-            return _cardService.SaveCards(request);
+            return Ok(_cardService.SaveCards(request));
         }
         catch (Exception)
         {
             //TODO: logolás
-            return false;
+            return BadRequest(false);
         }
     }
 
@@ -66,15 +66,15 @@ public class CardController : ControllerBase
     /// <param name="request">Request of saving list of cards</param>
     /// <returns></returns>
     [HttpPost(Name = "SaveCardList")]
-    public int? SaveCardList(SaveCardListRequest request)
+    public ActionResult<int?> SaveCardList(SaveCardListRequest request)
     {
         try
         {
-            return _cardService.SaveCardList(request);
+            return Ok(_cardService.SaveCardList(request));
         }
         catch (Exception)
         {
-            return null;
+            return BadRequest(null);
         }
     }
 
@@ -84,15 +84,15 @@ public class CardController : ControllerBase
     /// <param name="userId">User Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetListOfCardList")]
-    public List<CardListViewModel> GetListOfCardList(int userId)
+    public ActionResult<List<CardListViewModel>> GetListOfCardList(int userId)
     {
         try
         {
-            return _cardService.GetListOfCardList(userId);
+            return Ok(_cardService.GetListOfCardList(userId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return null;
+            return BadRequest(e.Message);
         }
     }
 
@@ -102,15 +102,15 @@ public class CardController : ControllerBase
     /// <param name="cardListId">cardList Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetCardsOfCardList")]
-    public List<CardViewModel> GetCardsOfCardList(int cardListId)
+    public ActionResult<List<CardViewModel>> GetCardsOfCardList(int cardListId)
     {
         try
         {
-            return _cardService.GetCardsOfCardList(cardListId);
+            return Ok(_cardService.GetCardsOfCardList(cardListId));
         }
         catch (Exception)
         {
-            return null;
+            return BadRequest(null);
         }
     }
 
@@ -120,15 +120,15 @@ public class CardController : ControllerBase
     /// <param name="cardListId">Id of the cardList</param>
     /// <returns></returns>
     [HttpGet(Name = "GetCardListById")]
-    public CardListViewModel GetCardListById(int cardListId)
+    public ActionResult<CardListViewModel> GetCardListById(int cardListId)
     {
         try
         {
-            return _cardService.GetCardListById(cardListId);
+            return Ok(_cardService.GetCardListById(cardListId));
         }
         catch (Exception)
         {
-            return null;
+            return BadRequest(null);
         }
     }
 }

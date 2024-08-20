@@ -19,6 +19,7 @@ export class CardLearningPage implements OnInit {
   score = 0;
   isFlipped = false;
   currentCardIndex = 0;
+  progress = 0;
 
   constructor(
     private loadingService: LoadingService,
@@ -45,6 +46,8 @@ export class CardLearningPage implements OnInit {
       this.lastCardHandler();
     }
 
+    this.progress += (1 / this.cards?.length) * 100;
+
     this.currentCardIndex++;
     this.isFlipped = false;
   }
@@ -60,6 +63,10 @@ export class CardLearningPage implements OnInit {
    * Loading the data
    */
   private loadData() {
+    // this.cards = [
+    //   { wordInLearningLanguage: 'english', wordInNativeLanguage: 'angol' },
+    //   { wordInLearningLanguage: 'hungary', wordInNativeLanguage: 'magyar' }
+    // ];
     this.loadingService.showLoading().then(() => {
       this.activatedRoute.params
         .pipe(
@@ -81,7 +88,6 @@ export class CardLearningPage implements OnInit {
             this.loadingService.hideLoading();
             if (cards?.length) {
               this.cards = [...cards];
-              console.log(this.cards);
             }
           },
           error: () => {

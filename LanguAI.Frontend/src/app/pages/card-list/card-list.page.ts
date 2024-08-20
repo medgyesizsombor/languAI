@@ -222,8 +222,7 @@ export class CardListPage implements OnInit, OnDestroy {
     if (this.hasCardChanged) {
       await this.alertService.showSavingMissedAlert().then((quit: boolean) => {
         if (quit) {
-          console.log(this.cards.length)
-          if (this.cards.length >= 2) {
+          if (this.cards.length >= 30) {
             this.navController.navigateForward(
               CARD_LEARNING_NAVIGATION + '/' + this.cardListId
             );
