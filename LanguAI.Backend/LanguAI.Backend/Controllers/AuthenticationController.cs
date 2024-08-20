@@ -6,7 +6,7 @@ namespace LanguAI.Backend.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class AuthenticationController
+public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -18,12 +18,17 @@ public class AuthenticationController
     [HttpPost]
     public ActionResult<string> Authenticate(AuthenticateRequestViewModel request)
     {
-        if (request == null)
+        ArgumentNullException.ThrowIfNull(request);
+
+        try
         {
-            return null;
+            return Ok(_authenticationService.Authenticate(request));
+        }
+        catch
+        {
+            return BadRequest(null);
         }
 
-        return _authenticationService.Authenticate(request);
     }
 }
 

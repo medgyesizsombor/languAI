@@ -63,12 +63,12 @@ public class PostService : BaseService, IPostService
     /// <summary>
     /// Get post by id
     /// </summary>
-    /// <param name="id">Id</param>
+    /// <param name="postId">postId</param>
     /// <returns></returns>
-    public PostViewModel GetPostById(int id)
+    public PostViewModel GetPostById(int postId)
     {
         PostViewModel postList = _context.Post.Include(p => p.User)
-            .Where(p => p.Id == id)
+            .Where(p => p.Id == postId)
             .Select(p => new PostViewModel
             {
                 Id = p.Id,

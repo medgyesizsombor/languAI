@@ -26,13 +26,16 @@ public class FriendshipController : ControllerBase
     [HttpPost(Name = "RequestFriendship")]
     public ActionResult<bool> RequestFriendship(int requesterId, int receiverId)
     {
+        ArgumentNullException.ThrowIfNull(requesterId);
+        ArgumentNullException.ThrowIfNull(receiverId);
+
         try
         {
-            return _friendshipService.RequestFriendship(requesterId, receiverId);
+            return Ok(_friendshipService.RequestFriendship(requesterId, receiverId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return false;
+            return BadRequest(e.Message);
         }
     }
 }

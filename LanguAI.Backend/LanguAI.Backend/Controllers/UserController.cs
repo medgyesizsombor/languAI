@@ -18,25 +18,60 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
+    /// <summary>
+    /// Get all the users
+    /// </summary>
+    /// <returns></returns>
     [HttpGet(Name = "GetAllUsers")]
     public ActionResult<List<UserViewModel>> GetAllUsers()
     {
-        return _userService.GetAllUsers();
+        try
+        {
+            return Ok(_userService.GetAllUsers());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
+    /// <summary>
+    /// Get user by Id
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
     [HttpGet(Name = "GetUserById")]
     public ActionResult<UserViewModel> GetUserById(int userId)
     {
-        return _userService.GetUserById(userId);
+        ArgumentNullException.ThrowIfNull(userId);
+
+        try
+        {
+            return Ok(_userService.GetUserById(userId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
-    [HttpPost(Name = "EditUser")]
+    /// <summary>
+    /// Save user
+    /// </summary>
+    /// <param name="request">User ViewModel</param>
+    /// <returns></returns>
+    [HttpPost(Name = "SaveUser")]
     public ActionResult<bool> SaveUser(UserViewModel request)
     {
-        bool success = false;
+        ArgumentNullException.ThrowIfNull(request);
 
-        success = _userService.EditUser(request);
-
-        return success;
+        try
+        {
+            return Ok(_userService.EditUser(request));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }

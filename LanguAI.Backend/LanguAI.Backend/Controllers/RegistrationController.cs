@@ -6,7 +6,7 @@ namespace LanguAI.Backend.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class RegistrationController
+public class RegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
 
@@ -15,15 +15,25 @@ public class RegistrationController
         _registrationService = registrationService;
     }
 
+    /// <summary>
+    /// Register
+    /// </summary>
+    /// <param name="request">Request ViewModel</param>
+    /// <returns></returns>
     [HttpPost(Name = "Register")]
     public ActionResult<bool> Register(RegisterRequestViewModel request)
     {
-        if (request == null)
+        ArgumentNullException.ThrowIfNull(request);
+
+        try
         {
-            return false;
+            return Ok(_registrationService.Register(request));
         }
-        
-        return _registrationService.Register(request);
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+
     }
 
 }
