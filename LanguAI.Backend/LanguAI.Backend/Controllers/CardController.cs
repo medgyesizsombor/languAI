@@ -1,5 +1,4 @@
-﻿using LanguAI.Backend.Core.Models;
-using LanguAI.Backend.Services;
+﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Card;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +28,11 @@ public class CardController : ControllerBase
     [HttpPost(Name = "GetWordList")]
     public async Task<ActionResult<List<CardViewModel>>> GetWordList(string nativeLanguage, string learningLanguage, string level, string topic)
     {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nativeLanguage);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(learningLanguage);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(level);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(topic);
+
         try
         {
             return Ok(await _cardService.GetWordList(nativeLanguage, learningLanguage, level, topic));
@@ -47,10 +51,11 @@ public class CardController : ControllerBase
     [HttpPost(Name = "SaveCards")]
     public ActionResult<bool> SaveCards(SaveCardRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        if (request.CardListId == 0) throw new ArgumentNullException();
+
         try
         {
-            if (request.CardListId == 0) throw new ArgumentNullException();
-            
             return Ok(_cardService.SaveCards(request));
         }
         catch (Exception)
@@ -68,6 +73,8 @@ public class CardController : ControllerBase
     [HttpPost(Name = "SaveCardList")]
     public ActionResult<int?> SaveCardList(SaveCardListRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         try
         {
             return Ok(_cardService.SaveCardList(request));
@@ -86,6 +93,8 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetListOfCardList")]
     public ActionResult<List<CardListViewModel>> GetListOfCardList(int userId)
     {
+        ArgumentNullException.ThrowIfNull(userId);
+
         try
         {
             return Ok(_cardService.GetListOfCardList(userId));
@@ -104,6 +113,8 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetCardsOfCardList")]
     public ActionResult<List<CardViewModel>> GetCardsOfCardList(int cardListId)
     {
+        ArgumentNullException.ThrowIfNull(cardListId);
+
         try
         {
             return Ok(_cardService.GetCardsOfCardList(cardListId));
@@ -122,6 +133,8 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetCardListById")]
     public ActionResult<CardListViewModel> GetCardListById(int cardListId)
     {
+        ArgumentNullException.ThrowIfNull(cardListId);
+
         try
         {
             return Ok(_cardService.GetCardListById(cardListId));

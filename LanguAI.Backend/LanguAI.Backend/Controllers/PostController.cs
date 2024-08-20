@@ -27,11 +27,11 @@ public class PostController : ControllerBase
     {
         try
         {
-            return _postService.GetAllPost();
+            return Ok(_postService.GetAllPost());
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return null;
+            return BadRequest(e.Message);
         }
     }
 
@@ -43,33 +43,35 @@ public class PostController : ControllerBase
     [HttpGet(Name = "GetPosts")]
     public ActionResult<List<PostViewModel>> GetPosts([FromQuery] GetPostRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         try
         {
-            if (request == null) return null;
-
-            return _postService.GetPosts(request);
+            return Ok(_postService.GetPosts(request));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return null;
+            return BadRequest(e.Message);
         }
     }
 
     /// <summary>
     /// Get the post by Id
     /// </summary>
-    /// <param name="id">Id of the post</param>
+    /// <param name="postId">Id of the post</param>
     /// <returns></returns>
     [HttpGet(Name = "GetPostById")]
-    public ActionResult<PostViewModel> GetPostById(int id)
+    public ActionResult<PostViewModel> GetPostById(int postId)
     {
+        ArgumentNullException.ThrowIfNull(postId);
+
         try
         {
-            return _postService.GetPostById(id);
+            return Ok(_postService.GetPostById(postId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return null;
+            return BadRequest(e.Message);
         }
     }
 
@@ -81,13 +83,15 @@ public class PostController : ControllerBase
     [HttpPost(Name = "SavePost")]
     public ActionResult<bool> SavePost(SavePostRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         try
         {
-            return _postService.SavePost(request);
+            return Ok(_postService.SavePost(request));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return false;
+            return BadRequest(e.Message);
         }
     }
 }
