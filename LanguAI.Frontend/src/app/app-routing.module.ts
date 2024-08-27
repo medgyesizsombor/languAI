@@ -7,6 +7,7 @@ import {
   CARD_LISTS_NAVIGATION,
   CARD_NAVIGATION,
   FORUM_NAVIGATION,
+  LESSON_LEARNING,
   LESSONS_NAVIGATION,
   LOGIN_NAVIGATION,
   MESSAGES_NAVIGATION,
@@ -91,6 +92,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/card-learning/card-learning.module').then(
         m => m.CardLearningPageModule
+      )
+  },
+  {
+    path: LESSON_LEARNING,
+    loadChildren: () =>
+      import('./pages/lesson-learning/lesson-learning.module').then(
+        m => m.LessonLearningPageModule
       )
   }
 ];
