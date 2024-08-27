@@ -54,6 +54,7 @@ ion-input {
 
 ion-card {
   margin: 0;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 2px 0px;
 }
 
 .medium-color {
@@ -154,6 +155,11 @@ ion-card {
 
   &t-0 {
     padding-top: 0;
+  }
+
+  &y-24px {
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
   &v-0 {

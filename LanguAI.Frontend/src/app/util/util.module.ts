@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { CardSwiperComponent } from '../components/card-swiper/card-swiper.component';
 import { EditFabComponent } from '../components/edit-fab/edit-fab.component';
 import { ProgressBarComponent } from '../components/progress-bar/progress-bar.component';
+import { MissingWordExerciseComponent } from '../components/missing-word-exercise/missing-word-exercise.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -19,7 +20,8 @@ export function createTranslateLoader(http: HttpClient) {
     HeaderComponent,
     CardSwiperComponent,
     EditFabComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    MissingWordExerciseComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,8 @@ export function createTranslateLoader(http: HttpClient) {
     HeaderComponent,
     CardSwiperComponent,
     EditFabComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    MissingWordExerciseComponent
   ]
 })
 export class UtilModule {}

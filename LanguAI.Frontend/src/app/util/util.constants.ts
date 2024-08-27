@@ -16,5 +16,6 @@ export const POST_NAVIGATION = 'post';
 export const CARD_LEARNING_NAVIGATION = 'card-learning';
 export const LESSONS_NAVIGATION = 'lessons';
 export const CARD_NAVIGATION = 'card';
+export const LESSON_LEARNING = 'lesson-learning';
 export const JWT_TOKEN = 'jwt-token';
 export const USER_ID = 'user-id';

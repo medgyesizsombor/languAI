@@ -1,0 +1,15 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header class="ion-no-border">
+    <app-progress-bar></app-progress-bar>
+  </ion-header>
+  <div *ngIf="showOverlay" class="overlay"></div>
+  <app-missing-word-exercise
+    (showCorrectButton)="showCorrectButton()"></app-missing-word-exercise>
+  <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
+    <button class="continue-button no-shadow" (click)="nextExercise()">
+      {{ 'CONTINUE' | translate }}
+    </button>
+  </div>
+</ion-content>
+
+<ng-template #saveButton></ng-template>

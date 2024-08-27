@@ -1,0 +1,37 @@
+.blank {
+  width: 100px;
+  height: 20px;
+  background-color: #ffffff;
+  border-radius: 6px;
+}
+
+ion-card {
+  background-color: #dcd6f7;
+  border-radius: 8px;
+}
+
+.missing-words {
+  margin: 12px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  padding: 4px 16px;
+  border-radius: 6px;
+}
+
+.missing-words-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.correct-blank {
+  width: 100px;
+  height: 20px;
+  background-color: #A6B1E1;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
