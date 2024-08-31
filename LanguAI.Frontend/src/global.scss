@@ -112,6 +112,10 @@ ion-card {
   display: flex;
 }
 
+.f-wrap {
+  flex-wrap: wrap;
+}
+
 .m {
   &e-1 {
     margin-right: 4px;
@@ -119,6 +123,14 @@ ion-card {
 
   &s-1 {
     margin-left: 4px;
+  }
+
+  &-1 {
+    margin: 4px;
+  }
+
+  &-3 {
+    margin: 12px;
   }
 }
 
@@ -265,4 +277,12 @@ ion-fab {
     background-color: #f4eeff;
     color: #424242;
   }
+}
+
+.h-250px {
+  height: 250px;
+}
+
+.invisible {
+  visibility: hidden;
 }

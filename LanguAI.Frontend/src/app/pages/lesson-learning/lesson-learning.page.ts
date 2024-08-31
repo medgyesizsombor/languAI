@@ -16,7 +16,7 @@ export class LessonLearningPage implements OnInit {
 
   ngOnInit() {}
 
-  showCorrectButton() {
+  showContinueButton() {
     this.showOverlay = true;
   }
 

@@ -15,6 +15,10 @@
     background-color: #83c0c1;
     border-radius: 24px;
     --color: #4b4a50;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 ion-header {
