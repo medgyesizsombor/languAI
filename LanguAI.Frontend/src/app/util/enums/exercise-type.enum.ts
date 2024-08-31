@@ -1,3 +1,4 @@
 export enum ExerciseTypeEnum {
-  missingWordExercise = 1
+  missingWordExercise = 1,
+  sentenceAssembyExercise = 2
 }

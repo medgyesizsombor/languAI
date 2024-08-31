@@ -43,5 +43,6 @@
   "REMOVE_QUESTION": "Törlés?",
   "REMOVE": "Törlés",
   "ARE_YOU_SURE_YOU_WANT_TO_DELETE_FROM_THE_LIST": "Biztosan ki szeretnéd törölni a listából a {{ value }}-t?",
-  "CONTINUE": "Folytatás"
+  "CONTINUE": "Folytatás",
+  "CHECK": "Ellenőrzés"
 }
