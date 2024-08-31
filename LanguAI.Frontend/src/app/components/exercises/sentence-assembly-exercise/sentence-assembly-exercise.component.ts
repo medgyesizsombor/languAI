@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { SentenceAssemblyExerciseWord } from 'src/app/util/models/sentence-assembly-exercise-word';
+import { AnimationService } from 'src/app/util/services/animation.service';
 
 @Component({
   selector: 'app-sentence-assembly-exercise',
@@ -7,6 +8,8 @@ import { SentenceAssemblyExerciseWord } from 'src/app/util/models/sentence-assem
   styleUrls: ['./sentence-assembly-exercise.component.scss']
 })
 export class SentenceAssemblyExerciseComponent implements OnInit {
+  @ViewChildren('container', { read: ElementRef }) container: QueryList<ElementRef> | undefined;
+  
   @Output() showCorrectButton = new EventEmitter<void>();
 
   correctSentence: Array<SentenceAssemblyExerciseWord> = [];
@@ -19,7 +22,7 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
 
   clickedWords: Array<SentenceAssemblyExerciseWord> = [];
 
-  constructor() {}
+  constructor(private animationService: AnimationService) {}
 
   ngOnInit() {
     this.loadData();
@@ -44,6 +47,8 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
     const isCorrect = this.isSolutionCorrect();
     if (isCorrect) {
       this.showCorrectButton.emit();
+    } else {
+      this.animationService.rotateAnimation(this.container);
     }
   }
 

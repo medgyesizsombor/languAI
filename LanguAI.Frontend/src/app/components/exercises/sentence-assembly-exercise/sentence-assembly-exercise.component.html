@@ -1,26 +1,34 @@
-<ion-row class="ion-margin-bottom">
-  <ion-card class="ion-padding py-24px no-shadow h-250px w-100">
-    <div class="d-flex ion-align-items-start">
-      <ion-card
-        class="word-cards no-shadow dark-background m-1"
-        *ngFor="let word of clickedWords; let index = index"
-        (click)="putWord(index, true)">
+<div #container>
+  <ion-row class="ion-margin-bottom">
+    <ion-card class="ion-padding py-24px no-shadow h-250px w-100">
+      <div class="d-flex ion-align-items-start">
+        <ion-card
+          class="word-cards no-shadow dark-background m-1"
+          *ngFor="let word of clickedWords; let index = index"
+          (click)="putWord(index, true)">
+          {{ word.text }}
+        </ion-card>
+      </div>
+    </ion-card>
+  </ion-row>
+  <ion-row
+    class="d-flex ion-align-items-center ion-justify-content-center word-cards-row">
+    <ion-card
+      class="word-cards m-1"
+      [disabled]="word.clicked"
+      *ngFor="let word of sentence; let index = index"
+      (click)="putWord(index)">
+      <span [ngClass]="{ invisible: word.clicked }">
         {{ word.text }}
-      </ion-card>
-    </div>
-  </ion-card>
-</ion-row>
-<ion-row class="d-flex ion-align-items-center ion-justify-content-center word-cards-row">
-  <ion-card
-    class="word-cards m-1"
-    [disabled]="word.clicked"
-    *ngFor="let word of sentence; let index = index"
-    (click)="putWord(index)">
-    <span [ngClass]="{ invisible: word.clicked }">
-      {{ word.text }}
-    </span>
-  </ion-card>
-</ion-row>
-<ion-row class="d-flex ion-align-items-center ion-justify-content-center">
-  <ion-button class="check-button" [disabled]="!clickedWords.length" (click)="check()">{{ 'CHECK' | translate }}</ion-button>
-</ion-row>
+      </span>
+    </ion-card>
+  </ion-row>
+  <ion-row class="d-flex ion-align-items-center ion-justify-content-center">
+    <ion-button
+      class="check-button"
+      [disabled]="!clickedWords.length"
+      (click)="check()">
+      {{ 'CHECK' | translate }}
+    </ion-button>
+  </ion-row>
+</div>

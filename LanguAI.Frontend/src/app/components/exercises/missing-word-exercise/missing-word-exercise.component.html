@@ -1,19 +1,21 @@
-<div class="row ion-margin-bottom">
-  <ion-card class="ion-padding py-24px no-shadow">
-    <div class="d-flex ion-align-items-center">
-      <span class="me-1">{{ firstPartOfSentence }}</span>
-      <div *ngIf="!isCorrect; else correct" class="blank me-1"></div>
-      <span>{{ secondPartOfSentence }}</span>
-    </div>
-  </ion-card>
-</div>
-<div class="row missing-words-container">
-  <ion-card
-    class="missing-words"
-    *ngFor="let word of words; let index = index"
-    (click)="checkWord(index)">
-    {{ word }}
-  </ion-card>
+<div #container>
+  <div class="row ion-margin-bottom">
+    <ion-card class="ion-padding py-24px no-shadow">
+      <div class="d-flex ion-align-items-center">
+        <span class="me-1">{{ firstPartOfSentence }}</span>
+        <div *ngIf="!isCorrect; else correct" class="blank me-1"></div>
+        <span>{{ secondPartOfSentence }}</span>
+      </div>
+    </ion-card>
+  </div>
+  <div class="row missing-words-container">
+    <ion-card
+      class="missing-words"
+      *ngFor="let word of words; let index = index"
+      (click)="checkWord(index)">
+      {{ word }}
+    </ion-card>
+  </div>
 </div>
 
 <ng-template #correct>
