@@ -5,7 +5,8 @@
   <div *ngIf="showOverlay" class="overlay"></div>
   <!-- <app-missing-word-exercise
     (showCorrectButton)="showContinueButton()"></app-missing-word-exercise> -->
-  <app-sentence-assembly-exercise (showCorrectButton)="showContinueButton()"></app-sentence-assembly-exercise>
+  <app-sentence-assembly-exercise
+    (showCorrectButton)="showContinueButton()"></app-sentence-assembly-exercise>
   <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
     <button class="continue-button no-shadow" (click)="nextExercise()">
       {{ 'CONTINUE' | translate }}

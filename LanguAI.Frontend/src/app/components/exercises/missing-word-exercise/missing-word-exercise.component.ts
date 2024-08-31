@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { AnimationService } from 'src/app/util/services/animation.service';
 
 @Component({
   selector: 'app-missing-word-exercise',
@@ -6,6 +7,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./missing-word-exercise.component.scss']
 })
 export class MissingWordExerciseComponent implements OnInit {
+  @ViewChildren('container', { read: ElementRef }) container: QueryList<ElementRef> | undefined;
+  
   @Output() showCorrectButton = new EventEmitter<void>();
 
   firstPartOfSentence = 'Click on the';
@@ -14,7 +17,7 @@ export class MissingWordExerciseComponent implements OnInit {
   correctWord = 'asdasd';
   isCorrect: boolean | null = null;
 
-  constructor() {}
+  constructor(private animationService: AnimationService) {}
 
   ngOnInit() {
     this.loadData();
@@ -29,6 +32,7 @@ export class MissingWordExerciseComponent implements OnInit {
       this.showCorrectButton.emit();
     } else {
       this.isCorrect = false;
+      this.animationService.rotateAnimation(this.container);
     }
   }
 
