@@ -1,0 +1,22 @@
+.clicked {
+  background: #a6b1e1 !important;
+}
+
+.word-card {
+  margin: 6px;
+  min-width: 110px;
+  max-width: 320px;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 16px;
+  display: flex;
+  --border-radius: 6px;
+  background: #dcd6f7;
+}
+
+.title {
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

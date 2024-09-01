@@ -1,26 +1,22 @@
 .overlay {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(232, 233, 235, 0.4);
-    z-index: 10;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(232, 233, 235, 0.4);
+  z-index: 10;
 }
 
 .continue-button {
-    z-index: 20;
-    width: 100px;
-    height: 35px;
-    background-color: #83c0c1;
-    border-radius: 24px;
-    --color: #4b4a50;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-ion-header {
-    padding-bottom: 16px;
+  z-index: 20;
+  width: 100px;
+  height: 35px;
+  background-color: #83c0c1;
+  border-radius: 24px;
+  --color: #4b4a50;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
