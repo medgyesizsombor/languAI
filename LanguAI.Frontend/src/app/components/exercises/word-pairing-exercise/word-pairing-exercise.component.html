@@ -1,0 +1,29 @@
+<div #container>
+  <ion-row class="title">
+    <ion-label>
+      {{ 'WORD_PAIRING_TITLE' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row size="6" *ngFor="let word of originalWords; let index = index">
+    <ion-col class="d-flex ion-justify-content-center">
+      <ion-card
+        class="word-card"
+        [ngClass]="{ clicked: clickedWord?.text === word.wordInNativeLanguage }"
+        [disabled]="nativeWords[index].paired"
+        (click)="wordClicked(nativeWords[index])">
+        {{ nativeWords[index].text }}
+      </ion-card>
+    </ion-col>
+    <ion-col class="d-flex ion-justify-content-center">
+      <ion-card
+        class="word-card"
+        [ngClass]="{
+          clicked: clickedWord?.text === learningWords[index].text
+        }"
+        [disabled]="learningWords[index].paired"
+        (click)="wordClicked(learningWords[index])">
+        {{ learningWords[index].text }}
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</div>

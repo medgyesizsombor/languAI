@@ -44,5 +44,6 @@
   "REMOVE": "Törlés",
   "ARE_YOU_SURE_YOU_WANT_TO_DELETE_FROM_THE_LIST": "Biztosan ki szeretnéd törölni a listából a {{ value }}-t?",
   "CONTINUE": "Folytatás",
-  "CHECK": "Ellenőrzés"
+  "CHECK": "Ellenőrzés",
+  "WORD_PAIRING_TITLE": "Párosítsd össze a szavakat!"
 }
