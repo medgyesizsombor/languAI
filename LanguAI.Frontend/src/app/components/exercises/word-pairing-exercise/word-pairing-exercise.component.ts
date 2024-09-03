@@ -31,6 +31,7 @@ export class WordPairingExerciseComponent implements OnInit {
     { wordInLearningLanguage: 'english', wordInNativeLanguage: 'angol' },
     { wordInLearningLanguage: 'german', wordInNativeLanguage: 'német' }
   ];
+
   constructor(private animationService: AnimationService) {}
 
   ngOnInit() {
