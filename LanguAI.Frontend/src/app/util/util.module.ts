@@ -14,6 +14,7 @@ import { MissingWordExerciseComponent } from '../components/exercises/missing-wo
 import { SentenceAssemblyExerciseComponent } from '../components/exercises/sentence-assembly-exercise/sentence-assembly-exercise.component';
 import { WordPairingExerciseComponent } from '../components/exercises/word-pairing-exercise/word-pairing-exercise.component';
 import { MistakeCorrectingExerciseComponent } from '../components/exercises/mistake-correcting-exercise/mistake-correcting-exercise.component';
+import { QuestionAnsweringExerciseComponent } from '../components/exercises/question-answering-exercise/question-answering-exercise.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -27,7 +28,8 @@ export function createTranslateLoader(http: HttpClient) {
     MissingWordExerciseComponent,
     SentenceAssemblyExerciseComponent,
     WordPairingExerciseComponent,
-    MistakeCorrectingExerciseComponent
+    MistakeCorrectingExerciseComponent,
+    QuestionAnsweringExerciseComponent
   ],
   imports: [
     CommonModule,
@@ -47,7 +49,8 @@ export function createTranslateLoader(http: HttpClient) {
     MissingWordExerciseComponent,
     SentenceAssemblyExerciseComponent,
     WordPairingExerciseComponent,
-    MistakeCorrectingExerciseComponent
+    MistakeCorrectingExerciseComponent,
+    QuestionAnsweringExerciseComponent
   ]
 })
 export class UtilModule {}

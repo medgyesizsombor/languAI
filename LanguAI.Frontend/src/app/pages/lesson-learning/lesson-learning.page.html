@@ -9,8 +9,10 @@
     (showCorrectButton)="showContinueButton()"></app-sentence-assembly-exercise> -->
   <!-- <app-word-pairing-exercise
     (showCorrectButton)="showContinueButton()"></app-word-pairing-exercise> -->
-  <app-mistake-correcting-exercise
-    (showCorrectButton)="showContinueButton()"></app-mistake-correcting-exercise>
+  <!-- <app-mistake-correcting-exercise
+    (showCorrectButton)="showContinueButton()"></app-mistake-correcting-exercise> -->
+  <app-question-answering-exercise
+    (showCorrectButton)="showContinueButton()"></app-question-answering-exercise>
   <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
     <button class="continue-button no-shadow" (click)="nextExercise()">
       {{ 'CONTINUE' | translate }}
