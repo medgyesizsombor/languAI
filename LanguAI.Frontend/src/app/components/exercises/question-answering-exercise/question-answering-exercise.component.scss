@@ -1,0 +1,24 @@
+.word-card {
+  margin: 6px;
+  min-width: 110px;
+  max-width: 320px;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 16px;
+  display: flex;
+  --border-radius: 6px;
+  background: #dcd6f7;
+}
+
+.words-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

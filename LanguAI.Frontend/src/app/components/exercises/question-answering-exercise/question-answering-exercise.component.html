@@ -1,0 +1,23 @@
+<ion-row class="title">
+  <ion-label>
+    {{ 'ANSWER_THE_QUESTION' | translate }}
+  </ion-label>
+</ion-row>
+<div #container>
+  <ion-row class="ion-margin-bottom">
+    <ion-card class="ion-padding py-24px no-shadow h-250px w-100">
+      <div class="d-flex ion-align-items-start">
+        <ion-card class="word-card no-shadow dark-background m-1">
+          <span class="me-1">{{ mainSentence }}</span>
+        </ion-card>
+      </div>
+    </ion-card>
+  </ion-row>
+  <ion-row
+    *ngFor="let sentence of sentences; let index = index"
+    class="words-container">
+    <ion-card class="word-card" (click)="checkSentence(sentence)">
+      {{ sentence.text }}
+    </ion-card>
+  </ion-row>
+</div>
