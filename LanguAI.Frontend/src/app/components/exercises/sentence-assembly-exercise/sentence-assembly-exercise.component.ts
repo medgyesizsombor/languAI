@@ -19,7 +19,6 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
     { text: 'is', clicked: false, index: 2 },
     { text: 'This', clicked: false, index: 1 }
   ];
-
   clickedWords: Array<SentenceAssemblyExerciseWord> = [];
 
   constructor(private animationService: AnimationService) {}

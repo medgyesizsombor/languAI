@@ -13,6 +13,7 @@ import { ProgressBarComponent } from '../components/progress-bar/progress-bar.co
 import { MissingWordExerciseComponent } from '../components/exercises/missing-word-exercise/missing-word-exercise.component';
 import { SentenceAssemblyExerciseComponent } from '../components/exercises/sentence-assembly-exercise/sentence-assembly-exercise.component';
 import { WordPairingExerciseComponent } from '../components/exercises/word-pairing-exercise/word-pairing-exercise.component';
+import { MistakeCorrectingExerciseComponent } from '../components/exercises/mistake-correcting-exercise/mistake-correcting-exercise.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -25,7 +26,8 @@ export function createTranslateLoader(http: HttpClient) {
     ProgressBarComponent,
     MissingWordExerciseComponent,
     SentenceAssemblyExerciseComponent,
-    WordPairingExerciseComponent
+    WordPairingExerciseComponent,
+    MistakeCorrectingExerciseComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +46,8 @@ export function createTranslateLoader(http: HttpClient) {
     ProgressBarComponent,
     MissingWordExerciseComponent,
     SentenceAssemblyExerciseComponent,
-    WordPairingExerciseComponent
+    WordPairingExerciseComponent,
+    MistakeCorrectingExerciseComponent
   ]
 })
 export class UtilModule {}
