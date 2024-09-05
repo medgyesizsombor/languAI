@@ -9,6 +9,7 @@ export const REGISTER_NAVIGATION = 'register';
 export const PROFILE_NAVIGATION = 'profile';
 export const SETTINGS_NAVIGATION = 'settings';
 export const MESSAGES_NAVIGATION = 'messages';
+export const MESSAGE_NAVIGATION = 'message';
 export const FORUM_NAVIGATION = 'forum';
 export const CARD_LISTS_NAVIGATION = 'card-lists';
 export const CARD_LIST_NAVIGATION = 'card-list';

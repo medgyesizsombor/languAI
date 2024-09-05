@@ -47,5 +47,8 @@
   "CHECK": "Ellenőrzés",
   "WORD_PAIRING_TITLE": "Párosítsd össze a szavakat!",
   "CORRECT_THE_WRONG_SENTENCE": "Javítsd ki a hibás mondatot!",
-  "ANSWER_THE_QUESTION": "Válaszolj a kérdésre!"
+  "ANSWER_THE_QUESTION": "Válaszolj a kérdésre!",
+  "MESSAGE_NAVIGATION_ERROR": "Hiba történt az üzenet megnyitása közben!",
+  "DATA_IS_LOADING": "Adatok töltődnek",
+  "SELECT_FRIEND_TO_SEND_MESSAGE": "Válassz ki egy ismerőst, akinek üzenni akarsz"
 }

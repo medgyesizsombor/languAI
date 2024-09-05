@@ -1,6 +1,9 @@
 ﻿using LanguAI.Backend.Core;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
+using LanguAI.Backend.ViewModels.SelectorModel;
+using LanguAI.Backend.ViewModels.User;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace LanguAI.Backend.Services;
 
@@ -9,6 +12,7 @@ public interface IFriendshipService
     bool RequestFriendship(int requesterId, int receiverId);
     bool ReceivingFriendshipRequest(int friendshipRequestId, int status);
     int ChangeFriendshipStatus(int previousStatus, int newStatus);
+    List<IntSelectorModel> GetFriendList(int userId);
 }
 
 public class FriendshipService : BaseService, IFriendshipService
@@ -74,7 +78,9 @@ public class FriendshipService : BaseService, IFriendshipService
             _context.SaveChanges();
 
             return true;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             return false;
         }
     }
@@ -82,5 +88,23 @@ public class FriendshipService : BaseService, IFriendshipService
     public int ChangeFriendshipStatus(int previousStatus, int newStatus)
     {
         return 0;
+    }
+
+    /// <summary>
+    /// Get friendlist by user Id
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
+    public List<IntSelectorModel> GetFriendList(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var asd = _context.Friendship.Where(f => f.FirstUserId == userId || f.SecondUserId == userId).Select(f => new IntSelectorModel
+        {
+            Id = f.FirstUserId == userId ? f.FirstUserId : f.SecondUserId,
+            Name = f.FirstUserId == userId ? f.FirstUser.Username : f.SecondUser.Username
+        }).ToList();
+
+        return asd;
     }
 }

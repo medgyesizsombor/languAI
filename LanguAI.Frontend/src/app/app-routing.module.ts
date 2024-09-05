@@ -10,6 +10,7 @@ import {
   LESSON_LEARNING,
   LESSONS_NAVIGATION,
   LOGIN_NAVIGATION,
+  MESSAGE_NAVIGATION,
   MESSAGES_NAVIGATION,
   POST_NAVIGATION,
   PROFILE_NAVIGATION,
@@ -100,6 +101,11 @@ const routes: Routes = [
       import('./pages/lesson-learning/lesson-learning.module').then(
         m => m.LessonLearningPageModule
       )
+  },
+  {
+    path: MESSAGE_NAVIGATION + '/:id',
+    loadChildren: () =>
+      import('./pages/message/message.module').then(m => m.MessagePageModule)
   }
 ];
 @NgModule({

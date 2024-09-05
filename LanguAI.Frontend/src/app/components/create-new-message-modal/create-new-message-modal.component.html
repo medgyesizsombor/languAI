@@ -1,0 +1,41 @@
+<!-- <div>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Welcome</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-select placeholder="Select fruit" (ionChange)="isSelectValueChanged($event)">
+        <ion-select-option
+          *ngFor="let friend of friendList"
+          [value]="friend.id">
+          {{ friend.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>
+</div> -->
+<div class="wrapper">
+  <h1>Dialog header</h1>
+
+  <ion-list lines="none">
+    <ion-item>
+      <ion-select placeholder="Select fruit" (ionChange)="isSelectValueChanged($event)">
+        <ion-select-option
+          *ngFor="let friend of friendList"
+          [value]="friend.id">
+          {{ friend.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</div>
