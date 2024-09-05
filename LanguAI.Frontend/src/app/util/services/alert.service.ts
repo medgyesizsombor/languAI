@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from './toastr.service';
+import { IntSelectorModel } from 'src/api/models';
 
 @Injectable({
   providedIn: 'root'

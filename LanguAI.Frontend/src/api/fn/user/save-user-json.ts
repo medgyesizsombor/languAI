@@ -8,12 +8,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { UserViewModel } from '../../models/user-view-model';
 
-export interface EditUser$Json$Params {
+export interface SaveUser$Json$Params {
       body?: UserViewModel
 }
 
-export function editUser$Json(http: HttpClient, rootUrl: string, params?: EditUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, editUser$Json.PATH, 'post');
+export function saveUser$Json(http: HttpClient, rootUrl: string, params?: SaveUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, saveUser$Json.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
@@ -28,4 +28,4 @@ export function editUser$Json(http: HttpClient, rootUrl: string, params?: EditUs
   );
 }
 
-editUser$Json.PATH = '/User/SaveUser';
+saveUser$Json.PATH = '/User/SaveUser';

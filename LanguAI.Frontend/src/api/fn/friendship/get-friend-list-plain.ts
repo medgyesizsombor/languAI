@@ -6,16 +6,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PostViewModel } from '../../models/post-view-model';
+import { IntSelectorModel } from '../../models/int-selector-model';
 
-export interface GetPostById$Plain$Params {
-  postId?: number;
+export interface GetFriendList$Plain$Params {
+  userId?: number;
 }
 
-export function getPostById$Plain(http: HttpClient, rootUrl: string, params?: GetPostById$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<PostViewModel>> {
-  const rb = new RequestBuilder(rootUrl, getPostById$Plain.PATH, 'get');
+export function getFriendList$Plain(http: HttpClient, rootUrl: string, params?: GetFriendList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<IntSelectorModel>>> {
+  const rb = new RequestBuilder(rootUrl, getFriendList$Plain.PATH, 'get');
   if (params) {
-    rb.query('postId', params.postId, {});
+    rb.query('userId', params.userId, {});
   }
 
   return http.request(
@@ -23,9 +23,9 @@ export function getPostById$Plain(http: HttpClient, rootUrl: string, params?: Ge
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PostViewModel>;
+      return r as StrictHttpResponse<Array<IntSelectorModel>>;
     })
   );
 }
 
-getPostById$Plain.PATH = '/Post/GetPostById';
+getFriendList$Plain.PATH = '/Friendship/GetFriendList';

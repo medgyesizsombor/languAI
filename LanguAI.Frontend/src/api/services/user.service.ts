@@ -9,10 +9,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { editUser$Json } from '../fn/user/edit-user-json';
-import { EditUser$Json$Params } from '../fn/user/edit-user-json';
-import { editUser$Plain } from '../fn/user/edit-user-plain';
-import { EditUser$Plain$Params } from '../fn/user/edit-user-plain';
 import { getAllUsers$Json } from '../fn/user/get-all-users-json';
 import { GetAllUsers$Json$Params } from '../fn/user/get-all-users-json';
 import { getAllUsers$Plain } from '../fn/user/get-all-users-plain';
@@ -21,6 +17,10 @@ import { getUserById$Json } from '../fn/user/get-user-by-id-json';
 import { GetUserById$Json$Params } from '../fn/user/get-user-by-id-json';
 import { getUserById$Plain } from '../fn/user/get-user-by-id-plain';
 import { GetUserById$Plain$Params } from '../fn/user/get-user-by-id-plain';
+import { saveUser$Json } from '../fn/user/save-user-json';
+import { SaveUser$Json$Params } from '../fn/user/save-user-json';
+import { saveUser$Plain } from '../fn/user/save-user-plain';
+import { SaveUser$Plain$Params } from '../fn/user/save-user-plain';
 import { UserViewModel } from '../models/user-view-model';
 
 @Injectable({ providedIn: 'root' })
@@ -123,49 +123,49 @@ export class UserService extends BaseService {
     );
   }
 
-  /** Path part for operation `editUser()` */
-  static readonly EditUserPath = '/User/SaveUser';
+  /** Path part for operation `saveUser()` */
+  static readonly SaveUserPath = '/User/SaveUser';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `editUser$Plain()` instead.
+   * To access only the response body, use `saveUser$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  editUser$Plain$Response(params?: EditUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-    return editUser$Plain(this.http, this.rootUrl, params, context);
+  saveUser$Plain$Response(params?: SaveUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return saveUser$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `editUser$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `saveUser$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  editUser$Plain(params?: EditUser$Plain$Params, context?: HttpContext): Observable<boolean> {
-    return this.editUser$Plain$Response(params, context).pipe(
+  saveUser$Plain(params?: SaveUser$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.saveUser$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `editUser$Json()` instead.
+   * To access only the response body, use `saveUser$Json()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  editUser$Json$Response(params?: EditUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-    return editUser$Json(this.http, this.rootUrl, params, context);
+  saveUser$Json$Response(params?: SaveUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return saveUser$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `editUser$Json$Response()` instead.
+   * To access the full response (for headers, for example), `saveUser$Json$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  editUser$Json(params?: EditUser$Json$Params, context?: HttpContext): Observable<boolean> {
-    return this.editUser$Json$Response(params, context).pipe(
+  saveUser$Json(params?: SaveUser$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.saveUser$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
