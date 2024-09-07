@@ -18,6 +18,7 @@ namespace LanguAI.Backend.Core
         public virtual DbSet<Friendship> Friendship { get; set; }
         public virtual DbSet<Card> Card { get; set; }
         public virtual DbSet<CardList> CardList { get; set; }
+        public virtual DbSet<Message> Message { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +45,18 @@ namespace LanguAI.Backend.Core
             modelBuilder.Entity<FriendshipRequest>()
                 .HasOne(fr => fr.Receiver)
                 .WithMany(u => u.ReceivedFriendshipRequests)
+                .HasForeignKey(fr => fr.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
+                .HasForeignKey(fr => fr.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMessages)
                 .HasForeignKey(fr => fr.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

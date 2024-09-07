@@ -33,4 +33,8 @@ public class User
     public virtual ICollection<FriendshipRequest> SentFriendshipRequests { get; set; } = new List<FriendshipRequest>();
 
     public virtual ICollection<FriendshipRequest> ReceivedFriendshipRequests { get; set; } = new List<FriendshipRequest>();
+
+    public virtual ICollection<Message> SentMessages { get; set; } = new List<Message>();
+
+    public virtual ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
 }
