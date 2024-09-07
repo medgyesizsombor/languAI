@@ -7,6 +7,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { AuthenticationService } from './services/authentication.service';
 import { CardService } from './services/card.service';
 import { FriendshipService } from './services/friendship.service';
+import { MessageService } from './services/message.service';
 import { PostService } from './services/post.service';
 import { RegistrationService } from './services/registration.service';
 import { UserService } from './services/user.service';
@@ -22,6 +23,7 @@ import { UserService } from './services/user.service';
     AuthenticationService,
     CardService,
     FriendshipService,
+    MessageService,
     PostService,
     RegistrationService,
     UserService,

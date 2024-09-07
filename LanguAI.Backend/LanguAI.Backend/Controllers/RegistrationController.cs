@@ -33,7 +33,5 @@ public class RegistrationController : ControllerBase
         {
             return BadRequest(e.Message);
         }
-
     }
-
 }
