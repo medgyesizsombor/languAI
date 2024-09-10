@@ -37,10 +37,6 @@ const routes: Routes = [
         loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
       },
       {
-        path: PROFILE_NAVIGATION,
-        loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
-      },
-      {
         path: 'post',
         loadChildren: () => import('../post/post.module').then(m => m.PostPageModule)
       },

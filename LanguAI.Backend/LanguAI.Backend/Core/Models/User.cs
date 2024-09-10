@@ -20,7 +20,7 @@ public class User
     public string PasswordHash { get; set; }
 
     [Required]
-    public int Country { get; set; }
+    public int Language { get; set; }
 
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 

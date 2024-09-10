@@ -9,7 +9,7 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/util/services/alert.service';
-import { CreateNewMessageModalComponent } from 'src/app/components/create-new-message-modal/create-new-message-modal.component';
+import { CreateNewMessageModalComponent } from 'src/app/components/modals/create-new-message-modal/create-new-message-modal.component';
 
 @Component({
   selector: 'app-messages',

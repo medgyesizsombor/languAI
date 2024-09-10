@@ -13,12 +13,12 @@
         <span
           *ngIf="isUsernameDirty && loginForm.get('username')?.hasError('required')"
           class="error-text">
-          Username is required.
+          {{ 'USERNAME_IS_REQUIRED' | translate }}
         </span>
         <span
           *ngIf="isUsernameDirty && loginForm.get('username')?.hasError('minlength')"
           class="error-text">
-          Username has to be at least 6 characters.
+          {{ 'MIN_6_CHARACTERS' | translate }}
         </span>
       </ion-col>
     </ion-row>
@@ -39,7 +39,7 @@
         <span
           *ngIf="isPasswordDirty && loginForm.get('password')?.hasError('minlength')"
           class="error-text">
-          Username has to be at least 6 characters.
+          {{ 'MIN_6_CHARACTERS' | translate }}
         </span>
       </ion-col>
     </ion-row>

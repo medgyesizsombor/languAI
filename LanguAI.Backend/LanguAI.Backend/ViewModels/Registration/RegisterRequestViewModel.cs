@@ -10,5 +10,5 @@ public class RegisterRequestViewModel
 
     public DateTime DateOfBirth { get; set; }
 
-    public int Country { get; set; }
+    public int Language { get; set; }
 }

@@ -50,5 +50,20 @@
   "ANSWER_THE_QUESTION": "Válaszolj a kérdésre!",
   "MESSAGE_NAVIGATION_ERROR": "Hiba történt az üzenet megnyitása közben!",
   "DATA_IS_LOADING": "Adatok töltődnek",
-  "SELECT_FRIEND_TO_SEND_MESSAGE": "Válassz ki egy ismerőst, akinek üzenni akarsz"
+  "SELECT_FRIEND_TO_SEND_MESSAGE": "Válassz ki egy ismerőst, akinek üzenni akarsz",
+  "CHANGE_PASSWORD": "Jelszó megváltoztatása",
+  "UNSUCCESS_PASSWORD_CHANGE": "Sikertelen jelszó változtatás",
+  "SUCCESS_PASSWORD_CHANGE": "Sikeres jelszó változtatás",
+  "OLD_PASSWORD": "Régi jelszó",
+  "NEW_PASSWORD": "Új jelszó",
+  "CONFIRM_NEW_PASSWORD": "Új jelszó mégegyszer",
+  "CONFIRM": "Megerősítés",
+  "SUCCESS_SAVING": "Sikeres mentés",
+  "UNSUCCESS_SAVING": "Sikertelen mentés",
+  "USERNAME_IS_REQUIRED": "Felhasználónév szükséges",
+  "MIN_6_CHARACTERS": "Legalább 6 karakternek kell lennie",
+  "PASSWORD_IS_REQUIRED": "Jelszó szükséges",
+  "LANGUAGE": "Nyelv",
+  "HU": "Magyar",
+  "EN": "Angol"
 }

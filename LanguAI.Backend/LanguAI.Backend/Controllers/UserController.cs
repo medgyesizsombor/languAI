@@ -74,4 +74,24 @@ public class UserController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    /// <summary>
+    /// Change User Password
+    /// </summary>
+    /// <param name="request">Change Password Request</param>
+    /// <returns></returns>
+    [HttpPost(Name = "ChangePassword")]
+    public ActionResult<bool> ChangePassword(ChangePasswordRequestViewModel request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        try
+        {
+            return Ok(_userService.ChangePassword(request));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 }

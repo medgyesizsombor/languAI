@@ -35,4 +35,18 @@
     </ion-col>
     <ion-col> {{ 'DARK_MODE' | translate }} </ion-col>
   </ion-row>
+  <ion-row>
+    <ion-col class="ion-text-center">
+      <ion-button class="primary-button-outline" (click)="logout()">
+        {{'SIGN_OUT' | translate}}
+      </ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="ion-text-center">
+      <ion-button class="error-outline-button" (click)="deleteProfile()">
+        {{'DELETE_PROFILE' | translate}}
+      </ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>

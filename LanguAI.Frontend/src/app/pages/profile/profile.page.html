@@ -4,42 +4,40 @@
     [showBackArrow]="true"
     (click)="navigateBack()"
     [title]="title"></app-header>
-
-  <ion-row class="avatar-container ion-justify-content-center">
-    <ion-avatar>
-      <ion-img
-        src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
-        alt="The Wisconsin State Capitol building in Madison, WI at night"></ion-img>
-    </ion-avatar>
-  </ion-row>
   <form *ngIf="profileForm" [formGroup]="profileForm">
+    <!-- USERNAME -->
     <ion-row>
       <ion-col class="ion-margin-horizontal">
         <ion-row class="line">
-          <ion-col size="1.5" class="align-item-center fs-24 ps-0">
+          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
             <ion-icon name="person-outline"></ion-icon>
           </ion-col>
-          <ion-col>
+          <ion-col class="form-col">
             <ion-input
+              id="username-input"
+              name="username-input"
               [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
-              [readonly]="!isEdit"
               type="text"
+              [autocomplete]="false"
               formControlName="username"
               placeholder="{{ 'USERNAME' | translate}}"></ion-input>
           </ion-col>
         </ion-row>
       </ion-col>
     </ion-row>
+
+    <!-- EMAIL -->
     <ion-row>
       <ion-col class="ion-margin-horizontal">
         <ion-row class="line">
-          <ion-col size="1.5" class="align-item-center fs-24 ps-0">
+          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
             <ion-icon name="mail-outline"></ion-icon>
           </ion-col>
-          <ion-col>
+          <ion-col class="form-col">
             <ion-input
+              id="email-input"
+              name="email-input"
               [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
-              [readonly]="!isEdit"
               type="email"
               formControlName="email"
               placeholder="{{ 'EMAIL' | translate}}"></ion-input>
@@ -47,24 +45,55 @@
         </ion-row>
       </ion-col>
     </ion-row>
+
+    <!-- LANGUAGE -->
+    <ion-row>
+      <ion-col class="ion-margin-horizontal">
+        <ion-row class="line">
+          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
+            <ion-icon name="language-outline"></ion-icon>
+          </ion-col>
+          <ion-col class="form-col">
+            <ion-select
+              [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
+              formControlName="language"
+              (ngModelChange)="changeLanguage()">
+              <ion-select-option
+                *ngFor="let language of languages"
+                [value]="language.id">
+                {{ language.name!.toUpperCase() | translate }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <!-- DATE OF BIRTH -->
     <ion-row>
       <ion-col class="ion-margin-horizontal">
         <ion-row class="line d-flex">
-          <ion-col size="1.5" class="align-item-center fs-24 ps-0">
+          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
             <ion-icon name="calendar-outline"></ion-icon>
           </ion-col>
-          <ion-col class="ion-align-content-start">
+          <ion-col class="ion-align-content-start form-col">
             <div class="d-flex">
               <ion-datetime-button
                 [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
                 [disabled]="!isEdit"
                 datetime="datetime"></ion-datetime-button>
-
               <ion-modal [keepContentsMounted]="true">
                 <ng-template>
                   <ion-datetime
+                    #datetime
+                    formControlName="dateOfBirth"
                     presentation="date"
-                    id="datetime"></ion-datetime>
+                    id="datetime"
+                    [showDefaultButtons]="true"
+                    doneText="{{ 'OK' | translate }}"
+                    cancelText="{{ 'CANCEL' | translate }}">
+                    <span slot="title">{{ 'SELECT_YOUR_BIRTHDAY' }}</span>
+                  </ion-datetime>
                 </ng-template>
               </ion-modal>
             </div>
@@ -72,30 +101,24 @@
         </ion-row>
       </ion-col>
     </ion-row>
-    <ng-container *ngIf="!isEdit; else edit">
-      <ion-row>
-        <ion-button
-          (click)="changeEditMode()"
-          class="ion-padding-horizontal primary-button">
-          {{'EDIT_PROFILE' | translate}}
-        </ion-button>
-      </ion-row>
-      <ion-row>
-        <ion-col class="ion-text-center">
-          <ion-button (click)="logout()">{{'SIGN_OUT' | translate}}</ion-button>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col class="ion-text-center">
-          <ion-button>{{'DELETE_PROFILE' | translate}}</ion-button>
-        </ion-col>
-      </ion-row>
-    </ng-container>
   </form>
-  <ion-row></ion-row>
-  <ion-row></ion-row>
-  <ion-row></ion-row>
-  <ion-row></ion-row>
+
+  <ng-container *ngIf="!isEdit; else edit">
+    <ion-row>
+      <ion-button
+        (click)="changeEditMode()"
+        class="ion-padding-horizontal primary-button">
+        {{ 'EDIT_PROFILE' | translate }}
+      </ion-button>
+    </ion-row>
+    <ion-row>
+      <ion-button
+        (click)="changePassword()"
+        class="primary-button-outline w-100 ion-padding-horizontal">
+        {{ 'CHANGE_PASSWORD' | translate }}
+      </ion-button>
+    </ion-row>
+  </ng-container>
 </ion-content>
 
 <ng-template #edit>
@@ -105,6 +128,10 @@
     </ion-button>
   </ion-row>
   <ion-row>
-    <ion-button (click)="changeEditMode()">{{'CANCEL' | translate}}</ion-button>
+    <ion-button
+      class="ion-padding-horizontal primary-button-outline w-100"
+      (click)="changeEditMode()">
+      {{'CANCEL' | translate}}
+    </ion-button>
   </ion-row>
 </ng-template>

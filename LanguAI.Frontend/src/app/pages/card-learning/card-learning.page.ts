@@ -63,10 +63,6 @@ export class CardLearningPage implements OnInit {
    * Loading the data
    */
   private loadData() {
-    // this.cards = [
-    //   { wordInLearningLanguage: 'english', wordInNativeLanguage: 'angol' },
-    //   { wordInLearningLanguage: 'hungary', wordInNativeLanguage: 'magyar' }
-    // ];
     this.loadingService.showLoading().then(() => {
       this.activatedRoute.params
         .pipe(

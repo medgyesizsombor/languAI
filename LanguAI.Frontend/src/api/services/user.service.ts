@@ -9,6 +9,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { changePassword$Json } from '../fn/user/change-password-json';
+import { ChangePassword$Json$Params } from '../fn/user/change-password-json';
+import { changePassword$Plain } from '../fn/user/change-password-plain';
+import { ChangePassword$Plain$Params } from '../fn/user/change-password-plain';
 import { getAllUsers$Json } from '../fn/user/get-all-users-json';
 import { GetAllUsers$Json$Params } from '../fn/user/get-all-users-json';
 import { getAllUsers$Plain } from '../fn/user/get-all-users-plain';
@@ -166,6 +170,53 @@ export class UserService extends BaseService {
    */
   saveUser$Json(params?: SaveUser$Json$Params, context?: HttpContext): Observable<boolean> {
     return this.saveUser$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `changePassword()` */
+  static readonly ChangePasswordPath = '/User/ChangePassword';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changePassword$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changePassword$Plain$Response(params?: ChangePassword$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return changePassword$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `changePassword$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changePassword$Plain(params?: ChangePassword$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.changePassword$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changePassword$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changePassword$Json$Response(params?: ChangePassword$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return changePassword$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `changePassword$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changePassword$Json(params?: ChangePassword$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.changePassword$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
