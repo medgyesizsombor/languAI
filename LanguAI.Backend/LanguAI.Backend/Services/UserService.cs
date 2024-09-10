@@ -12,6 +12,7 @@ public interface IUserService
     UserViewModel GetUserById(int userId);
     bool EditUser(UserViewModel request);
     bool ChangePassword(ChangePasswordRequestViewModel request);
+    bool DeleteUser(int userId);
 }
 
 public class UserService : BaseService, IUserService
@@ -21,6 +22,10 @@ public class UserService : BaseService, IUserService
     {
     }
 
+    /// <summary>
+    /// Get all the users
+    /// </summary>
+    /// <returns></returns>
     public List<UserViewModel> GetAllUsers()
     {
         return _context.User.Select(u => new UserViewModel()
@@ -32,6 +37,11 @@ public class UserService : BaseService, IUserService
         }).ToList();
     }
 
+    /// <summary>
+    /// Get user by Id
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
     public UserViewModel GetUserById(int userId)
     {
         User user = _context.User.FirstOrDefault(u => u.Id == userId);
@@ -51,6 +61,11 @@ public class UserService : BaseService, IUserService
         };
     }
 
+    /// <summary>
+    /// Save user
+    /// </summary>
+    /// <param name="request">User ViewModel</param>
+    /// <returns></returns>
     public bool EditUser(UserViewModel request)
     {
         try
@@ -102,6 +117,39 @@ public class UserService : BaseService, IUserService
         }
         catch (Exception ex)
         {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Delete User
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
+    public bool DeleteUser(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var currentUserId = 7;
+
+        try
+        {
+            if (userId != currentUserId) {
+                //throw new Authenti
+            }
+
+            var user = _context.User.FirstOrDefault(u => u.Id == userId);
+
+            if (user == null) {
+                //throw new AuthenticationError();
+            }
+
+            _context.User.Remove(user);
+            _context.SaveChanges();
+
+            return true;
+        }
+        catch (Exception e) {
             return false;
         }
     }
