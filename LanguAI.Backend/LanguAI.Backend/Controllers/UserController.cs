@@ -94,4 +94,24 @@ public class UserController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    /// <summary>
+    /// Delete User
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
+    [HttpPost(Name = "DeleteUser")]
+    public ActionResult<bool> DeleteUser(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        try
+        {
+            return Ok(_userService.DeleteUser(userId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 }

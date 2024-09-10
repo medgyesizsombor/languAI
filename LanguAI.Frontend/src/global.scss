@@ -130,6 +130,14 @@ ion-card {
     margin-right: 4px;
   }
 
+  &e-2 {
+    margin-right: 8px;
+  }
+
+  &e-3 {
+    margin-right: 12px;
+  }
+
   &s-1 {
     margin-left: 4px;
   }
@@ -140,6 +148,19 @@ ion-card {
 
   &-3 {
     margin: 12px;
+  }
+
+  &t-3 {
+    margin-top: 12px;
+  }
+
+  &t-4 {
+    margin-top: 16px;
+  }
+
+  &x-4 {
+    margin-right: 16px;
+    margin-left: 16px;
   }
 }
 
