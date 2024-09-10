@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { SETTINGS_TITLE } from '../../util/util.constants';
+import { LOGIN_NAVIGATION, SETTINGS_TITLE } from '../../util/util.constants';
 import { UserService } from 'src/api/services';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 
 @Component({
   selector: 'app-settings',
@@ -23,16 +24,17 @@ export class SettingsPage implements OnInit {
     private userService: UserService,
     private router: Router,
     private navController: NavController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
-    this.userService.getUserById$Json({ userId: 3 }).subscribe(res => {
-      if (res) {
-        console.log(res);
-        // patchModel();
-      }
-    });
+    // this.userService.getUserById$Json({ userId: 7 }).subscribe(res => {
+    //   if (res) {
+    //     console.log(res);
+    //     // patchModel();
+    //   }
+    // });
   }
 
   openNotificationModal() {}
@@ -41,13 +43,26 @@ export class SettingsPage implements OnInit {
 
   navigate(page: string, useNavController = false) {
     if (useNavController) {
-      console.log('this');
       this.navController.navigateForward('/' + page);
     } else {
-      console.log('that');
       this.router.navigateByUrl('/' + page);
     }
   }
 
   private patchModel() {}
+
+  /**
+   * Logout
+   */
+  logout() {
+    this.localStorageService.removeJwtToken();
+    this.router.navigate(['/' + LOGIN_NAVIGATION]);
+  }
+
+  /**
+   * Delete the profile
+   */
+  deleteProfile() {
+    //TODO: Megcsinálni
+  }
 }

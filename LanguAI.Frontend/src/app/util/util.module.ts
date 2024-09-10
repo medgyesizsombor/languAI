@@ -15,7 +15,8 @@ import { SentenceAssemblyExerciseComponent } from '../components/exercises/sente
 import { WordPairingExerciseComponent } from '../components/exercises/word-pairing-exercise/word-pairing-exercise.component';
 import { MistakeCorrectingExerciseComponent } from '../components/exercises/mistake-correcting-exercise/mistake-correcting-exercise.component';
 import { QuestionAnsweringExerciseComponent } from '../components/exercises/question-answering-exercise/question-answering-exercise.component';
-import { CreateNewMessageModalComponent } from '../components/create-new-message-modal/create-new-message-modal.component';
+import { CreateNewMessageModalComponent } from '../components/modals/create-new-message-modal/create-new-message-modal.component';
+import { LanguageSelectModalComponent } from '../components/modals/language-select-modal/language-select-modal.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -31,7 +32,8 @@ export function createTranslateLoader(http: HttpClient) {
     WordPairingExerciseComponent,
     MistakeCorrectingExerciseComponent,
     QuestionAnsweringExerciseComponent,
-    CreateNewMessageModalComponent
+    CreateNewMessageModalComponent,
+    LanguageSelectModalComponent
   ],
   imports: [
     CommonModule,
@@ -53,7 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
     WordPairingExerciseComponent,
     MistakeCorrectingExerciseComponent,
     QuestionAnsweringExerciseComponent,
-    CreateNewMessageModalComponent
+    CreateNewMessageModalComponent,
+    LanguageSelectModalComponent
   ]
 })
 export class UtilModule {}

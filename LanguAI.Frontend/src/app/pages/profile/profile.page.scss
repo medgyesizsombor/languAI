@@ -53,3 +53,16 @@ ion-datetime-button::part(native) {
 .readonly-mode {
   opacity: 0.6 !important;
 }
+
+.primary-button {
+  padding-top: 14px;
+  --box-shadow: none;
+
+  &-outline {
+    margin-top: 22px;
+  }
+}
+
+ion-select::part(icon) {
+  display: none !important;
+}

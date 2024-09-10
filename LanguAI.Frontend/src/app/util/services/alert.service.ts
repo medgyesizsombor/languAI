@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from './toastr.service';
-import { IntSelectorModel } from 'src/api/models';
+import { LoadingService } from './loading.service';
+import { UserService } from 'src/api/services';
+import { LocalStorageService } from './localstorage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,10 @@ export class AlertService {
   constructor(
     private alertController: AlertController,
     private translateService: TranslateService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private loadingService: LoadingService,
+    private userService: UserService,
+    private localStorage: LocalStorageService
   ) {}
 
   /**
@@ -201,6 +206,115 @@ export class AlertService {
             role: 'confirm',
             handler: () => {
               resolve();
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show Change Password Alert
+   */
+  async showChangePasswordAlert(): Promise<string | null> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('CHANGE_PASSWORD'),
+        cssClass: 'ion-input',
+        inputs: [
+          {
+            type: 'text',
+            name: 'oldPassword',
+            placeholder: this.translateService.instant('OLD_PASSWORD'),
+            attributes: {
+              autocomplete: 'off'
+            }
+          },
+          {
+            type: 'text',
+            name: 'newPassword',
+            placeholder: this.translateService.instant('NEW_PASSWORD'),
+            attributes: {
+              autocomplete: 'off'
+            }
+          },
+          {
+            type: 'text',
+            name: 'newPasswordConfirm',
+            placeholder: this.translateService.instant('CONFIRM_NEW_PASSWORD'),
+            attributes: {
+              autocomplete: 'off'
+            }
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve(null);
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              if (data.newPassword === data.newPasswordConfirm) {
+                this.loadingService.showLoading().then(() => {
+                  this.userService
+                    .changePassword$Json({
+                      body: {
+                        newPassword: data.newPassword,
+                        oldPassword: data.oldPassword,
+                        userId: this.localStorage.getUserId()!
+                      }
+                    })
+                    .subscribe({
+                      next: (success: boolean) => {
+                        this.loadingService.hideLoading();
+                        if (success) {
+                          this.toastrService.presentSuccessToast(
+                            this.translateService.instant(
+                              'SUCCESS_PASSWORD_CHANGE'
+                            )
+                          );
+                        } else {
+                          this.toastrService.presentErrorToast(
+                            this.translateService.instant(
+                              'UNSUCCESS_PASSWORD_CHANGE'
+                            )
+                          );
+                        }
+                      },
+                      error: () => {
+                        this.loadingService.hideLoading();
+                        this.toastrService.presentErrorToast(
+                          this.translateService.instant(
+                            'UNSUCCESS_PASSWORD_CHANGE'
+                          )
+                        );
+                      }
+                    });
+                });
+              }
+              // if (namesOfCardLists?.length) {
+              //   const isNameValid = this.isNameValid(
+              //     data.title,
+              //     namesOfCardLists as Array<string>
+              //   );
+
+              //   if (isNameValid) {
+              //     resolve(data.title);
+              //   } else {
+              //     this.toastrService.presentErrorToast(
+              //       this.translateService.instant('NAME_IS_ALREADY_TAKEN')
+              //     );
+              //   }
+              // } else {
+              //   resolve(data.title);
+              // }
             }
           }
         ]

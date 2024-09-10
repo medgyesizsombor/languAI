@@ -72,6 +72,12 @@ const routes: Routes = [
     canActivate: [AuthGuardFunction]
   },
   {
+    path: PROFILE_NAVIGATION + '/:id',
+    loadChildren: () =>
+      import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
+    canActivate: [AuthGuardFunction]
+  },
+  {
     path: POST_NAVIGATION,
     loadChildren: () =>
       import('./pages/post/post.module').then(m => m.PostPageModule)

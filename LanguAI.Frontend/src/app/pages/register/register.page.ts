@@ -51,7 +51,7 @@ export class RegisterPage implements OnInit, OnDestroy {
               email: this.registerForm?.get('email')?.value,
               dateOfBirth: '1998-04-20',
               password: this.registerForm?.get('password')?.value,
-              country: 1,
+              language: 1,
             },
           })
           .subscribe({

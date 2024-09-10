@@ -1,15 +1,26 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PROFILE_TITLE, LOGIN_NAVIGATION } from '../../util/util.constants';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import { PROFILE_TITLE } from '../../util/util.constants';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from 'src/api/services';
-import { UserViewModel } from 'src/api/models';
+import { IntSelectorModel, UserViewModel } from 'src/api/models';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-import { NavController } from '@ionic/angular';
+import { Subscription, switchMap } from 'rxjs';
+import { ModalController, NavController } from '@ionic/angular';
+import { AlertService } from 'src/app/util/services/alert.service';
+import { LanguageSelectModalComponent } from 'src/app/components/modals/language-select-modal/language-select-modal.component';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-profile',
@@ -17,12 +28,24 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./profile.page.scss']
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  @ViewChild('selectWrapperInner') selectWrapperInner: ElementRef | undefined;
+
+  id = uuid();
   profileForm: FormGroup | undefined;
   title = this.translateService.instant(PROFILE_TITLE);
   profileModel: UserViewModel = {};
   isEdit = false;
   originalProfileModel: UserViewModel = {};
   getUserSub: Subscription | undefined;
+  userId: number | null | undefined;
+  someoneElseProfile = false;
+  loadDataSub: Subscription | undefined;
+  saveSub: Subscription | undefined;
+  getLanguagesSub: Subscription | undefined;
+  languages: Array<IntSelectorModel> = [
+    { id: 1, name: 'hu' },
+    { id: 2, name: 'en' }
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,7 +55,10 @@ export class ProfilePage implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private toastrService: ToastrService,
     private translateService: TranslateService,
-    private navController: NavController
+    private navController: NavController,
+    private alertService: AlertService,
+    private activatedRoute: ActivatedRoute,
+    private modalController: ModalController
   ) {}
 
   ngOnInit() {
@@ -41,6 +67,8 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getUserSub?.unsubscribe();
+    this.saveSub?.unsubscribe();
+    this.loadDataSub?.unsubscribe();
   }
 
   /**
@@ -48,25 +76,85 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   changeEditMode() {
     this.isEdit = !this.isEdit;
-  }
 
-  /**
-   * Logout
-   */
-  logout() {
-    this.localStorageService.removeJwtToken();
-    this.router.navigate(['/' + LOGIN_NAVIGATION]);
+    const method = this.isEdit ? 'enable' : 'disable';
+
+    ['username', 'email', 'dateOfBirth', 'language'].forEach(control => {
+      this.profileForm?.controls[control][method]();
+    });
   }
 
   /**
    * Save the profile
    */
   save() {
-    //TODO
+    this.loadingService.showLoading().then(() => {
+      this.saveSub = this.userService
+        .saveUser$Json({
+          body: { ...this.profileForm?.value, id: this.userId! }
+        })
+        .subscribe({
+          next: (success: boolean) => {
+            this.loadingService.hideLoading();
+            if (success) {
+              this.isEdit = false;
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant('SUCCESS_SAVING')
+              );
+            } else {
+              this.toastrService.presentErrorToast(
+                this.translateService.instant('UNSUCCESS_SAVING')
+              );
+            }
+          },
+          error: () => {
+            this.loadingService.hideLoading();
+            this.toastrService.presentSuccessToast(
+              this.translateService.instant('UNSUCCESS_SAVING')
+            );
+          }
+        });
+    });
   }
 
   navigateBack() {
     this.navController.back();
+  }
+
+  /**
+   * Password Change
+   */
+  changePassword() {
+    this.alertService.showChangePasswordAlert();
+  }
+
+  changeLanguage() {
+    this.translateService.use(
+      this.languages.find(
+        l => l.id === this.profileForm?.controls['language'].value
+      )?.name!
+    );
+  }
+
+  async openLanguageSelect() {
+    this.loadingService.showLoading().then(async () => {
+      this.languages = [];
+      if (!this.languages?.length) {
+        this.getLanguagesSub;
+      }
+      const modal = await this.modalController.create({
+        component: LanguageSelectModalComponent,
+        componentProps: {
+          allLanguages: this.languages
+        }
+      });
+      modal.present();
+
+      const { data, role } = await modal.onWillDismiss();
+
+      if (role === 'confirm') {
+      }
+    });
   }
 
   /**
@@ -85,18 +173,39 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Load user's data
    */
   private loadData() {
-    this.getUserSub = this.userService
-      .getUserById$Json({ userId: 3 })
-      .subscribe(res => {
-        if (res) {
-          this.profileModel = res;
-          this.originalProfileModel = { ...this.profileModel };
-          this.fillForm();
-        } else {
-          this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast('DATA_ERROR');
-        }
-      });
+    this.userId = this.localStorageService.getUserId();
+    this.profileModel = {
+      id: this.userId!,
+      language: 1,
+      dateOfBirth: '1998-04-20',
+      email: 'teszt@teszt.com',
+      username: 'zsombi'
+    };
+    this.originalProfileModel = { ...this.profileModel };
+    this.fillForm();
+    // this.loadDataSub = this.activatedRoute.params
+    //   .pipe(
+    //     switchMap((params: Params) => {
+    //       const idFromParam = params['id'];
+    //       this.someoneElseProfile = idFromParam?.length;
+
+    //       return this.userService.getUserById$Json({
+    //         userId: idFromParam?.length ? +idFromParam : this.userId!
+    //       });
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: (res: UserViewModel) => {
+    //       this.profileModel = res;
+    //       if (!this.someoneElseProfile) {
+    //         this.originalProfileModel = { ...this.profileModel };
+    //       }
+    //       this.fillForm();
+    //     },
+    //     error: () => {
+    //       this.loadingService.hideLoading();
+    //     }
+    //   });
   }
 
   /**
@@ -104,9 +213,13 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   private createForm() {
     this.profileForm = this.formBuilder.group({
-      username: new FormControl(''),
-      email: [''],
-      dateOfBirth: ['']
+      username: [{ value: '', disabled: true }, [Validators.required]],
+      email: [
+        { value: '', disabled: true },
+        [Validators.required, Validators.email]
+      ],
+      dateOfBirth: [{ value: '', disabled: true }, [Validators.required]],
+      language: [{ value: '', disabled: true }, [Validators.required]]
     });
   }
 
@@ -117,7 +230,8 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.profileForm?.patchValue({
       username: this.profileModel.username,
       email: this.profileModel.email,
-      dateOfBirth: this.profileModel.dateOfBirth
+      dateOfBirth: this.profileModel.dateOfBirth,
+      language: this.profileModel.language
     });
 
     this.loadingService.hideLoading();

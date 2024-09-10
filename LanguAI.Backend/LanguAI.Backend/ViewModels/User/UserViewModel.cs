@@ -8,7 +8,7 @@ public class UserViewModel
 
     public DateTime DateOfBirth { get; set; }
 
-    public int Country { get; set; }
+    public int Language { get; set; }
 
     public string Email { get; set; }
 }
