@@ -99,18 +99,18 @@ export class ProfilePage implements OnInit, OnDestroy {
             if (success) {
               this.isEdit = false;
               this.toastrService.presentSuccessToast(
-                this.translateService.instant('SUCCESS_SAVING')
+                this.translateService.instant('SUCCESSFUL_SAVE')
               );
             } else {
               this.toastrService.presentErrorToast(
-                this.translateService.instant('UNSUCCESS_SAVING')
+                this.translateService.instant('UNSUCCESSFUL_SAVE')
               );
             }
           },
           error: () => {
             this.loadingService.hideLoading();
             this.toastrService.presentSuccessToast(
-              this.translateService.instant('UNSUCCESS_SAVING')
+              this.translateService.instant('UNSUCCESSFUL_SAVE')
             );
           }
         });
