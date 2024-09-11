@@ -67,7 +67,7 @@ export class LoginPage implements OnInit, OnDestroy {
                 this.loadingService.hideLoading();
                 if (res?.length) {
                   this.toastrService.presentSuccessToast(
-                    this.translateService.instant('SUCCESSFULLY_SIGNED_IN')
+                    this.translateService.instant('SUCCESSFUL_SIGN_IN')
                   );
                   this.localStorageService.setJwtToken(res);
                   this.router.navigate(['/' + LESSONS_NAVIGATION]);

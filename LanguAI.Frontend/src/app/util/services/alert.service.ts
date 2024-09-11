@@ -277,13 +277,13 @@ export class AlertService {
                         if (success) {
                           this.toastrService.presentSuccessToast(
                             this.translateService.instant(
-                              'SUCCESS_PASSWORD_CHANGE'
+                              'SUCCESSFUL_PASSWORD_CHANGE'
                             )
                           );
                         } else {
                           this.toastrService.presentErrorToast(
                             this.translateService.instant(
-                              'UNSUCCESS_PASSWORD_CHANGE'
+                              'UNSUCCESSFUL_PASSWORD_CHANGE'
                             )
                           );
                         }
@@ -292,7 +292,7 @@ export class AlertService {
                         this.loadingService.hideLoading();
                         this.toastrService.presentErrorToast(
                           this.translateService.instant(
-                            'UNSUCCESS_PASSWORD_CHANGE'
+                            'UNSUCCESSFUL_PASSWORD_CHANGE'
                           )
                         );
                       }

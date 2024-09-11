@@ -59,7 +59,7 @@ export class RegisterPage implements OnInit, OnDestroy {
               this.loadingService.hideLoading();
               if (res) {
                 //TODO: Bejelentkeztetni
-                this.toastrService.presentSuccessToast(this.translateService.instant('SUCCESSFULLY_REGISTERED'));
+                this.toastrService.presentSuccessToast(this.translateService.instant('SUCCESSFUL_REGISTRATION'));
                 this.router.navigate(['/' + LOGIN_NAVIGATION]);
               } else {
                 this.toastrService.presentErrorToast(
