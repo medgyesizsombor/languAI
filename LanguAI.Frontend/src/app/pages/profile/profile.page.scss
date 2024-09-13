@@ -54,15 +54,40 @@ ion-datetime-button::part(native) {
   opacity: 0.6 !important;
 }
 
-.primary-button {
-  padding-top: 14px;
-  --box-shadow: none;
+// .primary-button {
+//   padding-top: 14px;
+//   --box-shadow: none;
 
-  &-outline {
-    margin-top: 22px;
-  }
-}
+//   &-outline {
+//     margin-top: 22px;
+//   }
+// }
+
+// .request-button {
+//   margin-top: 8px;
+//   --padding-top: 4px;
+//   --padding-bottom: 4px;
+//   --padding-left: 8px;
+//   --padding-right: 8px;
+// }
 
 ion-select::part(icon) {
   display: none !important;
+}
+
+ion-badge {
+  background: #dcd6f7;
+  border-radius: 36px;
+  color: #424872;
+  border-color: #dcd6f7;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 11px;
+}
+
+.active-badge {
+  background-color: #a6b1e1;
+  border-color: #424872;
+  border-style: solid;
+  border-width: 1px;
 }

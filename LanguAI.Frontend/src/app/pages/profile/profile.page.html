@@ -4,126 +4,175 @@
     [showBackArrow]="true"
     (click)="navigateBack()"
     [title]="title"></app-header>
-  <form *ngIf="profileForm" [formGroup]="profileForm">
-    <!-- USERNAME -->
-    <ion-row>
-      <ion-col class="ion-margin-horizontal">
-        <ion-row class="line">
-          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
-            <ion-icon name="person-outline"></ion-icon>
-          </ion-col>
-          <ion-col class="form-col">
-            <ion-input
-              id="username-input"
-              name="username-input"
-              [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
-              type="text"
-              [autocomplete]="false"
-              formControlName="username"
-              placeholder="{{ 'USERNAME' | translate}}"></ion-input>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
 
-    <!-- EMAIL -->
-    <ion-row>
-      <ion-col class="ion-margin-horizontal">
-        <ion-row class="line">
-          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
-            <ion-icon name="mail-outline"></ion-icon>
-          </ion-col>
-          <ion-col class="form-col">
-            <ion-input
-              id="email-input"
-              name="email-input"
-              [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
-              type="email"
-              formControlName="email"
-              placeholder="{{ 'EMAIL' | translate}}"></ion-input>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
+  <!-- ACTION BUTTONS -->
+  <ion-row class="pb-5" *ngIf="isProfileOfSomeoneElse">
+    <ion-col
+      class="ion-align-items-center me-1">
+      <ion-button
+        class="primary-button request-button w-100 no-shadow"
+        (click)="sendRequest()"
+        [ngSwitch]="friendshipStatus">
+        <span *ngSwitchCase="1">{{ 'SEND_FRIEND_REQUEST' | translate }}</span>
+        <span *ngSwitchCase="2">{{ 'SENT_FRIEND_REQUEST' | translate }}</span>
+        <span *ngSwitchCase="3">{{ 'FRIEND' | translate }}</span>
+      </ion-button>
+    </ion-col>
+    <ion-col size="auto" class="pb-1">
+      <ion-button class="mt-0 primary-button-outline no-shadow">
+        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
 
-    <!-- LANGUAGE -->
-    <ion-row>
-      <ion-col class="ion-margin-horizontal">
-        <ion-row class="line">
-          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
-            <ion-icon name="language-outline"></ion-icon>
-          </ion-col>
-          <ion-col class="form-col">
-            <ion-select
-              [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
-              formControlName="language"
-              (ngModelChange)="changeLanguage()">
-              <ion-select-option
-                *ngFor="let language of languages"
-                [value]="language.id">
-                {{ language.name!.toUpperCase() | translate }}
-              </ion-select-option>
-            </ion-select>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
+  <!-- BADGES -->
+  <ion-row class="ion-justify-content-center pb-1">
+    <ion-badge
+      class="me-4 px-4 py-1"
+      [ngClass]="{ 'active-badge': activeBadge === badgeEnum.basicInfo }"
+      (click)="setActiveBadge(badgeEnum.basicInfo)">
+      {{ 'BASIC_INFO' | translate }}
+    </ion-badge>
+    <ion-badge
+      class="me-4 px-4 py-1"
+      [ngClass]="{ 'active-badge': activeBadge === badgeEnum.posts }"
+      (click)="setActiveBadge(badgeEnum.posts)">
+      {{ 'POSTS' | translate }}
+    </ion-badge>
+    <ion-badge
+      class="px-4 py-1"
+      [ngClass]="{ 'active-badge': activeBadge === badgeEnum.cards }"
+      (click)="setActiveBadge(badgeEnum.cards)">
+      {{ 'CARDS' | translate }}
+    </ion-badge>
+  </ion-row>
 
-    <!-- DATE OF BIRTH -->
-    <ion-row>
-      <ion-col class="ion-margin-horizontal">
-        <ion-row class="line d-flex">
-          <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
-            <ion-icon name="calendar-outline"></ion-icon>
-          </ion-col>
-          <ion-col class="ion-align-content-start form-col">
-            <div class="d-flex">
-              <ion-datetime-button
+  <ng-container *ngIf="activeBadge === badgeEnum.basicInfo; else posts">
+    <form *ngIf="profileForm" [formGroup]="profileForm" class="pb-5">
+      <!-- USERNAME -->
+      <ion-row>
+        <ion-col>
+          <ion-row class="line">
+            <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
+              <ion-icon name="person-outline"></ion-icon>
+            </ion-col>
+            <ion-col class="form-col">
+              <ion-input
+                id="username-input"
+                name="username-input"
                 [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
-                [disabled]="!isEdit"
-                datetime="datetime"></ion-datetime-button>
-              <ion-modal [keepContentsMounted]="true">
-                <ng-template>
-                  <ion-datetime
-                    #datetime
-                    formControlName="dateOfBirth"
-                    presentation="date"
-                    id="datetime"
-                    [showDefaultButtons]="true"
-                    doneText="{{ 'OK' | translate }}"
-                    cancelText="{{ 'CANCEL' | translate }}">
-                    <span slot="title">{{ 'SELECT_YOUR_BIRTHDAY' }}</span>
-                  </ion-datetime>
-                </ng-template>
-              </ion-modal>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
-  </form>
+                type="text"
+                [autocomplete]="false"
+                formControlName="username"
+                placeholder="{{ 'USERNAME' | translate}}"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
 
-  <ng-container *ngIf="!isEdit; else edit">
-    <ion-row>
-      <ion-button
-        (click)="changeEditMode()"
-        class="ion-padding-horizontal primary-button">
-        {{ 'EDIT_PROFILE' | translate }}
-      </ion-button>
-    </ion-row>
-    <ion-row>
-      <ion-button
-        (click)="changePassword()"
-        class="primary-button-outline w-100 ion-padding-horizontal">
-        {{ 'CHANGE_PASSWORD' | translate }}
-      </ion-button>
-    </ion-row>
+      <!-- EMAIL -->
+      <ion-row>
+        <ion-col>
+          <ion-row class="line">
+            <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
+              <ion-icon name="mail-outline"></ion-icon>
+            </ion-col>
+            <ion-col class="form-col">
+              <ion-input
+                id="email-input"
+                name="email-input"
+                [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
+                type="email"
+                formControlName="email"
+                placeholder="{{ 'EMAIL' | translate}}"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <!-- LANGUAGE -->
+      <ion-row *ngIf="!isProfileOfSomeoneElse">
+        <ion-col>
+          <ion-row class="line">
+            <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
+              <ion-icon name="language-outline"></ion-icon>
+            </ion-col>
+            <ion-col class="form-col">
+              <ion-select
+                [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
+                formControlName="language"
+                (ngModelChange)="changeLanguage()">
+                <ion-select-option
+                  *ngFor="let language of languages"
+                  [value]="language.id">
+                  {{ language.name!.toUpperCase() | translate }}
+                </ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <!-- DATE OF BIRTH -->
+      <ion-row>
+        <ion-col>
+          <ion-row class="line d-flex">
+            <ion-col size="1.5" class="align-item-center fs-24 ps-0 form-col">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </ion-col>
+            <ion-col class="ion-align-content-start form-col">
+              <div class="d-flex">
+                <ion-datetime-button
+                  [ngClass]="isEdit ? 'edit-mode' : 'readonly-mode'"
+                  [disabled]="!isEdit"
+                  datetime="datetime"></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime
+                      #datetime
+                      formControlName="dateOfBirth"
+                      presentation="date"
+                      id="datetime"
+                      [showDefaultButtons]="true"
+                      doneText="{{ 'OK' | translate }}"
+                      cancelText="{{ 'CANCEL' | translate }}">
+                      <span slot="title">{{ 'SELECT_YOUR_BIRTHDAY' }}</span>
+                    </ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="!isProfileOfSomeoneElse && activeBadge === badgeEnum.basicInfo">
+    <ng-container *ngIf="!isEdit; else edit">
+      <ion-row>
+        <ion-button
+          (click)="changeEditMode()"
+          class="ion-padding-horizontal primary-button w-100 pb-4 no-shadow">
+          {{ 'EDIT_PROFILE' | translate }}
+        </ion-button>
+      </ion-row>
+      <ion-row>
+        <ion-button
+          (click)="changePassword()"
+          class="primary-button-outline w-100 ion-padding-horizontal no-shadow">
+          {{ 'CHANGE_PASSWORD' | translate }}
+        </ion-button>
+      </ion-row>
+    </ng-container>
   </ng-container>
 </ion-content>
 
 <ng-template #edit>
   <ion-row>
-    <ion-button (click)="save()" class="ion-padding-horizontal primary-button">
+    <ion-button
+      (click)="save()"
+      class="ion-padding-horizontal primary-button w-100">
       {{'EDIT_PROFILE' | translate}}
     </ion-button>
   </ion-row>
@@ -135,3 +184,5 @@
     </ion-button>
   </ion-row>
 </ng-template>
+
+<ng-template #posts></ng-template>
