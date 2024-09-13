@@ -65,5 +65,10 @@
   "PASSWORD_IS_REQUIRED": "Password is required",
   "LANGUAGE": "Language",
   "HU": "Hungarian",
-  "EN": "English"
+  "EN": "English",
+  "SEND_FRIEND_REQUEST": "Send friendship request",
+  "SENT_FRIEND_REQUEST": "Friendship request is sent",
+  "FRIEND": "Ismerős",
+  "DETAILS": "Details",
+  "POSTS": "Posts"
 }

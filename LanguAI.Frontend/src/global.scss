@@ -67,7 +67,9 @@ ion-card {
 
 .primary-button {
   --background: #a6b1e1;
-  width: 100%;
+  --border-color: #a6b1e1;
+  --border-style: solid;
+  --border-width: 1px;
 
   &-outline {
     --background: inherit;
@@ -75,7 +77,6 @@ ion-card {
     --border-color: #a6b1e1;
     --border-style: solid;
     --border-width: 1px;
-    --box-shadow: none;
   }
 }
 
@@ -138,6 +139,10 @@ ion-card {
     margin-right: 12px;
   }
 
+  &e-4 {
+    margin-right: 16px;
+  }
+
   &s-1 {
     margin-left: 4px;
   }
@@ -148,6 +153,18 @@ ion-card {
 
   &-3 {
     margin: 12px;
+  }
+
+  &t-0 {
+    margin-top: 0;
+  }
+
+  &t-1 {
+    margin-top: 4px;
+  }
+
+  &t-2 {
+    margin-top: 8px;
   }
 
   &t-3 {
@@ -161,6 +178,16 @@ ion-card {
   &x-4 {
     margin-right: 16px;
     margin-left: 16px;
+  }
+
+  &x-2 {
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+
+  &y-1 {
+    margin-top: 4px;
+    margin-bottom: 4px;
   }
 }
 
@@ -195,6 +222,22 @@ ion-card {
     padding-bottom: 0;
   }
 
+  &b-1 {
+    padding-bottom: 4px;
+  }
+
+  &b-2 {
+    padding-bottom: 8px;
+  }
+
+  &b-4 {
+    padding-bottom: 16px;
+  }
+
+  &b-5 {
+    padding-bottom: 24px;
+  }
+
   &t-0 {
     padding-top: 0;
   }
@@ -220,6 +263,16 @@ ion-card {
   &-inner-v-2 {
     --inner-padding-end: 8px !important;
     --inner-padding-start: 8px !important;
+  }
+
+  &x-4 {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  &y-1 {
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 }
 

@@ -65,5 +65,10 @@
   "PASSWORD_IS_REQUIRED": "Jelszó szükséges",
   "LANGUAGE": "Nyelv",
   "HU": "Magyar",
-  "EN": "Angol"
+  "EN": "Angol",
+  "SEND_FRIEND_REQUEST": "Ismerősnek jelölés",
+  "SENT_FRIEND_REQUEST": "Ismerősnek jelölve",
+  "FRIEND": "Ismerős",
+  "DETAILS": "Adatok",
+  "POSTS": "Bejegyzések"
 }

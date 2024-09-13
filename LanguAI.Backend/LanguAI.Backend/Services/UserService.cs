@@ -135,13 +135,13 @@ public class UserService : BaseService, IUserService
         try
         {
             if (userId != currentUserId) {
-                //throw new Authenti
+                throw new UnauthorizedAccessException();
             }
 
             var user = _context.User.FirstOrDefault(u => u.Id == userId);
 
             if (user == null) {
-                //throw new AuthenticationError();
+                ArgumentNullException.ThrowIfNull(user);
             }
 
             _context.User.Remove(user);
@@ -154,4 +154,3 @@ public class UserService : BaseService, IUserService
         }
     }
 }
-

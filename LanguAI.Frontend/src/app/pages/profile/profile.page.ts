@@ -1,12 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PROFILE_TITLE } from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -20,7 +12,7 @@ import { Subscription, switchMap } from 'rxjs';
 import { ModalController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LanguageSelectModalComponent } from 'src/app/components/modals/language-select-modal/language-select-modal.component';
-import { v4 as uuid } from 'uuid';
+import { BadgeEnum } from 'src/app/util/enums/badge-enum';
 
 @Component({
   selector: 'app-profile',
@@ -28,9 +20,6 @@ import { v4 as uuid } from 'uuid';
   styleUrls: ['./profile.page.scss']
 })
 export class ProfilePage implements OnInit, OnDestroy {
-  @ViewChild('selectWrapperInner') selectWrapperInner: ElementRef | undefined;
-
-  id = uuid();
   profileForm: FormGroup | undefined;
   title = this.translateService.instant(PROFILE_TITLE);
   profileModel: UserViewModel = {};
@@ -38,14 +27,22 @@ export class ProfilePage implements OnInit, OnDestroy {
   originalProfileModel: UserViewModel = {};
   getUserSub: Subscription | undefined;
   userId: number | null | undefined;
-  someoneElseProfile = false;
+  isProfileOfSomeoneElse: boolean | undefined;
   loadDataSub: Subscription | undefined;
   saveSub: Subscription | undefined;
   getLanguagesSub: Subscription | undefined;
+  activeBadge = 1;
+  friendshipStatus = 1;
+
   languages: Array<IntSelectorModel> = [
     { id: 1, name: 'hu' },
     { id: 2, name: 'en' }
   ];
+
+  /**
+   * To make BadgeEnum usable in the template
+   */
+  badgeEnum = BadgeEnum;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,6 +79,15 @@ export class ProfilePage implements OnInit, OnDestroy {
     ['username', 'email', 'dateOfBirth', 'language'].forEach(control => {
       this.profileForm?.controls[control][method]();
     });
+  }
+
+  /**
+   * Change active badge
+   */
+  setActiveBadge(indexOfActiveBudge: number) {
+    if (this.activeBadge !== indexOfActiveBudge) {
+      this.activeBadge = indexOfActiveBudge;
+    }
   }
 
   /**
@@ -158,6 +164,20 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   /**
+   * Send a friendship request
+   */
+  sendRequest() {
+    //TODO
+  }
+
+  /**
+   * Navigate to chat
+   */
+  navigateToChat() {
+    //TODO
+  }
+
+  /**
    * Initialize
    */
   private initialize() {
@@ -174,38 +194,42 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   private loadData() {
     this.userId = this.localStorageService.getUserId();
-    this.profileModel = {
-      id: this.userId!,
-      language: 1,
-      dateOfBirth: '1998-04-20',
-      email: 'teszt@teszt.com',
-      username: 'zsombi'
-    };
-    this.originalProfileModel = { ...this.profileModel };
-    this.fillForm();
-    // this.loadDataSub = this.activatedRoute.params
-    //   .pipe(
-    //     switchMap((params: Params) => {
-    //       const idFromParam = params['id'];
-    //       this.someoneElseProfile = idFromParam?.length;
+    // this.profileModel = {
+    //   id: this.userId!,
+    //   language: 1,
+    //   dateOfBirth: '1998-04-20',
+    //   email: 'teszt@teszt.com',
+    //   username: 'zsombi'
+    // };
+    // this.isProfileOfSomeoneElse = true;
+    // this.originalProfileModel = { ...this.profileModel };
+    // this.fillForm();
+    this.loadDataSub = this.activatedRoute.params
+      .pipe(
+        switchMap((params: Params) => {
+          const idFromParam = +params['id'];
+          this.isProfileOfSomeoneElse = idFromParam
+            ? this.userId !== idFromParam
+            : false;
 
-    //       return this.userService.getUserById$Json({
-    //         userId: idFromParam?.length ? +idFromParam : this.userId!
-    //       });
-    //     })
-    //   )
-    //   .subscribe({
-    //     next: (res: UserViewModel) => {
-    //       this.profileModel = res;
-    //       if (!this.someoneElseProfile) {
-    //         this.originalProfileModel = { ...this.profileModel };
-    //       }
-    //       this.fillForm();
-    //     },
-    //     error: () => {
-    //       this.loadingService.hideLoading();
-    //     }
-    //   });
+          return this.userService.getUserById$Json({
+            userId: idFromParam ? +idFromParam : this.userId!
+          });
+        })
+      )
+      .subscribe({
+        next: (res: UserViewModel) => {
+          this.profileModel = res;
+          if (!this.isProfileOfSomeoneElse) {
+            this.originalProfileModel = { ...this.profileModel };
+          }
+          this.fillForm();
+        },
+        error: () => {
+          this.toastrService.presentErrorToast('DATA_ERROR');
+          this.loadingService.hideLoading();
+        }
+      });
   }
 
   /**
