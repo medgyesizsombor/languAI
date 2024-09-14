@@ -14,7 +14,6 @@ namespace LanguAI.Backend.Core
 
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Post> Post { get; set; }
-        public virtual DbSet<FriendshipRequest> FriendshipRequest { get; set; }
         public virtual DbSet<Friendship> Friendship { get; set; }
         public virtual DbSet<Card> Card { get; set; }
         public virtual DbSet<CardList> CardList { get; set; }
@@ -25,27 +24,15 @@ namespace LanguAI.Backend.Core
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Friendship>()
-                .HasOne(f => f.FirstUser)
+                .HasOne(f => f.Requester)
                 .WithMany(u => u.SentFriendships)
-                .HasForeignKey(f => f.FirstUserId)
+                .HasForeignKey(f => f.RequesterId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Friendship>()
-                .HasOne(f => f.SecondUser)
+                .HasOne(f => f.Recipient)
                 .WithMany(u => u.ReceivedFriendships)
-                .HasForeignKey(f => f.SecondUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<FriendshipRequest>()
-                .HasOne(fr => fr.Requester)
-                .WithMany(u => u.SentFriendshipRequests)
-                .HasForeignKey(fr => fr.RequesterId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<FriendshipRequest>()
-                .HasOne(fr => fr.Receiver)
-                .WithMany(u => u.ReceivedFriendshipRequests)
-                .HasForeignKey(fr => fr.ReceiverId)
+                .HasForeignKey(f => f.RecipientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
@@ -55,9 +42,9 @@ namespace LanguAI.Backend.Core
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
-                .HasOne(m => m.Receiver)
+                .HasOne(m => m.Recipient)
                 .WithMany(u => u.ReceivedMessages)
-                .HasForeignKey(fr => fr.ReceiverId)
+                .HasForeignKey(fr => fr.RecipientId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -1,4 +1,5 @@
-﻿using LanguAI.Backend.Services;
+﻿using LanguAI.Backend.Core.Enums;
+using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.SelectorModel;
 using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
@@ -20,20 +21,20 @@ public class FriendshipController : ControllerBase
     }
 
     /// <summary>
-    /// Save a post
+    /// Request a friendship
     /// </summary>
     /// <param name="requesterId">Requester's id</param>
-    /// <param name="receiverId">Receiver's id</param>
+    /// <param name="recipientId">Recipient's id</param>
     /// <returns></returns>
     [HttpPost(Name = "RequestFriendship")]
-    public ActionResult<bool> RequestFriendship(int requesterId, int receiverId)
+    public ActionResult<bool> RequestFriendship(int requesterId, int recipientId)
     {
         ArgumentNullException.ThrowIfNull(requesterId);
-        ArgumentNullException.ThrowIfNull(receiverId);
+        ArgumentNullException.ThrowIfNull(recipientId);
 
         try
         {
-            return Ok(_friendshipService.RequestFriendship(requesterId, receiverId));
+            return Ok(_friendshipService.RequestFriendship(requesterId, recipientId));
         }
         catch (Exception e)
         {
@@ -58,6 +59,30 @@ public class FriendshipController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// React the friendship request
+    /// </summary>
+    /// <param name="recipientId">Id of the friendship request Recipient</param>
+    /// <param name="requesterId">Id of the friendship requester</param>
+    /// <param name="friendshipStatus">Reacted friendship status</param>
+    /// <returns></returns>
+    [HttpPost(Name = "ReactFriendshipRequest")]
+    public ActionResult<FriendshipStatusEnum> ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus)
+    {
+        ArgumentNullException.ThrowIfNull(recipientId);
+        ArgumentNullException.ThrowIfNull(requesterId);
+        ArgumentNullException.ThrowIfNull(friendshipStatus);
+
+        try
+        {
+            return Ok(_friendshipService.ReactFriendshipRequest(recipientId, requesterId, friendshipStatus));
+        }
+        catch (Exception)
+        {
+            return FriendshipStatusEnum.Requested;
         }
     }
 }

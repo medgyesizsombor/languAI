@@ -15,7 +15,7 @@ public class AuthenticationController : ControllerBase
         _authenticationService = authenticationService;
     }
 
-    [HttpPost]
+    [HttpPost(Name = "Authenticate")]
     public ActionResult<string> Authenticate(AuthenticateRequestViewModel request)
     {
         ArgumentNullException.ThrowIfNull(request);

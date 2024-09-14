@@ -7,15 +7,18 @@
 
   <!-- ACTION BUTTONS -->
   <ion-row class="pb-5" *ngIf="isProfileOfSomeoneElse">
-    <ion-col
-      class="ion-align-items-center me-1">
+    <ion-col class="ion-align-items-center me-1">
       <ion-button
         class="primary-button request-button w-100 no-shadow"
         (click)="sendRequest()"
         [ngSwitch]="friendshipStatus">
-        <span *ngSwitchCase="1">{{ 'SEND_FRIEND_REQUEST' | translate }}</span>
-        <span *ngSwitchCase="2">{{ 'SENT_FRIEND_REQUEST' | translate }}</span>
-        <span *ngSwitchCase="3">{{ 'FRIEND' | translate }}</span>
+        <span *ngSwitchCase="friendshipStatusEnum.Requested">
+          {{ 'SENT_FRIEND_REQUEST' | translate }}
+        </span>
+        <span *ngSwitchCase="friendshipStatusEnum.Accepted">
+          {{ 'FRIEND' | translate }}
+        </span>
+        <span *ngSwitchDefault>{{ 'SEND_FRIEND_REQUEST' | translate }}</span>
       </ion-button>
     </ion-col>
     <ion-col size="auto" class="pb-1">
@@ -148,7 +151,8 @@
     </form>
   </ng-container>
 
-  <ng-container *ngIf="!isProfileOfSomeoneElse && activeBadge === badgeEnum.basicInfo">
+  <ng-container
+    *ngIf="!isProfileOfSomeoneElse && activeBadge === badgeEnum.basicInfo">
     <ng-container *ngIf="!isEdit; else edit">
       <ion-row>
         <ion-button

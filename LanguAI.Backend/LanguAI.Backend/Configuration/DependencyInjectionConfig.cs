@@ -14,7 +14,6 @@ public static class DependencyInjectionConfig
         {
             config.AddDebug();
             config.AddConsole();
-            //etc
         });
 
         services.AddScoped<IUserService, UserService>();

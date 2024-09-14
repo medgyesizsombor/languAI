@@ -56,7 +56,7 @@ export class LoginPage implements OnInit, OnDestroy {
         .showLoading(this.translateService.instant('LOGGING_IN'))
         .then(() => {
           this.authenticationSub = this.authenticationService
-            .authenticationAuthenticatePost$Json({
+            .authenticate$Json({
               body: {
                 username: this.loginForm?.controls['username'].value,
                 password: this.loginForm?.controls['password'].value

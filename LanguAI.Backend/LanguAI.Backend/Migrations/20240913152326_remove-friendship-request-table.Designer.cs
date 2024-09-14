@@ -4,6 +4,7 @@ using LanguAI.Backend.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LanguAI.Backend.Migrations
 {
     [DbContext(typeof(LanguAIDataContext))]
-    partial class LanguAIDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240913152326_remove-friendship-request-table")]
+    partial class removefriendshiprequesttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +101,7 @@ namespace LanguAI.Backend.Migrations
                     b.Property<bool>("IsCloseFriendship")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RecipientId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
                     b.Property<int>("RequesterId")
@@ -109,7 +112,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipientId");
+                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("RequesterId");
 
@@ -124,7 +127,7 @@ namespace LanguAI.Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("RecipientId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
                     b.Property<int>("SenderId")
@@ -142,7 +145,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipientId");
+                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
@@ -229,9 +232,9 @@ namespace LanguAI.Backend.Migrations
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.Friendship", b =>
                 {
-                    b.HasOne("LanguAI.Backend.Core.Models.User", "Recipient")
+                    b.HasOne("LanguAI.Backend.Core.Models.User", "Receiver")
                         .WithMany("ReceivedFriendships")
-                        .HasForeignKey("RecipientId")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -241,16 +244,16 @@ namespace LanguAI.Backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Recipient");
+                    b.Navigation("Receiver");
 
                     b.Navigation("Requester");
                 });
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.Message", b =>
                 {
-                    b.HasOne("LanguAI.Backend.Core.Models.User", "Recipient")
+                    b.HasOne("LanguAI.Backend.Core.Models.User", "Receiver")
                         .WithMany("ReceivedMessages")
-                        .HasForeignKey("RecipientId")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -260,7 +263,7 @@ namespace LanguAI.Backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Recipient");
+                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });

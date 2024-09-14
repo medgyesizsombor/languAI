@@ -22,9 +22,7 @@ public class Startup
 
         services.ConfigureDependencyInjection();
 
-        services.AddEndpointsApiExplorer();
-
-        services.AddSwaggerGen();
+        services.ConfigureSwagger();
 
         services.ConfigureCors();
     }
@@ -35,7 +33,10 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
         else
         {

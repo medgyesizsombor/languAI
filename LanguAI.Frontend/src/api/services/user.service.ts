@@ -13,6 +13,10 @@ import { changePassword$Json } from '../fn/user/change-password-json';
 import { ChangePassword$Json$Params } from '../fn/user/change-password-json';
 import { changePassword$Plain } from '../fn/user/change-password-plain';
 import { ChangePassword$Plain$Params } from '../fn/user/change-password-plain';
+import { deleteUser$Json } from '../fn/user/delete-user-json';
+import { DeleteUser$Json$Params } from '../fn/user/delete-user-json';
+import { deleteUser$Plain } from '../fn/user/delete-user-plain';
+import { DeleteUser$Plain$Params } from '../fn/user/delete-user-plain';
 import { getAllUsers$Json } from '../fn/user/get-all-users-json';
 import { GetAllUsers$Json$Params } from '../fn/user/get-all-users-json';
 import { getAllUsers$Plain } from '../fn/user/get-all-users-plain';
@@ -217,6 +221,53 @@ export class UserService extends BaseService {
    */
   changePassword$Json(params?: ChangePassword$Json$Params, context?: HttpContext): Observable<boolean> {
     return this.changePassword$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteUser()` */
+  static readonly DeleteUserPath = '/User/DeleteUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteUser$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUser$Plain$Response(params?: DeleteUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return deleteUser$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteUser$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUser$Plain(params?: DeleteUser$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.deleteUser$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteUser$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUser$Json$Response(params?: DeleteUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return deleteUser$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteUser$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUser$Json(params?: DeleteUser$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.deleteUser$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }

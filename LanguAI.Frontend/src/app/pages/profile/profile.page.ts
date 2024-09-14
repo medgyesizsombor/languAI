@@ -3,7 +3,7 @@ import { PROFILE_TITLE } from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { UserService } from 'src/api/services';
+import { FriendshipService, UserService } from 'src/api/services';
 import { IntSelectorModel, UserViewModel } from 'src/api/models';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
@@ -13,6 +13,7 @@ import { ModalController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LanguageSelectModalComponent } from 'src/app/components/modals/language-select-modal/language-select-modal.component';
 import { BadgeEnum } from 'src/app/util/enums/badge-enum';
+import { FriendshipStatusEnum } from 'src/api/models';
 
 @Component({
   selector: 'app-profile',
@@ -32,7 +33,9 @@ export class ProfilePage implements OnInit, OnDestroy {
   saveSub: Subscription | undefined;
   getLanguagesSub: Subscription | undefined;
   activeBadge = 1;
-  friendshipStatus = 1;
+  friendshipStatus: FriendshipStatusEnum | undefined;
+  friendshipStatusEnum = FriendshipStatusEnum;
+  sendFriendshipRequestSub: Subscription | undefined;
 
   languages: Array<IntSelectorModel> = [
     { id: 1, name: 'hu' },
@@ -55,7 +58,8 @@ export class ProfilePage implements OnInit, OnDestroy {
     private navController: NavController,
     private alertService: AlertService,
     private activatedRoute: ActivatedRoute,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private friendshipService: FriendshipService
   ) {}
 
   ngOnInit() {
@@ -66,6 +70,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.getUserSub?.unsubscribe();
     this.saveSub?.unsubscribe();
     this.loadDataSub?.unsubscribe();
+    this.sendFriendshipRequestSub?.unsubscribe();
   }
 
   /**
@@ -167,7 +172,36 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Send a friendship request
    */
   sendRequest() {
-    //TODO
+    this.sendFriendshipRequestSub = this.friendshipService
+      .requestFriendship$Json({
+        requesterId: this.userId!,
+        recipientId: this.profileModel.id
+      })
+      .subscribe({
+        next: (success: boolean) => {
+          if (success) {
+            this.friendshipStatus = FriendshipStatusEnum.Requested;
+            this.toastrService.presentSuccessToast(
+              this.translateService.instant(
+                'SUCCESSFUL_FRIENDSHIP_REQUEST_SENT'
+              )
+            );
+          } else {
+            this.toastrService.presentErrorToast(
+              this.translateService.instant(
+                'UNSUCCESSFUL_FRIENDSHIP_REQUEST_SENT'
+              )
+            );
+          }
+        },
+        error: () => {
+          this.toastrService.presentErrorToast(
+            this.translateService.instant(
+              'UNSUCCESSFUL_FRIENDSHIP_REQUEST_SENT'
+            )
+          );
+        }
+      });
   }
 
   /**
@@ -259,5 +293,15 @@ export class ProfilePage implements OnInit, OnDestroy {
     });
 
     this.loadingService.hideLoading();
+  }
+
+  /**
+   * Change status of friendship
+   */
+  private changeFriendshipStatus(
+    oldStatus: FriendshipStatusEnum,
+    newStatus: FriendshipStatusEnum
+  ) {
+    
   }
 }
