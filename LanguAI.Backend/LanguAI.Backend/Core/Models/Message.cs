@@ -19,10 +19,10 @@ public class Message
     public virtual User Sender { get; set; }
 
     [Required]
-    public int ReceiverId { get; set; }
+    public int RecipientId { get; set; }
 
-    [ForeignKey(nameof(ReceiverId))]
-    public virtual User Receiver { get; set; }
+    [ForeignKey(nameof(RecipientId))]
+    public virtual User Recipient { get; set; }
 
     [Required]
     public DateTime SentAt { get; set; } = DateTime.UtcNow;

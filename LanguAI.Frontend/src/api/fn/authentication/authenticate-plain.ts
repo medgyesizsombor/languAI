@@ -8,12 +8,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { AuthenticateRequestViewModel } from '../../models/authenticate-request-view-model';
 
-export interface AuthenticationAuthenticatePost$Plain$Params {
+export interface Authenticate$Plain$Params {
       body?: AuthenticateRequestViewModel
 }
 
-export function authenticationAuthenticatePost$Plain(http: HttpClient, rootUrl: string, params?: AuthenticationAuthenticatePost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-  const rb = new RequestBuilder(rootUrl, authenticationAuthenticatePost$Plain.PATH, 'post');
+export function authenticate$Plain(http: HttpClient, rootUrl: string, params?: Authenticate$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  const rb = new RequestBuilder(rootUrl, authenticate$Plain.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
@@ -28,4 +28,4 @@ export function authenticationAuthenticatePost$Plain(http: HttpClient, rootUrl: 
   );
 }
 
-authenticationAuthenticatePost$Plain.PATH = '/Authentication/Authenticate';
+authenticate$Plain.PATH = '/Authentication/Authenticate';

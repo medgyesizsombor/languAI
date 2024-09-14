@@ -9,11 +9,16 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { FriendshipStatusEnum } from '../models/friendship-status-enum';
 import { getFriendList$Json } from '../fn/friendship/get-friend-list-json';
 import { GetFriendList$Json$Params } from '../fn/friendship/get-friend-list-json';
 import { getFriendList$Plain } from '../fn/friendship/get-friend-list-plain';
 import { GetFriendList$Plain$Params } from '../fn/friendship/get-friend-list-plain';
 import { IntSelectorModel } from '../models/int-selector-model';
+import { reactFriendshipRequest$Json } from '../fn/friendship/react-friendship-request-json';
+import { ReactFriendshipRequest$Json$Params } from '../fn/friendship/react-friendship-request-json';
+import { reactFriendshipRequest$Plain } from '../fn/friendship/react-friendship-request-plain';
+import { ReactFriendshipRequest$Plain$Params } from '../fn/friendship/react-friendship-request-plain';
 import { requestFriendship$Json } from '../fn/friendship/request-friendship-json';
 import { RequestFriendship$Json$Params } from '../fn/friendship/request-friendship-json';
 import { requestFriendship$Plain } from '../fn/friendship/request-friendship-plain';
@@ -116,6 +121,53 @@ export class FriendshipService extends BaseService {
   getFriendList$Json(params?: GetFriendList$Json$Params, context?: HttpContext): Observable<Array<IntSelectorModel>> {
     return this.getFriendList$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<IntSelectorModel>>): Array<IntSelectorModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `reactFriendshipRequest()` */
+  static readonly ReactFriendshipRequestPath = '/Friendship/ReactFriendshipRequest';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `reactFriendshipRequest$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reactFriendshipRequest$Plain$Response(params?: ReactFriendshipRequest$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<FriendshipStatusEnum>> {
+    return reactFriendshipRequest$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `reactFriendshipRequest$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reactFriendshipRequest$Plain(params?: ReactFriendshipRequest$Plain$Params, context?: HttpContext): Observable<FriendshipStatusEnum> {
+    return this.reactFriendshipRequest$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FriendshipStatusEnum>): FriendshipStatusEnum => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `reactFriendshipRequest$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reactFriendshipRequest$Json$Response(params?: ReactFriendshipRequest$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<FriendshipStatusEnum>> {
+    return reactFriendshipRequest$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `reactFriendshipRequest$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reactFriendshipRequest$Json(params?: ReactFriendshipRequest$Json$Params, context?: HttpContext): Observable<FriendshipStatusEnum> {
+    return this.reactFriendshipRequest$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FriendshipStatusEnum>): FriendshipStatusEnum => r.body)
     );
   }
 

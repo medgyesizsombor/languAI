@@ -3,7 +3,7 @@
 import { MessageStatusEnum } from '../models/message-status-enum';
 export interface MessageViewModel {
   id?: number | null;
-  receiverId?: number;
+  recipientId?: number;
   senderId?: number;
   sentAt?: string;
   status?: MessageStatusEnum;

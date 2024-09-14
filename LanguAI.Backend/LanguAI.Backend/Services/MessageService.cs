@@ -45,7 +45,7 @@ public class MessageService : BaseService, IMessageService
             message = new Message
             {
                 SenderId = request.SenderId,
-                ReceiverId = request.ReceiverId,
+                RecipientId = request.RecipientId,
                 Status = MessageStatusEnum.Sent,
                 SentAt = DateTime.Now
             };
@@ -76,12 +76,12 @@ public class MessageService : BaseService, IMessageService
 
         return _context.Message
             .Where(m =>
-                (m.SenderId == userId && m.ReceiverId == friendId)
-                || (m.SenderId == friendId && m.ReceiverId == userId))
+                (m.SenderId == userId && m.RecipientId == friendId)
+                || (m.SenderId == friendId && m.RecipientId == userId))
             .Select(m => new MessageViewModel
             {
                 SenderId = m.SenderId,
-                ReceiverId = m.ReceiverId,
+                RecipientId = m.RecipientId,
                 Status = m.Status,
                 SentAt = m.SentAt,
                 Text = m.Text

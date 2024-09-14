@@ -10,7 +10,7 @@ public class MessageViewModel
 
     public int SenderId { get; set; }
 
-    public int ReceiverId { get; set; }
+    public int RecipientId { get; set; }
 
     public DateTime SentAt { get; set; }
 

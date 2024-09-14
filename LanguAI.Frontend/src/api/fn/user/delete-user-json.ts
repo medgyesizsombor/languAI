@@ -7,16 +7,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface RequestFriendship$Json$Params {
-  requesterId?: number;
-  recipientId?: number;
+export interface DeleteUser$Json$Params {
+  userId?: number;
 }
 
-export function requestFriendship$Json(http: HttpClient, rootUrl: string, params?: RequestFriendship$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, requestFriendship$Json.PATH, 'post');
+export function deleteUser$Json(http: HttpClient, rootUrl: string, params?: DeleteUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, deleteUser$Json.PATH, 'post');
   if (params) {
-    rb.query('requesterId', params.requesterId, {});
-    rb.query('recipientId', params.recipientId, {});
+    rb.query('userId', params.userId, {});
   }
 
   return http.request(
@@ -29,4 +27,4 @@ export function requestFriendship$Json(http: HttpClient, rootUrl: string, params
   );
 }
 
-requestFriendship$Json.PATH = '/Friendship/RequestFriendship';
+deleteUser$Json.PATH = '/User/DeleteUser';
