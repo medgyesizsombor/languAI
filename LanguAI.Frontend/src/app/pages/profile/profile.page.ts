@@ -4,11 +4,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FriendshipService, UserService } from 'src/api/services';
-import { IntSelectorModel, UserViewModel } from 'src/api/models';
+import {
+  FriendshipViewModel,
+  IntSelectorModel,
+  UserViewModel
+} from 'src/api/models';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription, switchMap } from 'rxjs';
+import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { ModalController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LanguageSelectModalComponent } from 'src/app/components/modals/language-select-modal/language-select-modal.component';
@@ -35,7 +39,9 @@ export class ProfilePage implements OnInit, OnDestroy {
   activeBadge = 1;
   friendshipStatus: FriendshipStatusEnum | undefined;
   friendshipStatusEnum = FriendshipStatusEnum;
+  friendshipViewModel: FriendshipViewModel | undefined;
   sendFriendshipRequestSub: Subscription | undefined;
+  reactFriendshipRequestSub: Subscription | undefined;
 
   languages: Array<IntSelectorModel> = [
     { id: 1, name: 'hu' },
@@ -71,6 +77,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.saveSub?.unsubscribe();
     this.loadDataSub?.unsubscribe();
     this.sendFriendshipRequestSub?.unsubscribe();
+    this.reactFriendshipRequestSub?.unsubscribe();
   }
 
   /**
@@ -212,6 +219,64 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   /**
+   * React friendship request
+   * Default value true
+   */
+  async reactFriendshipRequest(accept = true) {
+    await this.loadingService.showLoading();
+    const nextStatus = accept
+      ? FriendshipStatusEnum.Accepted
+      : FriendshipStatusEnum.Deleted;
+
+    this.reactFriendshipRequestSub = this.friendshipService
+      .reactFriendshipRequest$Json({
+        friendshipStatus: nextStatus,
+        recipientId: this.friendshipViewModel?.recipientId,
+        requesterId: this.friendshipViewModel?.requesterId
+      })
+      .subscribe({
+        next: (res: FriendshipStatusEnum) => {
+          switch (res) {
+            case FriendshipStatusEnum.Requested: {
+              this.toastrService.presentErrorToast(
+                this.translateService.instant(
+                  nextStatus === FriendshipStatusEnum.Accepted
+                    ? 'ERROR_HAPPEND_WHEN_TRIED_TO_ACCEPT_FRIENDSHIP_REQUEST'
+                    : 'ERROR_HAPPEND_WHEN_TRIED_TO_REJECT_FRIENDSHIP_REQUEST'
+                )
+              );
+              this.loadingService.hideLoading();
+              break;
+            }
+            case FriendshipStatusEnum.Deleted: {
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant(
+                  'SUCCESSFUL_REJECT_FRIENDSHIP_REQUEST'
+                )
+              );
+              console.log(this.friendshipViewModel?.status);
+              this.friendshipViewModel!.status = FriendshipStatusEnum.Deleted;
+              console.log(this.friendshipViewModel?.status);
+              this.loadingService.hideLoading();
+              break;
+            }
+            default: {
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant(
+                  'SUCCESSFUL_ADDED_TO_YOUR_LIST_OF_FRIENDS'
+                )
+              );
+              this.friendshipViewModel!.status = FriendshipStatusEnum.Accepted;
+              this.loadingService.hideLoading();
+              break;
+            }
+          }
+        },
+        error: () => {}
+      });
+  }
+
+  /**
    * Initialize
    */
   private initialize() {
@@ -249,19 +314,29 @@ export class ProfilePage implements OnInit, OnDestroy {
           return this.userService.getUserById$Json({
             userId: idFromParam ? +idFromParam : this.userId!
           });
+        }),
+        switchMap((res: UserViewModel) => {
+          this.profileModel = res;
+          this.fillForm();
+          if (!this.isProfileOfSomeoneElse) {
+            this.originalProfileModel = { ...this.profileModel };
+            return EMPTY;
+          }
+
+          return this.friendshipService.getFriendshipByUserId$Json({
+            currentUserId: this.userId!,
+            otherUserId: this.profileModel.id
+          });
         })
       )
       .subscribe({
-        next: (res: UserViewModel) => {
-          this.profileModel = res;
-          if (!this.isProfileOfSomeoneElse) {
-            this.originalProfileModel = { ...this.profileModel };
-          }
-          this.fillForm();
+        next: (res: FriendshipViewModel) => {
+          this.loadingService.hideLoading();
+          this.friendshipViewModel = res;
         },
         error: () => {
-          this.toastrService.presentErrorToast('DATA_ERROR');
           this.loadingService.hideLoading();
+          this.toastrService.presentErrorToast('DATA_ERROR');
         }
       });
   }
@@ -291,8 +366,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       dateOfBirth: this.profileModel.dateOfBirth,
       language: this.profileModel.language
     });
-
-    this.loadingService.hideLoading();
   }
 
   /**
@@ -301,7 +374,5 @@ export class ProfilePage implements OnInit, OnDestroy {
   private changeFriendshipStatus(
     oldStatus: FriendshipStatusEnum,
     newStatus: FriendshipStatusEnum
-  ) {
-    
-  }
+  ) {}
 }

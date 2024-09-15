@@ -1,5 +1,6 @@
 ﻿using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Services;
+using LanguAI.Backend.ViewModels.Friendship;
 using LanguAI.Backend.ViewModels.SelectorModel;
 using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +56,28 @@ public class FriendshipController : ControllerBase
         try
         {
             return Ok(_friendshipService.GetFriendList(userId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Get Friendship by user's Id
+    /// </summary>
+    /// <param name="currentUserId">Current user's Id</param>
+    /// <param name="otherUserId">Current other user's Id</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetFriendshipByUserId")]
+    public ActionResult<FriendshipViewModel> GetFriendshipByUserId(int currentUserId, int otherUserId)
+    {
+        ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(otherUserId);
+
+        try
+        {
+            return Ok(_friendshipService.GetFriendshipByUserId(currentUserId, otherUserId));
         }
         catch (Exception e)
         {
