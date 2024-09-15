@@ -1,4 +1,5 @@
 ﻿using LanguAI.Backend.Core;
+using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Card;
@@ -13,7 +14,8 @@ public interface ICardService
     List<CardListViewModel> GetListOfCardList(int userId);
     bool SaveCards(SaveCardRequest request);
     List<CardViewModel> GetCardsOfCardList(int cardListId);
-    CardListViewModel GetCardListById(int  cardListId);
+    CardListViewModel GetCardListById(int cardListId);
+    List<CardListViewModel> GetCardListsOfOtherUsers(int userId);
 }
 
 public class CardService : BaseService, ICardService
@@ -167,6 +169,35 @@ public class CardService : BaseService, ICardService
         return ConvertCardListToCardListViewModel(cardList);
     }
 
+    /// <summary>
+    /// Get other users' card lists.
+    /// All the public and the friends' protected cardlists.
+    /// </summary>
+    /// <param name="userId">Current User's Id</param>
+    /// <returns></returns>
+    public List<CardListViewModel> GetCardListsOfOtherUsers(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        try
+        {
+            return _context.CardList
+                 .Include(c => c.Cards)
+                 .Where(c => c.UserId != userId
+                     && ((c.Access == (int)CardListAccessEnum.Public)
+                         || c.Access == (int)CardListAccessEnum.Protected
+                             && (_context.Friendship
+                                 .Any(f => ((f.RequesterId == userId && f.RecipientId == c.UserId)
+                                     || (f.RecipientId == userId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
+                 .Select(c => ConvertCardListToCardListViewModel(c))
+                 .ToList();
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
     private static List<CardViewModel> ConvertCardListToCardViewModelList(List<Card> cardList)
     {
         if (cardList == null) { return null; }
@@ -224,7 +255,5 @@ public class CardService : BaseService, ICardService
             NativeLanguage = cardList.NativeLanguage,
             UserId = cardList.UserId
         };
-
-
     }
 }

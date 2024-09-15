@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LanguAI.Backend.Core.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LanguAI.Backend.Core.Models;
@@ -28,6 +29,9 @@ public class CardList
 
     [Required]
     public string Name { get; set; }
+
+    [Required]
+    public int Access { get; set; } = (int)CardListAccessEnum.Public;
 
     public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
 }

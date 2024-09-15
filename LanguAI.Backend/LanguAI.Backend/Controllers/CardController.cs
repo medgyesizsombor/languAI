@@ -144,4 +144,25 @@ public class CardController : ControllerBase
             return BadRequest(null);
         }
     }
+
+    /// <summary>
+    /// Get other users' card lists.
+    /// All the public and the friends' protected cardlists.
+    /// </summary>
+    /// <param name="userId">Current User's Id</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetCardListsOfOtherUsers")]
+    public ActionResult<List<CardListViewModel>> GetCardListsOfOtherUsers(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        try
+        {
+            return Ok(_cardService.GetCardListsOfOtherUsers(userId));
+        }
+        catch (Exception)
+        {
+            return BadRequest(null);
+        }
+    }
 }
