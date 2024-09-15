@@ -5,6 +5,7 @@ export { CardListViewModel } from './models/card-list-view-model';
 export { CardViewModel } from './models/card-view-model';
 export { ChangePasswordRequestViewModel } from './models/change-password-request-view-model';
 export { FriendshipStatusEnum } from './models/friendship-status-enum';
+export { FriendshipViewModel } from './models/friendship-view-model';
 export { IntSelectorModel } from './models/int-selector-model';
 export { MessageStatusEnum } from './models/message-status-enum';
 export { MessageViewModel } from './models/message-view-model';

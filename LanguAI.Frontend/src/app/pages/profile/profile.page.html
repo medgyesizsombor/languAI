@@ -10,10 +10,13 @@
     <ion-col class="ion-align-items-center me-1">
       <ion-button
         class="primary-button request-button w-100 no-shadow"
-        (click)="sendRequest()"
-        [ngSwitch]="friendshipStatus">
+        (click)="friendshipViewModel?.requesterId === userId ? sendRequest() : reactFriendshipRequest()"
+        [ngSwitch]="friendshipViewModel?.status">
         <span *ngSwitchCase="friendshipStatusEnum.Requested">
-          {{ 'SENT_FRIEND_REQUEST' | translate }}
+          <span
+            *ngIf="friendshipViewModel?.requesterId === userId; else acceptFriendshipRequest">
+            {{ 'SENT_FRIEND_REQUEST' | translate }}
+          </span>
         </span>
         <span *ngSwitchCase="friendshipStatusEnum.Accepted">
           {{ 'FRIEND' | translate }}
@@ -22,7 +25,10 @@
       </ion-button>
     </ion-col>
     <ion-col size="auto" class="pb-1">
-      <ion-button class="mt-0 primary-button-outline no-shadow">
+      <ion-button
+        class="mt-0 primary-button-outline no-shadow"
+        *ngIf="friendshipViewModel?.status === friendshipStatusEnum.Requested
+        && friendshipViewModel?.requesterId === userId; else rejectFriendshipRequest">
         <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
       </ion-button>
     </ion-col>
@@ -32,9 +38,9 @@
   <ion-row class="ion-justify-content-center pb-1">
     <ion-badge
       class="me-4 px-4 py-1"
-      [ngClass]="{ 'active-badge': activeBadge === badgeEnum.basicInfo }"
-      (click)="setActiveBadge(badgeEnum.basicInfo)">
-      {{ 'BASIC_INFO' | translate }}
+      [ngClass]="{ 'active-badge': activeBadge === badgeEnum.details }"
+      (click)="setActiveBadge(badgeEnum.details)">
+      {{ 'DETAILS' | translate }}
     </ion-badge>
     <ion-badge
       class="me-4 px-4 py-1"
@@ -50,7 +56,7 @@
     </ion-badge>
   </ion-row>
 
-  <ng-container *ngIf="activeBadge === badgeEnum.basicInfo; else posts">
+  <ng-container *ngIf="activeBadge === badgeEnum.details; else posts">
     <form *ngIf="profileForm" [formGroup]="profileForm" class="pb-5">
       <!-- USERNAME -->
       <ion-row>
@@ -152,7 +158,7 @@
   </ng-container>
 
   <ng-container
-    *ngIf="!isProfileOfSomeoneElse && activeBadge === badgeEnum.basicInfo">
+    *ngIf="!isProfileOfSomeoneElse && activeBadge === badgeEnum.details">
     <ng-container *ngIf="!isEdit; else edit">
       <ion-row>
         <ion-button
@@ -190,3 +196,15 @@
 </ng-template>
 
 <ng-template #posts></ng-template>
+
+<ng-template #acceptFriendshipRequest>
+  <span>{{ 'ACCEPT_FRIENDSHIP' | translate }}</span>
+</ng-template>
+
+<ng-template #rejectFriendshipRequest>
+  <ion-button
+    class="mt-0 error-outline-button no-shadow"
+    (click)="reactFriendshipRequest(false)">
+    <ion-icon name="close-circle-outline"></ion-icon>
+  </ion-button>
+</ng-template>

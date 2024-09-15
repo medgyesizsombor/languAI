@@ -2,6 +2,7 @@
 using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
+using LanguAI.Backend.ViewModels.Friendship;
 using LanguAI.Backend.ViewModels.SelectorModel;
 
 namespace LanguAI.Backend.Services;
@@ -9,10 +10,12 @@ namespace LanguAI.Backend.Services;
 public interface IFriendshipService
 {
     bool RequestFriendship(int requesterId, int recipientId);
+    List<IntSelectorModel> GetFriendList(int userId);
+    FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId);
+    FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
     bool ReceivingFriendshipRequest(int friendshipRequestId, int status);
     int ChangeFriendshipStatus(int oldStatus, int newStatus);
-    List<IntSelectorModel> GetFriendList(int userId);
-    FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
+
 }
 
 public class FriendshipService : BaseService, IFriendshipService
@@ -68,39 +71,6 @@ public class FriendshipService : BaseService, IFriendshipService
     }
 
     /// <summary>
-    /// Receiving the friendship request
-    /// </summary>
-    /// <param name="friendshipId">Id of the Friendship</param>
-    /// <param name="status">Status of friendship</param>
-    /// <returns></returns>
-    public bool ReceivingFriendshipRequest(int friendshipId, int status)
-    {
-        Friendship friendship = _context.Friendship.FirstOrDefault(f => f.Id == friendshipId);
-
-        try
-        {
-            if (friendship == null)
-            {
-                return false;
-            }
-
-            friendship.Status = status;
-            _context.SaveChanges();
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            return false;
-        }
-    }
-
-    public int ChangeFriendshipStatus(int oldStatus, int newStatus)
-    {
-        return 0;
-    }
-
-    /// <summary>
     /// Get friendlist by user Id
     /// </summary>
     /// <param name="userId">User's Id</param>
@@ -109,13 +79,41 @@ public class FriendshipService : BaseService, IFriendshipService
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        var asd = _context.Friendship.Where(f => f.RequesterId == userId || f.RecipientId == userId).Select(f => new IntSelectorModel
+        return _context.Friendship.Where(f => f.RequesterId == userId || f.RecipientId == userId).Select(f => new IntSelectorModel
         {
             Id = f.RequesterId == userId ? f.RequesterId : f.RecipientId,
             Name = f.RequesterId == userId ? f.Requester.Username : f.Recipient.Username
         }).ToList();
+    }
 
-        return asd;
+    /// <summary>
+    /// Get Friendship by user's Id
+    /// </summary>
+    /// <param name="currentUserId">Current user's Id</param>
+    /// <param name="otherUserId">Current other user's Id</param>
+    /// <returns></returns>
+    public FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId)
+    {
+        ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(otherUserId);
+
+        FriendshipViewModel friendship = _context.Friendship
+            .Where(f => ((f.RequesterId == currentUserId
+                            && f.RecipientId == otherUserId)
+                        || (f.RequesterId == otherUserId
+                            && f.RecipientId == currentUserId))
+                    && f.Status != (int)FriendshipStatusEnum.Deleted)
+            .Select(f => new FriendshipViewModel
+            {
+                RecipientId = f.RecipientId,
+                RequesterId = f.RequesterId,
+                Status = f.Status,
+                IsCloseFriendship = f.IsCloseFriendship
+            })
+            .FirstOrDefault();
+
+
+        return friendship;
     }
 
     /// <summary>
@@ -155,5 +153,38 @@ public class FriendshipService : BaseService, IFriendshipService
         {
             return FriendshipStatusEnum.Requested;
         }
+    }
+
+    /// <summary>
+    /// Receiving the friendship request
+    /// </summary>
+    /// <param name="friendshipId">Id of the Friendship</param>
+    /// <param name="status">Status of friendship</param>
+    /// <returns></returns>
+    public bool ReceivingFriendshipRequest(int friendshipId, int status)
+    {
+        Friendship friendship = _context.Friendship.FirstOrDefault(f => f.Id == friendshipId);
+
+        try
+        {
+            if (friendship == null)
+            {
+                return false;
+            }
+
+            friendship.Status = status;
+            _context.SaveChanges();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public int ChangeFriendshipStatus(int oldStatus, int newStatus)
+    {
+        return 0;
     }
 }
