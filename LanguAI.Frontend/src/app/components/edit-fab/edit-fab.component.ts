@@ -8,8 +8,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class EditFabComponent implements OnInit {
   @Input('cardsNumber') cardsNumber = 0;
   @Input('showPlayButton') showPlayButton = false;
-  @Output() addButtonEmit = new EventEmitter<Array<void>>();
-  @Output() playButtonEmit = new EventEmitter<Array<void>>();
+  @Input('isCardListOfOtherUser') isCardListOfOtherUser = false;
+  @Output() addButtonEmit = new EventEmitter<void>();
+  @Output() playButtonEmit = new EventEmitter<void>();
+  @Output() copyButtonEmit = new EventEmitter<void>()
 
   constructor() {}
 

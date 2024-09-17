@@ -7,6 +7,7 @@ import { CardListViewModel, CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
+import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { CARD_LEARNING_NAVIGATION } from 'src/app/util/util.constants';
 
@@ -25,6 +26,7 @@ export class CardListPage implements OnInit, OnDestroy {
   generatedCards: Array<CardViewModel> = [];
   hasCardChanged = false;
   title = '';
+  isCardListOfOtherUser = false;
 
   constructor(
     private cardService: CardService,
@@ -33,7 +35,8 @@ export class CardListPage implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private toastrService: ToastrService,
     private alertService: AlertService,
-    private navController: NavController
+    private navController: NavController,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -70,12 +73,16 @@ export class CardListPage implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (cardList: CardListViewModel) => {
-            this.loadingService.hideLoading();
             this.title = cardList?.name ?? '';
             if (cardList?.cardViewModelList?.length) {
               this.cards = [...cardList?.cardViewModelList];
               this.originalCards = [...cardList?.cardViewModelList];
             }
+
+            this.isCardListOfOtherUser =
+              cardList?.userId !== this.localStorageService.getUserId();
+
+            this.loadingService.hideLoading();
           },
           error: () => {
             this.toastrService.presentErrorToast(
@@ -240,5 +247,42 @@ export class CardListPage implements OnInit, OnDestroy {
     } else {
       this.alertService.showTooFewCardsAlert();
     }
+  }
+
+  /**
+   * Copy the cardlist of other user
+   */
+  copyCards() {
+    this.loadingService.showLoading().then(() => {
+      this.cardService
+        .copyCardListOfOtherUser$Json({
+          cardListId: this.cardListId!
+        })
+        .subscribe({
+          next: (success: boolean) => {
+            if (success) {
+              this.loadingService.hideLoading();
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant('SUCCESSFULLY_SAVE_THE_CARDS')
+              );
+            } else {
+              this.loadingService.hideLoading();
+              this.toastrService.presentErrorToast(
+                this.translateService.instant(
+                  'ERROR_HAPPEND_WHEN_TRIED_TO_SAVE_THE_CARDS'
+                )
+              );
+            }
+          },
+          error: () => {
+            this.loadingService.hideLoading();
+            this.toastrService.presentErrorToast(
+              this.translateService.instant(
+                'ERROR_HAPPEND_WHEN_TRIED_TO_SAVE_THE_CARDS'
+              )
+            );
+          }
+        });
+    });
   }
 }

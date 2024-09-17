@@ -56,7 +56,20 @@
     </ion-badge>
   </ion-row>
 
-  <ng-container *ngIf="activeBadge === badgeEnum.details; else posts">
+  <div [ngSwitch]="activeBadge">
+    <ng-container *ngSwitchCase="badgeEnum.details">
+      <ng-container *ngTemplateOutlet="details"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="badgeEnum.posts">
+      <ng-container *ngTemplateOutlet="posts"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="badgeEnum.cards">
+      <ng-container *ngTemplateOutlet="cards"></ng-container>
+    </ng-container>
+  </div>
+
+  <ng-template #details>
+    <!-- DETAILS -->
     <form *ngIf="profileForm" [formGroup]="profileForm" class="pb-5">
       <!-- USERNAME -->
       <ion-row>
@@ -155,10 +168,7 @@
         </ion-col>
       </ion-row>
     </form>
-  </ng-container>
 
-  <ng-container
-    *ngIf="!isProfileOfSomeoneElse && activeBadge === badgeEnum.details">
     <ng-container *ngIf="!isEdit; else edit">
       <ion-row>
         <ion-button
@@ -175,36 +185,63 @@
         </ion-button>
       </ion-row>
     </ng-container>
-  </ng-container>
+  </ng-template>
+
+  <ng-template #edit>
+    <ion-row>
+      <ion-button
+        (click)="save()"
+        class="ion-padding-horizontal primary-button w-100">
+        {{'EDIT_PROFILE' | translate}}
+      </ion-button>
+    </ion-row>
+    <ion-row>
+      <ion-button
+        class="ion-padding-horizontal primary-button-outline w-100"
+        (click)="changeEditMode()">
+        {{'CANCEL' | translate}}
+      </ion-button>
+    </ion-row>
+  </ng-template>
+
+  <!-- POSTS -->
+  <ng-template #posts></ng-template>
+
+  <!-- CARD -->
+  <ng-template #cards>
+    <ion-list
+      class="d-flex ion-wrap ion-justify-content-center ion-no-padding pt-4">
+      <ion-card
+        class="border-2 flash-cards"
+        *ngFor="let cardList of cardLists"
+        (click)="openCardList(cardList.id!)">
+        <!--TODO megcsinálni a listát-->
+        <ion-card-header class="ion-text-center border-2-bottom-line">
+          {{ cardList.modified | date:'YYYY. MM. dd' }}
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-label class="w-100">{{ cardList.name }}</ion-label>
+          </ion-row>
+          <ion-row>
+            <ion-label class="w-100">
+              {{ cardList.created | date:'YYYY. MM. dd' }}
+            </ion-label>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </ng-template>
+
+  <ng-template #acceptFriendshipRequest>
+    <span>{{ 'ACCEPT_FRIENDSHIP' | translate }}</span>
+  </ng-template>
+
+  <ng-template #rejectFriendshipRequest>
+    <ion-button
+      class="mt-0 error-outline-button no-shadow"
+      (click)="reactFriendshipRequest(false)">
+      <ion-icon name="close-circle-outline"></ion-icon>
+    </ion-button>
+  </ng-template>
 </ion-content>
-
-<ng-template #edit>
-  <ion-row>
-    <ion-button
-      (click)="save()"
-      class="ion-padding-horizontal primary-button w-100">
-      {{'EDIT_PROFILE' | translate}}
-    </ion-button>
-  </ion-row>
-  <ion-row>
-    <ion-button
-      class="ion-padding-horizontal primary-button-outline w-100"
-      (click)="changeEditMode()">
-      {{'CANCEL' | translate}}
-    </ion-button>
-  </ion-row>
-</ng-template>
-
-<ng-template #posts></ng-template>
-
-<ng-template #acceptFriendshipRequest>
-  <span>{{ 'ACCEPT_FRIENDSHIP' | translate }}</span>
-</ng-template>
-
-<ng-template #rejectFriendshipRequest>
-  <ion-button
-    class="mt-0 error-outline-button no-shadow"
-    (click)="reactFriendshipRequest(false)">
-    <ion-icon name="close-circle-outline"></ion-icon>
-  </ion-button>
-</ng-template>

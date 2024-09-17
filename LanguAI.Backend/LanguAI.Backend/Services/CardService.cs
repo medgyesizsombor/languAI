@@ -16,6 +16,8 @@ public interface ICardService
     List<CardViewModel> GetCardsOfCardList(int cardListId);
     CardListViewModel GetCardListById(int cardListId);
     List<CardListViewModel> GetCardListsOfOtherUsers(int userId);
+    List<CardListViewModel> GetCardListsOfOtherUserByUserId(int userId, int otherUserId);
+    bool CopyCardListOfOtherUser(int cardListId);
 }
 
 public class CardService : BaseService, ICardService
@@ -195,6 +197,76 @@ public class CardService : BaseService, ICardService
         catch (Exception ex)
         {
             return null;
+        }
+    }
+
+    /// <summary>
+    /// Get other user's accessible card lists
+    /// </summary>
+    /// <param name="userId">Current user's Id</param>
+    /// <param name="otherUserId">Other user's Id</param>
+    /// <returns></returns>
+    public List<CardListViewModel> GetCardListsOfOtherUserByUserId(int userId, int otherUserId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+        ArgumentNullException.ThrowIfNull(otherUserId);
+
+        return _context.CardList.Include(c => c.Cards).Where(c => c.UserId == otherUserId && ((c.Access == (int)CardListAccessEnum.Public)
+                         || c.Access == (int)CardListAccessEnum.Protected
+                             && (_context.Friendship
+                                 .Any(f => ((f.RequesterId == userId && f.RecipientId == c.UserId)
+                                     || (f.RecipientId == userId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
+            .Select(c => ConvertCardListToCardListViewModel(c))
+            .ToList();
+    }
+
+    /// <summary>
+    /// Copy other user's cardlist
+    /// </summary>
+    /// <param name="cardListId">If of Card list to copy</param>
+    /// <returns></returns>
+    public bool CopyCardListOfOtherUser(int cardListId)
+    {
+        ArgumentNullException.ThrowIfNull(cardListId);
+
+        CardList originalCardList = _context.CardList.Include(c => c.Cards).FirstOrDefault(c => c.Id == cardListId && c.Cards.Count != 0);
+
+        if (originalCardList == null) return false;
+
+        try
+        {
+            CardList cardList = new CardList
+            {
+                Access = (int)CardListAccessEnum.Public,
+                LearningLanguage = originalCardList.LearningLanguage,
+                Name = originalCardList.Name,
+                NativeLanguage = originalCardList.NativeLanguage,
+                UserId = 7
+            };
+
+            _context.CardList.Add(cardList);
+            _context.SaveChanges();
+
+            List<Card> cards = new List<Card>();
+
+            foreach (var card in originalCardList.Cards)
+            {
+                cards.Add(new Card
+                {
+                    CardListId = cardList.Id,
+                    WordInLearningLanguage = card.WordInLearningLanguage,
+                    WordInNativeLanguage = card.WordInNativeLanguage
+                });
+            }
+
+            _context.Card.AddRange(cards);
+
+            _context.SaveChanges();
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
 

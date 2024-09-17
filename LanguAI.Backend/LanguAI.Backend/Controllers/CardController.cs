@@ -165,4 +165,46 @@ public class CardController : ControllerBase
             return BadRequest(null);
         }
     }
+
+    /// <summary>
+    /// Get other user's accessible card lists
+    /// </summary>
+    /// <param name="userId">Current user's Id</param>
+    /// <param name="otherUserId">Other user's Id</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetCardListsOfOtherUserByUserId")]
+    public ActionResult<List<CardListViewModel>> GetCardListsOfOtherUserByUserId(int userId, int otherUserId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+        ArgumentNullException.ThrowIfNull(otherUserId);
+
+        try
+        {
+            return Ok(_cardService.GetCardListsOfOtherUserByUserId(userId, otherUserId));
+        }
+        catch (Exception)
+        {
+            return BadRequest(null);
+        }
+    }
+
+    /// <summary>
+    /// Copy other user's cardlist
+    /// </summary>
+    /// <param name="cardListId">If of Card list to copy</param>
+    /// <returns></returns>
+    [HttpPost(Name = "CopyCardListOfOtherUser")]
+    public ActionResult<bool> CopyCardListOfOtherUser(int cardListId)
+    {
+        ArgumentNullException.ThrowIfNull(cardListId);
+
+        try
+        {
+            return Ok(_cardService.CopyCardListOfOtherUser(cardListId));
+        }
+        catch (Exception)
+        {
+            return BadRequest(null);
+        }
+    }
 }
