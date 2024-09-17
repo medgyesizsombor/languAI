@@ -75,5 +75,7 @@
   "ERROR_HAPPEND_WHEN_TRIED_TO_ACCEPT_FRIENDSHIP_REQUEST": "Hiba történt barát kérelem elfogadása közben",
   "ERROR_HAPPEND_WHEN_TRIED_TO_REJECT_FRIENDSHIP_REQUEST": "Hiba történt barát kérelem törlése közben",
   "SUCCESSFUL_REJECT_FRIENDSHIP_REQUEST": "Sikeresen törölted a barát kérelmet",
-  "SUCCESSFUL_ADDED_TO_YOUR_LIST_OF_FRIENDS": "Sikeresen hozzáadva a barát listádhoz"
+  "SUCCESSFUL_ADDED_TO_YOUR_LIST_OF_FRIENDS": "Sikeresen hozzáadva a barát listádhoz",
+  "SUCCESSFULLY_SAVE_THE_CARDS": "Sikeresen lemásoltad a kártyákat",
+  "ERROR_HAPPEND_WHEN_TRIED_TO_SAVE_THE_CARDS": "Hiba történt a kártyák lemásolása közben"
 }

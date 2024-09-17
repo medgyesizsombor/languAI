@@ -11,10 +11,22 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { CardListViewModel } from '../models/card-list-view-model';
 import { CardViewModel } from '../models/card-view-model';
+import { copyCardListOfOtherUser$Json } from '../fn/card/copy-card-list-of-other-user-json';
+import { CopyCardListOfOtherUser$Json$Params } from '../fn/card/copy-card-list-of-other-user-json';
+import { copyCardListOfOtherUser$Plain } from '../fn/card/copy-card-list-of-other-user-plain';
+import { CopyCardListOfOtherUser$Plain$Params } from '../fn/card/copy-card-list-of-other-user-plain';
 import { getCardListById$Json } from '../fn/card/get-card-list-by-id-json';
 import { GetCardListById$Json$Params } from '../fn/card/get-card-list-by-id-json';
 import { getCardListById$Plain } from '../fn/card/get-card-list-by-id-plain';
 import { GetCardListById$Plain$Params } from '../fn/card/get-card-list-by-id-plain';
+import { getCardListsOfOtherUserByUserId$Json } from '../fn/card/get-card-lists-of-other-user-by-user-id-json';
+import { GetCardListsOfOtherUserByUserId$Json$Params } from '../fn/card/get-card-lists-of-other-user-by-user-id-json';
+import { getCardListsOfOtherUserByUserId$Plain } from '../fn/card/get-card-lists-of-other-user-by-user-id-plain';
+import { GetCardListsOfOtherUserByUserId$Plain$Params } from '../fn/card/get-card-lists-of-other-user-by-user-id-plain';
+import { getCardListsOfOtherUsers$Json } from '../fn/card/get-card-lists-of-other-users-json';
+import { GetCardListsOfOtherUsers$Json$Params } from '../fn/card/get-card-lists-of-other-users-json';
+import { getCardListsOfOtherUsers$Plain } from '../fn/card/get-card-lists-of-other-users-plain';
+import { GetCardListsOfOtherUsers$Plain$Params } from '../fn/card/get-card-lists-of-other-users-plain';
 import { getCardsOfCardList$Json } from '../fn/card/get-cards-of-card-list-json';
 import { GetCardsOfCardList$Json$Params } from '../fn/card/get-cards-of-card-list-json';
 import { getCardsOfCardList$Plain } from '../fn/card/get-cards-of-card-list-plain';
@@ -321,6 +333,147 @@ export class CardService extends BaseService {
   getCardListById$Json(params?: GetCardListById$Json$Params, context?: HttpContext): Observable<CardListViewModel> {
     return this.getCardListById$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CardListViewModel>): CardListViewModel => r.body)
+    );
+  }
+
+  /** Path part for operation `getCardListsOfOtherUsers()` */
+  static readonly GetCardListsOfOtherUsersPath = '/Card/GetCardListsOfOtherUsers';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardListsOfOtherUsers$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUsers$Plain$Response(params?: GetCardListsOfOtherUsers$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
+    return getCardListsOfOtherUsers$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardListsOfOtherUsers$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUsers$Plain(params?: GetCardListsOfOtherUsers$Plain$Params, context?: HttpContext): Observable<Array<CardListViewModel>> {
+    return this.getCardListsOfOtherUsers$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CardListViewModel>>): Array<CardListViewModel> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardListsOfOtherUsers$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUsers$Json$Response(params?: GetCardListsOfOtherUsers$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
+    return getCardListsOfOtherUsers$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardListsOfOtherUsers$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUsers$Json(params?: GetCardListsOfOtherUsers$Json$Params, context?: HttpContext): Observable<Array<CardListViewModel>> {
+    return this.getCardListsOfOtherUsers$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CardListViewModel>>): Array<CardListViewModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `getCardListsOfOtherUserByUserId()` */
+  static readonly GetCardListsOfOtherUserByUserIdPath = '/Card/GetCardListsOfOtherUserByUserId';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardListsOfOtherUserByUserId$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUserByUserId$Plain$Response(params?: GetCardListsOfOtherUserByUserId$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
+    return getCardListsOfOtherUserByUserId$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardListsOfOtherUserByUserId$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUserByUserId$Plain(params?: GetCardListsOfOtherUserByUserId$Plain$Params, context?: HttpContext): Observable<Array<CardListViewModel>> {
+    return this.getCardListsOfOtherUserByUserId$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CardListViewModel>>): Array<CardListViewModel> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardListsOfOtherUserByUserId$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUserByUserId$Json$Response(params?: GetCardListsOfOtherUserByUserId$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
+    return getCardListsOfOtherUserByUserId$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardListsOfOtherUserByUserId$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListsOfOtherUserByUserId$Json(params?: GetCardListsOfOtherUserByUserId$Json$Params, context?: HttpContext): Observable<Array<CardListViewModel>> {
+    return this.getCardListsOfOtherUserByUserId$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CardListViewModel>>): Array<CardListViewModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `copyCardListOfOtherUser()` */
+  static readonly CopyCardListOfOtherUserPath = '/Card/CopyCardListOfOtherUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `copyCardListOfOtherUser$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyCardListOfOtherUser$Plain$Response(params?: CopyCardListOfOtherUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return copyCardListOfOtherUser$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `copyCardListOfOtherUser$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyCardListOfOtherUser$Plain(params?: CopyCardListOfOtherUser$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.copyCardListOfOtherUser$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `copyCardListOfOtherUser$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyCardListOfOtherUser$Json$Response(params?: CopyCardListOfOtherUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return copyCardListOfOtherUser$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `copyCardListOfOtherUser$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyCardListOfOtherUser$Json(params?: CopyCardListOfOtherUser$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.copyCardListOfOtherUser$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

@@ -91,3 +91,11 @@ ion-badge {
   border-style: solid;
   border-width: 1px;
 }
+
+ion-list {
+  flex-direction: column;
+}
+
+.flash-cards:not(:last-child) {
+  margin-bottom: 16px;
+}

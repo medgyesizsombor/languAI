@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PROFILE_TITLE } from '../../util/util.constants';
+import { CARD_LIST_NAVIGATION, PROFILE_TITLE } from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FriendshipService, UserService } from 'src/api/services';
 import {
+  CardListViewModel,
   FriendshipViewModel,
   IntSelectorModel,
   UserViewModel
@@ -42,6 +43,44 @@ export class ProfilePage implements OnInit, OnDestroy {
   friendshipViewModel: FriendshipViewModel | undefined;
   sendFriendshipRequestSub: Subscription | undefined;
   reactFriendshipRequestSub: Subscription | undefined;
+  cardLists: Array<CardListViewModel> = [
+    {
+      id: 1,
+      created: new Date().toString(),
+      modified: new Date().toString(),
+      learningLanguage: 'magyar',
+      nativeLanguage: 'hungarian',
+      cardViewModelList: [
+        { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
+      ],
+      name: 'asd',
+      userId: 8
+    },
+    {
+      id: 1,
+      created: new Date().toString(),
+      modified: new Date().toString(),
+      learningLanguage: 'magyar',
+      nativeLanguage: 'hungarian',
+      cardViewModelList: [
+        { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
+      ],
+      name: 'asd2',
+      userId: 8
+    },
+    {
+      id: 1,
+      created: new Date().toString(),
+      modified: new Date().toString(),
+      learningLanguage: 'magyar',
+      nativeLanguage: 'hungarian',
+      cardViewModelList: [
+        { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
+      ],
+      name: 'asd3',
+      userId: 8
+    }
+  ];
 
   languages: Array<IntSelectorModel> = [
     { id: 1, name: 'hu' },
@@ -293,52 +332,53 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   private loadData() {
     this.userId = this.localStorageService.getUserId();
-    // this.profileModel = {
-    //   id: this.userId!,
-    //   language: 1,
-    //   dateOfBirth: '1998-04-20',
-    //   email: 'teszt@teszt.com',
-    //   username: 'zsombi'
-    // };
-    // this.isProfileOfSomeoneElse = true;
-    // this.originalProfileModel = { ...this.profileModel };
-    // this.fillForm();
-    this.loadDataSub = this.activatedRoute.params
-      .pipe(
-        switchMap((params: Params) => {
-          const idFromParam = +params['id'];
-          this.isProfileOfSomeoneElse = idFromParam
-            ? this.userId !== idFromParam
-            : false;
+    this.profileModel = {
+      id: this.userId!,
+      language: 1,
+      dateOfBirth: '1998-04-20',
+      email: 'teszt@teszt.com',
+      username: 'zsombi'
+    };
+    this.isProfileOfSomeoneElse = true;
+    this.originalProfileModel = { ...this.profileModel };
+    this.fillForm();
+    this.loadingService.hideLoading();
+    // this.loadDataSub = this.activatedRoute.params
+    //   .pipe(
+    //     switchMap((params: Params) => {
+    //       const idFromParam = +params['id'];
+    //       this.isProfileOfSomeoneElse = idFromParam
+    //         ? this.userId !== idFromParam
+    //         : false;
 
-          return this.userService.getUserById$Json({
-            userId: idFromParam ? +idFromParam : this.userId!
-          });
-        }),
-        switchMap((res: UserViewModel) => {
-          this.profileModel = res;
-          this.fillForm();
-          if (!this.isProfileOfSomeoneElse) {
-            this.originalProfileModel = { ...this.profileModel };
-            return EMPTY;
-          }
+    //       return this.userService.getUserById$Json({
+    //         userId: idFromParam ? +idFromParam : this.userId!
+    //       });
+    //     }),
+    //     switchMap((res: UserViewModel) => {
+    //       this.profileModel = res;
+    //       this.fillForm();
+    //       if (!this.isProfileOfSomeoneElse) {
+    //         this.originalProfileModel = { ...this.profileModel };
+    //         return EMPTY;
+    //       }
 
-          return this.friendshipService.getFriendshipByUserId$Json({
-            currentUserId: this.userId!,
-            otherUserId: this.profileModel.id
-          });
-        })
-      )
-      .subscribe({
-        next: (res: FriendshipViewModel) => {
-          this.loadingService.hideLoading();
-          this.friendshipViewModel = res;
-        },
-        error: () => {
-          this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast('DATA_ERROR');
-        }
-      });
+    //       return this.friendshipService.getFriendshipByUserId$Json({
+    //         currentUserId: this.userId!,
+    //         otherUserId: this.profileModel.id
+    //       });
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: (res: FriendshipViewModel) => {
+    //       this.loadingService.hideLoading();
+    //       this.friendshipViewModel = res;
+    //     },
+    //     error: () => {
+    //       this.loadingService.hideLoading();
+    //       this.toastrService.presentErrorToast('DATA_ERROR');
+    //     }
+    //   });
   }
 
   /**
@@ -375,4 +415,11 @@ export class ProfilePage implements OnInit, OnDestroy {
     oldStatus: FriendshipStatusEnum,
     newStatus: FriendshipStatusEnum
   ) {}
+
+  /**
+   * Open cardList
+   */
+  openCardList(cardListId: number) {
+    this.navController.navigateForward(CARD_LIST_NAVIGATION + '/' + cardListId);
+  }
 }

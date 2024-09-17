@@ -27,9 +27,17 @@
     </ion-list>
   </div>
   <ng-container *ngIf="showSwiper">
-    <app-card-swiper [generatedCards]="generatedCards" (addCardsEmit)="addCards($event)"></app-card-swiper>
+    <app-card-swiper
+      [generatedCards]="generatedCards"
+      (addCardsEmit)="addCards($event)"></app-card-swiper>
   </ng-container>
-  <app-edit-fab [showPlayButton]="false" [cardsNumber]="cards.length" (playButtonEmit)="learnCards()" (addButtonEmit)="generateCards()"></app-edit-fab>
+  <app-edit-fab
+    [showPlayButton]="false"
+    [cardsNumber]="cards.length"
+    [isCardListOfOtherUser]="isCardListOfOtherUser"
+    (playButtonEmit)="learnCards()"
+    (addButtonEmit)="generateCards()"
+    (copyButtonEmit)="copyCards()"></app-edit-fab>
 </ion-content>
 
 <ng-template #missingCards>
