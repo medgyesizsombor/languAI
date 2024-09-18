@@ -9,14 +9,16 @@ namespace LanguAI.Backend.Controllers;
 public class RegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
+    private readonly IFriendshipService _friendshipService;
 
-    public RegistrationController(IRegistrationService registrationService)
+    public RegistrationController(IRegistrationService registrationService, IFriendshipService friendshipService)
     {
         _registrationService = registrationService;
+        _friendshipService = friendshipService;
     }
 
     /// <summary>
-    /// Register
+    /// Register and create a friendship with ChatGPT
     /// </summary>
     /// <param name="request">Request ViewModel</param>
     /// <returns></returns>
@@ -27,7 +29,16 @@ public class RegistrationController : ControllerBase
 
         try
         {
-            return Ok(_registrationService.Register(request));
+            int? userId = _registrationService.Register(request);
+
+            if (userId == null)
+            {
+                return false;
+            }
+
+            bool isRegistrationSuccessful = _friendshipService.CreateFriendshipWithChatGPT((int)userId);
+
+            return isRegistrationSuccessful;
         }
         catch (Exception e)
         {
