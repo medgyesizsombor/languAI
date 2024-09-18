@@ -3,7 +3,10 @@
     [showAddButton]="true"
     [title]="title"
     (addButtonEmit)="newMessage()"></app-header>
-    <ion-list>
-      <ion-item lines="none" *ngFor="let friend of friendList; let index = index" (click)="openMessage(friend.id)">asd</ion-item>
-    </ion-list>
+  <ion-list>
+    <ion-item
+      lines="none"
+      *ngFor="let friend of friendList; let index = index"
+      (click)="openMessage(friend.id)"></ion-item>
+  </ion-list>
 </ion-content>
