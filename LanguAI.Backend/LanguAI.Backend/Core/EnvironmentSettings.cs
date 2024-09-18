@@ -9,4 +9,6 @@ public class EnvironmentSettings
     public static string RootUrl { get; set; }
 
     public static string ChatGPTApiKey { get; set; }
+
+    public static int ChatGPTId { get; set; }
 }

@@ -8,7 +8,7 @@ namespace LanguAI.Backend.Services;
 
 public interface IRegistrationService
 {
-    bool Register(RegisterRequestViewModel request);
+    int? Register(RegisterRequestViewModel request);
 }
 
 public class RegistrationService : BaseService, IRegistrationService
@@ -18,7 +18,12 @@ public class RegistrationService : BaseService, IRegistrationService
     {
     }
 
-    public bool Register(RegisterRequestViewModel request)
+    /// <summary>
+    /// Register the user
+    /// </summary>
+    /// <param name="request">Request ViewModel</param>
+    /// <returns></returns>
+    public int? Register(RegisterRequestViewModel request)
     {
         try
         {
@@ -40,11 +45,11 @@ public class RegistrationService : BaseService, IRegistrationService
             _context.User.Add(user);
             _context.SaveChanges();
 
-            return true;
+            return user.Id;
         }
         catch (Exception ex)
         {
-            return false;
+            return null;
         }
 
 

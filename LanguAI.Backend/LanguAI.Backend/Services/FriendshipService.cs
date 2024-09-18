@@ -15,6 +15,7 @@ public interface IFriendshipService
     FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
     bool ReceivingFriendshipRequest(int friendshipRequestId, int status);
     int ChangeFriendshipStatus(int oldStatus, int newStatus);
+    bool CreateFriendshipWithChatGPT(int userId);
 
 }
 
@@ -186,5 +187,41 @@ public class FriendshipService : BaseService, IFriendshipService
     public int ChangeFriendshipStatus(int oldStatus, int newStatus)
     {
         return 0;
+    }
+
+    /// <summary>
+    /// Create friendship with ChatGPT
+    /// </summary>
+    /// <param name="userId">Registered user's Id</param>
+    /// <returns></returns>
+    public bool CreateFriendshipWithChatGPT(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        try
+        {
+            var isFriendshipAlreadyCreated = _context.Friendship.Any(f => f.RequesterId == userId && f.RecipientId == EnvironmentSettings.ChatGPTId);
+
+            if (isFriendshipAlreadyCreated)
+            {
+                return false;
+            }
+
+            Friendship friendship = new Friendship
+            {
+                RequesterId = userId,
+                RecipientId = EnvironmentSettings.ChatGPTId,
+                Status = (int)FriendshipStatusEnum.Accepted
+            };
+
+            _context.Friendship.Add(friendship);
+            _context.SaveChanges();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }
