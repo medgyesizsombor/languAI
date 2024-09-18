@@ -22,6 +22,9 @@ public class User
     [Required]
     public int Language { get; set; }
 
+    [Required]
+    public bool IsActive { get; set; } = true;
+
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual ICollection<CardList> CardLists { get; set; } = new List<CardList>();

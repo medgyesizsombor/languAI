@@ -325,6 +325,69 @@ export class AlertService {
   }
 
   /**
+   * Show delete user alert
+   */
+  async showDeleteUserAlert(message?: string): Promise<boolean> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('ATTENTION_TITLE'),
+        subHeader: message,
+        message: this.translateService.instant('DELETE_PROFILE_QUESTION'),
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve(false);
+            }
+          },
+          {
+            text: this.translateService.instant('DELETE_PROFILE'),
+            role: 'confirm',
+            handler: () => {
+              resolve(true);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show cancel/confirm alert
+   * TODO: kiszervezni a confirm / cancel alerteket egybe
+   */
+  // async showDeleteUserAlert(message?: string): Promise<boolean> {
+  //   return new Promise(async resolve => {
+  //     this.alert = await this.alertController.create({
+  //       header: this.translateService.instant('ATTENTION_TITLE'),
+  //       subHeader: message,
+  //       message: this.translateService.instant('DELETE_PROFILE_QUESTION'),
+  //       buttons: [
+  //         {
+  //           text: this.translateService.instant('CANCEL'),
+  //           role: 'cancel',
+  //           handler: () => {
+  //             resolve(false);
+  //           }
+  //         },
+  //         {
+  //           text: this.translateService.instant('DELETE_PROFILE'),
+  //           role: 'confirm',
+  //           handler: () => {
+  //             resolve(true);
+  //           }
+  //         }
+  //       ]
+  //     });
+
+  //     this.alert.present();
+  //   });
+  // }
+
+  /**
    * The name is not taken
    */
   private isNameValid(title: string, namesOfCardLists: Array<string>): boolean {

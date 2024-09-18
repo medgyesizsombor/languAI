@@ -27,7 +27,10 @@ public class RegistrationService : BaseService, IRegistrationService
     {
         try
         {
-            if (_context.User.Any(u => u.Username == request.Username || u.Email == request.Email)) {
+            if (_context.User
+                .Any(u => u.IsActive
+                    && (u.Username == request.Username || u.Email == request.Email)))
+            {
                 throw new Exception("Username or email is already used by someone else");
             }
 
