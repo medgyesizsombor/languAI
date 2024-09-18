@@ -33,7 +33,7 @@ public class UserService : BaseService, IUserService
             Id = u.Id,
             Username = u.Username,
             DateOfBirth = u.DateOfBirth,
-            Language = u.Language,
+            Language = u.Language
         }).ToList();
     }
 
@@ -44,7 +44,7 @@ public class UserService : BaseService, IUserService
     /// <returns></returns>
     public UserViewModel GetUserById(int userId)
     {
-        User user = _context.User.FirstOrDefault(u => u.Id == userId);
+        User user = _context.User.FirstOrDefault(u => u.Id == userId && u.IsActive);
 
         if (user == null)
         {
@@ -58,6 +58,7 @@ public class UserService : BaseService, IUserService
             Language = user.Language,
             DateOfBirth = user.DateOfBirth,
             Email = user.Email,
+            IsActive = user.IsActive
         };
     }
 
@@ -70,7 +71,7 @@ public class UserService : BaseService, IUserService
     {
         try
         {
-            User user = _context.User.Where(u => u.Id == request.Id).FirstOrDefault();
+            User user = _context.User.Where(u => u.Id == request.Id && u.IsActive).FirstOrDefault();
 
             if (user == null)
             {
@@ -99,7 +100,7 @@ public class UserService : BaseService, IUserService
     {
         try
         {
-            User user = _context.User.FirstOrDefault(u => u.Id == request.UserId);
+            User user = _context.User.FirstOrDefault(u => u.Id == request.UserId && u.IsActive);
 
             if (Hasher.Verify(request.OldPassword, user.PasswordHash))
             {
@@ -134,22 +135,25 @@ public class UserService : BaseService, IUserService
 
         try
         {
-            if (userId != currentUserId) {
+            if (userId != currentUserId)
+            {
                 throw new UnauthorizedAccessException();
             }
 
-            var user = _context.User.FirstOrDefault(u => u.Id == userId);
+            var user = _context.User.FirstOrDefault(u => u.Id == userId && u.IsActive);
 
-            if (user == null) {
-                ArgumentNullException.ThrowIfNull(user);
+            if (user == null)
+            {
+                return false;
             }
 
-            _context.User.Remove(user);
+            user.IsActive = false;
             _context.SaveChanges();
 
             return true;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             return false;
         }
     }

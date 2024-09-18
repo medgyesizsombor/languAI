@@ -25,19 +25,15 @@ public class AuthenticationService : BaseService, IAuthenticationService
         {
             ArgumentNullException.ThrowIfNull(request);
 
-            User user = _context.User.FirstOrDefault(u => u.Username == request.Username);
+            User user = _context.User
+                .Where(u => u.Username == request.Username && u.IsActive)
+                .FirstOrDefault();
 
-            if (user == null)
-            {
-                return null;
-            }
+            if (user == null) return null;
 
             var verified = Hasher.Verify(request.Password, user.PasswordHash);
 
-            if (!verified)
-            {
-                return null;
-            }
+            if (!verified) return null;
 
             return CreateToken(user);
         }

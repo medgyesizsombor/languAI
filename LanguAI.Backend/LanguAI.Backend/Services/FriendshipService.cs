@@ -39,8 +39,12 @@ public class FriendshipService : BaseService, IFriendshipService
 
         try
         {
-            User requester = _context.User.Where(u => u.Id == requesterId).FirstOrDefault();
-            User recipient = _context.User.Where(u => u.Id == recipientId).FirstOrDefault();
+            User requester = _context.User
+                .Where(u => u.Id == requesterId && u.IsActive)
+                .FirstOrDefault();
+            User recipient = _context.User
+                .Where(u => u.Id == recipientId && u.IsActive)
+                .FirstOrDefault();
 
             bool isExistingFriendship = _context.Friendship
                 .Any(f => (f.RequesterId == requesterId
@@ -132,8 +136,12 @@ public class FriendshipService : BaseService, IFriendshipService
 
         try
         {
-            User recipient = _context.User.Where(u => u.Id == recipientId).FirstOrDefault();
-            User requester = _context.User.Where(u => u.Id == requesterId).FirstOrDefault();
+            User recipient = _context.User
+                .Where(u => u.Id == recipientId && u.IsActive)
+                .FirstOrDefault();
+            User requester = _context.User
+                .Where(u => u.Id == requesterId && u.IsActive)
+                .FirstOrDefault();
 
             Friendship friendship = _context.Friendship
                 .FirstOrDefault(f => f.RequesterId == requesterId
