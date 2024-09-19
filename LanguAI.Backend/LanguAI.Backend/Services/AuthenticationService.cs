@@ -13,12 +13,18 @@ namespace LanguAI.Backend.Services;
 public interface IAuthenticationService
 {
     string Authenticate(AuthenticateRequestViewModel request);
+    int? GetCurrentUserId(HttpContext httpContext);
 }
 
 public class AuthenticationService : BaseService, IAuthenticationService
 {
     public AuthenticationService(LanguAIDataContext context) : base(context) { }
 
+    /// <summary>
+    /// Signing in
+    /// </summary>
+    /// <param name="request">AuthenticateRequest ViewModel</param>
+    /// <returns></returns>
     public string Authenticate(AuthenticateRequestViewModel request)
     {
         try
@@ -43,6 +49,23 @@ public class AuthenticationService : BaseService, IAuthenticationService
         }
     }
 
+    /// <summary>
+    /// Get UserId by HttpContext
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <returns></returns>
+    public int? GetCurrentUserId(HttpContext httpContext)
+    {
+        var claimTypesValue = httpContext.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.Name)?.Value;
+
+        return claimTypesValue == null ? null : int.Parse(claimTypesValue);
+    }
+
+    /// <summary>
+    /// Create JwtToken
+    /// </summary>
+    /// <param name="user">The user who get the Token</param>
+    /// <returns></returns>
     private static string CreateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

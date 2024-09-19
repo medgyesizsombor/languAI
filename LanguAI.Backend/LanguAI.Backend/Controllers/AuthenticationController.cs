@@ -15,6 +15,11 @@ public class AuthenticationController : ControllerBase
         _authenticationService = authenticationService;
     }
 
+    /// <summary>
+    /// Signing in
+    /// </summary>
+    /// <param name="request">AuthenticateRequest ViewModel</param>
+    /// <returns></returns>
     [HttpPost(Name = "Authenticate")]
     public ActionResult<string> Authenticate(AuthenticateRequestViewModel request)
     {

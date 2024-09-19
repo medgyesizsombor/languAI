@@ -1,9 +1,11 @@
 ﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Card;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]/[action]")]
 public class CardController : ControllerBase
