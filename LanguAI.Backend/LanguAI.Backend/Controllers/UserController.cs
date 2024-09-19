@@ -1,9 +1,11 @@
 using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]/[action]")]
 public class UserController : ControllerBase
@@ -11,11 +13,13 @@ public class UserController : ControllerBase
     private readonly IUserService _userService;
 
     private readonly ILogger<UserController> _logger;
+    private readonly IAuthenticationService _authenticationService;
 
-    public UserController(ILogger<UserController> logger, IUserService userService)
+    public UserController(ILogger<UserController> logger, IUserService userService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _userService = userService;
+        _authenticationService = authenticationService;
     }
 
     /// <summary>
@@ -47,7 +51,8 @@ public class UserController : ControllerBase
 
         try
         {
-            return Ok(_userService.GetUserById(userId));
+            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+            return Ok(_userService.GetUserById((int)currentUserId));
         }
         catch (Exception e)
         {

@@ -17,14 +17,16 @@ public class Startup
     {
         services.AddControllers();
 
+        services.ConfigureDependencyInjection();
+
         services.AddDbContext<LanguAIDataContext>(options =>
             options.UseSqlServer(EnvironmentSettings.ConnectionString));
 
-        services.ConfigureDependencyInjection();
+        services.ConfigureCors();
+
+        services.ConfigureAuthentication();
 
         services.ConfigureSwagger();
-
-        services.ConfigureCors();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -48,6 +50,8 @@ public class Startup
         app.EnableCors();
 
         app.UseRouting();
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 

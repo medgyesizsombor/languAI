@@ -7,6 +7,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {
+  HTTP_INTERCEPTORS,
   HttpClient,
   provideHttpClient,
   withInterceptorsFromDi
@@ -16,6 +17,7 @@ import { ApiModule } from 'src/api/api.module';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { JwtInterceptor } from './util/interceptors/jwt-interceptor';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -41,6 +43,7 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     provideHttpClient(withInterceptorsFromDi())
   ]
 })
