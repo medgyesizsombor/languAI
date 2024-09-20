@@ -9,13 +9,14 @@ namespace LanguAI.Backend.Controllers;
 public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
-
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger<UserController> _logger;
 
-    public PostController(ILogger<UserController> logger, IPostService postService)
+    public PostController(ILogger<UserController> logger, IPostService postService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _postService = postService;
+        _authenticationService = authenticationService;
     }
 
     /// <summary>
@@ -83,11 +84,18 @@ public class PostController : ControllerBase
     [HttpPost(Name = "SavePost")]
     public ActionResult<bool> SavePost(SavePostRequest request)
     {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
+
+        if (currentUserId != request.UserId)
+        {
+            throw new UnauthorizedAccessException();
+        }
 
         try
         {
-            return Ok(_postService.SavePost(request));
+            return Ok(_postService.SavePost(request, (int)currentUserId));
         }
         catch (Exception e)
         {

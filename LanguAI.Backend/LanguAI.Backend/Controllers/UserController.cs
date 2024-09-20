@@ -68,11 +68,13 @@ public class UserController : ControllerBase
     [HttpPost(Name = "SaveUser")]
     public ActionResult<bool> SaveUser(UserViewModel request)
     {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
 
         try
         {
-            return Ok(_userService.EditUser(request));
+            return Ok(_userService.EditUser(request, (int)currentUserId));
         }
         catch (Exception e)
         {
@@ -88,10 +90,17 @@ public class UserController : ControllerBase
     [HttpPost(Name = "ChangePassword")]
     public ActionResult<bool> ChangePassword(ChangePasswordRequestViewModel request)
     {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
 
         try
         {
+            if (request.UserId != currentUserId)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             return Ok(_userService.ChangePassword(request));
         }
         catch (Exception e)
@@ -106,13 +115,14 @@ public class UserController : ControllerBase
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
     [HttpPost(Name = "DeleteUser")]
-    public ActionResult<bool> DeleteUser(int userId)
+    public ActionResult<bool> DeleteUser()
     {
-        ArgumentNullException.ThrowIfNull(userId);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
 
         try
         {
-            return Ok(_userService.DeleteUser(userId));
+            return Ok(_userService.DeleteUser((int)currentUserId));
         }
         catch (Exception e)
         {

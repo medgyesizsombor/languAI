@@ -12,30 +12,31 @@ namespace LanguAI.Backend.Controllers;
 public class FriendshipController : ControllerBase
 {
     private readonly IFriendshipService _friendshipService;
-
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger<UserController> _logger;
 
-    public FriendshipController(ILogger<UserController> logger, IFriendshipService friendshipService)
+    public FriendshipController(ILogger<UserController> logger, IFriendshipService friendshipService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _friendshipService = friendshipService;
+        _authenticationService = authenticationService;
     }
 
     /// <summary>
     /// Request a friendship
-    /// </summary>
-    /// <param name="requesterId">Requester's id</param>
+    /// </summary>>
     /// <param name="recipientId">Recipient's id</param>
     /// <returns></returns>
     [HttpPost(Name = "RequestFriendship")]
-    public ActionResult<bool> RequestFriendship(int requesterId, int recipientId)
+    public ActionResult<bool> RequestFriendship(int recipientId)
     {
-        ArgumentNullException.ThrowIfNull(requesterId);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(recipientId);
 
         try
         {
-            return Ok(_friendshipService.RequestFriendship(requesterId, recipientId));
+            return Ok(_friendshipService.RequestFriendship((int)currentUserId, recipientId));
         }
         catch (Exception e)
         {
@@ -66,18 +67,18 @@ public class FriendshipController : ControllerBase
     /// <summary>
     /// Get Friendship by user's Id
     /// </summary>
-    /// <param name="currentUserId">Current user's Id</param>
     /// <param name="otherUserId">Current other user's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetFriendshipByUserId")]
-    public ActionResult<FriendshipViewModel> GetFriendshipByUserId(int currentUserId, int otherUserId)
+    public ActionResult<FriendshipViewModel> GetFriendshipByUserId(int otherUserId)
     {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(otherUserId);
 
         try
         {
-            return Ok(_friendshipService.GetFriendshipByUserId(currentUserId, otherUserId));
+            return Ok(_friendshipService.GetFriendshipByUserId((int)currentUserId, otherUserId));
         }
         catch (Exception e)
         {
@@ -88,20 +89,20 @@ public class FriendshipController : ControllerBase
     /// <summary>
     /// React the friendship request
     /// </summary>
-    /// <param name="recipientId">Id of the friendship request Recipient</param>
     /// <param name="requesterId">Id of the friendship requester</param>
     /// <param name="friendshipStatus">Reacted friendship status</param>
     /// <returns></returns>
     [HttpPost(Name = "ReactFriendshipRequest")]
-    public ActionResult<FriendshipStatusEnum> ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus)
+    public ActionResult<FriendshipStatusEnum> ReactFriendshipRequest(int requesterId, FriendshipStatusEnum friendshipStatus)
     {
-        ArgumentNullException.ThrowIfNull(recipientId);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(requesterId);
         ArgumentNullException.ThrowIfNull(friendshipStatus);
 
         try
         {
-            return Ok(_friendshipService.ReactFriendshipRequest(recipientId, requesterId, friendshipStatus));
+            return Ok(_friendshipService.ReactFriendshipRequest((int)currentUserId, requesterId, friendshipStatus));
         }
         catch (Exception)
         {

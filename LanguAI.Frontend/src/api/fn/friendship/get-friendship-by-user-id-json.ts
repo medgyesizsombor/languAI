@@ -9,14 +9,12 @@ import { RequestBuilder } from '../../request-builder';
 import { FriendshipViewModel } from '../../models/friendship-view-model';
 
 export interface GetFriendshipByUserId$Json$Params {
-  currentUserId?: number;
   otherUserId?: number;
 }
 
 export function getFriendshipByUserId$Json(http: HttpClient, rootUrl: string, params?: GetFriendshipByUserId$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<FriendshipViewModel>> {
   const rb = new RequestBuilder(rootUrl, getFriendshipByUserId$Json.PATH, 'get');
   if (params) {
-    rb.query('currentUserId', params.currentUserId, {});
     rb.query('otherUserId', params.otherUserId, {});
   }
 

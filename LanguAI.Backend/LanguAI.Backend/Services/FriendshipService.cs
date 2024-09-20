@@ -9,7 +9,7 @@ namespace LanguAI.Backend.Services;
 
 public interface IFriendshipService
 {
-    bool RequestFriendship(int requesterId, int recipientId);
+    bool RequestFriendship(int currentUserId, int recipientId);
     List<IntSelectorModel> GetFriendList(int userId);
     FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId);
     FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
@@ -32,25 +32,25 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <param name="requesterId">Current user's Id</param>
     /// <param name="recipientId">Recipient's Id</param>
     /// <returns></returns>
-    public bool RequestFriendship(int requesterId, int recipientId)
+    public bool RequestFriendship(int currentUserId, int recipientId)
     {
-        ArgumentNullException.ThrowIfNull(requesterId);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(recipientId);
 
         try
         {
             User requester = _context.User
-                .Where(u => u.Id == requesterId && u.IsActive)
+                .Where(u => u.Id == currentUserId && u.IsActive)
                 .FirstOrDefault();
             User recipient = _context.User
                 .Where(u => u.Id == recipientId && u.IsActive)
                 .FirstOrDefault();
 
             bool isExistingFriendship = _context.Friendship
-                .Any(f => (f.RequesterId == requesterId
+                .Any(f => (f.RequesterId == currentUserId
                                 && f.RecipientId == recipientId)
                             || (f.RequesterId == recipientId
-                                && f.RecipientId == requesterId));
+                                && f.RecipientId == currentUserId));
 
             if (requester == null || recipient == null || isExistingFriendship)
             {
@@ -60,7 +60,7 @@ public class FriendshipService : BaseService, IFriendshipService
             Friendship friendship = new Friendship
             {
                 RecipientId = recipientId,
-                RequesterId = requesterId,
+                RequesterId = currentUserId,
                 Created = DateTime.Now
             };
 
@@ -128,16 +128,16 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <param name="requesterId">Id of the friendship requester</param>
     /// <param name="friendshipStatus">Reacted friendship status</param>
     /// <returns></returns>
-    public FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus)
+    public FriendshipStatusEnum ReactFriendshipRequest(int currentUserId, int requesterId, FriendshipStatusEnum friendshipStatus)
     {
-        ArgumentNullException.ThrowIfNull(recipientId);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(requesterId);
         ArgumentNullException.ThrowIfNull(friendshipStatus);
 
         try
         {
             User recipient = _context.User
-                .Where(u => u.Id == recipientId && u.IsActive)
+                .Where(u => u.Id == currentUserId && u.IsActive)
                 .FirstOrDefault();
             User requester = _context.User
                 .Where(u => u.Id == requesterId && u.IsActive)
@@ -145,7 +145,7 @@ public class FriendshipService : BaseService, IFriendshipService
 
             Friendship friendship = _context.Friendship
                 .FirstOrDefault(f => f.RequesterId == requesterId
-                    && f.RecipientId == recipientId
+                    && f.RecipientId == currentUserId
                     && f.Status == (int)FriendshipStatusEnum.Requested);
 
             if (requester == null || recipient == null || friendship == null)

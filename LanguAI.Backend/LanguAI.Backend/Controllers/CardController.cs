@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("[controller]/[action]")]
 public class CardController : ControllerBase
 {
     private readonly ICardService _cardService;
-
     private readonly ILogger<UserController> _logger;
+    private readonly IAuthenticationService _authenticationService;
 
-    public CardController(ILogger<UserController> logger, ICardService cardService)
+    public CardController(ILogger<UserController> logger, ICardService cardService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _cardService = cardService;
+        _authenticationService = authenticationService;
     }
 
     /// <summary>
@@ -46,9 +46,9 @@ public class CardController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    /// Save cards to card list
     /// </summary>
-    /// <param name="request"></param>
+    /// <param name="request">SaveCardRequest</param>
     /// <returns></returns>
     [HttpPost(Name = "SaveCards")]
     public ActionResult<bool> SaveCards(SaveCardRequest request)
@@ -171,18 +171,18 @@ public class CardController : ControllerBase
     /// <summary>
     /// Get other user's accessible card lists
     /// </summary>
-    /// <param name="userId">Current user's Id</param>
     /// <param name="otherUserId">Other user's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetCardListsOfOtherUserByUserId")]
-    public ActionResult<List<CardListViewModel>> GetCardListsOfOtherUserByUserId(int userId, int otherUserId)
+    public ActionResult<List<CardListViewModel>> GetCardListsOfOtherUserByUserId(int otherUserId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(otherUserId);
 
         try
         {
-            return Ok(_cardService.GetCardListsOfOtherUserByUserId(userId, otherUserId));
+            return Ok(_cardService.GetCardListsOfOtherUserByUserId((int)currentUserId, otherUserId));
         }
         catch (Exception)
         {
@@ -198,11 +198,13 @@ public class CardController : ControllerBase
     [HttpPost(Name = "CopyCardListOfOtherUser")]
     public ActionResult<bool> CopyCardListOfOtherUser(int cardListId)
     {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(cardListId);
 
         try
         {
-            return Ok(_cardService.CopyCardListOfOtherUser(cardListId));
+            return Ok(_cardService.CopyCardListOfOtherUser((int)currentUserId, cardListId));
         }
         catch (Exception)
         {

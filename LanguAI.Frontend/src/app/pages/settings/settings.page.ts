@@ -67,23 +67,12 @@ export class SettingsPage implements OnInit {
    */
   deleteProfile() {
     this.loadingService.showLoading().then(() => {
-      this.userService
-        .deleteUser$Json({ userId: this.localStorageService.getUserId()! })
-        .subscribe({
-          next: (success: boolean) => {
-            if (success) {
-              this.loadingService.hideLoading();
-              this.removeJwtToken();
-            } else {
-              this.loadingService.hideLoading();
-              this.toastrService.presentErrorToast(
-                this.translateService.instant(
-                  'ERROR_HAPPEND_WHEN_TRIED_TO_DELETE_PROFILE'
-                )
-              );
-            }
-          },
-          error: () => {
+      this.userService.deleteUser$Json().subscribe({
+        next: (success: boolean) => {
+          if (success) {
+            this.loadingService.hideLoading();
+            this.removeJwtToken();
+          } else {
             this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
               this.translateService.instant(
@@ -91,7 +80,16 @@ export class SettingsPage implements OnInit {
               )
             );
           }
-        });
+        },
+        error: () => {
+          this.loadingService.hideLoading();
+          this.toastrService.presentErrorToast(
+            this.translateService.instant(
+              'ERROR_HAPPEND_WHEN_TRIED_TO_DELETE_PROFILE'
+            )
+          );
+        }
+      });
     });
   }
 
