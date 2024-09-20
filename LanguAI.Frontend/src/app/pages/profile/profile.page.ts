@@ -220,7 +220,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   sendRequest() {
     this.sendFriendshipRequestSub = this.friendshipService
       .requestFriendship$Json({
-        requesterId: this.userId!,
         recipientId: this.profileModel.id
       })
       .subscribe({
@@ -270,7 +269,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.reactFriendshipRequestSub = this.friendshipService
       .reactFriendshipRequest$Json({
         friendshipStatus: nextStatus,
-        recipientId: this.friendshipViewModel?.recipientId,
         requesterId: this.friendshipViewModel?.requesterId
       })
       .subscribe({

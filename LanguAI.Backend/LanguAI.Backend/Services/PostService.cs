@@ -11,7 +11,7 @@ public interface IPostService
     List<PostViewModel> GetAllPost();
     List<PostViewModel> GetPosts(GetPostRequest request);
     PostViewModel GetPostById(int id);
-    bool SavePost(SavePostRequest request);
+    bool SavePost(SavePostRequest request, int currentUserId);
 }
 
 public class PostService : BaseService, IPostService
@@ -87,8 +87,11 @@ public class PostService : BaseService, IPostService
     /// </summary>
     /// <param name="request">The request</param>
     /// <returns></returns>
-    public bool SavePost(SavePostRequest request)
+    public bool SavePost(SavePostRequest request, int currentUserId)
     {
+        ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(request);
+
         bool isEdit = false;
 
         Post post;
@@ -110,7 +113,7 @@ public class PostService : BaseService, IPostService
 
         post.Content = request.Content;
         post.Created = request.Created;
-        post.UserId = request.UserId;
+        post.UserId = currentUserId;
 
         if (!isEdit)
         {

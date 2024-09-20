@@ -9,7 +9,6 @@ import { RequestBuilder } from '../../request-builder';
 import { FriendshipStatusEnum } from '../../models/friendship-status-enum';
 
 export interface ReactFriendshipRequest$Json$Params {
-  recipientId?: number;
   requesterId?: number;
 
 /**
@@ -25,7 +24,6 @@ export interface ReactFriendshipRequest$Json$Params {
 export function reactFriendshipRequest$Json(http: HttpClient, rootUrl: string, params?: ReactFriendshipRequest$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<FriendshipStatusEnum>> {
   const rb = new RequestBuilder(rootUrl, reactFriendshipRequest$Json.PATH, 'post');
   if (params) {
-    rb.query('recipientId', params.recipientId, {});
     rb.query('requesterId', params.requesterId, {});
     rb.query('friendshipStatus', params.friendshipStatus, {});
   }

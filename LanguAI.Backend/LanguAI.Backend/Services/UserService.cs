@@ -10,7 +10,7 @@ public interface IUserService
 {
     List<UserViewModel> GetAllUsers();
     UserViewModel GetUserById(int userId);
-    bool EditUser(UserViewModel request);
+    bool EditUser(UserViewModel request, int currentUserId);
     bool ChangePassword(ChangePasswordRequestViewModel request);
     bool DeleteUser(int userId);
 }
@@ -67,11 +67,14 @@ public class UserService : BaseService, IUserService
     /// </summary>
     /// <param name="request">User ViewModel</param>
     /// <returns></returns>
-    public bool EditUser(UserViewModel request)
+    public bool EditUser(UserViewModel request, int currentUserId)
     {
+        ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(request);
+
         try
         {
-            User user = _context.User.Where(u => u.Id == request.Id && u.IsActive).FirstOrDefault();
+            User user = _context.User.Where(u => u.Id == currentUserId && u.IsActive).FirstOrDefault();
 
             if (user == null)
             {

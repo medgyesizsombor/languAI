@@ -8,13 +8,11 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface DeleteUser$Json$Params {
-  userId?: number;
 }
 
 export function deleteUser$Json(http: HttpClient, rootUrl: string, params?: DeleteUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
   const rb = new RequestBuilder(rootUrl, deleteUser$Json.PATH, 'post');
   if (params) {
-    rb.query('userId', params.userId, {});
   }
 
   return http.request(

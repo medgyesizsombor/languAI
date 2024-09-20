@@ -8,14 +8,12 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface RequestFriendship$Plain$Params {
-  requesterId?: number;
   recipientId?: number;
 }
 
 export function requestFriendship$Plain(http: HttpClient, rootUrl: string, params?: RequestFriendship$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
   const rb = new RequestBuilder(rootUrl, requestFriendship$Plain.PATH, 'post');
   if (params) {
-    rb.query('requesterId', params.requesterId, {});
     rb.query('recipientId', params.recipientId, {});
   }
 

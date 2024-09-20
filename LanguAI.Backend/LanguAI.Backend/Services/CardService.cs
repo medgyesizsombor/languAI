@@ -16,8 +16,8 @@ public interface ICardService
     List<CardViewModel> GetCardsOfCardList(int cardListId);
     CardListViewModel GetCardListById(int cardListId);
     List<CardListViewModel> GetCardListsOfOtherUsers(int userId);
-    List<CardListViewModel> GetCardListsOfOtherUserByUserId(int userId, int otherUserId);
-    bool CopyCardListOfOtherUser(int cardListId);
+    List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId);
+    bool CopyCardListOfOtherUser(int currentUserId, int cardListId);
 }
 
 public class CardService : BaseService, ICardService
@@ -110,8 +110,14 @@ public class CardService : BaseService, ICardService
         return asd;
     }
 
+    /// <summary>
+    /// Save cards to card list
+    /// </summary>
+    /// <param name="request">SaveCardRequest</param>
+    /// <returns></returns>
     public bool SaveCards(SaveCardRequest request)
     {
+        //TODO: Only the owner can save
         ArgumentNullException.ThrowIfNull(request);
 
         List<Card> oldCards = _context.Card.Where(c => c.CardListId == request.CardListId).ToList();
@@ -206,16 +212,16 @@ public class CardService : BaseService, ICardService
     /// <param name="userId">Current user's Id</param>
     /// <param name="otherUserId">Other user's Id</param>
     /// <returns></returns>
-    public List<CardListViewModel> GetCardListsOfOtherUserByUserId(int userId, int otherUserId)
+    public List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(otherUserId);
 
         return _context.CardList.Include(c => c.Cards).Where(c => c.UserId == otherUserId && ((c.Access == (int)CardListAccessEnum.Public)
                          || c.Access == (int)CardListAccessEnum.Protected
                              && (_context.Friendship
-                                 .Any(f => ((f.RequesterId == userId && f.RecipientId == c.UserId)
-                                     || (f.RecipientId == userId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
+                                 .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == c.UserId)
+                                     || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
             .Select(c => ConvertCardListToCardListViewModel(c))
             .ToList();
     }
@@ -223,13 +229,18 @@ public class CardService : BaseService, ICardService
     /// <summary>
     /// Copy other user's cardlist
     /// </summary>
-    /// <param name="cardListId">If of Card list to copy</param>
+    /// <param name="currentUserId">Current user's Id</param>
+    /// <param name="cardListId">Id of Card list to copy</param>
     /// <returns></returns>
-    public bool CopyCardListOfOtherUser(int cardListId)
+    public bool CopyCardListOfOtherUser(int currentUserId, int cardListId)
     {
         ArgumentNullException.ThrowIfNull(cardListId);
+        ArgumentNullException.ThrowIfNull(currentUserId);
 
-        CardList originalCardList = _context.CardList.Include(c => c.Cards).FirstOrDefault(c => c.Id == cardListId && c.Cards.Count != 0);
+        CardList originalCardList = _context.CardList
+            .Include(c => c.Cards)
+            .Where(c => c.Id == cardListId && c.Cards.Count != 0)
+            .FirstOrDefault();
 
         if (originalCardList == null) return false;
 
@@ -241,7 +252,7 @@ public class CardService : BaseService, ICardService
                 LearningLanguage = originalCardList.LearningLanguage,
                 Name = originalCardList.Name,
                 NativeLanguage = originalCardList.NativeLanguage,
-                UserId = 7
+                UserId = currentUserId
             };
 
             _context.CardList.Add(cardList);

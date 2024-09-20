@@ -9,14 +9,12 @@ import { RequestBuilder } from '../../request-builder';
 import { CardListViewModel } from '../../models/card-list-view-model';
 
 export interface GetCardListsOfOtherUserByUserId$Json$Params {
-  userId?: number;
   otherUserId?: number;
 }
 
 export function getCardListsOfOtherUserByUserId$Json(http: HttpClient, rootUrl: string, params?: GetCardListsOfOtherUserByUserId$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
   const rb = new RequestBuilder(rootUrl, getCardListsOfOtherUserByUserId$Json.PATH, 'get');
   if (params) {
-    rb.query('userId', params.userId, {});
     rb.query('otherUserId', params.otherUserId, {});
   }
 
