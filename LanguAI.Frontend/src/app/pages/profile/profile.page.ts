@@ -19,6 +19,7 @@ import { AlertService } from 'src/app/util/services/alert.service';
 import { LanguageSelectModalComponent } from 'src/app/components/modals/language-select-modal/language-select-modal.component';
 import { BadgeEnum } from 'src/app/util/enums/badge-enum';
 import { FriendshipStatusEnum } from 'src/api/models';
+import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
 
 @Component({
   selector: 'app-profile',
@@ -104,7 +105,8 @@ export class ProfilePage implements OnInit, OnDestroy {
     private alertService: AlertService,
     private activatedRoute: ActivatedRoute,
     private modalController: ModalController,
-    private friendshipService: FriendshipService
+    private friendshipService: FriendshipService,
+    private friendshipRequestService: FriendshipRequestService
   ) {}
 
   ngOnInit() {
@@ -172,10 +174,6 @@ export class ProfilePage implements OnInit, OnDestroy {
           }
         });
     });
-  }
-
-  navigateBack() {
-    this.navController.back();
   }
 
   /**
@@ -261,55 +259,14 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Default value true
    */
   async reactFriendshipRequest(accept = true) {
-    await this.loadingService.showLoading();
-    const nextStatus = accept
-      ? FriendshipStatusEnum.Accepted
-      : FriendshipStatusEnum.Deleted;
-
-    this.reactFriendshipRequestSub = this.friendshipService
-      .reactFriendshipRequest$Json({
-        friendshipStatus: nextStatus,
-        requesterId: this.friendshipViewModel?.requesterId
-      })
-      .subscribe({
-        next: (res: FriendshipStatusEnum) => {
-          switch (res) {
-            case FriendshipStatusEnum.Requested: {
-              this.toastrService.presentErrorToast(
-                this.translateService.instant(
-                  nextStatus === FriendshipStatusEnum.Accepted
-                    ? 'ERROR_HAPPEND_WHEN_TRIED_TO_ACCEPT_FRIENDSHIP_REQUEST'
-                    : 'ERROR_HAPPEND_WHEN_TRIED_TO_REJECT_FRIENDSHIP_REQUEST'
-                )
-              );
-              this.loadingService.hideLoading();
-              break;
-            }
-            case FriendshipStatusEnum.Deleted: {
-              this.toastrService.presentSuccessToast(
-                this.translateService.instant(
-                  'SUCCESSFUL_REJECT_FRIENDSHIP_REQUEST'
-                )
-              );
-              console.log(this.friendshipViewModel?.status);
-              this.friendshipViewModel!.status = FriendshipStatusEnum.Deleted;
-              console.log(this.friendshipViewModel?.status);
-              this.loadingService.hideLoading();
-              break;
-            }
-            default: {
-              this.toastrService.presentSuccessToast(
-                this.translateService.instant(
-                  'SUCCESSFUL_ADDED_TO_YOUR_LIST_OF_FRIENDS'
-                )
-              );
-              this.friendshipViewModel!.status = FriendshipStatusEnum.Accepted;
-              this.loadingService.hideLoading();
-              break;
-            }
-          }
-        },
-        error: () => {}
+    this.friendshipRequestService
+      .reactFriendshipRequest(accept, this.friendshipViewModel?.requesterId)
+      .subscribe((res: FriendshipStatusEnum) => {
+        if (res === FriendshipStatusEnum.Accepted) {
+          this.friendshipViewModel!.status = FriendshipStatusEnum.Accepted;
+        } else if (res === FriendshipStatusEnum.Deleted) {
+          this.friendshipViewModel!.status = FriendshipStatusEnum.Deleted;
+        }
       });
   }
 

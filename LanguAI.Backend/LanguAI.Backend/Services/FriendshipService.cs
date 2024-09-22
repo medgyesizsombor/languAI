@@ -16,7 +16,8 @@ public interface IFriendshipService
     bool ReceivingFriendshipRequest(int friendshipRequestId, int status);
     int ChangeFriendshipStatus(int oldStatus, int newStatus);
     bool CreateFriendshipWithChatGPT(int userId);
-
+    List<FriendshipRequestViewModel> GetFriendshipRequestList(int currentUserId);
+    int? GetNumberOfFriendshipRequest(int currentUserId);
 }
 
 public class FriendshipService : BaseService, IFriendshipService
@@ -113,7 +114,8 @@ public class FriendshipService : BaseService, IFriendshipService
                 RecipientId = f.RecipientId,
                 RequesterId = f.RequesterId,
                 Status = f.Status,
-                IsCloseFriendship = f.IsCloseFriendship
+                IsCloseFriendship = f.IsCloseFriendship,
+                Created = f.Created
             })
             .FirstOrDefault();
 
@@ -230,6 +232,56 @@ public class FriendshipService : BaseService, IFriendshipService
         catch (Exception)
         {
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Get the current user's all friendship request
+    /// </summary>
+    /// <returns></returns>
+    public List<FriendshipRequestViewModel> GetFriendshipRequestList(int currentUserId)
+    {
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            return _context.Friendship
+                .Where(f => f.RecipientId == currentUserId && f.Status == (int)FriendshipStatusEnum.Requested)
+                .Select(f => new FriendshipRequestViewModel
+                {
+                    Id = f.Id,
+                    Created = f.Created,
+                    RequesterName = f.Requester.Username,
+                    RequesterId = f.RequesterId
+                })
+                .OrderByDescending(f => f.Created)
+                .ToList();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Get the current user's all friendship request
+    /// </summary>
+    /// <returns></returns>
+    public int? GetNumberOfFriendshipRequest(int currentUserId)
+    {
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            return _context.Friendship
+                .Where(f => f.RecipientId == currentUserId && f.Status == (int)FriendshipStatusEnum.Requested)
+                .Select(f => f.Id)
+                .ToList()
+                .Count;
+        }
+        catch (Exception)
+        {
+            return null;
         }
     }
 }

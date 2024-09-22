@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { LOGIN_NAVIGATION, SETTINGS_TITLE } from '../../util/util.constants';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  LOGIN_NAVIGATION,
+  NOTIFICATIONS_NAVIGATION,
+  SETTINGS_TITLE
+} from '../../util/util.constants';
 import { UserService } from 'src/api/services';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
@@ -7,20 +11,25 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
+import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss']
 })
-export class SettingsPage implements OnInit {
+export class SettingsPage implements OnInit, OnDestroy {
   title = this.translateService.instant(SETTINGS_TITLE);
+  numberOfFriendshipRequest = 0;
 
   profile = {
     image: 'asd',
     username: 'asd1',
     email: 'asd@asd.com'
   };
+
+  deleteUserSub: Subscription | undefined;
 
   constructor(
     private userService: UserService,
@@ -29,10 +38,12 @@ export class SettingsPage implements OnInit {
     private translateService: TranslateService,
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private friendshipRequestService: FriendshipRequestService
   ) {}
 
   ngOnInit() {
+    this.loadData();
     // this.userService.getUserById$Json({ userId: 7 }).subscribe(res => {
     //   if (res) {
     //     console.log(res);
@@ -41,7 +52,9 @@ export class SettingsPage implements OnInit {
     // });
   }
 
-  openNotificationModal() {}
+  ngOnDestroy() {
+    this.deleteUserSub?.unsubscribe();
+  }
 
   openDarkModeModal() {}
 
@@ -96,5 +109,10 @@ export class SettingsPage implements OnInit {
   private removeJwtToken() {
     this.localStorageService.removeJwtToken();
     this.router.navigate(['/' + LOGIN_NAVIGATION]);
+  }
+
+  private loadData() {
+    this.numberOfFriendshipRequest =
+      this.friendshipRequestService.numberOfFriendshipRequest;
   }
 }

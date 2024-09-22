@@ -2,7 +2,6 @@
   <app-header
     [useNavController]="true"
     [showBackArrow]="true"
-    (click)="navigateBack()"
     [title]="title"></app-header>
 
   <!-- ACTION BUTTONS -->
@@ -234,7 +233,9 @@
   </ng-template>
 
   <ng-template #acceptFriendshipRequest>
-    <span>{{ 'ACCEPT_FRIENDSHIP' | translate }}</span>
+    <span (click)="reactFriendshipRequest(false)">
+      {{ 'ACCEPT_FRIENDSHIP' | translate }}
+    </span>
   </ng-template>
 
   <ng-template #rejectFriendshipRequest>
