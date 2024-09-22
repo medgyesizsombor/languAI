@@ -14,8 +14,8 @@ import { UtilModule } from '../../util/util.module';
     CommonModule,
     FormsModule,
     TabsPageRoutingModule,
-    UtilModule,
+    UtilModule
   ],
-  declarations: [TabsPage],
+  declarations: [TabsPage]
 })
 export class TabsPageModule {}

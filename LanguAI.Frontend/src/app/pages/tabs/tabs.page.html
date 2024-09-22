@@ -18,6 +18,12 @@
 
     <ion-tab-button tab="settings">
       <ion-icon name="settings-outline"></ion-icon>
+      <ion-badge
+        *ngIf="numberOfFriendshipRequest"
+        id="notifications-badge"
+        color="danger">
+        {{ numberOfFriendshipRequest}}
+      </ion-badge>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

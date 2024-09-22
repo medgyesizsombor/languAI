@@ -21,13 +21,15 @@ import {
 export class CardListsPage {
   title = this.translateService.instant(CARD_LISTS_TITLE);
 
-  getCardListsSub: Subscription | undefined;
   userId: number | null | undefined;
   cardLists: Array<CardListViewModel> = [];
 
   suggestedName: string | undefined;
 
   isLoading = true;
+
+  getCardListsSub: Subscription | undefined;
+  createCardListSub: Subscription | undefined;
 
   constructor(
     private cardService: CardService,
@@ -47,6 +49,7 @@ export class CardListsPage {
   ionViewDidLeave() {
     this.cardLists = [];
     this.getCardListsSub?.unsubscribe();
+    this.createCardListSub?.unsubscribe();
   }
 
   addCardList() {
@@ -62,7 +65,7 @@ export class CardListsPage {
       .then((name: string | null) => {
         if (name?.length) {
           this.loadingService.showLoading('CREATING_CARD_LIST').then(() => {
-            this.cardService
+            this.createCardListSub = this.cardService
               .saveCardList$Json({
                 body: {
                   userId: 7,

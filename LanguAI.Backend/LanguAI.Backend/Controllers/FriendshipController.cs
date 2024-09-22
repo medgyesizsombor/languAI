@@ -2,7 +2,6 @@
 using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Friendship;
 using LanguAI.Backend.ViewModels.SelectorModel;
-using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
@@ -107,6 +106,46 @@ public class FriendshipController : ControllerBase
         catch (Exception)
         {
             return FriendshipStatusEnum.Requested;
+        }
+    }
+
+    /// <summary>
+    /// Get the current user's all friendship request
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet(Name = "GetFriendshipRequestList")]
+    public ActionResult<List<FriendshipRequestViewModel>> GetFriendshipRequestList()
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            return Ok(_friendshipService.GetFriendshipRequestList((int)currentUserId));
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Get the current user's number of friendship request
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet(Name = "GetNumberOfFriendshipRequest")]
+    public ActionResult<int?> GetNumberOfFriendshipRequest()
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            return Ok(_friendshipService.GetNumberOfFriendshipRequest((int)currentUserId));
+        }
+        catch (Exception)
+        {
+            return BadRequest(null);
         }
     }
 }

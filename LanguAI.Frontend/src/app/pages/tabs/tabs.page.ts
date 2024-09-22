@@ -1,25 +1,22 @@
 import { Component } from '@angular/core';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
-import { faArrowLeft, faCheckSquare, faSquare, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
+import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
-  styleUrls: ['tabs.page.scss'],
+  styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
-  constructor(library: FaIconLibrary) {
-    library.addIcons(
-      faSquare,
-      faCheckSquare,
-      faSquare,
-      faCheckSquare,
-      faMedium,
-      faStackOverflow,
-      faGithub,
-      faArrowLeft,
-      faUser
-    );
+  numberOfFriendshipRequest = 0;
+
+  constructor(
+    private localStorageService: LocalStorageService,
+    private friendshipRequestService: FriendshipRequestService
+  ) {
+    // this.numberOfFriendshipRequest =
+    //   localStorageService.getNumberOfFriendshipRequest() ?? 0;
+    this.numberOfFriendshipRequest =
+      this.friendshipRequestService.numberOfFriendshipRequest;
   }
 }

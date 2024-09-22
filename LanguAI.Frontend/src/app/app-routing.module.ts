@@ -7,11 +7,12 @@ import {
   CARD_LISTS_NAVIGATION,
   CARD_NAVIGATION,
   FORUM_NAVIGATION,
-  LESSON_LEARNING,
+  LESSON_LEARNING_NAVIGATION,
   LESSONS_NAVIGATION,
   LOGIN_NAVIGATION,
   MESSAGE_NAVIGATION,
   MESSAGES_NAVIGATION,
+  NOTIFICATIONS_NAVIGATION,
   POST_NAVIGATION,
   PROFILE_NAVIGATION,
   REGISTER_NAVIGATION,
@@ -102,7 +103,7 @@ const routes: Routes = [
       )
   },
   {
-    path: LESSON_LEARNING,
+    path: LESSON_LEARNING_NAVIGATION,
     loadChildren: () =>
       import('./pages/lesson-learning/lesson-learning.module').then(
         m => m.LessonLearningPageModule
@@ -112,6 +113,13 @@ const routes: Routes = [
     path: MESSAGE_NAVIGATION + '/:id',
     loadChildren: () =>
       import('./pages/message/message.module').then(m => m.MessagePageModule)
+  },
+  {
+    path: NOTIFICATIONS_NAVIGATION,
+    loadChildren: () =>
+      import('./pages/notifications/notifications.module').then(
+        m => m.NotificationsPageModule
+      )
   }
 ];
 @NgModule({

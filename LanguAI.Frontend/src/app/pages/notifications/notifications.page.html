@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <app-header
+    [useNavController]="true"
+    [showBackArrow]="true"
+    title="{{ 'NOTIFICATIONS_TITLE' | translate }}"></app-header>
+  <ion-list *ngIf="friendshipRequests?.length; else missingFriendshipRequest">
+    <div
+      class="ion-no-padding d-flex ion-justify-content-between align-item-center border-1-bottom-line"
+      *ngFor="let friendshipRequest of friendshipRequests; let index = index">
+      <span>{{ friendshipRequest.requesterName }}</span>
+      <ion-item class="ion-no-padding ion-item-no-padding-end" lines="none">
+        <ion-icon
+          class="me-2"
+          (click)="reactFriendshipRequest(friendshipRequest.requesterId!)"
+          name="person-add-outline"></ion-icon>
+        <ion-icon
+          (click)="reactFriendshipRequest(friendshipRequest.requesterId!, false)"
+          name="trash-outline"></ion-icon>
+      </ion-item>
+    </div>
+  </ion-list>
+</ion-content>
+
+<ng-template #missingFriendshipRequest>
+  {{ 'THERE_ARE_NO_FRIENDSHIP_REQUESTS_WAITING_FOR_YOU' | translate }}
+</ng-template>
