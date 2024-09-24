@@ -11,6 +11,10 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { CardListViewModel } from '../models/card-list-view-model';
 import { CardViewModel } from '../models/card-view-model';
+import { changeAccessOfCardList$Json } from '../fn/card/change-access-of-card-list-json';
+import { ChangeAccessOfCardList$Json$Params } from '../fn/card/change-access-of-card-list-json';
+import { changeAccessOfCardList$Plain } from '../fn/card/change-access-of-card-list-plain';
+import { ChangeAccessOfCardList$Plain$Params } from '../fn/card/change-access-of-card-list-plain';
 import { copyCardListOfOtherUser$Json } from '../fn/card/copy-card-list-of-other-user-json';
 import { CopyCardListOfOtherUser$Json$Params } from '../fn/card/copy-card-list-of-other-user-json';
 import { copyCardListOfOtherUser$Plain } from '../fn/card/copy-card-list-of-other-user-plain';
@@ -473,6 +477,53 @@ export class CardService extends BaseService {
    */
   copyCardListOfOtherUser$Json(params?: CopyCardListOfOtherUser$Json$Params, context?: HttpContext): Observable<boolean> {
     return this.copyCardListOfOtherUser$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `changeAccessOfCardList()` */
+  static readonly ChangeAccessOfCardListPath = '/Card/ChangeAccessOfCardList';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeAccessOfCardList$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changeAccessOfCardList$Plain$Response(params?: ChangeAccessOfCardList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return changeAccessOfCardList$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `changeAccessOfCardList$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changeAccessOfCardList$Plain(params?: ChangeAccessOfCardList$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.changeAccessOfCardList$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeAccessOfCardList$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changeAccessOfCardList$Json$Response(params?: ChangeAccessOfCardList$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return changeAccessOfCardList$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `changeAccessOfCardList$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  changeAccessOfCardList$Json(params?: ChangeAccessOfCardList$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.changeAccessOfCardList$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }

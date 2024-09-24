@@ -38,6 +38,9 @@
     (playButtonEmit)="learnCards()"
     (addButtonEmit)="generateCards()"
     (copyButtonEmit)="copyCards()"></app-edit-fab>
+  <app-edit-acces-fab
+    [currentAccess]="accessOfCardList"
+    (changeAccessEmit)="changeAccess($event)"></app-edit-acces-fab>
 </ion-content>
 
 <ng-template #missingCards>

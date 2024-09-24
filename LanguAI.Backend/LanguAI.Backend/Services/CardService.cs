@@ -18,6 +18,7 @@ public interface ICardService
     List<CardListViewModel> GetCardListsOfOtherUsers(int userId);
     List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId);
     bool CopyCardListOfOtherUser(int currentUserId, int cardListId);
+    bool ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request);
 }
 
 public class CardService : BaseService, ICardService
@@ -104,7 +105,8 @@ public class CardService : BaseService, ICardService
                 Name = c.Name,
                 CardViewModelList = ConvertCardListToCardViewModelList(c.Cards.ToList()),
                 Created = c.Created,
-                Modified = c.Modified
+                Modified = c.Modified,
+                Access = (CardListAccessEnum)c.Access
             }).ToList();
 
         return asd;
@@ -192,8 +194,8 @@ public class CardService : BaseService, ICardService
             return _context.CardList
                  .Include(c => c.Cards)
                  .Where(c => c.UserId != userId
-                     && ((c.Access == (int)CardListAccessEnum.Public)
-                         || c.Access == (int)CardListAccessEnum.Protected
+                     && ((c.Access == CardListAccessEnum.Public)
+                         || c.Access == CardListAccessEnum.Protected
                              && (_context.Friendship
                                  .Any(f => ((f.RequesterId == userId && f.RecipientId == c.UserId)
                                      || (f.RecipientId == userId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
@@ -217,8 +219,9 @@ public class CardService : BaseService, ICardService
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(otherUserId);
 
-        return _context.CardList.Include(c => c.Cards).Where(c => c.UserId == otherUserId && ((c.Access == (int)CardListAccessEnum.Public)
-                         || c.Access == (int)CardListAccessEnum.Protected
+        return _context.CardList.Include(c => c.Cards)
+            .Where(c => c.UserId == otherUserId && ((c.Access == CardListAccessEnum.Public)
+                         || c.Access == CardListAccessEnum.Protected
                              && (_context.Friendship
                                  .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == c.UserId)
                                      || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
@@ -248,7 +251,7 @@ public class CardService : BaseService, ICardService
         {
             CardList cardList = new CardList
             {
-                Access = (int)CardListAccessEnum.Public,
+                Access = CardListAccessEnum.Public,
                 LearningLanguage = originalCardList.LearningLanguage,
                 Name = originalCardList.Name,
                 NativeLanguage = originalCardList.NativeLanguage,
@@ -276,6 +279,39 @@ public class CardService : BaseService, ICardService
             return true;
         }
         catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Change access of card list
+    /// </summary>
+    /// <param name="request">ChangeAccessOfCardListViewModel</param>
+    /// <returns></returns>
+    public bool ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        try
+        {
+            CardList cardList = _context.CardList
+                .Where(c => c.UserId == request.UserId
+                    && c.Id == request.CardListId)
+                .FirstOrDefault();
+
+            if (cardList == null)
+            {
+                return false;
+            }
+
+            cardList.Access = request.Access;
+
+            _context.SaveChanges();
+
+            return true;
+        }
+        catch
         {
             return false;
         }
@@ -336,7 +372,8 @@ public class CardService : BaseService, ICardService
             Modified = cardList.Modified,
             Name = cardList.Name,
             NativeLanguage = cardList.NativeLanguage,
-            UserId = cardList.UserId
+            UserId = cardList.UserId,
+            Access = (CardListAccessEnum)cardList.Access
         };
     }
 }

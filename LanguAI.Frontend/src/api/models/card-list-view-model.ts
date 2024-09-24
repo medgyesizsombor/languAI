@@ -1,7 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+import { CardListAccessEnum } from '../models/card-list-access-enum';
 import { CardViewModel } from '../models/card-view-model';
 export interface CardListViewModel {
+  access?: CardListAccessEnum;
   cardViewModelList?: Array<CardViewModel> | null;
   created?: string;
   id?: number;

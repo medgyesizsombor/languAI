@@ -83,5 +83,12 @@
   "NOTIFICATION_ERROR": "Hiba történt az értesítések betöltése közben",
   "NOTIFICATIONS_TITLE": "Értesítések",
   "THERE_ARE_NO_FRIENDSHIP_REQUESTS_WAITING_FOR_YOU": "Jelenleg nincs rád váró ismerős jelölés",
-  "SENDING_REACT_TO_FRIENDSHIP_REQUEST": "Barátkérelem reakció küldése"
+  "SENDING_REACT_TO_FRIENDSHIP_REQUEST": "Barátkérelem reakció küldése",
+  "ACCESS_TITLE": "Láthatóság beállítása",
+  "WHO_CAN_SEE_THIS_CARDLIST_QUESTION": "Ki láthassa ezt a kártya gyűjteményt?",
+  "ONLY_ME": "Csak én",
+  "ONLY_MY_FRIENDS": "Csak a barátaim",
+  "EVERYBODY": "Mindenki",
+  "SUCCESSFUL_ACCESS_CHANGE": "A hozzáférés sikeresen frissítve",
+  "UNSUCCESSFUL_ACCESS_CHANGE": "A hozzáférés frissítése nem sikerült"
 }
