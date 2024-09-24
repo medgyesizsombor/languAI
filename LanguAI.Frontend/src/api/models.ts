@@ -1,8 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export { AuthenticateRequestViewModel } from './models/authenticate-request-view-model';
+export { CardListAccessEnum } from './models/card-list-access-enum';
 export { CardListViewModel } from './models/card-list-view-model';
 export { CardViewModel } from './models/card-view-model';
+export { ChangeAccessOfCardListViewModel } from './models/change-access-of-card-list-view-model';
 export { ChangePasswordRequestViewModel } from './models/change-password-request-view-model';
 export { FriendshipRequestViewModel } from './models/friendship-request-view-model';
 export { FriendshipStatusEnum } from './models/friendship-status-enum';

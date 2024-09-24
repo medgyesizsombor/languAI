@@ -211,4 +211,31 @@ public class CardController : ControllerBase
             return BadRequest(null);
         }
     }
+
+    /// <summary>
+    /// Change access of card list
+    /// </summary>
+    /// <param name="request">ChangeAccessOfCardListViewModel</param>
+    /// <returns></returns>
+    [HttpPost(Name = "ChangeAccessOfCardList")]
+    public ActionResult<bool> ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(request);
+
+        try
+        {
+            if (request.UserId != currentUserId)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return Ok(_cardService.ChangeAccessOfCardList(request));
+        }
+        catch (Exception)
+        {
+            return BadRequest(false);
+        }
+    }
 }

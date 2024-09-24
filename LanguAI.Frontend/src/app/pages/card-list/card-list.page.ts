@@ -3,7 +3,11 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
-import { CardListViewModel, CardViewModel } from 'src/api/models';
+import {
+  CardListAccessEnum,
+  CardListViewModel,
+  CardViewModel
+} from 'src/api/models';
 import { CardService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
@@ -17,12 +21,14 @@ import { CARD_LEARNING_NAVIGATION } from 'src/app/util/util.constants';
   styleUrls: ['./card-list.page.scss']
 })
 export class CardListPage implements OnInit, OnDestroy {
+  accessOfCardList = CardListAccessEnum.Public;
   cards: Array<CardViewModel> = [];
   originalCards: Array<CardViewModel> = [];
   showSwiper = false;
   cardListId: number | undefined | null;
   getCardListIdSub: Subscription | undefined;
   saveCardsSub: Subscription | undefined;
+  changeAccessOfCardListSub: Subscription | undefined;
   generatedCards: Array<CardViewModel> = [];
   hasCardChanged = false;
   title = '';
@@ -45,6 +51,8 @@ export class CardListPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getCardListIdSub?.unsubscribe();
+    this.saveCardsSub?.unsubscribe();
+    this.changeAccessOfCardListSub?.unsubscribe();
   }
 
   ionViewWillEnter() {
@@ -55,6 +63,18 @@ export class CardListPage implements OnInit, OnDestroy {
    * Loading the data
    */
   private loadData() {
+    // this.cards = [
+    //   {
+    //     id: 1,
+    //     wordInLearningLanguage: 'english',
+    //     wordInNativeLanguage: 'angol'
+    //   },
+    //   {
+    //     id: 2,
+    //     wordInLearningLanguage: 'hungarian',
+    //     wordInNativeLanguage: 'magyar'
+    //   }
+    // ];
     this.loadingService.showLoading().then(() => {
       this.activatedRoute.params
         .pipe(
@@ -75,6 +95,8 @@ export class CardListPage implements OnInit, OnDestroy {
           next: (cardList: CardListViewModel) => {
             this.title = cardList?.name ?? '';
             if (cardList?.cardViewModelList?.length) {
+              this.accessOfCardList =
+                cardList.access ?? CardListAccessEnum.Public;
               this.cards = [...cardList?.cardViewModelList];
               this.originalCards = [...cardList?.cardViewModelList];
             }
@@ -280,6 +302,44 @@ export class CardListPage implements OnInit, OnDestroy {
               this.translateService.instant(
                 'ERROR_HAPPEND_WHEN_TRIED_TO_SAVE_THE_CARDS'
               )
+            );
+          }
+        });
+    });
+  }
+
+  /**
+   * Change the access of the cardlist
+   */
+  changeAccess(access: CardListAccessEnum) {
+    this.loadingService.showLoading().then(() => {
+      this.cardService
+        .changeAccessOfCardList$Json({
+          body: {
+            userId: this.localStorageService.getUserId()!,
+            cardListId: this.cardListId!,
+            access
+          }
+        })
+        .subscribe({
+          next: res => {
+            if (res) {
+              this.accessOfCardList = access;
+              this.loadingService.hideLoading();
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant('SUCCESSFUL_ACCESS_CHANGE')
+              );
+            } else {
+              this.loadingService.hideLoading();
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant('UNSUCCESSFUL_ACCESS_CHANGE')
+              );
+            }
+          },
+          error: () => {
+            this.loadingService.hideLoading();
+            this.toastrService.presentSuccessToast(
+              this.translateService.instant('SUCCESSFUL_ACCESS_CHANGE')
             );
           }
         });

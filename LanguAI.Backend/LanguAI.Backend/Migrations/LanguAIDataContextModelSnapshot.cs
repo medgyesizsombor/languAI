@@ -45,7 +45,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasIndex("CardListId");
 
-                    b.ToTable("Card");
+                    b.ToTable("Card", (string)null);
                 });
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.CardList", b =>
@@ -84,7 +84,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CardList");
+                    b.ToTable("CardList", (string)null);
                 });
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.Friendship", b =>
@@ -116,7 +116,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasIndex("RequesterId");
 
-                    b.ToTable("Friendship");
+                    b.ToTable("Friendship", (string)null);
                 });
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.Message", b =>
@@ -149,7 +149,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Message", (string)null);
                 });
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.Post", b =>
@@ -174,7 +174,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Post");
+                    b.ToTable("Post", (string)null);
                 });
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.User", b =>
@@ -208,7 +208,7 @@ namespace LanguAI.Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("LanguAI.Backend.Core.Models.Card", b =>

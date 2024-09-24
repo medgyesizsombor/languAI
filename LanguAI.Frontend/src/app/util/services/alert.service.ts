@@ -5,6 +5,7 @@ import { ToastrService } from './toastr.service';
 import { LoadingService } from './loading.service';
 import { UserService } from 'src/api/services';
 import { LocalStorageService } from './localstorage.service';
+import { CardListAccessEnum } from 'src/api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -386,6 +387,60 @@ export class AlertService {
   //     this.alert.present();
   //   });
   // }
+
+  /**
+   * Show access alert
+   */
+  async showAccessAlert(
+    currentAccess: CardListAccessEnum
+  ): Promise<CardListAccessEnum | null> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('ACCESS_TITLE'),
+        message: this.translateService.instant(
+          'WHO_CAN_SEE_THIS_CARDLIST_QUESTION'
+        ),
+        inputs: [
+          {
+            label: this.translateService.instant('ONLY_ME'),
+            type: 'radio',
+            value: CardListAccessEnum.Private,
+            checked: currentAccess === CardListAccessEnum.Private
+          },
+          {
+            label: this.translateService.instant('ONLY_MY_FRIENDS'),
+            type: 'radio',
+            value: CardListAccessEnum.Protected,
+            checked: currentAccess === CardListAccessEnum.Protected
+          },
+          {
+            label: this.translateService.instant('EVERYBODY'),
+            type: 'radio',
+            value: CardListAccessEnum.Public,
+            checked: currentAccess === CardListAccessEnum.Public
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve(null);
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              resolve(data);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
 
   /**
    * The name is not taken

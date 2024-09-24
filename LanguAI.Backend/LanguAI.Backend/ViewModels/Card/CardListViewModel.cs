@@ -1,4 +1,6 @@
-﻿namespace LanguAI.Backend.ViewModels.Card;
+﻿using LanguAI.Backend.Core.Enums;
+
+namespace LanguAI.Backend.ViewModels.Card;
 
 public class CardListViewModel
 {
@@ -15,6 +17,8 @@ public class CardListViewModel
     public DateTime Created { get; set; }
 
     public DateTime Modified { get; set; }
+
+    public CardListAccessEnum Access { get; set; }
 
     public List<CardViewModel> CardViewModelList { get; set; } = new List<CardViewModel>();
 }
