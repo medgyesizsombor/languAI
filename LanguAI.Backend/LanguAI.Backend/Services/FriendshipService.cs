@@ -85,11 +85,14 @@ public class FriendshipService : BaseService, IFriendshipService
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        return _context.Friendship.Where(f => f.RequesterId == userId || f.RecipientId == userId).Select(f => new IntSelectorModel
-        {
-            Id = f.RequesterId == userId ? f.RequesterId : f.RecipientId,
-            Name = f.RequesterId == userId ? f.Requester.Username : f.Recipient.Username
-        }).ToList();
+        return _context.Friendship
+            .Where(f => f.RequesterId == userId || f.RecipientId == userId)
+            .Select(f => new IntSelectorModel
+            {
+                Id = f.RequesterId == userId ? f.RecipientId : f.RequesterId,
+                Name = f.RequesterId == userId ? f.Recipient.Username : f.Requester.Username
+            })
+            .ToList();
     }
 
     /// <summary>

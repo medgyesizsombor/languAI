@@ -44,6 +44,8 @@ public class UserService : BaseService, IUserService
     /// <returns></returns>
     public UserViewModel GetUserById(int userId)
     {
+        ArgumentNullException.ThrowIfNull(userId);
+
         User user = _context.User.FirstOrDefault(u => u.Id == userId && u.IsActive);
 
         if (user == null)

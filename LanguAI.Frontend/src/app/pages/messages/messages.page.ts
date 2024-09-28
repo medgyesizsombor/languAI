@@ -19,8 +19,8 @@ import { CreateNewMessageModalComponent } from 'src/app/components/modals/create
 export class MessagesPage implements OnInit, OnDestroy {
   title = this.translateService.instant(MESSAGES_TITLE);
   friendList: Array<IntSelectorModel> = [
-    { id: 1, name: 'asd' },
-    { id: 2, name: 'asdasd' }
+    // { id: 1, name: 'asd' },
+    // { id: 2, name: 'asdasd' }
   ];
   getFriendListSub: Subscription | undefined;
 
@@ -55,7 +55,6 @@ export class MessagesPage implements OnInit, OnDestroy {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-     
     }
   }
 
@@ -68,23 +67,24 @@ export class MessagesPage implements OnInit, OnDestroy {
   }
 
   private loadFriends() {
-    // const userId = this.localStorageService.getUserId();
-    // this.loadingService.showLoading();
-    // if (userId) {
-    //   this.getFriendListSub = this.friendshipService
-    //     .getFriendList$Json({
-    //       userId
-    //     })
-    //     .subscribe({
-    //       next: (res: Array<IntSelectorModel>) => {
-    //         this.loadingService.hideLoading();
-    //         this.friends = res;
-    //       },
-    //       error: () => {
-    //         this.loadingService.hideLoading();
-    //         this.toastrService.presentErrorToast('DATA_ERROR');
-    //       }
-    //     });
-    // }
+    const userId = this.localStorageService.getUserId();
+    this.loadingService.showLoading().then(() => {
+      if (userId) {
+        this.getFriendListSub = this.friendshipService
+          .getFriendList$Json({
+            userId
+          })
+          .subscribe({
+            next: (res: Array<IntSelectorModel>) => {
+              this.friendList = res;
+              this.loadingService.hideLoading();
+            },
+            error: () => {
+              this.loadingService.hideLoading();
+              this.toastrService.presentErrorToast('DATA_ERROR');
+            }
+          });
+      }
+    });
   }
 }

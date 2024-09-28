@@ -1,14 +1,11 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>message</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
+  <app-header
+    [title]="otherUser?.username!"
+    [showBackArrow]="true"></app-header>
   <ion-row
     class="ion-margin-top"
     *ngFor="let message of messages"
-    [ngClass]="message.sender === userId ? 'sent-row' : 'received-row'">
+    [ngClass]="message.senderId === userId ? 'sent-row' : 'received-row'">
     <ion-card class="message-card">{{ message.text }}</ion-card>
   </ion-row>
 </ion-content>
@@ -16,17 +13,22 @@
 <ion-footer>
   <form *ngIf="chatForm" [formGroup]="chatForm">
     <div>
-      <ion-row class="input-row ion-padding-horizontal">
+      <ion-row
+        class="input-row ion-padding-horizontal ion-justify-content-between">
         <ion-col size="10">
           <ion-input
             type="text"
             id="message"
             class="form-control"
             formControlName="message"
-            placeholder="{{ 'ENTER_A_MESSAGE' | translate}}"></ion-input>
+            placeholder="{{ 'ENTER_A_MESSAGE' | translate }}"
+            (keyup)="isMessageValid()"></ion-input>
         </ion-col>
         <ion-col class="send-button" size="auto">
-          <ion-icon class="fs-18" (click)="sendMessage()" name="send"></ion-icon>
+          <ion-icon
+            class="fs-18"
+            (click)="sendMessage()"
+            name="send"></ion-icon>
         </ion-col>
       </ion-row>
     </div>
