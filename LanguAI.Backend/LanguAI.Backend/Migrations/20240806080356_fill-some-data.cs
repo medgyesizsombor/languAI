@@ -10,9 +10,9 @@ namespace LanguAI.Backend.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("INSERT INTO [User] (Username, Email, DateOfBirth, PasswordHash, Country) VALUES ('root', 'root@root.com', '1998-04-20', 'asdasdasd', 1);");
+            migrationBuilder.Sql("INSERT INTO [User] (Username, Email, DateOfBirth, PasswordHash, Country) VALUES ('zsombi', 'zsombi@zsombi.com', '1998-04-20', '35000.5gfNI6xRC1EQvlZZ/qn0fg==.+StLmP+l+3ft9AIS0MJhc4cxLXnaT5JTtmaJZ0B4uNDMi/LRHEudZgFKUMdVeqhzF8lyNObuttHajoeIo5XMpg==', 1);");
 
-            migrationBuilder.Sql("INSERT INTO [CardList] (UserId, LearningLanguage, NativeLanguage, Created, Modified, Name) VALUES ((SELECT Id FROM [User] WHERE Username = 'root'), 'hungarian', 'english', '2024-08-26', '2024-08-26', 'asd');");
+            migrationBuilder.Sql("INSERT INTO [CardList] (UserId, LearningLanguage, NativeLanguage, Created, Modified, Name) VALUES ((SELECT Id FROM [User] WHERE Username = 'zsombi'), 'hungarian', 'english', '2024-08-26', '2024-08-26', 'asd');");
         }
 
         /// <inheritdoc />

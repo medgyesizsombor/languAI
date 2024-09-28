@@ -7,6 +7,8 @@
     <ion-item
       lines="none"
       *ngFor="let friend of friendList; let index = index"
-      (click)="openMessage(friend.id)"></ion-item>
+      (click)="openMessage(friend.id)">
+      {{ friend.name }}
+    </ion-item>
   </ion-list>
 </ion-content>

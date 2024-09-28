@@ -90,5 +90,8 @@
   "ONLY_MY_FRIENDS": "Csak a barátaim",
   "EVERYBODY": "Mindenki",
   "SUCCESSFUL_ACCESS_CHANGE": "A hozzáférés sikeresen frissítve",
-  "UNSUCCESSFUL_ACCESS_CHANGE": "A hozzáférés frissítése nem sikerült"
+  "UNSUCCESSFUL_ACCESS_CHANGE": "A hozzáférés frissítése nem sikerült",
+  "ERROR_LOADING_CHAT": "Hiba a chat betöltése közben",
+  "ERROR_RECEIVING_MESSAGE_FROM_CHATGPT": "Hiba a ChatGPT válaszolása közben",
+  "ENTER_A_MESSAGE": "Írj üzenetet"
 }

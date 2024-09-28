@@ -52,7 +52,10 @@ public class UserController : ControllerBase
         try
         {
             var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-            return Ok(_userService.GetUserById((int)currentUserId));
+
+            ArgumentNullException.ThrowIfNull(currentUserId);
+
+            return Ok(_userService.GetUserById(userId));
         }
         catch (Exception e)
         {

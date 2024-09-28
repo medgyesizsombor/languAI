@@ -8,8 +8,8 @@ namespace LanguAI.Backend.Services;
 
 public interface IMessageService
 {
-    public bool SendMessage(MessageViewModel request);
-    public List<MessageViewModel> GetMessageListByUserId(int userId, int friendId);
+    bool SendMessage(MessageViewModel request);
+    List<MessageViewModel> GetMessageListByUserId(int userId, int friendId);
 }
 
 public class MessageService : BaseService, IMessageService
@@ -46,7 +46,7 @@ public class MessageService : BaseService, IMessageService
             {
                 SenderId = request.SenderId,
                 RecipientId = request.RecipientId,
-                Status = MessageStatusEnum.Sent,
+                Status = request.Status,
                 SentAt = DateTime.Now
             };
         }

@@ -23,3 +23,4 @@ export const NOTIFICATIONS_TITLE = 'NOTIFICATIONS';
 export const JWT_TOKEN = 'jwt-token';
 export const USER_ID = 'user-id';
 export const NUMBER_OF_FRIENDSHIP_REQUEST = 'number-of-friendship-request';
+export const CHAT_GPT_ID = 2;

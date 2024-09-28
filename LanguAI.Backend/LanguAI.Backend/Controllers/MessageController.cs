@@ -9,13 +9,15 @@ namespace LanguAI.Backend.Controllers;
 public class MessageController : ControllerBase
 {
     private readonly IMessageService _messageService;
+    private readonly IAuthenticationService _authenticationService;
 
     private readonly ILogger<UserController> _logger;
 
-    public MessageController(ILogger<UserController> logger, IMessageService messageService)
+    public MessageController(ILogger<UserController> logger, IMessageService messageService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _messageService = messageService;
+        _authenticationService = authenticationService;
     }
 
     /// <summary>
@@ -46,13 +48,13 @@ public class MessageController : ControllerBase
     [HttpGet(Name = "GetMessageListByUserId")]
     public ActionResult<List<MessageViewModel>> GetMessageListByUserId(int friendId)
     {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(friendId);
-
-        var userId = 7;
 
         try
         {
-            return Ok(_messageService.GetMessageListByUserId(userId, friendId));
+            return Ok(_messageService.GetMessageListByUserId((int)currentUserId, friendId));
         }
         catch (Exception e)
         {
