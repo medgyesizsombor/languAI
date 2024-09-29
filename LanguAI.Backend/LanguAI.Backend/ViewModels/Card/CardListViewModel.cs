@@ -18,7 +18,7 @@ public class CardListViewModel
 
     public DateTime Modified { get; set; }
 
-    public CardListAccessEnum Access { get; set; }
+    public AccessEnum Access { get; set; }
 
     public List<CardViewModel> CardViewModelList { get; set; } = new List<CardViewModel>();
 }

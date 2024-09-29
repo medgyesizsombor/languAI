@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LanguAI.Backend.Core.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LanguAI.Backend.Core.Models;
@@ -19,4 +20,7 @@ public class Post
 
     [Required]
     public DateTime Created { get; set; }
+
+    [Required]
+    public AccessEnum Access { get; set; }
 }

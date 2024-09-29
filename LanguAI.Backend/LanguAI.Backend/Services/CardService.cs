@@ -106,7 +106,7 @@ public class CardService : BaseService, ICardService
                 CardViewModelList = ConvertCardListToCardViewModelList(c.Cards.ToList()),
                 Created = c.Created,
                 Modified = c.Modified,
-                Access = (CardListAccessEnum)c.Access
+                Access = (AccessEnum)c.Access
             }).ToList();
 
         return asd;
@@ -194,11 +194,11 @@ public class CardService : BaseService, ICardService
             return _context.CardList
                  .Include(c => c.Cards)
                  .Where(c => c.UserId != userId
-                     && ((c.Access == CardListAccessEnum.Public)
-                         || c.Access == CardListAccessEnum.Protected
+                     && ((c.Access == AccessEnum.Public)
+                         || (c.Access == AccessEnum.Protected
                              && (_context.Friendship
                                  .Any(f => ((f.RequesterId == userId && f.RecipientId == c.UserId)
-                                     || (f.RecipientId == userId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
+                                     || (f.RecipientId == userId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted)))))
                  .Select(c => ConvertCardListToCardListViewModel(c))
                  .ToList();
         }
@@ -220,11 +220,11 @@ public class CardService : BaseService, ICardService
         ArgumentNullException.ThrowIfNull(otherUserId);
 
         return _context.CardList.Include(c => c.Cards)
-            .Where(c => c.UserId == otherUserId && ((c.Access == CardListAccessEnum.Public)
-                         || c.Access == CardListAccessEnum.Protected
+            .Where(c => c.UserId == otherUserId && (c.Access == AccessEnum.Public
+                         || (c.Access == AccessEnum.Protected
                              && (_context.Friendship
                                  .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == c.UserId)
-                                     || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted))))
+                                     || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted)))))
             .Select(c => ConvertCardListToCardListViewModel(c))
             .ToList();
     }
@@ -251,7 +251,7 @@ public class CardService : BaseService, ICardService
         {
             CardList cardList = new CardList
             {
-                Access = CardListAccessEnum.Public,
+                Access = AccessEnum.Public,
                 LearningLanguage = originalCardList.LearningLanguage,
                 Name = originalCardList.Name,
                 NativeLanguage = originalCardList.NativeLanguage,
@@ -373,7 +373,7 @@ public class CardService : BaseService, ICardService
             Name = cardList.Name,
             NativeLanguage = cardList.NativeLanguage,
             UserId = cardList.UserId,
-            Access = (CardListAccessEnum)cardList.Access
+            Access = (AccessEnum)cardList.Access
         };
     }
 }

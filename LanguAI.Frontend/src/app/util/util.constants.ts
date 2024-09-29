@@ -14,6 +14,7 @@ export const FORUM_NAVIGATION = 'forum';
 export const CARD_LISTS_NAVIGATION = 'card-lists';
 export const CARD_LIST_NAVIGATION = 'card-list';
 export const POST_NAVIGATION = 'post';
+export const CREATE_POST_NAVIGATION = 'create-post'
 export const CARD_LEARNING_NAVIGATION = 'card-learning';
 export const LESSONS_NAVIGATION = 'lessons';
 export const CARD_NAVIGATION = 'card';

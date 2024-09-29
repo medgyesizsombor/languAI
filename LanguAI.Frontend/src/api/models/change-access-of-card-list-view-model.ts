@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-import { CardListAccessEnum } from '../models/card-list-access-enum';
+import { AccessEnum } from '../models/access-enum';
 export interface ChangeAccessOfCardListViewModel {
-  access?: CardListAccessEnum;
+  access?: AccessEnum;
   cardListId?: number;
   userId?: number;
 }

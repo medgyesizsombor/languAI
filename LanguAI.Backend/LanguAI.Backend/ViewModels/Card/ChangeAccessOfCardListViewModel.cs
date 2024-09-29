@@ -6,7 +6,7 @@ public class ChangeAccessOfCardListViewModel
 {
     public int UserId { get; set; }
 
-    public CardListAccessEnum Access { get; set; }
+    public AccessEnum Access { get; set; }
 
     public int CardListId { get; set; }
 }
