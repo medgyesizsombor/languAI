@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
+export { AccessEnum } from './models/access-enum';
 export { AuthenticateRequestViewModel } from './models/authenticate-request-view-model';
-export { CardListAccessEnum } from './models/card-list-access-enum';
 export { CardListViewModel } from './models/card-list-view-model';
 export { CardViewModel } from './models/card-view-model';
 export { ChangeAccessOfCardListViewModel } from './models/change-access-of-card-list-view-model';

@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import {
-  CardListAccessEnum,
+  AccessEnum,
   CardListViewModel,
   CardViewModel
 } from 'src/api/models';
@@ -21,7 +21,7 @@ import { CARD_LEARNING_NAVIGATION } from 'src/app/util/util.constants';
   styleUrls: ['./card-list.page.scss']
 })
 export class CardListPage implements OnInit, OnDestroy {
-  accessOfCardList = CardListAccessEnum.Public;
+  accessOfCardList = AccessEnum.Public;
   cards: Array<CardViewModel> = [];
   originalCards: Array<CardViewModel> = [];
   showSwiper = false;
@@ -96,7 +96,7 @@ export class CardListPage implements OnInit, OnDestroy {
             this.title = cardList?.name ?? '';
             if (cardList?.cardViewModelList?.length) {
               this.accessOfCardList =
-                cardList.access ?? CardListAccessEnum.Public;
+                cardList.access ?? AccessEnum.Public;
               this.cards = [...cardList?.cardViewModelList];
               this.originalCards = [...cardList?.cardViewModelList];
             }
@@ -311,7 +311,7 @@ export class CardListPage implements OnInit, OnDestroy {
   /**
    * Change the access of the cardlist
    */
-  changeAccess(access: CardListAccessEnum) {
+  changeAccess(access: AccessEnum) {
     this.loadingService.showLoading().then(() => {
       this.cardService
         .changeAccessOfCardList$Json({

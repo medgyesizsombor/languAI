@@ -85,7 +85,7 @@
   "THERE_ARE_NO_FRIENDSHIP_REQUESTS_WAITING_FOR_YOU": "Jelenleg nincs rád váró ismerős jelölés",
   "SENDING_REACT_TO_FRIENDSHIP_REQUEST": "Barátkérelem reakció küldése",
   "ACCESS_TITLE": "Láthatóság beállítása",
-  "WHO_CAN_SEE_THIS_CARDLIST_QUESTION": "Ki láthassa ezt a kártya gyűjteményt?",
+  "WHO_CAN_SEE_THIS_QUESTION": "Ki láthassa ezt?",
   "ONLY_ME": "Csak én",
   "ONLY_MY_FRIENDS": "Csak a barátaim",
   "EVERYBODY": "Mindenki",
@@ -93,5 +93,9 @@
   "UNSUCCESSFUL_ACCESS_CHANGE": "A hozzáférés frissítése nem sikerült",
   "ERROR_LOADING_CHAT": "Hiba a chat betöltése közben",
   "ERROR_RECEIVING_MESSAGE_FROM_CHATGPT": "Hiba a ChatGPT válaszolása közben",
-  "ENTER_A_MESSAGE": "Írj üzenetet"
+  "ENTER_A_MESSAGE": "Írj üzenetet",
+  "CREATING_POST": "Bejegyzés létrehozása",
+  "WRITE_HERE_THE_CONTEXT_OF_POST": "Írd ide a poszt tartalmát...",
+  "SUCCESSFUL_CREATION_OF_THE_POST": "Sikeres a bejegyzés létrehozása",
+  "UNSUCCESSFUL_CREATION_OF_THE_POST": "Sikertelen a bejegyzés létrehozása"
 }

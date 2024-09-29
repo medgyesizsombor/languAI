@@ -8,7 +8,7 @@
  *
  * 3 = Private
  */
-export enum CardListAccessEnum {
+export enum AccessEnum {
   Public = 1,
   Protected = 2,
   Private = 3

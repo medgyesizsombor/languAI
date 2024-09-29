@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CardListAccessEnum } from 'src/api/models';
+import { AccessEnum } from 'src/api/models';
 import { AlertService } from 'src/app/util/services/alert.service';
 
 @Component({
@@ -8,9 +8,9 @@ import { AlertService } from 'src/app/util/services/alert.service';
   styleUrls: ['./edit-acces-fab.component.scss']
 })
 export class EditAccesFabComponent implements OnInit {
-  @Input() currentAccess: CardListAccessEnum | undefined;
+  @Input() currentAccess: AccessEnum | undefined;
 
-  @Output() changeAccessEmit = new EventEmitter<CardListAccessEnum>();
+  @Output() changeAccessEmit = new EventEmitter<AccessEnum>();
 
   constructor(private alertService: AlertService) {}
 
@@ -18,8 +18,8 @@ export class EditAccesFabComponent implements OnInit {
 
   openAccessAlert() {
     this.alertService
-      .showAccessAlert(this.currentAccess ?? CardListAccessEnum.Public)
-      .then((res: CardListAccessEnum | null) => {
+      .showAccessAlert(this.currentAccess ?? AccessEnum.Public)
+      .then((res: AccessEnum | null) => {
         if (res) {
           this.changeAccessEmit.emit(res);
         }

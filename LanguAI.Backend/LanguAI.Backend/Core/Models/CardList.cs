@@ -31,7 +31,7 @@ public class CardList
     public string Name { get; set; }
 
     [Required]
-    public CardListAccessEnum Access { get; set; } = CardListAccessEnum.Public;
+    public AccessEnum Access { get; set; } = AccessEnum.Public;
 
     public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
 }

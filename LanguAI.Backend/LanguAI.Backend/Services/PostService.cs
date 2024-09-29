@@ -31,7 +31,8 @@ public class PostService : BaseService, IPostService
                 Id = p.Id,
                 Username = p.User.Username,
                 Content = p.Content,
-                Created = p.Created
+                Created = p.Created,
+                Access = p.Access
             }).ToList();
 
         return postList;
@@ -54,7 +55,8 @@ public class PostService : BaseService, IPostService
                 Id = p.Id,
                 Username = p.User.Username,
                 Content = p.Content,
-                Created = p.Created
+                Created = p.Created,
+                Access = p.Access
             }).ToList();
 
         return postList;
@@ -74,7 +76,8 @@ public class PostService : BaseService, IPostService
                 Id = p.Id,
                 Username = p.User.Username,
                 Content = p.Content,
-                Created = p.Created
+                Created = p.Created,
+                Access = p.Access
             }).FirstOrDefault();
 
         if (postList == null) return null;
@@ -114,6 +117,7 @@ public class PostService : BaseService, IPostService
         post.Content = request.Content;
         post.Created = request.Created;
         post.UserId = currentUserId;
+        post.Access = request.Access;
 
         if (!isEdit)
         {

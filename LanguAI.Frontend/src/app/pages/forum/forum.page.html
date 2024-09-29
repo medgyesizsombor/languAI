@@ -1,4 +1,7 @@
-<ion-header><app-header [title]="title"></app-header></ion-header>
+<app-header
+  [showAddButton]="true"
+  [title]="title"
+  (addButtonEmit)="navigateToPost()"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content

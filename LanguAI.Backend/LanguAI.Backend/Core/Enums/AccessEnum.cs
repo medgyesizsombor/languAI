@@ -1,6 +1,6 @@
 ﻿namespace LanguAI.Backend.Core.Enums;
 
-public enum CardListAccessEnum
+public enum AccessEnum
 {
     Public = 1,
     Protected = 2,

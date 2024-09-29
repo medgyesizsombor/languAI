@@ -5,7 +5,7 @@ import { ToastrService } from './toastr.service';
 import { LoadingService } from './loading.service';
 import { UserService } from 'src/api/services';
 import { LocalStorageService } from './localstorage.service';
-import { CardListAccessEnum } from 'src/api/models';
+import { AccessEnum } from 'src/api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -392,32 +392,32 @@ export class AlertService {
    * Show access alert
    */
   async showAccessAlert(
-    currentAccess: CardListAccessEnum
-  ): Promise<CardListAccessEnum | null> {
+    currentAccess: AccessEnum
+  ): Promise<AccessEnum | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
         header: this.translateService.instant('ACCESS_TITLE'),
         message: this.translateService.instant(
-          'WHO_CAN_SEE_THIS_CARDLIST_QUESTION'
+          'WHO_CAN_SEE_THIS_QUESTION'
         ),
         inputs: [
           {
             label: this.translateService.instant('ONLY_ME'),
             type: 'radio',
-            value: CardListAccessEnum.Private,
-            checked: currentAccess === CardListAccessEnum.Private
+            value: AccessEnum.Private,
+            checked: currentAccess === AccessEnum.Private
           },
           {
             label: this.translateService.instant('ONLY_MY_FRIENDS'),
             type: 'radio',
-            value: CardListAccessEnum.Protected,
-            checked: currentAccess === CardListAccessEnum.Protected
+            value: AccessEnum.Protected,
+            checked: currentAccess === AccessEnum.Protected
           },
           {
             label: this.translateService.instant('EVERYBODY'),
             type: 'radio',
-            value: CardListAccessEnum.Public,
-            checked: currentAccess === CardListAccessEnum.Public
+            value: AccessEnum.Public,
+            checked: currentAccess === AccessEnum.Public
           }
         ],
         buttons: [

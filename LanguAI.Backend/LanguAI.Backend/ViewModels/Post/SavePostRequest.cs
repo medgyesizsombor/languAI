@@ -1,4 +1,6 @@
-﻿namespace LanguAI.Backend.ViewModels.Post;
+﻿using LanguAI.Backend.Core.Enums;
+
+namespace LanguAI.Backend.ViewModels.Post;
 
 public class SavePostRequest
 {
@@ -8,5 +10,7 @@ public class SavePostRequest
 
     public int UserId { get; set; }
 
-    public DateTime Created { get; set; }
+    public DateTime Created { get; set; } = DateTime.Now;
+
+    public AccessEnum Access { get; set; }
 }

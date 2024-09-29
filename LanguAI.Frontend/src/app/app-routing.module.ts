@@ -6,6 +6,7 @@ import {
   CARD_LIST_NAVIGATION,
   CARD_LISTS_NAVIGATION,
   CARD_NAVIGATION,
+  CREATE_POST_NAVIGATION,
   FORUM_NAVIGATION,
   LESSON_LEARNING_NAVIGATION,
   LESSONS_NAVIGATION,
@@ -119,6 +120,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/notifications/notifications.module').then(
         m => m.NotificationsPageModule
+      )
+  },
+  {
+    path: CREATE_POST_NAVIGATION,
+    loadChildren: () =>
+      import('./pages/create-post/create-post.module').then(
+        m => m.CreatePostPageModule
       )
   }
 ];
