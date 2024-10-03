@@ -21,6 +21,10 @@ import { getPosts$Json } from '../fn/post/get-posts-json';
 import { GetPosts$Json$Params } from '../fn/post/get-posts-json';
 import { getPosts$Plain } from '../fn/post/get-posts-plain';
 import { GetPosts$Plain$Params } from '../fn/post/get-posts-plain';
+import { getPostsFromForum$Json } from '../fn/post/get-posts-from-forum-json';
+import { GetPostsFromForum$Json$Params } from '../fn/post/get-posts-from-forum-json';
+import { getPostsFromForum$Plain } from '../fn/post/get-posts-from-forum-plain';
+import { GetPostsFromForum$Plain$Params } from '../fn/post/get-posts-from-forum-plain';
 import { PostViewModel } from '../models/post-view-model';
 import { savePost$Json } from '../fn/post/save-post-json';
 import { SavePost$Json$Params } from '../fn/post/save-post-json';
@@ -218,6 +222,53 @@ export class PostService extends BaseService {
   savePost$Json(params?: SavePost$Json$Params, context?: HttpContext): Observable<boolean> {
     return this.savePost$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `getPostsFromForum()` */
+  static readonly GetPostsFromForumPath = '/Post/GetPostsFromForum';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPostsFromForum$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostsFromForum$Plain$Response(params?: GetPostsFromForum$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PostViewModel>>> {
+    return getPostsFromForum$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPostsFromForum$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostsFromForum$Plain(params?: GetPostsFromForum$Plain$Params, context?: HttpContext): Observable<Array<PostViewModel>> {
+    return this.getPostsFromForum$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<PostViewModel>>): Array<PostViewModel> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPostsFromForum$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostsFromForum$Json$Response(params?: GetPostsFromForum$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PostViewModel>>> {
+    return getPostsFromForum$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPostsFromForum$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostsFromForum$Json(params?: GetPostsFromForum$Json$Params, context?: HttpContext): Observable<Array<PostViewModel>> {
+    return this.getPostsFromForum$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<PostViewModel>>): Array<PostViewModel> => r.body)
     );
   }
 

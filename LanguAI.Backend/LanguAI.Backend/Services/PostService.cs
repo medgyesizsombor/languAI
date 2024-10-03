@@ -1,6 +1,8 @@
 ﻿using LanguAI.Backend.Core;
+using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
+using LanguAI.Backend.ViewModels.Interaction;
 using LanguAI.Backend.ViewModels.Post;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +12,9 @@ public interface IPostService
 {
     List<PostViewModel> GetAllPost();
     List<PostViewModel> GetPosts(GetPostRequest request);
-    PostViewModel GetPostById(int id);
+    PostViewModel GetPostById(int postId, int currentUserId);
     bool SavePost(SavePostRequest request, int currentUserId);
+    List<PostViewModel> GetPostsFromForum(int currentUserId);
 }
 
 public class PostService : BaseService, IPostService
@@ -67,22 +70,36 @@ public class PostService : BaseService, IPostService
     /// </summary>
     /// <param name="postId">postId</param>
     /// <returns></returns>
-    public PostViewModel GetPostById(int postId)
+    public PostViewModel GetPostById(int postId, int currentUserId)
     {
-        PostViewModel postList = _context.Post.Include(p => p.User)
+        ArgumentNullException.ThrowIfNull(postId);
+
+        return _context.Post
+            .Include(p => p.User)
+            .Include(p => p.Interactions)
             .Where(p => p.Id == postId)
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
-                Username = p.User.Username,
-                Content = p.Content,
+                Access = p.Access,
                 Created = p.Created,
-                Access = p.Access
-            }).FirstOrDefault();
-
-        if (postList == null) return null;
-
-        return postList;
+                Content = p.Content,
+                Username = p.User.Username,
+                Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && !i.IsDeleted),
+                NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
+                NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0),
+                Comments = p.Interactions.Where(i => i.InteractionType == InteractionEnum.Comment && !i.IsDeleted).Select(i => new CommentViewModel
+                {
+                    Id = i.Id,
+                    Created = i.Created,
+                    Liked = i.ChildInteractions.Any(ci => ci.ParentInteractionId == i.Id && !ci.IsDeleted && ci.UserId == currentUserId),
+                    NumberOfLikes = i.ChildInteractions.Sum(ci => (ci.InteractionType == InteractionEnum.Like && !ci.IsDeleted) ? 1 : 0),
+                    UserId = i.UserId,
+                    Text = i.Content,
+                    Username = i.User.Username
+                }).ToList()
+            })
+            .FirstOrDefault();
     }
 
     /// <summary>
@@ -128,5 +145,35 @@ public class PostService : BaseService, IPostService
 
         return true;
     }
-}
 
+    /// <summary>
+    /// Get posts from forum
+    /// </summary>
+    /// <param name="currentUserId">The current user's Id</param>
+    /// <returns></returns>
+    public List<PostViewModel> GetPostsFromForum(int currentUserId)
+    {
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        return _context.Post
+            .Include(p => p.User)
+            .Include(p => p.Interactions)
+            .Where(p => p.UserId == currentUserId
+                || (p.Access == AccessEnum.Public)
+                || (p.Access == AccessEnum.Protected && (_context.Friendship
+                                .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == p.UserId)
+                                    || (f.RecipientId == currentUserId && f.RequesterId == p.UserId))))))
+            .Select(p => new PostViewModel
+            {
+                Id = p.Id,
+                Access = p.Access,
+                Created = p.Created,
+                Content = p.Content,
+                Username = p.User.Username,
+                Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && i.IsDeleted == false),
+                NumberOfLikes = p.Interactions.Sum(i => i.InteractionType == InteractionEnum.Like ? 1 : 0),
+                NumberOfComments = p.Interactions.Sum(i => i.InteractionType == InteractionEnum.Comment ? 1 : 0)
+            })
+            .ToList();
+    }
+}

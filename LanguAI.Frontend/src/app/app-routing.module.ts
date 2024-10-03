@@ -80,7 +80,7 @@ const routes: Routes = [
     canActivate: [AuthGuardFunction]
   },
   {
-    path: POST_NAVIGATION,
+    path: POST_NAVIGATION + '/:id',
     loadChildren: () =>
       import('./pages/post/post.module').then(m => m.PostPageModule)
   },

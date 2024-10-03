@@ -1,8 +1,36 @@
-<!-- <app-header
-  [title]="title"
-  [showSaveButton]="hasCardChanged"
-  (saveButtonEmit)="saveCards()"
+<app-header
+  [title]="post?.username ?? ''"
   [showBackArrow]="true"
-  [showSavingMissed]="hasCardChanged"
+  [showSavingMissed]="isAnyChanges"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
-<ion-content class="ion-padding"></ion-content> -->
+<ion-content class="ion-padding">
+  <app-post-component
+    [post]="post"
+    (likeButtonEmit)="like()"
+    [showCommentButton]="false"></app-post-component>
+  <ion-card *ngFor="let comment of post?.comments">{{ comment.text}}</ion-card>
+</ion-content>
+<ion-footer>
+  <form *ngIf="commentForm" [formGroup]="commentForm">
+    <div>
+      <ion-row
+        class="input-row ion-padding-horizontal ion-align-items-center ion-justify-content-between">
+        <ion-col size="10">
+          <ion-input
+            type="text"
+            id="comment"
+            class="form-control"
+            formControlName="comment"
+            placeholder="{{ 'ENTER_A_COMMENT' | translate }}"
+            (keyup)="isCommentValid()"></ion-input>
+        </ion-col>
+        <ion-col class="d-flex ion-align-items-center" size="auto">
+          <ion-icon
+            class="fs-18"
+            (click)="sendComment()"
+            name="send"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </div>
+  </form>
+</ion-footer>

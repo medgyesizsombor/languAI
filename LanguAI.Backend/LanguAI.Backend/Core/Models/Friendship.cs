@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using LanguAI.Backend.Core.Enums;
 using System.ComponentModel.DataAnnotations;
-using LanguAI.Backend.Core.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LanguAI.Backend.Core.Models;
 
