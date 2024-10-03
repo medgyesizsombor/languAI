@@ -24,5 +24,6 @@ public static class DependencyInjectionConfig
         services.AddScoped<IChatGPTService, ChatGPTService>();
         services.AddScoped<ICardService, CardService>();
         services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IInteractionService, InteractionService>();
     }
 }

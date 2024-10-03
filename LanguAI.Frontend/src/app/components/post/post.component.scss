@@ -1,0 +1,26 @@
+ion-avatar {
+  height: 30px;
+  width: 30px;
+  margin-right: 6px;
+}
+
+.avatar-row {
+  margin-bottom: 6px;
+}
+
+ion-chip {
+  --background: #dcd6f7;
+  margin: 6px 6px 0 0;
+
+  ion-icon {
+    margin: 0;
+  }
+}
+
+.button-row {
+  margin-bottom: 16px;
+}
+
+.liked-chip {
+  background-color: #a6b1e1;
+}

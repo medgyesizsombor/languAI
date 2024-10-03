@@ -97,5 +97,13 @@
   "CREATING_POST": "Bejegyzés létrehozása",
   "WRITE_HERE_THE_CONTEXT_OF_POST": "Írd ide a poszt tartalmát...",
   "SUCCESSFUL_CREATION_OF_THE_POST": "Sikeres a bejegyzés létrehozása",
-  "UNSUCCESSFUL_CREATION_OF_THE_POST": "Sikertelen a bejegyzés létrehozása"
+  "UNSUCCESSFUL_CREATION_OF_THE_POST": "Sikertelen a bejegyzés létrehozása",
+  "UNSUCCESSFUL_LIKE": "Sikertelen a kedvelés",
+  "UNSUCCESSFUL_LIKE_CANCEL": "Sikertelen a kedvelés visszavonása",
+  "SENDING_LIKE": "Kedvelés elküldése",
+  "CANCEL_LIKE": "Kedvelés visszavonása",
+  "LOADING_POST_DOTDOTDOT": "Bejegyzés betöltése...",
+  "FAILED_TO_LOAD_POST": "Bejegyzés betöltése sikertelen",
+  "ENTER_A_COMMENT": "Írj hozzászólást",
+  "SENDING_COMMENT_DOTDOTDOT": "Hozzászólás elküldése..."
 }

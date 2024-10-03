@@ -1,4 +1,5 @@
-﻿using LanguAI.Backend.Services;
+﻿using Azure.Core;
+using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Post;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,11 +65,13 @@ public class PostController : ControllerBase
     [HttpGet(Name = "GetPostById")]
     public ActionResult<PostViewModel> GetPostById(int postId)
     {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(postId);
 
         try
         {
-            return Ok(_postService.GetPostById(postId));
+            return Ok(_postService.GetPostById(postId, (int)currentUserId));
         }
         catch (Exception e)
         {
@@ -88,14 +91,34 @@ public class PostController : ControllerBase
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
 
-        if (currentUserId != request.UserId)
-        {
-            throw new UnauthorizedAccessException();
-        }
+        if (currentUserId != request.UserId) throw new UnauthorizedAccessException();
 
         try
         {
             return Ok(_postService.SavePost(request, (int)currentUserId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Get posts from forum
+    /// </summary>
+    /// <param name="userId">The current user's Id</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetPostsFromForum")]
+    public ActionResult<List<PostViewModel>> GetPostsFromForum(int userId) {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(userId);
+
+        if (currentUserId != userId) throw new UnauthorizedAccessException();
+
+        try
+        {
+            return Ok(_postService.GetPostsFromForum(userId));
         }
         catch (Exception e)
         {

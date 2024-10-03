@@ -26,13 +26,13 @@ export class CardListPage implements OnInit, OnDestroy {
   originalCards: Array<CardViewModel> = [];
   showSwiper = false;
   cardListId: number | undefined | null;
-  getCardListIdSub: Subscription | undefined;
   saveCardsSub: Subscription | undefined;
   changeAccessOfCardListSub: Subscription | undefined;
   generatedCards: Array<CardViewModel> = [];
   hasCardChanged = false;
   title = '';
   isCardListOfOtherUser = false;
+  getCardListSub: Subscription | undefined;
 
   constructor(
     private cardService: CardService,
@@ -50,9 +50,9 @@ export class CardListPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getCardListIdSub?.unsubscribe();
     this.saveCardsSub?.unsubscribe();
     this.changeAccessOfCardListSub?.unsubscribe();
+    this.getCardListSub?.unsubscribe();
   }
 
   ionViewWillEnter() {
@@ -76,7 +76,7 @@ export class CardListPage implements OnInit, OnDestroy {
     //   }
     // ];
     this.loadingService.showLoading().then(() => {
-      this.activatedRoute.params
+      this.getCardListSub = this.activatedRoute.params
         .pipe(
           switchMap((params: Params) => {
             this.cardListId = params['id'];

@@ -1,0 +1,39 @@
+<ion-row class="d-flex ion-align-items-center avatar-row">
+  <ion-avatar>
+    <ion-img
+      src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
+      alt="The Wisconsin State Capitol building in Madison, WI at night"></ion-img>
+  </ion-avatar>
+  <ion-label class="fs-14">{{ post?.username }}</ion-label>
+</ion-row>
+<ion-row>
+  <ion-card class="w-100">
+    <ion-card-header>
+      <ion-label>image</ion-label>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-label>{{ post?.content }}</ion-label>
+      </ion-row>
+      <ion-row class="d-flex ion-justify-content-end">
+        <ion-label class="fs-11">
+          {{ post?.created | date : 'YYYY. MM. dd HH:mm.' }}
+        </ion-label>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+</ion-row>
+<ion-row class="button-row">
+  <ion-chip
+    [ngClass]="{ 'liked-chip': post?.liked }"
+    class="action-button"
+    (click)="like(post?.id!)">
+    <ion-icon name="heart-outline"></ion-icon>
+  </ion-chip>
+  <ion-chip
+    *ngIf="showCommentButton"
+    class="action-button"
+    (click)="navigateToPost(post?.id!)">
+    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+  </ion-chip>
+</ion-row>

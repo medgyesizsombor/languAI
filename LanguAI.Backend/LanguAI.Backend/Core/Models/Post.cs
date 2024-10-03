@@ -23,4 +23,6 @@ public class Post
 
     [Required]
     public AccessEnum Access { get; set; }
+
+    public virtual ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
 }
