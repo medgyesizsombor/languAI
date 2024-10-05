@@ -47,12 +47,12 @@ public class InteractionController : ControllerBase
     }
 
     /// <summary>
-    /// Delete interaction
+    /// Dislike
     /// </summary>
     /// <param name="request">Interaction to be deleted</param>
     /// <returns></returns>
-    [HttpPost(Name = "DeleteInteraction")]
-    public ActionResult<bool> DeleteInteraction(DeleteInteractionRequestViewModel request)
+    [HttpPost(Name = "Dislike")]
+    public ActionResult<bool> Dislike(DislikeRequestViewModel request)
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
@@ -62,7 +62,31 @@ public class InteractionController : ControllerBase
 
         try
         {
-            return Ok(_interactionService.DeleteInteraction(request));
+            return Ok(_interactionService.Dislike(request));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Delete Comment
+    /// </summary>
+    /// <param name="request">Interaction to be deleted</param>
+    /// <returns></returns>
+    [HttpPost(Name = "DeleteComment")]
+    public ActionResult<bool> DeleteComment(DeleteCommentRequestViewModel request)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(request);
+
+        if (request.UserId != currentUserId) throw new UnauthorizedAccessException();
+
+        try
+        {
+            return Ok(_interactionService.DeleteComment(request));
         }
         catch (Exception ex)
         {

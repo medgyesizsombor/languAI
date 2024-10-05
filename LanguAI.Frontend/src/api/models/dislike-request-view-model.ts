@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface DeleteInteractionRequestViewModel {
+export interface DislikeRequestViewModel {
   parentInteractionId?: number | null;
   postId?: number | null;
   userId?: number;

@@ -6,20 +6,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { DeleteInteractionRequestViewModel } from '../../models/delete-interaction-request-view-model';
+import { DislikeRequestViewModel } from '../../models/dislike-request-view-model';
 
-export interface DeleteInteraction$Plain$Params {
-      body?: DeleteInteractionRequestViewModel
+export interface Dislike$Json$Params {
+      body?: DislikeRequestViewModel
 }
 
-export function deleteInteraction$Plain(http: HttpClient, rootUrl: string, params?: DeleteInteraction$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, deleteInteraction$Plain.PATH, 'post');
+export function dislike$Json(http: HttpClient, rootUrl: string, params?: Dislike$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, dislike$Json.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +28,4 @@ export function deleteInteraction$Plain(http: HttpClient, rootUrl: string, param
   );
 }
 
-deleteInteraction$Plain.PATH = '/Interaction/DeleteInteraction';
+dislike$Json.PATH = '/Interaction/Dislike';

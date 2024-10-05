@@ -1,6 +1,6 @@
 ﻿namespace LanguAI.Backend.ViewModels.Interaction;
 
-public class DeleteInteractionRequestViewModel
+public class DislikeRequestViewModel
 {
     public int? PostId { get; set; }
 

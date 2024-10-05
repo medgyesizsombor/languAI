@@ -1,0 +1,38 @@
+<div>
+  <ion-row class="avatar-row">
+    <ion-col class="d-flex ion-align-items-center">
+      <ion-avatar>
+        <ion-img
+          src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
+          alt="The Wisconsin State Capitol building in Madison, WI at night"></ion-img>
+      </ion-avatar>
+      <ion-label class="fs-14">{{ comment?.username }}</ion-label>
+    </ion-col>
+    <ion-col
+      *ngIf="comment?.userId === userId"
+      size="auto"
+      class="d-flex ion-align-items-center fs-20">
+      <ion-icon class="trash-icon" name="trash-outline" (click)="delete()"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-card class="w-100">
+      <ion-row>
+        <ion-label>{{ comment?.text }}</ion-label>
+      </ion-row>
+      <ion-row class="d-flex ion-justify-content-end">
+        <ion-label class="fs-11">
+          {{ comment?.created | date : 'YYYY. MM. dd HH:mm.' }}
+        </ion-label>
+      </ion-row>
+    </ion-card>
+  </ion-row>
+  <ion-row class="mb-4">
+    <ion-chip
+      [ngClass]="{ 'liked-chip': comment?.liked }"
+      class="action-button"
+      (click)="like()">
+      <ion-icon name="heart-outline"></ion-icon>
+    </ion-chip>
+  </ion-row>
+</div>
