@@ -20,6 +20,7 @@ import { LanguageSelectModalComponent } from '../components/modals/language-sele
 import { EditAccesFabComponent } from '../components/edit-acces-fab/edit-acces-fab.component';
 import { PostComponent } from '../components/post/post.component';
 import { CommentComponent } from '../components/comment/comment.component';
+import { LoaderComponent } from '../components/loader/loader.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -39,7 +40,8 @@ export function createTranslateLoader(http: HttpClient) {
     LanguageSelectModalComponent,
     EditAccesFabComponent,
     PostComponent,
-    CommentComponent
+    CommentComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +67,8 @@ export function createTranslateLoader(http: HttpClient) {
     LanguageSelectModalComponent,
     EditAccesFabComponent,
     PostComponent,
-    CommentComponent
+    CommentComponent,
+    LoaderComponent
   ]
 })
 export class UtilModule {}

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CardListViewModel } from 'src/api/models';
@@ -13,7 +13,7 @@ import { CARD_LISTS_TITLE } from 'src/app/util/util.constants';
   templateUrl: './cards.page.html',
   styleUrls: ['./cards.page.scss']
 })
-export class CardsPage implements OnInit, OnDestroy {
+export class CardsPage {
   title = this.translateService.instant(CARD_LISTS_TITLE);
 
   getCardListsSub: Subscription | undefined;
@@ -28,12 +28,12 @@ export class CardsPage implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.userId = this.localStorageService.getUserId();
     this.loadCardLists();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.getCardListsSub?.unsubscribe();
   }
 

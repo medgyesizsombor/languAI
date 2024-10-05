@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -16,13 +16,10 @@ import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss']
 })
-export class LoginPage implements OnInit, OnDestroy {
+export class LoginPage {
   loginForm: FormGroup | undefined;
-
   isUsernameDirty = false;
   isPasswordDirty = false;
-
-  isLoading = false;
 
   authenticationSub: Subscription | undefined;
 
@@ -39,11 +36,11 @@ export class LoginPage implements OnInit, OnDestroy {
     library.addIcons(faUser);
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.createForm();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.authenticationSub?.unsubscribe();
   }
 

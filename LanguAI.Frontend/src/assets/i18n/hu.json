@@ -107,5 +107,6 @@
   "ENTER_A_COMMENT": "Írj hozzászólást",
   "SENDING_COMMENT_DOTDOTDOT": "Hozzászólás elküldése...",
   "UNSUCCESSFUL_COMMENT_DELETE": "Hozzászólás törlése sikertelen",
-  "DELETING_THE_COMMENT_DOTDOTDOT": "Hozzászólás törlése..."
+  "DELETING_THE_COMMENT_DOTDOTDOT": "Hozzászólás törlése...",
+  "DATA_IS_LOADING_DOTDOTDOT": "Adatok töltődnek..."
 }

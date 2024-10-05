@@ -1,12 +1,15 @@
-<ion-content>
-  <app-header
-    [title]="otherUser?.username!"
-    [showBackArrow]="true"></app-header>
+<app-header
+  [title]="otherUser?.username ?? ''"
+  [showBackArrow]="true"></app-header>
+<ion-content #content>
   <ion-row
-    class="ion-margin-top"
+    class="ion-margin-top message-row"
     *ngFor="let message of messages"
-    [ngClass]="message.senderId === userId ? 'sent-row' : 'received-row'">
-    <ion-card class="message-card">{{ message.text }}</ion-card>
+    [ngClass]="message.senderId === userId ? 'own-row' : 'received-row'">
+    <ion-card
+      [ngClass]="message.senderId === userId ? 'own-card' : 'received-card'">
+      {{ message.text }}
+    </ion-card>
   </ion-row>
 </ion-content>
 

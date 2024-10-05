@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,21 +10,25 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { CHAT_GPT_ID } from 'src/app/util/util.constants';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-message',
   templateUrl: './message.page.html',
   styleUrls: ['./message.page.scss']
 })
-export class MessagePage implements OnInit, OnDestroy {
+export class MessagePage {
+  @ViewChild('content') content: IonContent | undefined;
+
   isChatGPT = false;
   chatForm: FormGroup | undefined;
   userId: number | null | undefined;
   messages: Array<MessageViewModel> = [];
   otherUser: UserViewModel | undefined;
+  isValid = false;
+
   loadDataSub: Subscription | undefined;
   sendMessageSub: Subscription | undefined;
-  isValid = false;
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -38,14 +42,14 @@ export class MessagePage implements OnInit, OnDestroy {
     private chatGPTService: ChatGptService
   ) {}
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     await this.loadingService.showLoading();
     this.createForm();
     this.userId = this.localStorageService.getUserId();
     this.loadMessages();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.loadDataSub?.unsubscribe();
     this.sendMessageSub?.unsubscribe();
   }
@@ -87,6 +91,7 @@ export class MessagePage implements OnInit, OnDestroy {
           }),
           switchMap((res: Array<MessageViewModel>) => {
             this.messages = [...res];
+            this.content?.scrollToBottom();
             this.loadingService.hideLoading();
 
             if (this.isChatGPT) {
@@ -157,6 +162,11 @@ export class MessagePage implements OnInit, OnDestroy {
         next: (res: Array<MessageViewModel>) => {
           this.messages = [...res];
           this.loadingService.hideLoading();
+
+          // Settimeout is needed!
+          setTimeout(() => {
+            this.content?.scrollToBottom(100);
+          }, 50);
         },
         error: () => {
           this.loadingService.hideLoading();

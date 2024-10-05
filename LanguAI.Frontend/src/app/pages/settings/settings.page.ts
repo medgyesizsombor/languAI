@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   LOGIN_NAVIGATION,
-  NOTIFICATIONS_NAVIGATION,
   SETTINGS_TITLE
 } from '../../util/util.constants';
 import { UserService } from 'src/api/services';
@@ -19,7 +18,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss']
 })
-export class SettingsPage implements OnInit, OnDestroy {
+export class SettingsPage {
   title = this.translateService.instant(SETTINGS_TITLE);
   numberOfFriendshipRequest = 0;
 
@@ -42,8 +41,9 @@ export class SettingsPage implements OnInit, OnDestroy {
     private friendshipRequestService: FriendshipRequestService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadData();
+    //TODO befejezni
     // this.userService.getUserById$Json({ userId: 7 }).subscribe(res => {
     //   if (res) {
     //     console.log(res);
@@ -52,7 +52,7 @@ export class SettingsPage implements OnInit, OnDestroy {
     // });
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.deleteUserSub?.unsubscribe();
   }
 

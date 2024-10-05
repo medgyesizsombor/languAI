@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { NavController } from '@ionic/angular';
@@ -16,11 +16,12 @@ import { UserInteractionService } from 'src/app/util/services/user-interaction.s
   templateUrl: './post.page.html',
   styleUrls: ['./post.page.scss']
 })
-export class PostPage implements OnInit, OnDestroy {
+export class PostPage {
   commentForm: FormGroup | undefined;
   isAnyChanges = false;
   post: PostViewModel | undefined;
   isValid = false;
+  isLoading = false;
 
   sendCommentSub: Subscription | undefined;
   getPostSub: Subscription | undefined;
@@ -38,12 +39,12 @@ export class PostPage implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadPost();
     this.createForm();
   }
 
-  ngOnDestroy() {
+  ionViewWillLeave() {
     this.getPostSub?.unsubscribe();
     this.sendCommentSub?.unsubscribe();
   }
@@ -175,6 +176,7 @@ export class PostPage implements OnInit, OnDestroy {
   }
 
   private async loadPost() {
+    this.isLoading = true;
     await this.loadingService.showLoading(
       this.translateService.instant('LOADING_POST_DOTDOTDOT')
     );
@@ -185,6 +187,7 @@ export class PostPage implements OnInit, OnDestroy {
           const postId = params['id'];
 
           if (!postId?.length) {
+            this.isLoading = false;
             this.loadingService.hideLoading();
             return EMPTY;
           }
@@ -194,17 +197,20 @@ export class PostPage implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (res: PostViewModel) => {
-          this.loadingService.hideLoading();
-
           if (res) {
             this.post = { ...res };
+            this.isLoading = false;
+            this.loadingService.hideLoading();
           } else {
+            this.isLoading = false;
+            this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
               this.translateService.instant('FAILED_TO_LOAD_POST')
             );
           }
         },
         error: () => {
+          this.isLoading = false;
           this.loadingService.hideLoading();
           this.toastrService.presentErrorToast(
             this.translateService.instant('FAILED_TO_LOAD_POST')

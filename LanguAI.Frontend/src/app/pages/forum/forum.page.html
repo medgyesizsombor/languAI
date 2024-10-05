@@ -3,20 +3,22 @@
   [title]="title"
   (addButtonEmit)="navigateToPost()"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content
-      pullingIcon="chevron-down-circle-outline"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing..."></ion-refresher-content>
-  </ion-refresher>
-  <ng-container *ngIf="posts.length; else missingPosts">
-    <app-post-component
-      *ngFor="let post of posts"
-      [post]="post"
-      [navigate]="true"
-      (likeButtonEmit)="like($event)"
-      (navigateButtonEmit)="navigateToPost($event)"></app-post-component>
+  <ng-container *ngIf="!isLoading; else loader">
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+      <ion-refresher-content
+        pullingIcon="chevron-down-circle-outline"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing..."></ion-refresher-content>
+    </ion-refresher>
+    <ng-container *ngIf="posts.length; else missingPosts">
+      <app-post-component
+        *ngFor="let post of posts"
+        [post]="post"
+        [navigate]="true"
+        (likeButtonEmit)="like($event)"
+        (navigateButtonEmit)="navigateToPost($event)"></app-post-component>
+    </ng-container>
   </ng-container>
 </ion-content>
 
@@ -35,4 +37,8 @@
       </ion-button>
     </div>
   </div>
+</ng-template>
+
+<ng-template #loader>
+  <app-loader></app-loader>
 </ng-template>

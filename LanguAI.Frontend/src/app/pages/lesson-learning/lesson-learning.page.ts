@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ExerciseTypeEnum } from 'src/app/util/enums/exercise-type.enum';
 
 @Component({
@@ -6,7 +6,7 @@ import { ExerciseTypeEnum } from 'src/app/util/enums/exercise-type.enum';
   templateUrl: './lesson-learning.page.html',
   styleUrls: ['./lesson-learning.page.scss']
 })
-export class LessonLearningPage implements OnInit {
+export class LessonLearningPage {
   currentExercise: ExerciseTypeEnum | undefined;
   exerciseTypeEnum = ExerciseTypeEnum;
   exercises: Array<ExerciseTypeEnum> | undefined;
@@ -14,7 +14,7 @@ export class LessonLearningPage implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ionViewWillEnter() {}
 
   showContinueButton() {
     this.showOverlay = true;

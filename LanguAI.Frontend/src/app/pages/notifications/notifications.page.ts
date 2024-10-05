@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import {
@@ -17,8 +17,7 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss']
 })
-export class NotificationsPage implements OnInit, OnDestroy {
-  getFriendshipRequestListSub: Subscription | undefined;
+export class NotificationsPage {
   friendshipRequests: Array<FriendshipRequestViewModel> = [
     {
       created: Date().toString(),
@@ -36,6 +35,7 @@ export class NotificationsPage implements OnInit, OnDestroy {
 
   friendshipStatusEnum = FriendshipStatusEnum;
 
+  getFriendshipRequestListSub: Subscription | undefined;
   reactFriendshipRequestSub: Subscription | undefined;
 
   constructor(
@@ -47,12 +47,13 @@ export class NotificationsPage implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadFriendshipRequests();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.reactFriendshipRequestSub?.unsubscribe();
+    this.getFriendshipRequestListSub?.unsubscribe();
     this.friendshipRequestService.numberOfFriendshipRequest =
       this.friendshipRequests.length;
   }
@@ -71,25 +72,25 @@ export class NotificationsPage implements OnInit, OnDestroy {
   }
 
   private loadFriendshipRequests() {
-    // this.loadingService
-    //   .showLoading(
-    //     this.translateService.instant('FRIENDSHIP_REQUESTS_ARE_LOADING')
-    //   )
-    //   .then(() => {
-    //     this.getFriendshipRequestListSub = this.frienshipService
-    //       .getFriendshipRequestList$Json()
-    //       .subscribe({
-    //         next: (res: Array<FriendshipRequestViewModel>) => {
-    //           this.friendshipRequests = [...res];
-    //           this.loadingService.hideLoading();
-    //         },
-    //         error: () => {
-    //           this.loadingService.hideLoading();
-    //           this.toastrService.presentErrorToast(
-    //             this.translateService.instant('NOTIFICATION_ERROR')
-    //           );
-    //         }
-    //       });
-    //   });
+    this.loadingService
+      .showLoading(
+        this.translateService.instant('FRIENDSHIP_REQUESTS_ARE_LOADING')
+      )
+      .then(() => {
+        this.getFriendshipRequestListSub = this.friendshipService
+          .getFriendshipRequestList$Json()
+          .subscribe({
+            next: (res: Array<FriendshipRequestViewModel>) => {
+              this.friendshipRequests = [...res];
+              this.loadingService.hideLoading();
+            },
+            error: () => {
+              this.loadingService.hideLoading();
+              this.toastrService.presentErrorToast(
+                this.translateService.instant('NOTIFICATION_ERROR')
+              );
+            }
+          });
+      });
   }
 }

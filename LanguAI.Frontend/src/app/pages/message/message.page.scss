@@ -4,8 +4,15 @@ form {
 
 ion-card {
   padding: 10px 14px 8px 14px;
-  background-color: #dcd6f7;
   border-radius: 13px / 20px;
+}
+
+.received-card {
+  background-color: #dcd6f7;
+}
+
+.own-card {
+  background-color: #ebf1fb;
 }
 
 ion-col {
@@ -13,12 +20,16 @@ ion-col {
   align-items: center;
 }
 
+.message-row:last-child {
+  margin-bottom: 12px;
+}
+
 .received-row {
   margin-left: 16px;
   margin-right: 64px;
 }
 
-.sent-row {
+.own-row {
   justify-content: end;
   margin-right: 16px;
   margin-left: 64px;
@@ -26,4 +37,5 @@ ion-col {
 
 .input-row {
   justify-content: inherit;
+  margin-bottom: 0;
 }

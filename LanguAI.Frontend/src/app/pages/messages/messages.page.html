@@ -1,9 +1,9 @@
+<app-header
+  [showAddButton]="true"
+  [title]="title"
+  (addButtonEmit)="newMessage()"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <app-header
-    [showAddButton]="true"
-    [title]="title"
-    (addButtonEmit)="newMessage()"></app-header>
-  <ion-list>
+  <ion-list class="pt-0" *ngIf="!isLoading; else loader">
     <ion-item
       lines="none"
       *ngFor="let friend of friendList; let index = index"
@@ -12,3 +12,7 @@
     </ion-item>
   </ion-list>
 </ion-content>
+
+<ng-template #loader>
+  <app-loader [message]="('CHATS_ARE_LOADING' | translate)"></app-loader>
+</ng-template>

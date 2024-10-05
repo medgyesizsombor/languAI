@@ -1,0 +1,10 @@
+<ion-label class="d-flex ion-justify-content-center ion-align-items-center">
+  <ion-spinner class="me-1" name="bubbles"></ion-spinner>
+  <span *ngIf="message.length; else noMessage"></span>
+</ion-label>
+
+<ng-template #noMessage>
+  <span>
+    {{ 'DATA_IS_LOADING_DOTDOTDOT' | translate }}
+  </span>
+</ng-template>

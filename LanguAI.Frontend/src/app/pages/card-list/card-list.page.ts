@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,19 +20,20 @@ import { CARD_LEARNING_NAVIGATION } from 'src/app/util/util.constants';
   templateUrl: './card-list.page.html',
   styleUrls: ['./card-list.page.scss']
 })
-export class CardListPage implements OnInit, OnDestroy {
+export class CardListPage {
   accessOfCardList = AccessEnum.Public;
   cards: Array<CardViewModel> = [];
   originalCards: Array<CardViewModel> = [];
   showSwiper = false;
   cardListId: number | undefined | null;
-  saveCardsSub: Subscription | undefined;
-  changeAccessOfCardListSub: Subscription | undefined;
   generatedCards: Array<CardViewModel> = [];
   hasCardChanged = false;
   title = '';
   isCardListOfOtherUser = false;
+
   getCardListSub: Subscription | undefined;
+  saveCardsSub: Subscription | undefined;
+  changeAccessOfCardListSub: Subscription | undefined;
 
   constructor(
     private cardService: CardService,
@@ -45,18 +46,14 @@ export class CardListPage implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadData();
   }
 
-  ngOnDestroy() {
+  ionViewWillLeave() {
     this.saveCardsSub?.unsubscribe();
     this.changeAccessOfCardListSub?.unsubscribe();
     this.getCardListSub?.unsubscribe();
-  }
-
-  ionViewWillEnter() {
-    // this.useSwipe();
   }
 
   /**
