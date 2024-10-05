@@ -4,7 +4,11 @@ import { ToastrService } from './toastr.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from './localstorage.service';
 import { LoadingService } from './loading.service';
-import { InteractionEnum, PostViewModel } from 'src/api/models';
+import {
+  CommentViewModel,
+  InteractionEnum,
+  PostViewModel
+} from 'src/api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +22,11 @@ export class UserInteractionService {
     private loadingService: LoadingService
   ) {}
 
-  async like(post: PostViewModel) {
-    if (!post.liked) {
+  /**
+   * Like content
+   */
+  async like(content: CommentViewModel | PostViewModel, isPost = true) {
+    if (!content.liked) {
       await this.loadingService.showLoading(
         this.translateService.instant('SENDING_LIKE')
       );
@@ -28,7 +35,8 @@ export class UserInteractionService {
         .saveInteraction$Json({
           body: {
             userId: this.localStorageService.getUserId()!,
-            postId: post.id!,
+            parentInteractionId: isPost ? null : content.id,
+            postId: isPost ? content.id : null,
             interactionType: InteractionEnum.Like
           }
         })
@@ -36,7 +44,7 @@ export class UserInteractionService {
           next: (success: boolean) => {
             this.loadingService.hideLoading();
             if (success) {
-              post.liked = true;
+              content.liked = true;
             } else {
               this.toastrService.presentErrorToast(
                 this.translateService.instant('UNSUCCESSFUL_LIKE')
@@ -51,19 +59,26 @@ export class UserInteractionService {
           }
         });
     } else {
-      this.dislike(post);
+      this.dislike(content, isPost);
     }
   }
 
-  private async dislike(post: PostViewModel) {
+  /**
+   * Dislike content
+   */
+  private async dislike(
+    content: CommentViewModel | PostViewModel,
+    isPost = true
+  ) {
     await this.loadingService.showLoading(
       this.translateService.instant('CANCEL_LIKE')
     );
 
     this.interactionService
-      .deleteInteraction$Json({
+      .dislike$Json({
         body: {
-          postId: post.id!,
+          postId: isPost ? content.id : null,
+          parentInteractionId: isPost ? null : content.id,
           userId: this.localStorageService.getUserId()!
         }
       })
@@ -71,7 +86,7 @@ export class UserInteractionService {
         next: (success: boolean) => {
           this.loadingService.hideLoading();
           if (success) {
-            post.liked = false;
+            content.liked = false;
           } else {
             this.toastrService.presentErrorToast(
               this.translateService.instant('UNSUCCESSFUL_LIKE_CANCEL')

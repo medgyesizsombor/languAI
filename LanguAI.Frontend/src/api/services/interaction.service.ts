@@ -9,10 +9,14 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { deleteInteraction$Json } from '../fn/interaction/delete-interaction-json';
-import { DeleteInteraction$Json$Params } from '../fn/interaction/delete-interaction-json';
-import { deleteInteraction$Plain } from '../fn/interaction/delete-interaction-plain';
-import { DeleteInteraction$Plain$Params } from '../fn/interaction/delete-interaction-plain';
+import { deleteComment$Json } from '../fn/interaction/delete-comment-json';
+import { DeleteComment$Json$Params } from '../fn/interaction/delete-comment-json';
+import { deleteComment$Plain } from '../fn/interaction/delete-comment-plain';
+import { DeleteComment$Plain$Params } from '../fn/interaction/delete-comment-plain';
+import { dislike$Json } from '../fn/interaction/dislike-json';
+import { Dislike$Json$Params } from '../fn/interaction/dislike-json';
+import { dislike$Plain } from '../fn/interaction/dislike-plain';
+import { Dislike$Plain$Params } from '../fn/interaction/dislike-plain';
 import { saveInteraction$Json } from '../fn/interaction/save-interaction-json';
 import { SaveInteraction$Json$Params } from '../fn/interaction/save-interaction-json';
 import { saveInteraction$Plain } from '../fn/interaction/save-interaction-plain';
@@ -71,49 +75,96 @@ export class InteractionService extends BaseService {
     );
   }
 
-  /** Path part for operation `deleteInteraction()` */
-  static readonly DeleteInteractionPath = '/Interaction/DeleteInteraction';
+  /** Path part for operation `dislike()` */
+  static readonly DislikePath = '/Interaction/Dislike';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteInteraction$Plain()` instead.
+   * To access only the response body, use `dislike$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  deleteInteraction$Plain$Response(params?: DeleteInteraction$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-    return deleteInteraction$Plain(this.http, this.rootUrl, params, context);
+  dislike$Plain$Response(params?: Dislike$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return dislike$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deleteInteraction$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `dislike$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  deleteInteraction$Plain(params?: DeleteInteraction$Plain$Params, context?: HttpContext): Observable<boolean> {
-    return this.deleteInteraction$Plain$Response(params, context).pipe(
+  dislike$Plain(params?: Dislike$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.dislike$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteInteraction$Json()` instead.
+   * To access only the response body, use `dislike$Json()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  deleteInteraction$Json$Response(params?: DeleteInteraction$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-    return deleteInteraction$Json(this.http, this.rootUrl, params, context);
+  dislike$Json$Response(params?: Dislike$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return dislike$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deleteInteraction$Json$Response()` instead.
+   * To access the full response (for headers, for example), `dislike$Json$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  deleteInteraction$Json(params?: DeleteInteraction$Json$Params, context?: HttpContext): Observable<boolean> {
-    return this.deleteInteraction$Json$Response(params, context).pipe(
+  dislike$Json(params?: Dislike$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.dislike$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteComment()` */
+  static readonly DeleteCommentPath = '/Interaction/DeleteComment';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteComment$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  deleteComment$Plain$Response(params?: DeleteComment$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return deleteComment$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteComment$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  deleteComment$Plain(params?: DeleteComment$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.deleteComment$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteComment$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  deleteComment$Json$Response(params?: DeleteComment$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return deleteComment$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteComment$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  deleteComment$Json(params?: DeleteComment$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.deleteComment$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }

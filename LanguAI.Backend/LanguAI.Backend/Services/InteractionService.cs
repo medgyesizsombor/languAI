@@ -3,14 +3,14 @@ using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Interaction;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace LanguAI.Backend.Services;
 
 public interface IInteractionService
 {
     bool SaveInteraction(SaveInteractionRequestViewModel request);
-    bool DeleteInteraction(DeleteInteractionRequestViewModel request);
+    bool Dislike(DislikeRequestViewModel request);
+    bool DeleteComment(DeleteCommentRequestViewModel request);
 }
 public class InteractionService : BaseService, IInteractionService
 {
@@ -74,19 +74,42 @@ public class InteractionService : BaseService, IInteractionService
     /// </summary>
     /// <param name="request">Interaction to be deleted</param>
     /// <returns></returns>
-    public bool DeleteInteraction(DeleteInteractionRequestViewModel request)
+    public bool Dislike(DislikeRequestViewModel request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var interaction = _context.Interaction
+        var like = _context.Interaction
             .FirstOrDefault(i => i.UserId == request.UserId
                 && i.PostId == request.PostId
                 && i.ParentInteractionId == request.ParentInteractionId
+                && i.InteractionType == InteractionEnum.Like
                 && i.IsDeleted == false);
 
-        ArgumentNullException.ThrowIfNull(interaction);
+        ArgumentNullException.ThrowIfNull(like);
 
-        interaction.IsDeleted = true;
+        like.IsDeleted = true;
+
+        _context.SaveChanges();
+
+        return true;
+    }
+
+    /// <summary>
+    /// Delete Comment
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public bool DeleteComment(DeleteCommentRequestViewModel request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var comment = _context.Interaction
+            .FirstOrDefault(i => i.UserId == request.UserId
+                && i.Id == request.Id);
+
+        ArgumentNullException.ThrowIfNull(comment);
+
+        comment.IsDeleted = true;
 
         _context.SaveChanges();
 

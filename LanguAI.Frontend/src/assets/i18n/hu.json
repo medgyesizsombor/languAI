@@ -105,5 +105,7 @@
   "LOADING_POST_DOTDOTDOT": "Bejegyzés betöltése...",
   "FAILED_TO_LOAD_POST": "Bejegyzés betöltése sikertelen",
   "ENTER_A_COMMENT": "Írj hozzászólást",
-  "SENDING_COMMENT_DOTDOTDOT": "Hozzászólás elküldése..."
+  "SENDING_COMMENT_DOTDOTDOT": "Hozzászólás elküldése...",
+  "UNSUCCESSFUL_COMMENT_DELETE": "Hozzászólás törlése sikertelen",
+  "DELETING_THE_COMMENT_DOTDOTDOT": "Hozzászólás törlése..."
 }

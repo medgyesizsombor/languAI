@@ -48,12 +48,25 @@ export class PostPage implements OnInit, OnDestroy {
     this.sendCommentSub?.unsubscribe();
   }
 
-  async like() {
-    if (this.post) {
+  /**
+   * Like a comment or the post
+   */
+  async like(contentId: number | null = null) {
+    if (!this.post) return;
+
+    if (contentId) {
+      const comment = this.post.comments?.find(c => c.id === contentId);
+      if (comment && comment.userId === this.localStorageService.getUserId()) {
+        await this.userInteractionService.like(comment, false);
+      }
+    } else {
       await this.userInteractionService.like(this.post);
     }
   }
 
+  /**
+   * Check if the input is valid
+   */
   isCommentValid() {
     this.isValid = this.commentForm?.controls['comment'].value?.trim()?.length;
   }
@@ -64,6 +77,48 @@ export class PostPage implements OnInit, OnDestroy {
   navigateBackWithoutSaving(quit: boolean) {
     if (quit) {
       this.navController.back();
+    }
+  }
+
+  /**
+   * Delete a comment
+   */
+  async deleteComment(commentId: number) {
+    await this.loadingService.showLoading('DELETING_THE_COMMENT_DOTDOTDOT');
+
+    if (commentId) {
+      const comment = this.post?.comments?.find(c => c.id === commentId);
+      if (comment && comment.userId === this.localStorageService.getUserId()) {
+        this.interactionService
+          .deleteComment$Json({
+            body: {
+              id: commentId,
+              userId: this.localStorageService.getUserId()!
+            }
+          })
+          .subscribe({
+            next: (success: boolean) => {
+              if (success) {
+                this.loadingService.hideLoading();
+
+                if (this.post) {
+                  this.post.comments = this.post.comments?.filter(
+                    c => c.id !== commentId
+                  );
+                }
+              } else {
+                this.toastrService.presentErrorToast(
+                  this.translateService.instant('UNSUCCESSFUL_COMMENT_DELETE')
+                );
+              }
+            },
+            error: () => {
+              this.toastrService.presentErrorToast(
+                this.translateService.instant('UNSUCCESSFUL_COMMENT_DELETE')
+              );
+            }
+          });
+      }
     }
   }
 
@@ -100,10 +155,9 @@ export class PostPage implements OnInit, OnDestroy {
         .subscribe({
           next: (res: PostViewModel) => {
             this.loadingService.hideLoading();
-
             if (res) {
               this.post = { ...res };
-              this.commentForm?.reset();
+              this.commentForm?.controls['comment']?.patchValue(null);
             } else {
               this.toastrService.presentErrorToast(
                 this.translateService.instant('FAILED_TO_LOAD_POST')

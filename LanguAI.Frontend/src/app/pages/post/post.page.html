@@ -8,7 +8,13 @@
     [post]="post"
     (likeButtonEmit)="like()"
     [showCommentButton]="false"></app-post-component>
-  <ion-card *ngFor="let comment of post?.comments">{{ comment.text}}</ion-card>
+  <app-comment
+    *ngFor="let comment of post?.comments"
+    [comment]="comment"
+    (likeButtonEmit)="like($event)"
+    (deleteButtonEmit)="deleteComment($event)">
+    {{ comment.text}}
+  </app-comment>
 </ion-content>
 <ion-footer>
   <form *ngIf="commentForm" [formGroup]="commentForm">

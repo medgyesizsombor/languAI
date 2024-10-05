@@ -6,14 +6,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { DeleteInteractionRequestViewModel } from '../../models/delete-interaction-request-view-model';
+import { DeleteCommentRequestViewModel } from '../../models/delete-comment-request-view-model';
 
-export interface DeleteInteraction$Json$Params {
-      body?: DeleteInteractionRequestViewModel
+export interface DeleteComment$Json$Params {
+      body?: DeleteCommentRequestViewModel
 }
 
-export function deleteInteraction$Json(http: HttpClient, rootUrl: string, params?: DeleteInteraction$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, deleteInteraction$Json.PATH, 'post');
+export function deleteComment$Json(http: HttpClient, rootUrl: string, params?: DeleteComment$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, deleteComment$Json.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
@@ -28,4 +28,4 @@ export function deleteInteraction$Json(http: HttpClient, rootUrl: string, params
   );
 }
 
-deleteInteraction$Json.PATH = '/Interaction/DeleteInteraction';
+deleteComment$Json.PATH = '/Interaction/DeleteComment';

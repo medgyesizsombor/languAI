@@ -19,6 +19,7 @@ import { CreateNewMessageModalComponent } from '../components/modals/create-new-
 import { LanguageSelectModalComponent } from '../components/modals/language-select-modal/language-select-modal.component';
 import { EditAccesFabComponent } from '../components/edit-acces-fab/edit-acces-fab.component';
 import { PostComponent } from '../components/post/post.component';
+import { CommentComponent } from '../components/comment/comment.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -37,7 +38,8 @@ export function createTranslateLoader(http: HttpClient) {
     CreateNewMessageModalComponent,
     LanguageSelectModalComponent,
     EditAccesFabComponent,
-    PostComponent
+    PostComponent,
+    CommentComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +64,8 @@ export function createTranslateLoader(http: HttpClient) {
     CreateNewMessageModalComponent,
     LanguageSelectModalComponent,
     EditAccesFabComponent,
-    PostComponent
+    PostComponent,
+    CommentComponent
   ]
 })
 export class UtilModule {}

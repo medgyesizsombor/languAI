@@ -97,7 +97,9 @@ public class PostService : BaseService, IPostService
                     UserId = i.UserId,
                     Text = i.Content,
                     Username = i.User.Username
-                }).ToList()
+                })
+                .OrderBy(p => p.Created)
+                .ToList()
             })
             .FirstOrDefault();
     }
@@ -171,8 +173,8 @@ public class PostService : BaseService, IPostService
                 Content = p.Content,
                 Username = p.User.Username,
                 Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && i.IsDeleted == false),
-                NumberOfLikes = p.Interactions.Sum(i => i.InteractionType == InteractionEnum.Like ? 1 : 0),
-                NumberOfComments = p.Interactions.Sum(i => i.InteractionType == InteractionEnum.Comment ? 1 : 0)
+                NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
+                NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0)
             })
             .ToList();
     }

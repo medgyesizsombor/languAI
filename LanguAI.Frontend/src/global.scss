@@ -175,6 +175,10 @@ ion-card {
     margin-top: 16px;
   }
 
+  &b-4 {
+    margin-bottom: 16px;
+  }
+
   &x-4 {
     margin-right: 16px;
     margin-left: 16px;
@@ -202,6 +206,10 @@ ion-card {
 
   &-18 {
     font-size: 18px;
+  }
+
+  &-20 {
+    font-size: 20px;
   }
 
   &-24 {
@@ -406,4 +414,17 @@ ion-fab {
 ion-col {
   padding-left: 0;
   padding-right: 0;
+}
+
+.liked-chip {
+  background-color: #a6b1e1;
+}
+
+ion-chip {
+  --background: #dcd6f7;
+  margin: 6px 6px 0 0;
+
+  ion-icon {
+    margin: 0;
+  }
 }
