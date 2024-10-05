@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ExerciseTypeEnum } from 'src/app/util/enums/exercise-type.enum';
+import { ExerciseTypeEnum } from 'src/app/util/enums/exercise-type-enum';
 
 @Component({
   selector: 'app-lesson-learning',

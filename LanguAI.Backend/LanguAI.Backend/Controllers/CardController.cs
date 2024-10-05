@@ -88,26 +88,6 @@ public class CardController : ControllerBase
     }
 
     /// <summary>
-    /// Get all the CardList that the user has
-    /// </summary>
-    /// <param name="userId">User Id</param>
-    /// <returns></returns>
-    [HttpGet(Name = "GetListOfCardList")]
-    public ActionResult<List<CardListViewModel>> GetListOfCardList(int userId)
-    {
-        ArgumentNullException.ThrowIfNull(userId);
-
-        try
-        {
-            return Ok(_cardService.GetListOfCardList(userId));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
-    /// <summary>
     /// Get all the cards by the cardListId
     /// </summary>
     /// <param name="cardListId">cardList Id</param>
@@ -148,19 +128,23 @@ public class CardController : ControllerBase
     }
 
     /// <summary>
-    /// Get other users' card lists.
-    /// All the public and the friends' protected cardlists.
+    /// Get all the CardList that the user has and is not deleted
     /// </summary>
     /// <param name="userId">Current User's Id</param>
     /// <returns></returns>
-    [HttpGet(Name = "GetCardListsOfOtherUsers")]
-    public ActionResult<List<CardListViewModel>> GetCardListsOfOtherUsers(int userId)
+    [HttpGet(Name = "GetCardListsOfCurrentUser")]
+    public ActionResult<List<CardListViewModel>> GetCardListsOfCurrentUser(int userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
         try
         {
-            return Ok(_cardService.GetCardListsOfOtherUsers(userId));
+            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+            ArgumentNullException.ThrowIfNull(currentUserId);
+
+            if (userId != currentUserId) throw new UnauthorizedAccessException();
+
+            return Ok(_cardService.GetCardListsOfCurrentUser(userId));
         }
         catch (Exception)
         {
@@ -169,7 +153,8 @@ public class CardController : ControllerBase
     }
 
     /// <summary>
-    /// Get other user's accessible card lists
+    /// Get other users' card lists.
+    /// All the public and the friends' protected cardlists.
     /// </summary>
     /// <param name="otherUserId">Other user's Id</param>
     /// <returns></returns>

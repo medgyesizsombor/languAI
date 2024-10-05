@@ -33,5 +33,8 @@ public class CardList
     [Required]
     public AccessEnum Access { get; set; } = AccessEnum.Public;
 
+    [Required]
+    public bool IsDeleted { get; set; } = false;
+
     public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
 }

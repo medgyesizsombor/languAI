@@ -8,18 +8,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CardListViewModel } from '../../models/card-list-view-model';
 
-export interface GetListOfCardList$Plain$Params {
+export interface GetCardListsOfCurrentUser$Json$Params {
   userId?: number;
 }
 
-export function getListOfCardList$Plain(http: HttpClient, rootUrl: string, params?: GetListOfCardList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
-  const rb = new RequestBuilder(rootUrl, getListOfCardList$Plain.PATH, 'get');
+export function getCardListsOfCurrentUser$Json(http: HttpClient, rootUrl: string, params?: GetCardListsOfCurrentUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
+  const rb = new RequestBuilder(rootUrl, getCardListsOfCurrentUser$Json.PATH, 'get');
   if (params) {
     rb.query('userId', params.userId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +28,4 @@ export function getListOfCardList$Plain(http: HttpClient, rootUrl: string, param
   );
 }
 
-getListOfCardList$Plain.PATH = '/Card/GetListOfCardList';
+getCardListsOfCurrentUser$Json.PATH = '/Card/GetCardListsOfCurrentUser';
