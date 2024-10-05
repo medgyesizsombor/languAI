@@ -11,11 +11,10 @@ public interface ICardService
 {
     Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level, string topic);
     int? SaveCardList(SaveCardListRequest request);
-    List<CardListViewModel> GetListOfCardList(int userId);
     bool SaveCards(SaveCardRequest request);
     List<CardViewModel> GetCardsOfCardList(int cardListId);
     CardListViewModel GetCardListById(int cardListId);
-    List<CardListViewModel> GetCardListsOfOtherUsers(int userId);
+    List<CardListViewModel> GetCardListsOfCurrentUser(int userId);
     List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId);
     bool CopyCardListOfOtherUser(int currentUserId, int cardListId);
     bool ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request);
@@ -89,29 +88,6 @@ public class CardService : BaseService, ICardService
         return cardList.Id;
     }
 
-    public List<CardListViewModel> GetListOfCardList(int userId)
-    {
-        if (userId == 0) throw new ArgumentNullException("userId");
-
-        var asd = _context.CardList
-            .Include(c => c.Cards)
-            .Where(c => c.UserId == userId)
-            .Select(c => new CardListViewModel
-            {
-                UserId = c.UserId,
-                Id = c.Id,
-                LearningLanguage = c.LearningLanguage,
-                NativeLanguage = c.NativeLanguage,
-                Name = c.Name,
-                CardViewModelList = ConvertCardListToCardViewModelList(c.Cards.ToList()),
-                Created = c.Created,
-                Modified = c.Modified,
-                Access = (AccessEnum)c.Access
-            }).ToList();
-
-        return asd;
-    }
-
     /// <summary>
     /// Save cards to card list
     /// </summary>
@@ -170,11 +146,16 @@ public class CardService : BaseService, ICardService
             .ToList());
     }
 
+    /// <summary>
+    /// Get cardlist by cardlistId
+    /// </summary>
+    /// <param name="cardListId">Id of Cardlist</param>
+    /// <returns></returns>
     public CardListViewModel GetCardListById(int cardListId)
     {
         ArgumentNullException.ThrowIfNull(cardListId);
 
-        var cardList = _context.CardList.Include(c => c.Cards).Where(c => c.Id == cardListId).FirstOrDefault();
+        var cardList = _context.CardList.Include(c => c.Cards).FirstOrDefault(c => c.Id == cardListId);
 
         return ConvertCardListToCardListViewModel(cardList);
     }
@@ -185,7 +166,7 @@ public class CardService : BaseService, ICardService
     /// </summary>
     /// <param name="userId">Current User's Id</param>
     /// <returns></returns>
-    public List<CardListViewModel> GetCardListsOfOtherUsers(int userId)
+    public List<CardListViewModel> GetCardListsOfCurrentUser(int userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
@@ -193,12 +174,8 @@ public class CardService : BaseService, ICardService
         {
             return _context.CardList
                  .Include(c => c.Cards)
-                 .Where(c => c.UserId != userId
-                     && ((c.Access == AccessEnum.Public)
-                         || (c.Access == AccessEnum.Protected
-                             && (_context.Friendship
-                                 .Any(f => ((f.RequesterId == userId && f.RecipientId == c.UserId)
-                                     || (f.RecipientId == userId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted)))))
+                 .Where(c => c.UserId == userId
+                        && !c.IsDeleted)
                  .Select(c => ConvertCardListToCardListViewModel(c))
                  .ToList();
         }
@@ -211,7 +188,7 @@ public class CardService : BaseService, ICardService
     /// <summary>
     /// Get other user's accessible card lists
     /// </summary>
-    /// <param name="userId">Current user's Id</param>
+    /// <param name="currentUserId">Current user's Id</param>
     /// <param name="otherUserId">Other user's Id</param>
     /// <returns></returns>
     public List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId)
@@ -220,7 +197,9 @@ public class CardService : BaseService, ICardService
         ArgumentNullException.ThrowIfNull(otherUserId);
 
         return _context.CardList.Include(c => c.Cards)
-            .Where(c => c.UserId == otherUserId && (c.Access == AccessEnum.Public
+            .Where(c => c.UserId == otherUserId
+                    && !c.IsDeleted
+                    && (c.Access == AccessEnum.Public
                          || (c.Access == AccessEnum.Protected
                              && (_context.Friendship
                                  .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == c.UserId)
@@ -242,7 +221,7 @@ public class CardService : BaseService, ICardService
 
         CardList originalCardList = _context.CardList
             .Include(c => c.Cards)
-            .Where(c => c.Id == cardListId && c.Cards.Count != 0)
+            .Where(c => c.Id == cardListId && c.Cards.Count != 0 && !c.IsDeleted)
             .FirstOrDefault();
 
         if (originalCardList == null) return false;
@@ -296,9 +275,9 @@ public class CardService : BaseService, ICardService
         try
         {
             CardList cardList = _context.CardList
-                .Where(c => c.UserId == request.UserId
-                    && c.Id == request.CardListId)
-                .FirstOrDefault();
+                .FirstOrDefault(c => c.UserId == request.UserId
+                    && !c.IsDeleted
+                    && c.Id == request.CardListId);
 
             if (cardList == null)
             {
@@ -373,7 +352,7 @@ public class CardService : BaseService, ICardService
             Name = cardList.Name,
             NativeLanguage = cardList.NativeLanguage,
             UserId = cardList.UserId,
-            Access = (AccessEnum)cardList.Access
+            Access = cardList.Access
         };
     }
 }

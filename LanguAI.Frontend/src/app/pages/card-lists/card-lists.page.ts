@@ -28,7 +28,7 @@ export class CardListsPage {
 
   isLoading = true;
 
-  getCardListsSub: Subscription | undefined;
+  getCardListsOfCurrentUserSub: Subscription | undefined;
   createCardListSub: Subscription | undefined;
 
   constructor(
@@ -48,7 +48,7 @@ export class CardListsPage {
 
   ionViewDidLeave() {
     this.cardLists = [];
-    this.getCardListsSub?.unsubscribe();
+    this.getCardListsOfCurrentUserSub?.unsubscribe();
     this.createCardListSub?.unsubscribe();
   }
 
@@ -108,8 +108,8 @@ export class CardListsPage {
   private loadCardLists() {
     if (this.userId) {
       this.loadingService.showLoading().then(() => {
-        this.getCardListsSub = this.cardService
-          .getListOfCardList$Json({
+        this.getCardListsOfCurrentUserSub = this.cardService
+          .getCardListsOfCurrentUser$Json({
             userId: this.userId!
           })
           .subscribe({

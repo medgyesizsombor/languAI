@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import {
   JWT_TOKEN,
+  LEVEL_OF_CURRENT_LANGUAGE,
   NUMBER_OF_FRIENDSHIP_REQUEST,
   USER_ID
 } from '../util.constants';
+import { LanguageLevelEnum } from '../enums/language-level-enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
+  currentLevel: LanguageLevelEnum | undefined;
+
   constructor() {}
 
   /**
@@ -110,5 +114,38 @@ export class LocalStorageService {
    */
   removeNumberOfFriendshipRequest() {
     localStorage.removeItem(NUMBER_OF_FRIENDSHIP_REQUEST);
+  }
+
+  /**
+   * Set Number of Friendship request to localStorage
+   */
+  setLevelOfCurrentLanguage(level: LanguageLevelEnum): boolean {
+    if (level) {
+      localStorage.setItem(LEVEL_OF_CURRENT_LANGUAGE, level.toString());
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get Number of Friendship request from localStorage
+   */
+  getLevelOfCurrentLanguage(): LanguageLevelEnum | null {
+    const level = Number(localStorage.getItem(LEVEL_OF_CURRENT_LANGUAGE));
+
+    if (!isNaN(level) && level in LanguageLevelEnum) {
+      this.currentLevel = level;
+      return level;
+    }
+
+    return null;
+  }
+
+  /**
+   * Remove Number of Friendship request from localStorage
+   */
+  removeLevelOfCurrentLanguage() {
+    localStorage.removeItem(LEVEL_OF_CURRENT_LANGUAGE);
   }
 }

@@ -8,18 +8,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CardListViewModel } from '../../models/card-list-view-model';
 
-export interface GetCardListsOfOtherUsers$Json$Params {
+export interface GetCardListsOfCurrentUser$Plain$Params {
   userId?: number;
 }
 
-export function getCardListsOfOtherUsers$Json(http: HttpClient, rootUrl: string, params?: GetCardListsOfOtherUsers$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
-  const rb = new RequestBuilder(rootUrl, getCardListsOfOtherUsers$Json.PATH, 'get');
+export function getCardListsOfCurrentUser$Plain(http: HttpClient, rootUrl: string, params?: GetCardListsOfCurrentUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardListViewModel>>> {
+  const rb = new RequestBuilder(rootUrl, getCardListsOfCurrentUser$Plain.PATH, 'get');
   if (params) {
     rb.query('userId', params.userId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +28,4 @@ export function getCardListsOfOtherUsers$Json(http: HttpClient, rootUrl: string,
   );
 }
 
-getCardListsOfOtherUsers$Json.PATH = '/Card/GetCardListsOfOtherUsers';
+getCardListsOfCurrentUser$Plain.PATH = '/Card/GetCardListsOfCurrentUser';

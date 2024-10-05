@@ -1,16 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LESSONS_TITLE } from 'src/app/util/util.constants';
+import { Subscription } from 'rxjs';
+import { CardListViewModel } from 'src/api/models';
+import { CardService } from 'src/api/services';
+import { LoadingService } from 'src/app/util/services/loading.service';
+import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 
 @Component({
   selector: 'app-lessons',
   templateUrl: './lessons.page.html',
   styleUrls: ['./lessons.page.scss']
 })
-export class LessonsPage implements OnInit {
-  title = this.translateService.instant(LESSONS_TITLE);
+export class LessonsPage {
+  isLoading = false;
+  cardLists: Array<CardListViewModel> = [];
 
-  constructor(private translateService: TranslateService) {}
+  getCardListsOfCurrentUserSub: Subscription | undefined;
 
-  ngOnInit() {}
+  constructor(
+    private translateService: TranslateService,
+    private cardService: CardService,
+    private localStorageService: LocalStorageService,
+    private loadingService: LoadingService
+  ) {}
+
+  ionViewWillEnter() {
+    this.loadWordLists();
+  }
+
+  ionViewDidLeave() {
+    this.getCardListsOfCurrentUserSub?.unsubscribe();
+  }
+
+  /**
+   * Load user's wordlists
+   */
+  private loadWordLists() {
+    this.isLoading = true;
+    this.loadingService.showLoading().then()
+
+    this.getCardListsOfCurrentUserSub =
+      this.cardService.getCardListsOfCurrentUser$Json({
+        userId: this.localStorageService.getUserId()!
+      }).subscribe((res: Array<CardListViewModel>) => {
+        this.cardLists = { ...res };
+      });
+  }
 }

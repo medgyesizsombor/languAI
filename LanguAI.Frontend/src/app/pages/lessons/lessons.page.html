@@ -1,3 +1,11 @@
-<ion-content [fullscreen]="true" class="ion-padding">
-  <app-header [title]="title"></app-header>
+<app-header [title]="('LESSONS_TITLE' | translate)"></app-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="!isLoading; else loader">
+    
+  </ng-container>
 </ion-content>
+
+<ng-template #loader>
+  <app-loader></app-loader>
+</ng-template>
