@@ -19,10 +19,10 @@ import {
   templateUrl: './forum.page.html',
   styleUrls: ['./forum.page.scss']
 })
-export class ForumPage implements OnInit, OnDestroy {
+export class ForumPage {
   title = this.translateService.instant(FORUM_TITLE);
-
   posts: Array<PostViewModel> = [];
+  isLoading = false;
 
   getPostsSub: Subscription | undefined;
 
@@ -35,11 +35,11 @@ export class ForumPage implements OnInit, OnDestroy {
     private userInteractionService: UserInteractionService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadPosts();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.getPostsSub?.unsubscribe();
   }
 
@@ -85,6 +85,7 @@ export class ForumPage implements OnInit, OnDestroy {
    * Loading posts for the user
    */
   private loadPosts(event?: any) {
+    this.isLoading = true;
     this.loadingService
       .showLoading(this.translateService.instant('FORUM_IS_LOADING'))
       .then(() => {
@@ -98,10 +99,12 @@ export class ForumPage implements OnInit, OnDestroy {
                 this.posts = [...res];
                 event?.target?.complete();
               }
+              this.isLoading = false;
               this.loadingService.hideLoading();
             },
             error: (err: Error) => {
               console.log(err.message);
+              this.isLoading = false;
               this.loadingService.hideLoading();
             }
           });

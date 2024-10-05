@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { EMPTY, switchMap } from 'rxjs';
+import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
@@ -13,13 +13,15 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   templateUrl: './card-learning.page.html',
   styleUrls: ['./card-learning.page.scss']
 })
-export class CardLearningPage implements OnInit {
+export class CardLearningPage {
   cardListId: number | undefined | null;
   cards: Array<CardViewModel> = [];
   score = 0;
   isFlipped = false;
   currentCardIndex = 0;
   progress = 0;
+
+  getCardsOfCardListSub: Subscription | undefined;
 
   constructor(
     private loadingService: LoadingService,
@@ -30,8 +32,12 @@ export class CardLearningPage implements OnInit {
     private navController: NavController
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadData();
+  }
+
+  ionViewDidLeave() {
+    this.getCardsOfCardListSub?.unsubscribe();
   }
 
   /**

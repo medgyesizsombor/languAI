@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { AccessEnum, PostViewModel, SavePostRequest } from 'src/api/models';
 import { PostService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
@@ -13,7 +14,7 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   templateUrl: './create-post.page.html',
   styleUrls: ['./create-post.page.scss']
 })
-export class CreatePostPage implements OnInit {
+export class CreatePostPage {
   postForm: FormGroup | undefined;
   isPostValid = false;
   unsavedPost = false;
@@ -28,8 +29,14 @@ export class CreatePostPage implements OnInit {
     private localStorageService: LocalStorageService
   ) {}
 
-  ngOnInit() {
+  savePostSub: Subscription | undefined;
+
+  ionViewWillEnter() {
     this.createForm();
+  }
+
+  ionViewDidLeave() {
+    this.savePostSub?.unsubscribe();
   }
 
   savePost() {
@@ -42,7 +49,7 @@ export class CreatePostPage implements OnInit {
       this.loadingService
         .showLoading(this.translateService.instant('CREATING_POST'))
         .then(() => {
-          this.postService
+          this.savePostSub = this.postService
             .savePost$Json({
               body: { ...postViewModel }
             })

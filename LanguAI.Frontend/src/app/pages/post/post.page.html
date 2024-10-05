@@ -4,6 +4,7 @@
   [showSavingMissed]="isAnyChanges"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 <ion-content class="ion-padding">
+  <ng-container *ngIf="!isLoading; else loader"></ng-container>
   <app-post-component
     [post]="post"
     (likeButtonEmit)="like()"
@@ -40,3 +41,7 @@
     </div>
   </form>
 </ion-footer>
+
+<ng-template #loader>
+  <app-loader></app-loader>
+</ng-template>

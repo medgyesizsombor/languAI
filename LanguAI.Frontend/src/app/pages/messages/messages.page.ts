@@ -16,12 +16,11 @@ import { CreateNewMessageModalComponent } from 'src/app/components/modals/create
   templateUrl: './messages.page.html',
   styleUrls: ['./messages.page.scss']
 })
-export class MessagesPage implements OnInit, OnDestroy {
+export class MessagesPage {
   title = this.translateService.instant(MESSAGES_TITLE);
-  friendList: Array<IntSelectorModel> = [
-    // { id: 1, name: 'asd' },
-    // { id: 2, name: 'asdasd' }
-  ];
+  friendList: Array<IntSelectorModel> = [];
+  isLoading = false;
+
   getFriendListSub: Subscription | undefined;
 
   constructor(
@@ -35,11 +34,11 @@ export class MessagesPage implements OnInit, OnDestroy {
     private modalController: ModalController
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadFriends();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.getFriendListSub?.unsubscribe();
   }
 
@@ -67,6 +66,7 @@ export class MessagesPage implements OnInit, OnDestroy {
   }
 
   private loadFriends() {
+    this.isLoading = true;
     const userId = this.localStorageService.getUserId();
     this.loadingService.showLoading().then(() => {
       if (userId) {
@@ -77,6 +77,7 @@ export class MessagesPage implements OnInit, OnDestroy {
           .subscribe({
             next: (res: Array<IntSelectorModel>) => {
               this.friendList = res;
+              this.isLoading = false;
               this.loadingService.hideLoading();
             },
             error: () => {

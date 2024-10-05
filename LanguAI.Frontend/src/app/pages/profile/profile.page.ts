@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CARD_LIST_NAVIGATION, PROFILE_TITLE } from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -26,24 +26,18 @@ import { FriendshipRequestService } from 'src/app/util/services/friendship-reque
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss']
 })
-export class ProfilePage implements OnInit, OnDestroy {
+export class ProfilePage {
   profileForm: FormGroup | undefined;
   title = this.translateService.instant(PROFILE_TITLE);
   profileModel: UserViewModel = {};
   isEdit = false;
   originalProfileModel: UserViewModel = {};
-  getUserSub: Subscription | undefined;
   userId: number | null | undefined;
   isProfileOfSomeoneElse: boolean | undefined;
-  loadDataSub: Subscription | undefined;
-  saveSub: Subscription | undefined;
-  getLanguagesSub: Subscription | undefined;
   activeBadge = 1;
   friendshipStatus: FriendshipStatusEnum | undefined;
   friendshipStatusEnum = FriendshipStatusEnum;
   friendshipViewModel: FriendshipViewModel | undefined;
-  sendFriendshipRequestSub: Subscription | undefined;
-  reactFriendshipRequestSub: Subscription | undefined;
   cardLists: Array<CardListViewModel> = [
     {
       id: 1,
@@ -88,6 +82,13 @@ export class ProfilePage implements OnInit, OnDestroy {
     { id: 2, name: 'en' }
   ];
 
+  sendFriendshipRequestSub: Subscription | undefined;
+  reactFriendshipRequestSub: Subscription | undefined;
+  getUserSub: Subscription | undefined;
+  loadDataSub: Subscription | undefined;
+  saveSub: Subscription | undefined;
+  getLanguagesSub: Subscription | undefined;
+
   /**
    * To make BadgeEnum usable in the template
    */
@@ -109,16 +110,17 @@ export class ProfilePage implements OnInit, OnDestroy {
     private friendshipRequestService: FriendshipRequestService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.initialize();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.getUserSub?.unsubscribe();
     this.saveSub?.unsubscribe();
     this.loadDataSub?.unsubscribe();
     this.sendFriendshipRequestSub?.unsubscribe();
     this.reactFriendshipRequestSub?.unsubscribe();
+    this.getLanguagesSub?.unsubscribe();
   }
 
   /**
@@ -195,6 +197,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.loadingService.showLoading().then(async () => {
       this.languages = [];
       if (!this.languages?.length) {
+        //todo befejezni
         this.getLanguagesSub;
       }
       const modal = await this.modalController.create({

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -13,9 +13,9 @@ import { LOGIN_NAVIGATION } from 'src/app/util/util.constants';
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
-  styleUrls: ['./register.page.scss'],
+  styleUrls: ['./register.page.scss']
 })
-export class RegisterPage implements OnInit, OnDestroy {
+export class RegisterPage {
   registerForm: FormGroup | undefined;
 
   registerSub: Subscription | undefined;
@@ -32,49 +32,57 @@ export class RegisterPage implements OnInit, OnDestroy {
     library.addIcons(faUser);
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.createForm();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.registerSub?.unsubscribe();
   }
 
   register() {
     if (this.isValid()) {
-      this.loadingService.showLoading(this.translateService.instant('REGISTRATION')).then(() => {
-        //TODO: Ország selecttel majd kipótolni
-        this.registerSub = this.registrationService
-          .register$Json({
-            body: {
-              username: this.registerForm?.get('username')?.value,
-              email: this.registerForm?.get('email')?.value,
-              dateOfBirth: '1998-04-20',
-              password: this.registerForm?.get('password')?.value,
-              language: 1,
-            },
-          })
-          .subscribe({
-            next: res => {
-              this.loadingService.hideLoading();
-              if (res) {
-                //TODO: Bejelentkeztetni
-                this.toastrService.presentSuccessToast(this.translateService.instant('SUCCESSFUL_REGISTRATION'));
-                this.router.navigate(['/' + LOGIN_NAVIGATION]);
-              } else {
+      this.loadingService
+        .showLoading(this.translateService.instant('REGISTRATION'))
+        .then(() => {
+          //TODO: Ország selecttel majd kipótolni
+          this.registerSub = this.registrationService
+            .register$Json({
+              body: {
+                username: this.registerForm?.get('username')?.value,
+                email: this.registerForm?.get('email')?.value,
+                dateOfBirth: '1998-04-20',
+                password: this.registerForm?.get('password')?.value,
+                language: 1
+              }
+            })
+            .subscribe({
+              next: res => {
+                this.loadingService.hideLoading();
+                if (res) {
+                  //TODO: Bejelentkeztetni
+                  this.toastrService.presentSuccessToast(
+                    this.translateService.instant('SUCCESSFUL_REGISTRATION')
+                  );
+                  this.router.navigate(['/' + LOGIN_NAVIGATION]);
+                } else {
+                  this.toastrService.presentErrorToast(
+                    this.translateService.instant(
+                      'ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER'
+                    )
+                  );
+                }
+              },
+              error: () => {
+                this.loadingService.hideLoading();
                 this.toastrService.presentErrorToast(
-                  this.translateService.instant('ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER')
+                  this.translateService.instant(
+                    'ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER'
+                  )
                 );
               }
-            },
-            error: () => {
-              this.loadingService.hideLoading();
-              this.toastrService.presentErrorToast(
-                this.translateService.instant('ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER')
-              );
-            },
-          });
-      });
+            });
+        });
     }
   }
 
@@ -86,7 +94,7 @@ export class RegisterPage implements OnInit, OnDestroy {
       email: [''],
       dateOfBirth: [''],
       password: [''],
-      confirmPassword: [''],
+      confirmPassword: ['']
     });
   }
 
@@ -100,7 +108,8 @@ export class RegisterPage implements OnInit, OnDestroy {
       !this.registerForm?.get('dateOfBirth')?.errors &&
       !this.registerForm?.get('password')?.errors &&
       !this.registerForm?.get('confirmPassword')?.errors &&
-      this.registerForm?.get('confirmPassword')?.value === this.registerForm?.get('password')?.value
+      this.registerForm?.get('confirmPassword')?.value ===
+        this.registerForm?.get('password')?.value
     );
   }
 }

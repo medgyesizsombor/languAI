@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
@@ -11,8 +12,10 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   templateUrl: './card.page.html',
   styleUrls: ['./card.page.scss']
 })
-export class CardPage implements OnInit {
+export class CardPage {
   cards: Array<CardViewModel> = [];
+
+  getWordListsSub: Subscription | undefined;
 
   constructor(
     private cardService: CardService,
@@ -22,8 +25,12 @@ export class CardPage implements OnInit {
     private toastrService: ToastrService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.initialize();
+  }
+
+  ionViewDidLeave() {
+    this.getWordListsSub?.unsubscribe();
   }
 
   /**
@@ -35,45 +42,46 @@ export class CardPage implements OnInit {
     if (id?.length) {
       //TODO loading the cards of the list
     } else {
-      this.cards = [
-        {
-          wordInLearningLanguage: 'hungary',
-          wordInNativeLanguage: 'magyarország'
-        },
-        { wordInLearningLanguage: 'english', wordInNativeLanguage: 'anglia' }
-      ];
-      // this.loadingService.showLoading(this.translateService.instant('GENERATING_THE_CARDS'))
-      // .then(() => {
-      //   this.cardService
-      //     .getWordList$Json({
-      //       learningLanguage: 'hungarian',
-      //       level: 'A1',
-      //       nativeLanguage: 'english'
-      //     })
-      //     .subscribe({
-      //       next: (res: Array<CardViewModel>) => {
-      //         this.loadingService.hideLoading();
-      //         if (res?.length) {
-      //           this.cards = [...res];
-      //           console.log(this.cards);
-      //         } else {
-      //           this.toastrService.presentErrorToast(
-      //             this.translateService.instant(
-      //               'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
-      //             )
-      //           );
-      //         }
-      //       },
-      //       error: () => {
-      //         this.loadingService.hideLoading();
-      //         this.toastrService.presentErrorToast(
-      //           this.translateService.instant(
-      //             'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
-      //           )
-      //         );
-      //       }
-      //     });
-      // });
+      // this.cards = [
+      //   {
+      //     wordInLearningLanguage: 'hungary',
+      //     wordInNativeLanguage: 'magyarország'
+      //   },
+      //   { wordInLearningLanguage: 'english', wordInNativeLanguage: 'anglia' }
+      // ];
+      this.loadingService
+        .showLoading(this.translateService.instant('GENERATING_THE_CARDS'))
+        .then(() => {
+          this.getWordListsSub = this.cardService
+            .getWordList$Json({
+              learningLanguage: 'hungarian',
+              level: 'A1',
+              nativeLanguage: 'english'
+            })
+            .subscribe({
+              next: (res: Array<CardViewModel>) => {
+                this.loadingService.hideLoading();
+                if (res?.length) {
+                  this.cards = [...res];
+                  console.log(this.cards);
+                } else {
+                  this.toastrService.presentErrorToast(
+                    this.translateService.instant(
+                      'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
+                    )
+                  );
+                }
+              },
+              error: () => {
+                this.loadingService.hideLoading();
+                this.toastrService.presentErrorToast(
+                  this.translateService.instant(
+                    'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
+                  )
+                );
+              }
+            });
+        });
     }
   }
 }
