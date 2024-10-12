@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import {
+  LEARNINGS_NAVIGATION,
   LOGIN_NAVIGATION,
+  NOTIFICATIONS_NAVIGATION,
+  PROFILE_NAVIGATION,
   SETTINGS_TITLE
 } from '../../util/util.constants';
 import { UserService } from 'src/api/services';
@@ -12,6 +15,8 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
 import { Subscription } from 'rxjs';
+import { SettingsNavigationEnum } from 'src/app/util/enums/settings-navigation-enum';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-settings',
@@ -58,7 +63,24 @@ export class SettingsPage {
 
   openDarkModeModal() {}
 
-  navigate(page: string, useNavController = false) {
+  navigate(settingsNavigationEnum: SettingsNavigationEnum) {
+    const useNavController = Capacitor.getPlatform() === 'web';
+    let page = '';
+
+    switch (settingsNavigationEnum) {
+      case SettingsNavigationEnum.profile: {
+        page = PROFILE_NAVIGATION;
+        break;
+      }
+      case SettingsNavigationEnum.notifications: {
+        page = NOTIFICATIONS_NAVIGATION;
+        break;
+      }
+      case SettingsNavigationEnum.learnings: {
+        page = LEARNINGS_NAVIGATION;
+        break;
+      }
+    }
     if (useNavController) {
       this.navController.navigateForward('/' + page);
     } else {

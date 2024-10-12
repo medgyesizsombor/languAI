@@ -1,0 +1,41 @@
+<app-header [title]="'NEW_LEARNING' | translate"></app-header>
+
+<ion-content>
+  <ng-container *ngIf="!isLoading">
+    <form *ngIf="newLearningForm" [formGroup]="newLearningForm" class="px-4">
+      <ion-select
+        formControlName="languageId"
+        [label]="'LANGUAGE' | translate"
+        label-placement="stacked">
+        <ion-select-option
+          *ngFor="let language of languageList"
+          [value]="language.id">
+          {{ language.name }}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-select
+        formControlName="languageLevel"
+        [label]="'LEVEL' | translate"
+        label-placement="stacked"
+        class="ion-margin-bottom">
+        <ion-select-option
+          *ngFor="let languageLevel of languageLevelList"
+          [value]="languageLevel.id">
+          {{ languageLevel.name! | translate }}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-row class="ion-margin-bottom w-100">
+        <ion-button class="primary-button no-shadow w-100" (click)="confirm()">
+          {{ 'CONFIRM' | translate }}
+        </ion-button>
+      </ion-row>
+      <ion-row class="w-100">
+        <ion-button class="error-outline-button w-100" (click)="dismiss()">
+          {{ 'CANCEL' | translate }}
+        </ion-button>
+      </ion-row>
+    </form>
+  </ng-container>
+</ion-content>

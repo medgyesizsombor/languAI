@@ -38,4 +38,6 @@ public class User
     public virtual ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
 
     public virtual ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
+
+    public virtual ICollection<Learning> Learnings { get; set; } = new List<Learning>();
 }

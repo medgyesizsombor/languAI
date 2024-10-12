@@ -25,5 +25,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<ICardService, CardService>();
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IInteractionService, InteractionService>();
+        services.AddScoped<ILearningService, LearningService>();
+        services.AddScoped<ILanguageService, LanguageService>();
     }
 }

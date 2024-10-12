@@ -1,0 +1,35 @@
+<app-header
+  [showBackArrow]="true"
+  [title]="('LEARNINGS' | translate)"
+  [showAddButton]="true"
+  (addButtonEmit)="addLearning()"></app-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="!isLoading">
+    <ion-list class="pt-0" *ngIf="learnings?.length; else missingLearnings">
+      <ion-item
+        lines="none"
+        *ngFor="let learning of learnings; let index = index"
+        (click)="changeActiveLearning(learning.id!)">
+        <ion-row class="w-100 ion-justify-content-between">
+          <ion-col class="ion-align-items-center d-flex">
+            {{ languageId === hungarianLanguageId ? learning.languageInHun :
+            learning.languageName }} - {{learning.languageLevel |
+            languageLevel}}
+          </ion-col>
+          <ion-col
+            size="auto"
+            *ngIf="learning.isActive"
+            class="ion-align-items-center d-flex fs-28">
+            <ion-icon name="checkmark-outline"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+</ion-content>
+
+<ng-template #missingLearnings>
+  <ion-label>{{ 'YOU_DONT_HAVE_ANY_LEARNINGS_YET' | translate }}</ion-label>
+  <ion-label>{{ '' | translate }}</ion-label>
+</ng-template>

@@ -391,15 +391,11 @@ export class AlertService {
   /**
    * Show access alert
    */
-  async showAccessAlert(
-    currentAccess: AccessEnum
-  ): Promise<AccessEnum | null> {
+  async showAccessAlert(currentAccess: AccessEnum): Promise<AccessEnum | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
         header: this.translateService.instant('ACCESS_TITLE'),
-        message: this.translateService.instant(
-          'WHO_CAN_SEE_THIS_QUESTION'
-        ),
+        message: this.translateService.instant('WHO_CAN_SEE_THIS_QUESTION'),
         inputs: [
           {
             label: this.translateService.instant('ONLY_ME'),
@@ -433,6 +429,36 @@ export class AlertService {
             role: 'confirm',
             handler: data => {
               resolve(data);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show existing learning alert
+   */
+  async showExistingLearningAlert(): Promise<boolean> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('ATTENTION_TITLE'),
+        message: this.translateService.instant('YOU_ALREADY_HAVE_LEARNING_LIKE_THIS_WOULD_YOU_LIKE_TO_MAKE_THAT_ACTIVE_QUESTIONMARK'),
+        buttons: [
+          {
+            text: this.translateService.instant('NO'),
+            role: 'cancel',
+            handler: () => {
+              resolve(false);
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: () => {
+              resolve(true);
             }
           }
         ]

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -90,11 +90,11 @@ export class RegisterPage {
 
   private createForm() {
     this.registerForm = this.formBuilder.group({
-      username: [''],
-      email: [''],
-      dateOfBirth: [''],
-      password: [''],
-      confirmPassword: ['']
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
     });
   }
 
