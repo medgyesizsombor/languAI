@@ -3,6 +3,8 @@ export { CardService } from './services/card.service';
 export { ChatGptService } from './services/chat-gpt.service';
 export { FriendshipService } from './services/friendship.service';
 export { InteractionService } from './services/interaction.service';
+export { LanguageService } from './services/language.service';
+export { LearningService } from './services/learning.service';
 export { MessageService } from './services/message.service';
 export { PostService } from './services/post.service';
 export { RegistrationService } from './services/registration.service';

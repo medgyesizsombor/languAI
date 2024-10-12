@@ -15,15 +15,14 @@
     </ion-col>
   </ion-row>
 
-  <ion-row (click)="navigate('profile', true )" class="settings-row mx-4 mt-3">
+  <ion-row (click)="navigate(1)" class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="person-outline"></ion-icon>
     </ion-col>
     <ion-col>{{ 'MY_PROFILE' | translate }}</ion-col>
   </ion-row>
-  <ion-row
-    (click)="navigate('notifications', true)"
-    class="settings-row mx-4 mt-3">
+
+  <ion-row (click)="navigate(2)" class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="notifications-outline"></ion-icon>
       <ion-badge
@@ -35,22 +34,43 @@
     </ion-col>
     <ion-col>{{ 'NOTIFICATION' | translate }}</ion-col>
   </ion-row>
+
   <ion-row (click)="openDarkModeModal()" class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="contrast-outline"></ion-icon>
     </ion-col>
     <ion-col>{{ 'DARK_MODE' | translate }}</ion-col>
   </ion-row>
+
+  <ion-row class="settings-row mx-4 mt-3">
+    <ion-col size="auto" class="align-item-center fs-24 me-2">
+      <ion-icon name="phone-portrait-outline"></ion-icon>
+    </ion-col>
+    <ion-col>{{ 'LANGUAGE_OF_APPLICATION' | translate }}</ion-col>
+  </ion-row>
+
+  <ion-row (click)="navigate(3)" class="settings-row mx-4 mt-3">
+    <ion-col size="auto" class="align-item-center fs-24 me-2">
+      <ion-icon name="language-outline"></ion-icon>
+    </ion-col>
+    <ion-col>{{ 'LEARNINGS' | translate }}</ion-col>
+  </ion-row>
+
   <ion-row class="mx-4 mt-4">
     <ion-col class="ion-text-center">
-      <ion-button class="primary-button-outline w-100 no-shadow" (click)="logout()">
+      <ion-button
+        class="primary-button-outline w-100 no-shadow"
+        (click)="logout()">
         {{'SIGN_OUT' | translate}}
       </ion-button>
     </ion-col>
   </ion-row>
+
   <ion-row class="mx-4">
     <ion-col class="ion-text-center">
-      <ion-button class="error-outline-button w-100 no-shadow" (click)="deleteProfile()">
+      <ion-button
+        class="error-outline-button w-100 no-shadow"
+        (click)="deleteProfile()">
         {{'DELETE_PROFILE' | translate}}
       </ion-button>
     </ion-col>

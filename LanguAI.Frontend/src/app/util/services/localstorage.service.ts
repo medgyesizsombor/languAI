@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
   JWT_TOKEN,
+  LANGUAGE_CODE,
+  LANGUAGE_ID,
   LEVEL_OF_CURRENT_LANGUAGE,
   NUMBER_OF_FRIENDSHIP_REQUEST,
   USER_ID
 } from '../util.constants';
-import { LanguageLevelEnum } from '../enums/language-level-enum';
+import { LanguageLevelEnum } from 'src/api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -147,5 +149,63 @@ export class LocalStorageService {
    */
   removeLevelOfCurrentLanguage() {
     localStorage.removeItem(LEVEL_OF_CURRENT_LANGUAGE);
+  }
+
+  /**
+   * Set Id of language
+   */
+  setLangugageId(languageId: number) {
+    if (languageId) {
+      localStorage.setItem(LANGUAGE_ID, languageId.toString());
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get Id of language
+   */
+  getLanguageId(): number | null {
+    const languageId = localStorage.getItem(LANGUAGE_ID);
+
+    if (languageId?.length) {
+      return +languageId;
+    }
+
+    return null;
+  }
+
+  /**
+   * Remove Id of language
+   */
+  removeLanguageIc() {
+    localStorage.removeItem(LANGUAGE_ID);
+  }
+
+  /**
+   * Set Code  of language
+   */
+  setLangugageCode(languageCode: string) {
+    if (languageCode) {
+      localStorage.setItem(LANGUAGE_CODE, languageCode);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get Id of language
+   */
+  getLanguageCode(): string {
+    return localStorage.getItem(LANGUAGE_CODE) ?? '';
+  }
+
+  /**
+   * Remove Code of language
+   */
+  removeLanguageCode() {
+    localStorage.removeItem(LANGUAGE_CODE);
   }
 }

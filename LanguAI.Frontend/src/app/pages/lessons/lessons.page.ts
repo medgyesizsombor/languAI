@@ -35,15 +35,18 @@ export class LessonsPage {
   /**
    * Load user's wordlists
    */
-  private loadWordLists() {
+  private async loadWordLists() {
     this.isLoading = true;
-    this.loadingService.showLoading().then()
+    await this.loadingService.showLoading();
 
-    this.getCardListsOfCurrentUserSub =
-      this.cardService.getCardListsOfCurrentUser$Json({
+    this.getCardListsOfCurrentUserSub = this.cardService
+      .getCardListsOfCurrentUser$Json({
         userId: this.localStorageService.getUserId()!
-      }).subscribe((res: Array<CardListViewModel>) => {
+      })
+      .subscribe((res: Array<CardListViewModel>) => {
         this.cardLists = { ...res };
+        this.isLoading = false;
+        this.loadingService.hideLoading();
       });
   }
 }

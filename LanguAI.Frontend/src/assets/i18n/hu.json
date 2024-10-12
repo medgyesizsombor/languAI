@@ -108,5 +108,16 @@
   "SENDING_COMMENT_DOTDOTDOT": "Hozzászólás elküldése...",
   "UNSUCCESSFUL_COMMENT_DELETE": "Hozzászólás törlése sikertelen",
   "DELETING_THE_COMMENT_DOTDOTDOT": "Hozzászólás törlése...",
-  "DATA_IS_LOADING_DOTDOTDOT": "Adatok töltődnek..."
+  "DATA_IS_LOADING_DOTDOTDOT": "Adatok töltődnek...",
+  "LEARNINGS": "Tanulmányok",
+  "LANGUAGE_OF_APPLICATION": "Alkalmazás nyelve",
+  "UNSUCCESSFUL_LEARNING_LOAD": "Tanulmányok betöltése sikertelen",
+  "UNSUCCESSFUL_CHANGE": "Sikertelen váltás",
+  "CHANGING_ACTIVE_LEARNING": "Aktív nyelv változtatása",
+  "BEGINNER": "Kezdő",
+  "INTERMEDIATE": "Közepes",
+  "ADVANCED": "Haladó",
+  "YOU_ALREADY_HAVE_LEARNING_LIKE_THIS_WOULD_YOU_LIKE_TO_MAKE_THAT_ACTIVE_QUESTIONMARK": "Már van ilyen tanulmányod. Szeretnéd azt aktiválni?",
+  "NEW_LEARNING": "Új Tanulmány",
+  "LEVEL": "Szint"
 }

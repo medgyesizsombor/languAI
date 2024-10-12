@@ -19,6 +19,9 @@ namespace LanguAI.Backend.Core
         public virtual DbSet<CardList> CardList { get; set; }
         public virtual DbSet<Message> Message { get; set; }
         public virtual DbSet<Interaction> Interaction { get; set; }
+        public virtual DbSet<Topic> Topic { get; set; }
+        public virtual DbSet<Learning> Learning { get; set; }
+        public virtual DbSet<Language> Language { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,7 +68,24 @@ namespace LanguAI.Backend.Core
                 .WithMany(p => p.Interactions)
                 .HasForeignKey(i => i.PostId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Learning>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.Learnings)
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Learning>()
+                .HasOne(l => l.Language)
+                .WithMany(l => l.Learnings)
+                .HasForeignKey(l => l.LanguageId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CardList>()
+                .HasOne(c => c.Topic)
+                .WithMany(t => t.CardLists)
+                .HasForeignKey(c => c.TopicId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
 }

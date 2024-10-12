@@ -21,6 +21,8 @@ import { EditAccesFabComponent } from '../components/edit-acces-fab/edit-acces-f
 import { PostComponent } from '../components/post/post.component';
 import { CommentComponent } from '../components/comment/comment.component';
 import { LoaderComponent } from '../components/loader/loader.component';
+import { NewLearningModalComponent } from '../components/new-learning-modal/new-learning-modal.component';
+import { LanguageLevelPipe } from './pipes/language-level.pipe';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -41,7 +43,9 @@ export function createTranslateLoader(http: HttpClient) {
     EditAccesFabComponent,
     PostComponent,
     CommentComponent,
-    LoaderComponent
+    LoaderComponent,
+    NewLearningModalComponent,
+    LanguageLevelPipe
   ],
   imports: [
     CommonModule,
@@ -68,7 +72,10 @@ export function createTranslateLoader(http: HttpClient) {
     EditAccesFabComponent,
     PostComponent,
     CommentComponent,
-    LoaderComponent
+    LoaderComponent,
+    CreateNewMessageModalComponent,
+    NewLearningModalComponent,
+    LanguageLevelPipe
   ]
 })
 export class UtilModule {}

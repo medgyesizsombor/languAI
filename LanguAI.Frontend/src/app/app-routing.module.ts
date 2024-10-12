@@ -8,6 +8,7 @@ import {
   CARD_NAVIGATION,
   CREATE_POST_NAVIGATION,
   FORUM_NAVIGATION,
+  LEARNINGS_NAVIGATION,
   LESSON_LEARNING_NAVIGATION,
   LESSONS_NAVIGATION,
   LOGIN_NAVIGATION,
@@ -127,6 +128,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/create-post/create-post.module').then(
         m => m.CreatePostPageModule
+      )
+  },
+  {
+    path: LEARNINGS_NAVIGATION,
+    loadChildren: () =>
+      import('./pages/learnings/learnings.module').then(
+        m => m.LearningPageModule
       )
   }
 ];
