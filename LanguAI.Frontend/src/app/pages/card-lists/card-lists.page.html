@@ -1,8 +1,8 @@
+<app-header
+  [showAddButton]="true"
+  [title]="('CARD_LISTS_TITLE' | translate)"
+  (addButtonEmit)="addCardList()"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <app-header
-    [showAddButton]="true"
-    [title]="title"
-    (addButtonEmit)="addCardList()"></app-header>
   <!-- TODO Középre igazítani majd a listát -->
   <ion-list
     *ngIf="!isLoading"

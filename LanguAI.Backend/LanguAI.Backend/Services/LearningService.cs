@@ -1,8 +1,10 @@
-﻿using Azure.Core;
-using LanguAI.Backend.Core;
+﻿using LanguAI.Backend.Core;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
+using LanguAI.Backend.ViewModels.Card;
 using LanguAI.Backend.ViewModels.Learning;
+using LanguAI.Backend.ViewModels.SelectorModel;
+using LanguAI.Backend.ViewModels.Topic;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
@@ -12,6 +14,7 @@ public interface ILearningService
     int SaveLearning(SaveLearningRequestViewModel request);
     List<LearningViewModel> GetLearningsOfUsers(int userId);
     bool ChangeActiveLearning(int userId, int learningId);
+    List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId);
 }
 public class LearningService : BaseService, ILearningService
 {
@@ -96,7 +99,7 @@ public class LearningService : BaseService, ILearningService
                 IsActive = l.IsActive,
                 LanguageCode = l.Language.Code,
                 LanguageName = l.Language.Name,
-                LanguageInHun = l.Language.NameInHun
+                LanguageNameInHun = l.Language.NameInHun
             })
             .ToList();
     }
@@ -137,6 +140,40 @@ public class LearningService : BaseService, ILearningService
             transaction.Rollback();
             throw;
         }
+    }
+
+    public List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var currentLearning = _context.Learning.FirstOrDefault(l => l.IsActive && l.UserId == userId);
+
+        if (currentLearning == null) return null;
+
+        var topicList = _context.Topic
+            .Include(t => t.CardLists)
+            .Where(t => t.LanguageLevel == currentLearning.LanguageLevel
+                && t.CardLists
+                    .Any(c => c.UserId == userId
+                    && !c.IsDeleted
+                    && c.LearningLanguageId == currentLearning.LanguageId)).Select(t => new TopicOfCurrentLearningViewModel
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        NameInHun = t.NameInHun,
+                        Description = t.Description,
+                        DescriptionInHun = t.DescriptionInHun,
+                        CardListNamesAndIds = t.CardLists
+                    .Select(c => new IntSelectorModel
+                    {
+                        Id = c.Id,
+                        Name = c.Name
+                    })
+                    .ToList()
+                    })
+            .ToList();
+
+        return topicList;
     }
 
     /// <summary>

@@ -23,6 +23,8 @@ import { CommentComponent } from '../components/comment/comment.component';
 import { LoaderComponent } from '../components/loader/loader.component';
 import { NewLearningModalComponent } from '../components/new-learning-modal/new-learning-modal.component';
 import { LanguageLevelPipe } from './pipes/language-level.pipe';
+import { TopicNamePipe } from './pipes/topic-name.pipe';
+import { LanguageNamePipe } from './pipes/language-name.pipe';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -45,7 +47,9 @@ export function createTranslateLoader(http: HttpClient) {
     CommentComponent,
     LoaderComponent,
     NewLearningModalComponent,
-    LanguageLevelPipe
+    LanguageLevelPipe,
+    TopicNamePipe,
+    LanguageNamePipe,
   ],
   imports: [
     CommonModule,
@@ -75,7 +79,9 @@ export function createTranslateLoader(http: HttpClient) {
     LoaderComponent,
     CreateNewMessageModalComponent,
     NewLearningModalComponent,
-    LanguageLevelPipe
+    LanguageLevelPipe,
+    TopicNamePipe,
+    LanguageNamePipe
   ]
 })
 export class UtilModule {}

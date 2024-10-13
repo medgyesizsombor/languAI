@@ -86,6 +86,18 @@ namespace LanguAI.Backend.Core
                 .WithMany(t => t.CardLists)
                 .HasForeignKey(c => c.TopicId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CardList>()
+                .HasOne(c => c.NativeLanguage)
+                .WithMany(l => l.NativeLanguageOfCardLists)
+                .HasForeignKey(c => c.NativeLanguageId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CardList>()
+                .HasOne(c => c.LearningLanguage)
+                .WithMany(l => l.LearningLanguageOfCardLists)
+                .HasForeignKey(c => c.LearningLanguageId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

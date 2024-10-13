@@ -39,42 +39,42 @@ export class ProfilePage {
   friendshipStatusEnum = FriendshipStatusEnum;
   friendshipViewModel: FriendshipViewModel | undefined;
   cardLists: Array<CardListViewModel> = [
-    {
-      id: 1,
-      created: new Date().toString(),
-      modified: new Date().toString(),
-      learningLanguage: 'magyar',
-      nativeLanguage: 'hungarian',
-      cardViewModelList: [
-        { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
-      ],
-      name: 'asd',
-      userId: 8
-    },
-    {
-      id: 1,
-      created: new Date().toString(),
-      modified: new Date().toString(),
-      learningLanguage: 'magyar',
-      nativeLanguage: 'hungarian',
-      cardViewModelList: [
-        { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
-      ],
-      name: 'asd2',
-      userId: 8
-    },
-    {
-      id: 1,
-      created: new Date().toString(),
-      modified: new Date().toString(),
-      learningLanguage: 'magyar',
-      nativeLanguage: 'hungarian',
-      cardViewModelList: [
-        { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
-      ],
-      name: 'asd3',
-      userId: 8
-    }
+    // {
+    //   id: 1,
+    //   created: new Date().toString(),
+    //   modified: new Date().toString(),
+    //   learningLanguageI: 'magyar',
+    //   nativeLanguage: 'hungarian',
+    //   cardViewModelList: [
+    //     { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
+    //   ],
+    //   name: 'asd',
+    //   userId: 8
+    // },
+    // {
+    //   id: 1,
+    //   created: new Date().toString(),
+    //   modified: new Date().toString(),
+    //   learningLanguage: 'magyar',
+    //   nativeLanguage: 'hungarian',
+    //   cardViewModelList: [
+    //     { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
+    //   ],
+    //   name: 'asd2',
+    //   userId: 8
+    // },
+    // {
+    //   id: 1,
+    //   created: new Date().toString(),
+    //   modified: new Date().toString(),
+    //   learningLanguage: 'magyar',
+    //   nativeLanguage: 'hungarian',
+    //   cardViewModelList: [
+    //     { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
+    //   ],
+    //   name: 'asd3',
+    //   userId: 8
+    // }
   ];
 
   languages: Array<IntSelectorModel> = [

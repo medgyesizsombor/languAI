@@ -70,8 +70,8 @@ public class CardService : BaseService, ICardService
         }
 
         cardList.UserId = request.UserId;
-        cardList.LearningLanguage = request.LearningLanguage;
-        cardList.NativeLanguage = request.NativeLanguage;
+        cardList.LearningLanguageId = request.LearningLanguageId;
+        cardList.NativeLanguageId = request.NativeLanguageId;
         cardList.Name = request.Name;
 
         if (isEdit)

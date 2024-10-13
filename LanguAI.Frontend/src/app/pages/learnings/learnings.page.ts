@@ -20,11 +20,11 @@ export class LearningPage {
   isLoading = true;
   learnings: Array<LearningViewModel> | undefined;
   languageId: number | null = null;
+  hungarianLanguageId = HUNGARIAN_LANGUAGE_ID;
 
   getLearningsSub: Subscription | undefined;
   loadLearningsSub: Subscription | undefined;
   saveLearningSub: Subscription | undefined;
-  hungarianLanguageId = HUNGARIAN_LANGUAGE_ID;
 
   constructor(
     private translateService: TranslateService,

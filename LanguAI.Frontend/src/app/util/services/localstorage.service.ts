@@ -13,8 +13,6 @@ import { LanguageLevelEnum } from 'src/api/models';
   providedIn: 'root'
 })
 export class LocalStorageService {
-  currentLevel: LanguageLevelEnum | undefined;
-
   constructor() {}
 
   /**
@@ -137,7 +135,6 @@ export class LocalStorageService {
     const level = Number(localStorage.getItem(LEVEL_OF_CURRENT_LANGUAGE));
 
     if (!isNaN(level) && level in LanguageLevelEnum) {
-      this.currentLevel = level;
       return level;
     }
 
@@ -179,7 +176,7 @@ export class LocalStorageService {
   /**
    * Remove Id of language
    */
-  removeLanguageIc() {
+  removeLanguageId() {
     localStorage.removeItem(LANGUAGE_ID);
   }
 

@@ -13,9 +13,8 @@
         (click)="changeActiveLearning(learning.id!)">
         <ion-row class="w-100 ion-justify-content-between">
           <ion-col class="ion-align-items-center d-flex">
-            {{ languageId === hungarianLanguageId ? learning.languageInHun :
-            learning.languageName }} - {{learning.languageLevel |
-            languageLevel}}
+            {{ learning | languageName }} - {{ learning.languageLevel |
+            languageLevel }}
           </ion-col>
           <ion-col
             size="auto"

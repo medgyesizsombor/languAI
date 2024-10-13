@@ -6,8 +6,8 @@ export interface LearningViewModel {
   isActive?: boolean;
   languageCode?: string | null;
   languageId?: number;
-  languageInHun?: string | null;
   languageLevel?: LanguageLevelEnum;
   languageName?: string | null;
+  languageNameInHun?: string | null;
   userId?: number;
 }

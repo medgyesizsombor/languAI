@@ -15,11 +15,19 @@ public class CardList
     [ForeignKey(nameof(UserId))]
     public virtual User User { get; set; }
 
+    //Default learning language id is the english language id
     [Required]
-    public string LearningLanguage { get; set; }
+    public int LearningLanguageId { get; set; } = 23;
 
+    [ForeignKey(nameof(LearningLanguageId))]
+    public virtual Language LearningLanguage { get; set; }
+
+    //Default native language id is the english language id
     [Required]
-    public string NativeLanguage { get; set; }
+    public int NativeLanguageId { get; set; } = 35;
+
+    [ForeignKey(nameof(NativeLanguageId))]
+    public virtual Language NativeLanguage { get; set; }
 
     [Required]
     public DateTime Created { get; set; } = DateTime.Now;

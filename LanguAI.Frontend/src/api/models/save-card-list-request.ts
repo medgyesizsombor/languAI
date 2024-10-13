@@ -2,8 +2,8 @@
 /* eslint-disable */
 export interface SaveCardListRequest {
   id?: number | null;
-  learningLanguage?: string | null;
+  learningLanguageId?: number;
   name?: string | null;
-  nativeLanguage?: string | null;
+  nativeLanguageId?: number;
   userId?: number;
 }
