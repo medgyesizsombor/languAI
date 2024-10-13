@@ -1,9 +1,36 @@
-<app-header [title]="('LESSONS_TITLE' | translate)"></app-header>
+<app-header
+  [title]="('LESSONS_TITLE' | translate)"
+  [showAddButton]="true"
+  (addButtonEmit)="moreTopic()"></app-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngIf="!isLoading; else loader"></ng-container>
+<ion-content [fullscreen]="true" class="mt-3">
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="topicList?.length; else missingCardList">
+      <div *ngFor="let topic of topicList">
+        <ion-row
+          class="topic-name ion-justify-content-center"
+          (click)="startExercises()">
+          {{ topic | topicName }}
+        </ion-row>
+        <ion-list>
+          <ion-item
+            lines="none"
+            *ngFor="let cardList of topic.cardListNamesAndIds">
+            {{ cardList.name }}
+          </ion-item>
+        </ion-list>
+      </div>
+    </ng-container>
+  </ng-container>
 </ion-content>
 
-<ng-template #loader>
-  <app-loader></app-loader>
+<ng-template #missingCardList>
+  <ion-label>
+    {{'YOU_MUST_HAVE_AT_LEAST_ONE_CARDLIST_TO_DO_EXERCISES' | translate}}
+  </ion-label>
+  <ion-button
+    class="primary-button no-shadow"
+    (click)="navigateToCardListsPage()">
+    {{ 'NAVIGATE_TO_CARDLISTS_PAGE' | translate }}
+  </ion-button>
 </ng-template>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -9,8 +9,7 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
-  CARD_LIST_NAVIGATION,
-  CARD_LISTS_TITLE
+  CARD_LIST_NAVIGATION
 } from 'src/app/util/util.constants';
 
 @Component({
@@ -19,8 +18,6 @@ import {
   styleUrls: ['./card-lists.page.scss']
 })
 export class CardListsPage {
-  title = this.translateService.instant(CARD_LISTS_TITLE);
-
   userId: number | null | undefined;
   cardLists: Array<CardListViewModel> = [];
 
@@ -65,12 +62,13 @@ export class CardListsPage {
       .then((name: string | null) => {
         if (name?.length) {
           this.loadingService.showLoading('CREATING_CARD_LIST').then(() => {
+            // TODO continue, to not make it automatically
             this.createCardListSub = this.cardService
               .saveCardList$Json({
                 body: {
                   userId: 7,
-                  learningLanguage: 'english',
-                  nativeLanguage: 'hungarian',
+                  learningLanguageId: 23,
+                  nativeLanguageId: 35,
                   name
                 }
               })
@@ -116,7 +114,7 @@ export class CardListsPage {
             next: (res: Array<CardListViewModel>) => {
               this.loadingService.hideLoading();
               this.isLoading = false;
-              this.cardLists = res;
+              this.cardLists = [...res];
               this.generateSuggestedCardListName();
             },
             error: () => {

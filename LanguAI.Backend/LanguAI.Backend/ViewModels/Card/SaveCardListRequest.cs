@@ -6,9 +6,9 @@ public class SaveCardListRequest
 
     public int UserId { get; set; }
 
-    public string LearningLanguage { get; set; }
+    public int LearningLanguageId { get; set; }
 
-    public string NativeLanguage { get; set; }
+    public int NativeLanguageId { get; set; }
 
     public string Name { get; set; }
 }

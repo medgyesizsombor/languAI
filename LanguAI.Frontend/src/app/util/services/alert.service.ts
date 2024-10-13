@@ -445,7 +445,9 @@ export class AlertService {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
         header: this.translateService.instant('ATTENTION_TITLE'),
-        message: this.translateService.instant('YOU_ALREADY_HAVE_LEARNING_LIKE_THIS_WOULD_YOU_LIKE_TO_MAKE_THAT_ACTIVE_QUESTIONMARK'),
+        message: this.translateService.instant(
+          'YOU_ALREADY_HAVE_LEARNING_LIKE_THIS_WOULD_YOU_LIKE_TO_MAKE_THAT_ACTIVE_QUESTIONMARK'
+        ),
         buttons: [
           {
             text: this.translateService.instant('NO'),
@@ -456,6 +458,40 @@ export class AlertService {
           },
           {
             text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: () => {
+              resolve(true);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show confirm alert
+   */
+  async showConfirmAlert(
+    header: string,
+    message: string,
+    confirmText: string
+  ): Promise<boolean> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: this.translateService.instant('NO'),
+            role: 'cancel',
+            handler: () => {
+              resolve(false);
+            }
+          },
+          {
+            text: confirmText,
             role: 'confirm',
             handler: () => {
               resolve(true);

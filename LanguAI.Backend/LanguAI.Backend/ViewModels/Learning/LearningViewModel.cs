@@ -16,7 +16,7 @@ public class LearningViewModel
 
     public string LanguageName { get; set; }
 
-    public string LanguageInHun { get; set; }
+    public string LanguageNameInHun { get; set; }
 
     public string LanguageCode { get; set; }
 }

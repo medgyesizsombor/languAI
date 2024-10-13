@@ -119,5 +119,13 @@
   "ADVANCED": "Haladó",
   "YOU_ALREADY_HAVE_LEARNING_LIKE_THIS_WOULD_YOU_LIKE_TO_MAKE_THAT_ACTIVE_QUESTIONMARK": "Már van ilyen tanulmányod. Szeretnéd azt aktiválni?",
   "NEW_LEARNING": "Új Tanulmány",
-  "LEVEL": "Szint"
+  "LEVEL": "Szint",
+  "UNSUCCESSFUL_LOAD_LESSONS": "Leckék betöltése sikertelen",
+  "YOU_MUST_HAVE_AT_LEAST_ONE_CARDLIST_TO_DO_EXERCISES": "Legalább egy szókártya gyűjteménnyel kell rendelkezned, hogy kipróbáld a feladatokat",
+  "NAVIGATE_TO_CARDLISTS_PAGE": "Navigálás a Szókártya gyűjtemény oldalra",
+  "MORE_TOPIC": "Több témakör",
+  "NEW_LESSONS": "Új feladatok",
+  "FOR_MORE_EXERCISE_WOULD_YOU_LIKE_TO_CREATE_NEW_CARDLISTS": "Szeretnél létrehozni új kártyagyűjteményt újabb feladatokért?",
+  "NO": "Nem",
+  "YES": "Igen"
 }

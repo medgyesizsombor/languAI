@@ -1,4 +1,5 @@
 ﻿using LanguAI.Backend.Core.Enums;
+using LanguAI.Backend.Core.Models;
 
 namespace LanguAI.Backend.ViewModels.Card;
 
@@ -8,9 +9,9 @@ public class CardListViewModel
 
     public int UserId { get; set; }
 
-    public string LearningLanguage { get; set; }
+    public Language LearningLanguage { get; set; }
 
-    public string NativeLanguage { get; set; }
+    public Language NativeLanguage { get; set; }
 
     public string Name { get; set; }
 

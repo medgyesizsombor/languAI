@@ -1,5 +1,7 @@
-﻿using LanguAI.Backend.Services;
+﻿using LanguAI.Backend.Core.Models;
+using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Learning;
+using LanguAI.Backend.ViewModels.Topic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,6 +86,24 @@ public class LearningController : ControllerBase
         try
         {
             return Ok(_learningService.ChangeActiveLearning(userId, learningId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet(Name = "GetCardListOfCurrentLearningGroupByTopic")]
+    public ActionResult<List<TopicOfCurrentLearningViewModel>> GetCardListOfCurrentLearningGroupByTopic(int userId)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        if (currentUserId != userId) throw new UnauthorizedAccessException();
+
+        try
+        {
+            return Ok(_learningService.GetCardListOfCurrentLearningGroupByTopic(userId));
         }
         catch (Exception e)
         {
