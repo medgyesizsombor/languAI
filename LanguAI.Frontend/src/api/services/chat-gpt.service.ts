@@ -9,7 +9,12 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { ExerciseViewModel } from '../models/exercise-view-model';
 import { MessageViewModel } from '../models/message-view-model';
+import { receiveExercisesFromChatGpt$Json } from '../fn/chat-gpt/receive-exercises-from-chat-gpt-json';
+import { ReceiveExercisesFromChatGpt$Json$Params } from '../fn/chat-gpt/receive-exercises-from-chat-gpt-json';
+import { receiveExercisesFromChatGpt$Plain } from '../fn/chat-gpt/receive-exercises-from-chat-gpt-plain';
+import { ReceiveExercisesFromChatGpt$Plain$Params } from '../fn/chat-gpt/receive-exercises-from-chat-gpt-plain';
 import { receiveMessageFromChatGpt$Json } from '../fn/chat-gpt/receive-message-from-chat-gpt-json';
 import { ReceiveMessageFromChatGpt$Json$Params } from '../fn/chat-gpt/receive-message-from-chat-gpt-json';
 import { receiveMessageFromChatGpt$Plain } from '../fn/chat-gpt/receive-message-from-chat-gpt-plain';
@@ -116,6 +121,53 @@ export class ChatGptService extends BaseService {
   receiveMessageFromChatGpt$Json(params?: ReceiveMessageFromChatGpt$Json$Params, context?: HttpContext): Observable<MessageViewModel> {
     return this.receiveMessageFromChatGpt$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<MessageViewModel>): MessageViewModel => r.body)
+    );
+  }
+
+  /** Path part for operation `receiveExercisesFromChatGpt()` */
+  static readonly ReceiveExercisesFromChatGptPath = '/ChatGPT/ReceiveExercisesFromChatGPT';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `receiveExercisesFromChatGpt$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  receiveExercisesFromChatGpt$Plain$Response(params?: ReceiveExercisesFromChatGpt$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExerciseViewModel>>> {
+    return receiveExercisesFromChatGpt$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `receiveExercisesFromChatGpt$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  receiveExercisesFromChatGpt$Plain(params?: ReceiveExercisesFromChatGpt$Plain$Params, context?: HttpContext): Observable<Array<ExerciseViewModel>> {
+    return this.receiveExercisesFromChatGpt$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ExerciseViewModel>>): Array<ExerciseViewModel> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `receiveExercisesFromChatGpt$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  receiveExercisesFromChatGpt$Json$Response(params?: ReceiveExercisesFromChatGpt$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExerciseViewModel>>> {
+    return receiveExercisesFromChatGpt$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `receiveExercisesFromChatGpt$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  receiveExercisesFromChatGpt$Json(params?: ReceiveExercisesFromChatGpt$Json$Params, context?: HttpContext): Observable<Array<ExerciseViewModel>> {
+    return this.receiveExercisesFromChatGpt$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ExerciseViewModel>>): Array<ExerciseViewModel> => r.body)
     );
   }
 

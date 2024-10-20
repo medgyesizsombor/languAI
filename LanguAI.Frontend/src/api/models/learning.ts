@@ -6,9 +6,11 @@ import { User } from '../models/user';
 export interface Learning {
   id: number;
   isActive: boolean;
-  language?: Language;
-  languageId: number;
   languageLevel: LanguageLevelEnum;
+  learningLanguage?: Language;
+  learningLanguageId: number;
+  nativeLanguage?: Language;
+  nativeLanguageId: number;
   user?: User;
   userId: number;
 }

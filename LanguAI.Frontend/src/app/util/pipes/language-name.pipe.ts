@@ -11,7 +11,7 @@ export class LanguageNamePipe implements PipeTransform {
 
   transform(learning: LearningViewModel): string | undefined | null {
     return this.localDataService.nativeLanguageId === HUNGARIAN_LANGUAGE_ID
-      ? learning.languageNameInHun
-      : learning.languageName;
+      ? learning.learningLanguageNameInHun
+      : learning.learningLanguageName;
   }
 }

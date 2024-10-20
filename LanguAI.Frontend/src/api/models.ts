@@ -11,6 +11,8 @@ export { ChangePasswordRequestViewModel } from './models/change-password-request
 export { CommentViewModel } from './models/comment-view-model';
 export { DeleteCommentRequestViewModel } from './models/delete-comment-request-view-model';
 export { DislikeRequestViewModel } from './models/dislike-request-view-model';
+export { ExerciseTypeEnum } from './models/exercise-type-enum';
+export { ExerciseViewModel } from './models/exercise-view-model';
 export { Friendship } from './models/friendship';
 export { FriendshipRequestViewModel } from './models/friendship-request-view-model';
 export { FriendshipStatusEnum } from './models/friendship-status-enum';
@@ -18,6 +20,7 @@ export { FriendshipViewModel } from './models/friendship-view-model';
 export { Interaction } from './models/interaction';
 export { InteractionEnum } from './models/interaction-enum';
 export { IntSelectorModel } from './models/int-selector-model';
+export { IsCorrectAndTextSentenceViewModel } from './models/is-correct-and-text-sentence-view-model';
 export { Language } from './models/language';
 export { LanguageLevelEnum } from './models/language-level-enum';
 export { Learning } from './models/learning';

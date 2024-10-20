@@ -4,10 +4,14 @@ import { LanguageLevelEnum } from '../models/language-level-enum';
 export interface LearningViewModel {
   id?: number;
   isActive?: boolean;
-  languageCode?: string | null;
-  languageId?: number;
   languageLevel?: LanguageLevelEnum;
-  languageName?: string | null;
-  languageNameInHun?: string | null;
+  learningLanguageCode?: string | null;
+  learningLanguageId?: number;
+  learningLanguageName?: string | null;
+  learningLanguageNameInHun?: string | null;
+  nativeLanguageCode?: string | null;
+  nativeLanguageId?: number;
+  nativeLanguageName?: string | null;
+  nativeLanguageNameInHun?: string | null;
   userId?: number;
 }

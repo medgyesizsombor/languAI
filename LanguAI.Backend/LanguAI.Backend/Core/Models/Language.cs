@@ -16,7 +16,8 @@ public class Language
     [Required]
     public string NameInHun {  get; set; }
 
-    public virtual ICollection<Learning> Learnings { get; set; } = new List<Learning>();
+    public virtual ICollection<Learning> LearningLanguageOfLearnings { get; set; } = new List<Learning>();
+    public virtual ICollection<Learning> NativeLanguageOfLearnings { get; set; } = new List<Learning>();
     public virtual ICollection<CardList> LearningLanguageOfCardLists { get; set; } = new List<CardList>();
     public virtual ICollection<CardList> NativeLanguageOfCardLists { get; set; } = new List<CardList>();
 }

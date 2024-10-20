@@ -1,5 +1,6 @@
-﻿using Azure.Core;
+﻿using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Services;
+using LanguAI.Backend.ViewModels.Exercise;
 using LanguAI.Backend.ViewModels.Message;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +13,18 @@ public class ChatGPTController : ControllerBase
     private readonly IChatGPTService _chatGPTService;
     private readonly IAuthenticationService _authenticationService;
     private readonly IMessageService _messageService;
+    private readonly ILearningService _learningService;
+    private readonly ICardService _cardService;
 
     private readonly ILogger<UserController> _logger;
 
-    public ChatGPTController(ILogger<UserController> logger, IChatGPTService chatGPTService, IAuthenticationService authenticationService, IMessageService messageService)
+    public ChatGPTController(ILogger<UserController> logger, IChatGPTService chatGPTService, IAuthenticationService authenticationService, IMessageService messageService, ICardService cardService)
     {
         _logger = logger;
         _chatGPTService = chatGPTService;
         _authenticationService = authenticationService;
         _messageService = messageService;
+        _cardService = cardService;
     }
 
     /// <summary>
@@ -40,12 +44,12 @@ public class ChatGPTController : ControllerBase
     //    }
     //}
 
+    //TODO: REFAKT Exception
     /// <summary>
     /// Send message to ChatGPT
     /// </summary>
     /// <param name="message">Message request</param>
     /// <returns></returns>
-    /// TODO Kipróbálni
     [HttpPost(Name = "SendMessageToChatGPT")]
     public async Task<ActionResult<MessageViewModel>> SendMessageToChatGPT(MessageViewModel message)
     {
@@ -82,12 +86,11 @@ public class ChatGPTController : ControllerBase
         }
     }
 
+    //TODO: REFAKT Exception
     /// <summary>
     /// Receive message from chatGPT
     /// </summary>
-    /// <param name="message">Message request</param>
     /// <returns></returns>
-    /// TODO Kipróbálni
     [HttpPost(Name = "ReceiveMessageFromChatGPT")]
     public async Task<ActionResult<MessageViewModel>> ReceiveMessageFromChatGPT()
     {
@@ -107,6 +110,34 @@ public class ChatGPTController : ControllerBase
         catch (Exception)
         {
             return null;
+        }
+    }
+
+    /// <summary>
+    /// Receive exercises from ChatGPT
+    /// </summary>
+    /// <param name="request">Request for exercises</param>
+    /// <returns></returns>
+    [HttpGet(Name = "ReceiveExercisesFromChatGPT")]
+    public async Task<ActionResult<List<ExerciseViewModel>>> ReceiveExercisesFromChatGPTAsync([FromQuery] ExerciseRequestViewModel request)
+    {
+        try
+        {
+            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+            ArgumentNullException.ThrowIfNull(request);
+            ArgumentNullException.ThrowIfNull(currentUserId);
+
+            if (currentUserId != request.UserId) throw new UnauthorizedAccessException();
+
+            var wordsInLearningLanguage = _cardService.GetLanguageWordsAsOneStringByCardListId(request.CardListId);
+
+            var exercises = await _chatGPTService.ReceiveExercisesFromChatGPT(request, wordsInLearningLanguage);
+
+            return Ok(exercises);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
 }

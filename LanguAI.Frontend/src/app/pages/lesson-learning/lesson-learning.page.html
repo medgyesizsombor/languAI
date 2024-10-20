@@ -1,23 +1,42 @@
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header class="ion-no-border">
-    <app-progress-bar></app-progress-bar>
-  </ion-header>
-  <div *ngIf="showOverlay" class="overlay"></div>
-  <!-- <app-missing-word-exercise
-    (showCorrectButton)="showContinueButton()"></app-missing-word-exercise> -->
-  <!-- <app-sentence-assembly-exercise
-    (showCorrectButton)="showContinueButton()"></app-sentence-assembly-exercise> -->
-  <!-- <app-word-pairing-exercise
-    (showCorrectButton)="showContinueButton()"></app-word-pairing-exercise> -->
-  <!-- <app-mistake-correcting-exercise
-    (showCorrectButton)="showContinueButton()"></app-mistake-correcting-exercise> -->
-  <app-question-answering-exercise
-    (showCorrectButton)="showContinueButton()"></app-question-answering-exercise>
-  <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
-    <button class="continue-button no-shadow" (click)="nextExercise()">
-      {{ 'CONTINUE' | translate }}
-    </button>
-  </div>
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="exerciseList?.length; else missingExercises">
+      <ion-header class="ion-no-border">
+        <app-progress-bar></app-progress-bar>
+      </ion-header>
+      <!-- <div *ngIf="showOverlay" class="overlay"></div> -->
+      <ng-container *ngFor="let exercise of exerciseList">
+        <app-missing-word-exercise
+          (showCorrectButton)="showContinueButton()"
+          *ngIf="exercise.exerciseType === exerciseTypeEnum.MissingWordExercise
+            && exercise.isActive"></app-missing-word-exercise>
+        <app-sentence-assembly-exercise
+          (showCorrectButton)="showContinueButton()"
+          *ngIf="exercise.exerciseType === exerciseTypeEnum.SentenceAssemblyExercise
+            && exercise.isActive"></app-sentence-assembly-exercise>
+        <app-word-pairing-exercise
+          (showCorrectButton)="showContinueButton()"
+          *ngIf="exercise.exerciseType === exerciseTypeEnum.WordPairingExercise
+            && exercise.isActive"></app-word-pairing-exercise>
+        <app-mistake-correcting-exercise
+          [exercise]="exercise"
+          (showCorrectButton)="showContinueButton()"
+          *ngIf="exercise.exerciseType === exerciseTypeEnum.MistakeCorrectingExercise
+            && exercise.isActive"></app-mistake-correcting-exercise>
+        <app-question-answering-exercise
+          (showCorrectButton)="showContinueButton()"
+          *ngIf="exercise.exerciseType === exerciseTypeEnum.QuestionAnsweringExercise
+            && exercise.isActive"></app-question-answering-exercise>
+        <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
+          <button class="continue-button no-shadow" (click)="nextExercise()">
+            {{ 'CONTINUE' | translate }}
+          </button>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
 </ion-content>
 
 <ng-template #saveButton></ng-template>
+
+<ng-template #missingExercises></ng-template>

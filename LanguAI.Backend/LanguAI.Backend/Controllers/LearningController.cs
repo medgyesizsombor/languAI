@@ -93,6 +93,11 @@ public class LearningController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get the card lists of current learning
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
     [HttpGet(Name = "GetCardListOfCurrentLearningGroupByTopic")]
     public ActionResult<List<TopicOfCurrentLearningViewModel>> GetCardListOfCurrentLearningGroupByTopic(int userId)
     {

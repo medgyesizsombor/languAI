@@ -12,11 +12,19 @@ public class LearningViewModel
 
     public int UserId { get; set; }
 
-    public int LanguageId { get; set; }
+    public int LearningLanguageId { get; set; }
 
-    public string LanguageName { get; set; }
+    public string LearningLanguageName { get; set; }
 
-    public string LanguageNameInHun { get; set; }
+    public string LearningLanguageNameInHun { get; set; }
 
-    public string LanguageCode { get; set; }
+    public string LearningLanguageCode { get; set; }
+
+    public int NativeLanguageId { get; set; }
+
+    public string NativeLanguageName { get; set; }
+
+    public string NativeLanguageNameInHun { get; set; }
+
+    public string NativeLanguageCode { get; set; }
 }

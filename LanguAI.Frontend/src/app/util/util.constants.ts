@@ -32,3 +32,6 @@ export const LEARNINGS_NAVIGATION = 'learnings';
 export const HUNGARIAN_LANGUAGE_CODE = 'hu';
 export const ENGLISH_LANGUAGE_ID = 23;
 export const HUNGARIAN_LANGUAGE_ID = 35;
+export const BEGINNER = 'BEGINNER';
+export const INTERMEDIATE = 'INTERMEDIATE';
+export const ADVANCED = 'ADVANCED';

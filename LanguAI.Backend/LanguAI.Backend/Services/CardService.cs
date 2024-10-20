@@ -18,6 +18,7 @@ public interface ICardService
     List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId);
     bool CopyCardListOfOtherUser(int currentUserId, int cardListId);
     bool ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request);
+    string GetLanguageWordsAsOneStringByCardListId(int cardListId);
 }
 
 public class CardService : BaseService, ICardService
@@ -296,6 +297,40 @@ public class CardService : BaseService, ICardService
         }
     }
 
+    /// <summary>
+    /// Get language words by id of cardlist
+    /// </summary>
+    /// <param name="cardListId"></param>
+    /// <returns></returns>
+    public string GetLanguageWordsAsOneStringByCardListId(int cardListId)
+    {
+        ArgumentNullException.ThrowIfNull(cardListId);
+
+        var wordList = _context.Card
+            .Where(c => c.CardListId == cardListId)
+            .Select(c => c.WordInLearningLanguage)
+            .ToList();
+
+        string words = "";
+
+        for (int i = 0; i < wordList.Count; i++)
+        {
+            if (i == 0)
+            {
+                words = wordList[i];
+            }
+
+            words = words + ", " + wordList[i];
+        }
+
+        return words;
+    }
+
+    /// <summary>
+    /// Convert a list of cards to list of card view models
+    /// </summary>
+    /// <param name="cardList">List of cards</param>
+    /// <returns></returns>
     private static List<CardViewModel> ConvertCardListToCardViewModelList(List<Card> cardList)
     {
         if (cardList == null) { return null; }
@@ -311,6 +346,12 @@ public class CardService : BaseService, ICardService
         return cardViewModelList;
     }
 
+    /// <summary>
+    /// Convert Card View Model List to Card List
+    /// </summary>
+    /// <param name="cardListId">Id of cardList</param>
+    /// <param name="cardViewModelList">List of Card View Models</param>
+    /// <returns></returns>
     private List<Card> ConvertCardViewModelListToCardList(int cardListId, List<CardViewModel> cardViewModelList)
     {
         List<Card> cards = new List<Card>();

@@ -1,5 +1,4 @@
-﻿using LanguAI.Backend.ViewModels.Card;
-using LanguAI.Backend.ViewModels.SelectorModel;
+﻿using LanguAI.Backend.ViewModels.SelectorModel;
 
 namespace LanguAI.Backend.ViewModels.Topic;
 

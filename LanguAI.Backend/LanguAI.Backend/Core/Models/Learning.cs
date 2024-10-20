@@ -22,8 +22,14 @@ public class Learning
     public virtual User User { get; set; }
 
     [Required]
-    public int LanguageId { get; set; }
+    public int LearningLanguageId { get; set; }
 
-    [ForeignKey(nameof(LanguageId))]
-    public virtual Language Language { get; set; }
+    [ForeignKey(nameof(LearningLanguageId))]
+    public virtual Language LearningLanguage { get; set; }
+
+    [Required]
+    public int NativeLanguageId { get; set; }
+
+    [ForeignKey(nameof(NativeLanguageId))]
+    public virtual Language NativeLanguage { get; set; }
 }

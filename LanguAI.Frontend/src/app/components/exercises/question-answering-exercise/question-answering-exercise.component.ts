@@ -2,12 +2,16 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { MistakeCorrectingSentence } from 'src/app/util/models/mistake-correcting-sentence';
+import {
+  ExerciseViewModel,
+  IsCorrectAndTextSentenceViewModel
+} from 'src/api/models';
 import { AnimationService } from 'src/app/util/services/animation.service';
 
 @Component({
@@ -20,15 +24,8 @@ export class QuestionAnsweringExerciseComponent implements OnInit {
     | QueryList<ElementRef>
     | undefined;
 
+  @Input() exercise: ExerciseViewModel | undefined;
   @Output() showCorrectButton = new EventEmitter<void>();
-
-  mainSentence: string = 'This is a question?';
-  sentences: Array<MistakeCorrectingSentence> = [
-    { isCorrect: true, text: 'Yes, it is.' },
-    { isCorrect: false, text: 'However I have a headache.' },
-    { isCorrect: false, text: 'That are not a good question.' },
-    { isCorrect: false, text: 'I have an umbrella.' }
-  ];
 
   constructor(private animationService: AnimationService) {}
 
@@ -36,7 +33,7 @@ export class QuestionAnsweringExerciseComponent implements OnInit {
     this.loadData;
   }
 
-  checkSentence(sentence: MistakeCorrectingSentence) {
+  checkSentence(sentence: IsCorrectAndTextSentenceViewModel) {
     if (sentence.isCorrect) {
       this.showCorrectButton.emit();
     } else {
