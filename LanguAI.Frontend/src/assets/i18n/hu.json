@@ -127,5 +127,11 @@
   "NEW_LESSONS": "Új feladatok",
   "FOR_MORE_EXERCISE_WOULD_YOU_LIKE_TO_CREATE_NEW_CARDLISTS": "Szeretnél létrehozni új kártyagyűjteményt újabb feladatokért?",
   "NO": "Nem",
-  "YES": "Igen"
+  "YES": "Igen",
+  "THERE_ARE_NO_CREATED_CARDS_YET": "Még nincs kártya a kártyagyűjteményben",
+  "PRESS_ADD_BUTTON_TO_GENERATE_CARDS_WITH_CHATGPT": "A plusz gomb segítségével tudsz generálni szavakat a ChatGPT segítségével",
+  "GENERATING_THE_EXERCISES_IT_MAY_TAKE_A_WHILE": "Feladatok generálása, eltarthat egy ideig",
+  "UNSUCCESSFUL_GENERATE_EXERCISE": "Sikertelen feladat generálás",
+  "MAKE_A_SENTENCE_FROM_THIS_WORDS": "Állítsd össze a mondatot az alábbi szavakkal!",
+  "CLICK_ON_THE_MISSING_WORD": "Kattints a hiányzó szóra!"
 }

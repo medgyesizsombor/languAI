@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { ExerciseViewModel } from 'src/api/models';
 import { AnimationService } from 'src/app/util/services/animation.service';
 
 @Component({
@@ -9,12 +10,9 @@ import { AnimationService } from 'src/app/util/services/animation.service';
 export class MissingWordExerciseComponent implements OnInit {
   @ViewChildren('container', { read: ElementRef }) container: QueryList<ElementRef> | undefined;
   
+  @Input() exercise: ExerciseViewModel | undefined;
   @Output() showCorrectButton = new EventEmitter<void>();
 
-  firstPartOfSentence = 'Click on the';
-  secondPartOfSentence = 'word';
-  words = ['asd', 'asdasd', 'asddsa', 'dsa', 'asd', 'asddsa', 'dsa'];
-  correctWord = 'asdasd';
   isCorrect: boolean | null = null;
 
   constructor(private animationService: AnimationService) {}
@@ -26,8 +24,8 @@ export class MissingWordExerciseComponent implements OnInit {
   /**
    * Check if the selected word is correct
    */
-  checkWord(index: number) {
-    if (this.correctWord === this.words[index]) {
+  checkWord(word: string) {
+    if (this.exercise?.correctWord === word) {
       this.isCorrect = true;
       this.showCorrectButton.emit();
     } else {

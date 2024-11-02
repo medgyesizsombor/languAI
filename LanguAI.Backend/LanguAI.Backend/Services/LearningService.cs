@@ -15,9 +15,11 @@ public interface ILearningService
     List<LearningViewModel> GetLearningsOfUsers(int userId);
     bool ChangeActiveLearning(int userId, int learningId);
     List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId);
+    LearningViewModel GetCurrentLearningOfUser(int userId);
 }
 public class LearningService : BaseService, ILearningService
 {
+    private readonly IAuthenticationService _authenticationService;
     public LearningService(LanguAIDataContext context) : base(context) { }
 
     /// <summary>
@@ -54,7 +56,8 @@ public class LearningService : BaseService, ILearningService
             }
 
             learning.LanguageLevel = request.LanguageLevel;
-            learning.LanguageId = request.LanguageId;
+            learning.LearningLanguageId = request.LanguageId;
+            //TODO NativaLanguageId
             learning.UserId = request.UserId;
             learning.IsActive = true;
 
@@ -88,18 +91,18 @@ public class LearningService : BaseService, ILearningService
         ArgumentNullException.ThrowIfNull(userId);
 
         return _context.Learning
-            .Include(l => l.Language)
+            .Include(l => l.LearningLanguage)
             .Where(l => l.UserId == userId)
             .Select(l => new LearningViewModel
             {
                 Id = l.Id,
                 LanguageLevel = l.LanguageLevel,
-                LanguageId = l.LanguageId,
+                LearningLanguageId = l.LearningLanguageId,
                 UserId = userId,
                 IsActive = l.IsActive,
-                LanguageCode = l.Language.Code,
-                LanguageName = l.Language.Name,
-                LanguageNameInHun = l.Language.NameInHun
+                LearningLanguageCode = l.LearningLanguage.Code,
+                LearningLanguageName = l.LearningLanguage.Name,
+                LearningLanguageNameInHun = l.LearningLanguage.NameInHun
             })
             .ToList();
     }
@@ -142,6 +145,11 @@ public class LearningService : BaseService, ILearningService
         }
     }
 
+    /// <summary>
+    /// Get the card lists of current learning
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
     public List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
@@ -156,24 +164,50 @@ public class LearningService : BaseService, ILearningService
                 && t.CardLists
                     .Any(c => c.UserId == userId
                     && !c.IsDeleted
-                    && c.LearningLanguageId == currentLearning.LanguageId)).Select(t => new TopicOfCurrentLearningViewModel
-                    {
-                        Id = t.Id,
-                        Name = t.Name,
-                        NameInHun = t.NameInHun,
-                        Description = t.Description,
-                        DescriptionInHun = t.DescriptionInHun,
-                        CardListNamesAndIds = t.CardLists
+                    && c.LearningLanguageId == currentLearning.LearningLanguageId))
+            .Select(t => new TopicOfCurrentLearningViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                NameInHun = t.NameInHun,
+                Description = t.Description,
+                DescriptionInHun = t.DescriptionInHun,
+                CardListNamesAndIds = t.CardLists
                     .Select(c => new IntSelectorModel
                     {
                         Id = c.Id,
                         Name = c.Name
                     })
                     .ToList()
-                    })
+            })
             .ToList();
 
         return topicList;
+    }
+
+    /// <summary>
+    /// Get Current user's learning
+    /// </summary>
+    /// <param name="userId">Current user's id</param>
+    /// <returns></returns>
+    public LearningViewModel GetCurrentLearningOfUser(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var currentLearning = _context.Learning
+            .Include(l => l.LearningLanguage)
+            .Include(l => l.NativeLanguage)
+            .FirstOrDefault(l => l.UserId == userId
+                && l.IsActive);
+
+        if (currentLearning == null) return null;
+
+        return new LearningViewModel
+        {
+            Id = currentLearning.Id,
+            LearningLanguageName = currentLearning.LearningLanguage.Name,
+            NativeLanguageName = currentLearning.NativeLanguage.Name
+        };
     }
 
     /// <summary>

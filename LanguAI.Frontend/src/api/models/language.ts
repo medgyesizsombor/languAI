@@ -6,8 +6,9 @@ export interface Language {
   code: string;
   id: number;
   learningLanguageOfCardLists?: Array<CardList> | null;
-  learnings?: Array<Learning> | null;
+  learningLanguageOfLearnings?: Array<Learning> | null;
   name: string;
   nameInHun: string;
   nativeLanguageOfCardLists?: Array<CardList> | null;
+  nativeLanguageOfLearnings?: Array<Learning> | null;
 }

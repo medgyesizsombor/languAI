@@ -3,7 +3,8 @@ import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { TopicOfCurrentLearningViewModel } from 'src/api/models';
-import { CardService, LearningService } from 'src/api/services';
+import { CardService, ChatGptService, LearningService } from 'src/api/services';
+import { LanguageLevelPipe } from 'src/app/util/pipes/language-level.pipe';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalDataService } from 'src/app/util/services/local-data.service';
@@ -11,7 +12,8 @@ import { LocalStorageService } from 'src/app/util/services/localstorage.service'
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
   CARD_LISTS_NAVIGATION,
-  HUNGARIAN_LANGUAGE_ID
+  HUNGARIAN_LANGUAGE_ID,
+  LESSON_LEARNING_NAVIGATION
 } from 'src/app/util/util.constants';
 
 @Component({
@@ -39,7 +41,7 @@ export class LessonsPage {
   ) {}
 
   ionViewWillEnter() {
-    this.loadWordLists();
+    this.cardLists();
   }
 
   ionViewDidLeave() {
@@ -79,10 +81,19 @@ export class LessonsPage {
     // TODO: Start exercises
   }
 
+  navigateToLessonLearningPage(
+    description: string | null | undefined,
+    cardListId: number | undefined
+  ) {
+    this.navController.navigateForward(LESSON_LEARNING_NAVIGATION, {
+      queryParams: { description, cardListId }
+    });
+  }
+
   /**
-   * Load user's wordlists
+   * Load user's cardLists
    */
-  private async loadWordLists() {
+  private async cardLists() {
     this.isLoading = true;
     await this.loadingService.showLoading();
 

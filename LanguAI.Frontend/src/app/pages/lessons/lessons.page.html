@@ -14,6 +14,7 @@
         </ion-row>
         <ion-list>
           <ion-item
+            (click)="navigateToLessonLearningPage(topic.description, cardList.id)"
             lines="none"
             *ngFor="let cardList of topic.cardListNamesAndIds">
             {{ cardList.name }}
@@ -25,12 +26,16 @@
 </ion-content>
 
 <ng-template #missingCardList>
-  <ion-label>
-    {{'YOU_MUST_HAVE_AT_LEAST_ONE_CARDLIST_TO_DO_EXERCISES' | translate}}
-  </ion-label>
-  <ion-button
-    class="primary-button no-shadow"
-    (click)="navigateToCardListsPage()">
-    {{ 'NAVIGATE_TO_CARDLISTS_PAGE' | translate }}
-  </ion-button>
+  <ion-row>
+    <ion-label>
+      {{'YOU_MUST_HAVE_AT_LEAST_ONE_CARDLIST_TO_DO_EXERCISES' | translate}}
+    </ion-label>
+  </ion-row>
+  <ion-row>
+    <ion-button
+      class="primary-button no-shadow"
+      (click)="navigateToCardListsPage()">
+      {{ 'NAVIGATE_TO_CARDLISTS_PAGE' | translate }}
+    </ion-button>
+  </ion-row>
 </ng-template>

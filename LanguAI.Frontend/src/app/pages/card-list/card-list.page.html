@@ -1,11 +1,12 @@
+<app-header
+  [title]="title"
+  [showSaveButton]="hasCardChanged"
+  (saveButtonEmit)="saveCards()"
+  [showBackArrow]="true"
+  [showSavingMissed]="hasCardChanged"
+  (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
+
 <ion-content [fullscreen]="true" class="ion-padding">
-  <app-header
-    [title]="title"
-    [showSaveButton]="hasCardChanged"
-    (saveButtonEmit)="saveCards()"
-    [showBackArrow]="true"
-    [showSavingMissed]="hasCardChanged"
-    (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
   <div *ngIf="!showSwiper">
     <ion-list *ngIf="cards?.length; else missingCards">
       <ion-item

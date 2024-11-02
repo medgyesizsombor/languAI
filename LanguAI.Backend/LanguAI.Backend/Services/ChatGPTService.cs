@@ -1,8 +1,12 @@
 ﻿using LanguAI.Backend.Core;
 using LanguAI.Backend.Core.Enums;
+using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Card;
+using LanguAI.Backend.ViewModels.Exercise;
 using LanguAI.Backend.ViewModels.Message;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
@@ -14,13 +18,16 @@ public interface IChatGPTService
 {
     Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level, string topic);
     Task<MessageViewModel> GetResponseToConversation(int currentUserId);
-
+    Task<List<ExerciseViewModel>> ReceiveExercisesFromChatGPT(ExerciseRequestViewModel request, string words);
 }
 
 public class ChatGPTService : BaseService, IChatGPTService
 {
-    public ChatGPTService(LanguAIDataContext context) : base(context)
+    private readonly ILearningService _learningService;
+
+    public ChatGPTService(LanguAIDataContext context, ILearningService learningService) : base(context)
     {
+        _learningService = learningService;
     }
 
     /// <summary>
@@ -115,11 +122,94 @@ public class ChatGPTService : BaseService, IChatGPTService
     }
 
     /// <summary>
+    /// Receive exercise from ChatGPT
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public async Task<List<ExerciseViewModel>> ReceiveExercisesFromChatGPT(ExerciseRequestViewModel request, string words)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var currentLearning = _learningService.GetCurrentLearningOfUser(request.UserId);
+
+        if (currentLearning == null) return null;
+
+        var exercises = new List<ExerciseViewModel>();
+        var previousMainSentences = "";
+
+        for (int i = 0; i < 10; i++)
+        {
+            Random random = new Random();
+            var exerciseType = (ExerciseTypeEnum)random.Next(1, 6);
+
+            string messageFromSystem;
+            string messageFromUser;
+
+            switch (exerciseType)
+            {
+                case ExerciseTypeEnum.MissingWordExercise:
+                    messageFromSystem = $"Answer in JSON where the format is like {{\"CorrectWord\":\"TheWordWhichIsMissingInTheSentence\",\"FirstPartOfTheSentence\":\"ThePartOfSentenceBeforeTheMissingWord\",\"LastPartOfTheSentence\":\"ThePartOfSentenceAfterTheMissingWord\",\"Words\":[\"CorrectWord\",\"RandomWord\",\"RandomWord\",\"RandomWord\"]}}.";
+                    messageFromUser = $"Pick 1 word from {words} and generate a really short sentence and the sentence has to contain the word. The sentece should be {request.LanguageLevel} and related to the topic of {request.TopicDescription} and mustn't be in this sentence lists: \"{previousMainSentences}\". Generate other 4 words from a random topic which would make a nonsense of the sentence.  the order of the list should be not sorted";
+                    break;
+                case ExerciseTypeEnum.SentenceAssemblyExercise:
+                    messageFromSystem = $"Answer in JSON where the format is like {{ \"MainSentence\": \"The main sentence\", \"SentenceAssemblyExerciseSentence\": [{{ \"Text\": \"string\" }},{{ \"Text\": \"string\" }},{{ \"Text\": \"string\" }},{{ \"Text\": \"string\" }}]}}.";
+                    messageFromUser = $"Give me a grammatically correct, mininum 3 words long, maximum 6 words long sentence, which contain a word from this list: {words}. The sentence should the level be {request.LanguageLevel} level, related to the topic of {request.TopicDescription} and mustn't be in this sentence lists: \"{previousMainSentences}\". After generating the sentence, break it by the words";
+                    break;
+                case ExerciseTypeEnum.WordPairingExercise:
+                    //TODO átírni
+                    messageFromSystem = $"Answer in JSON where the format is like {{\"Sentence\": [{{ \"isCorrect\": boolean, \"text\": string}}, {{ \"isCorrect\": boolean, \"text\": string}}, {{ \"isCorrect\": boolean, \"text\": string}}, {{ \"isCorrect\": boolean, \"text\": string}}]}}. The sentence should contains a word from this list: {words}, should the level be {request.LanguageLevel} level and related to the topic of {request.TopicDescription}.";
+                    messageFromUser = $"Give me a short sentence, break it by the words, tag them with the current index of the sentence. After you finish creating this, the order of the list should be not sorted";
+                    break;
+                case ExerciseTypeEnum.MistakeCorrectingExercise:
+                    messageFromSystem = $"Answer in JSON where the format is like {{\"MainSentence\": \"The main sentence\",\"IsCorrectAndTextSentences\": [{{ \"IsCorrect\": boolean, \"Text\": string}},{{ \"IsCorrect\": boolean, \"Text\":string}},{{ \"IsCorrect\": boolean, \"Text\": string}},{{ \"IsCorrect\": boolean, \"Text\": string}}]}}";
+                    messageFromUser = $"Give me a grammatically incorrect short sentence for the mainSentence in {currentLearning.LearningLanguageName} which is not in the {previousMainSentences}, and 4 senteces, where 3 is still gramatically incorrect, and 1 is correcting the main sentence. The order should be not sorted. The senteces should contains a word from this list: {words}, should the level be {request.LanguageLevel} level and related to the topic of {request.TopicDescription}";
+                    break;
+                default:
+                    messageFromSystem = $"Answer in JSON where the format is like {{\"MainSentence\": \"The main sentence\",\"IsCorrectAndTextSentences\": [{{ \"IsCorrect\": boolean, \"Text\": string}},{{ \"IsCorrect\": boolean, \"Text\":string}},{{ \"IsCorrect\": boolean, \"Text\": string}},{{ \"IsCorrect\": boolean, \"Text\": string}}]}} The question should contains a word from this list: {words}, should the level be {request.LanguageLevel} level and related to the topic of {request.TopicDescription}.";
+                    messageFromUser = $"Give me a short question for the mainSentence in {currentLearning.LearningLanguageName} which is not in this < {previousMainSentences} >, and generate a short correct answer for the question where the IsCorrect is true, and 3 short answers which are answering a full random question and the IsCorrect is false for other questions for IsCorrectAndTextSentences.";
+                    break;
+            }
+
+            ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
+            ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, messageFromUser);
+
+            ChatMessage result = await SendRequestToChatGPTAsync(systemMessage, userMessage, 0.5);
+
+            var response = JsonSerializer.Deserialize<ExerciseViewModel>(result.TextContent);
+
+            response.ExerciseType = exerciseType;
+
+            if (i == 0)
+            {
+                response.IsActive = true;
+            }
+
+            if (ExerciseTypeEnum.MistakeCorrectingExercise == response.ExerciseType
+                || ExerciseTypeEnum.QuestionAnsweringExercise == response.ExerciseType
+                || ExerciseTypeEnum.SentenceAssemblyExercise == response.ExerciseType)
+            {
+                if (i == 0)
+                {
+                    previousMainSentences = response.MainSentence;
+                }
+                else
+                {
+                    previousMainSentences = $"{previousMainSentences}, {response.MainSentence}";
+                }
+            }
+            exercises.Add(response);
+        }
+
+        return exercises;
+    }
+
+    /// <summary>
     /// Send a request to ChatGPT API and get the response message
     /// </summary>
-    /// <param name="message">Message to ChatGPT</param>
+    /// <param name="systemMessage">System Message</param>
+    /// <param name="userMessage">User's message</param>
     /// <returns></returns>
-    private async Task<ChatMessage> SendRequestToChatGPTAsync(ChatMessage systemMessage, ChatMessage userMessage)
+    private async Task<ChatMessage> SendRequestToChatGPTAsync(ChatMessage systemMessage, ChatMessage userMessage, double temperature = 0.1)
     {
         var openai = new OpenAIAPI(EnvironmentSettings.ChatGPTApiKey);
 
@@ -131,8 +221,8 @@ public class ChatGPTService : BaseService, IChatGPTService
         var request = new ChatRequest()
         {
             Messages = messages,
-            Temperature = 0.1,
-            Model = Model.ChatGPTTurbo
+            Temperature = temperature,
+            Model = Model.ChatGPTTurbo_16k
         };
 
         ChatResult result = new ChatResult();

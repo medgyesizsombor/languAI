@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { LearningViewModel } from 'src/api/models';
 import { LearningService } from 'src/api/services';
-import { NewLearningModalComponent } from 'src/app/components/new-learning-modal/new-learning-modal.component';
+import { NewLearningModalComponent } from 'src/app/components/modals/new-learning-modal/new-learning-modal.component';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -86,7 +86,7 @@ export class LearningPage {
       const learning = this.learnings?.find(
         l =>
           l.languageLevel === data.languageLevel &&
-          l.languageId === data.languageId
+          l.learningLanguageId === data.languageId
       );
 
       if (learning) {

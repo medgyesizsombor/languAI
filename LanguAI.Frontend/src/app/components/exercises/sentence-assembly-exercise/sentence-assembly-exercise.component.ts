@@ -1,6 +1,17 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { SentenceAssemblyExerciseWord } from 'src/app/util/models/sentence-assembly-exercise-word';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
+import { ExerciseViewModel } from 'src/api/models';
+import { SentenceAssemblyExerciseWord } from 'src/api/models/sentence-assembly-exercise-word';
 import { AnimationService } from 'src/app/util/services/animation.service';
+import { LoadingService } from 'src/app/util/services/loading.service';
 
 @Component({
   selector: 'app-sentence-assembly-exercise',
@@ -8,28 +19,29 @@ import { AnimationService } from 'src/app/util/services/animation.service';
   styleUrls: ['./sentence-assembly-exercise.component.scss']
 })
 export class SentenceAssemblyExerciseComponent implements OnInit {
-  @ViewChildren('container', { read: ElementRef }) container: QueryList<ElementRef> | undefined;
-  
+  @ViewChildren('container', { read: ElementRef }) container:
+    | QueryList<ElementRef>
+    | undefined;
+
+  @Input() exercise: ExerciseViewModel | undefined;
   @Output() showCorrectButton = new EventEmitter<void>();
 
   correctSentence: Array<SentenceAssemblyExerciseWord> = [];
-  sentence: Array<SentenceAssemblyExerciseWord> = [
-    { text: 'sentence', clicked: false, index: 4 },
-    { text: 'a', clicked: false, index: 3 },
-    { text: 'is', clicked: false, index: 2 },
-    { text: 'This', clicked: false, index: 1 }
-  ];
   clickedWords: Array<SentenceAssemblyExerciseWord> = [];
 
-  constructor(private animationService: AnimationService) {}
+  constructor(
+    private animationService: AnimationService,
+    private loadingService: LoadingService
+  ) {}
 
   ngOnInit() {
+    console.log(this.exercise);
     this.loadData();
   }
 
   putWord(index: number, removeFromSentence = false) {
     if (removeFromSentence) {
-      this.sentence.map(w => {
+      this.exercise?.sentenceAssemblyExerciseSentence?.map(w => {
         if (w === this.clickedWords[index]) {
           w.clicked = false;
         }
@@ -37,11 +49,18 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
 
       this.clickedWords.splice(index, 1);
     } else {
-      this.sentence[index].clicked = true;
-      this.clickedWords.push(this.sentence[index]);
+      if (this.exercise?.sentenceAssemblyExerciseSentence?.[index]) {
+        this.exercise.sentenceAssemblyExerciseSentence[index].clicked = true;
+        this.clickedWords.push(
+          this.exercise.sentenceAssemblyExerciseSentence[index]
+        );
+      }
     }
   }
 
+  /**
+   * Check if the solution is correct
+   */
   check() {
     const isCorrect = this.isSolutionCorrect();
     if (isCorrect) {
@@ -51,14 +70,35 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
     }
   }
 
-  private loadData() {
-    this.correctSentence = [...this.sentence];
-    this.correctSentence = this.correctSentence.sort(
-      (a: SentenceAssemblyExerciseWord, b: SentenceAssemblyExerciseWord) =>
-        a.index - b.index
-    );
+  /**
+   * Load data
+   */
+  private async loadData() {
+    if (this.exercise?.sentenceAssemblyExerciseSentence) {
+      await this.loadingService.showLoading('EXERCISE_IS_LOADING');
+      this.exercise.sentenceAssemblyExerciseSentence = [
+        ...this.mapTheIndexOfWords(
+          this.exercise?.sentenceAssemblyExerciseSentence
+        )
+      ];
+      this.correctSentence = [
+        ...this.exercise.sentenceAssemblyExerciseSentence
+      ];
+
+      this.exercise.sentenceAssemblyExerciseSentence = [
+        ...this.shuffleTheElements(
+          this.exercise.sentenceAssemblyExerciseSentence
+        )
+      ];
+      this.loadingService.hideLoading();
+    } else {
+      //TODO mi van, ha nem tölt be
+    }
   }
 
+  /**
+   * Check if the solution is correct
+   */
   private isSolutionCorrect(): boolean {
     if (this.correctSentence.length !== this.clickedWords.length) {
       return false;
@@ -72,5 +112,46 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
         word.index === otherWord?.index;
       return isCorrect;
     });
+  }
+
+  /**
+   * Map the index of the words
+   */
+  private mapTheIndexOfWords(
+    sentence: Array<SentenceAssemblyExerciseWord>
+  ): Array<SentenceAssemblyExerciseWord> {
+    if (sentence?.length) {
+      return sentence.map((s: SentenceAssemblyExerciseWord, i: number) => {
+        s.index = i;
+        return s;
+      });
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Shuffle the elements of the array
+   */
+  private shuffleTheElements(
+    sentence: Array<SentenceAssemblyExerciseWord>
+  ): Array<SentenceAssemblyExerciseWord> {
+    if (sentence?.length > 1) {
+      let currentIndex = sentence?.length;
+
+      while (currentIndex !== 0) {
+        const randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        [sentence[currentIndex], sentence[randomIndex]] = [
+          sentence[randomIndex],
+          sentence[currentIndex]
+        ];
+      }
+
+      return sentence;
+    } else {
+      return sentence;
+    }
   }
 }

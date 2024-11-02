@@ -1,9 +1,9 @@
+<ion-row class="exercise-title">
+  <ion-label>
+    {{ 'WORD_PAIRING_TITLE' | translate }}
+  </ion-label>
+</ion-row>
 <div #container>
-  <ion-row class="title">
-    <ion-label>
-      {{ 'WORD_PAIRING_TITLE' | translate }}
-    </ion-label>
-  </ion-row>
   <ion-row size="6" *ngFor="let word of originalWords; let index = index">
     <ion-col class="d-flex ion-justify-content-center">
       <ion-card
