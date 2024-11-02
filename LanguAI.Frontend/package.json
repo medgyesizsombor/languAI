@@ -10,7 +10,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "gen-openapi": "ng-openapi-gen -i http://localhost:49655/swagger/v1/swagger.json -o src/api"
+    "gen-openapi": "ng-openapi-gen -i http://localhost:49655/swagger/v1/swagger.json -o src/api",
+    "generate-images": "npx capacitor-assets generate"
+
   },
   "private": true,
   "dependencies": {
@@ -28,6 +30,7 @@
     "@capacitor/haptics": "^6.0.1",
     "@capacitor/keyboard": "^6.0.2",
     "@capacitor/screen-orientation": "^6.0.2",
+    "@capacitor/splash-screen": "^6.0.2",
     "@capacitor/status-bar": "^6.0.1",
     "@fortawesome/angular-fontawesome": "^0.15.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -58,6 +61,7 @@
     "@angular/cli": "^18.2.3",
     "@angular/compiler-cli": "^18.2.3",
     "@angular/language-service": "^18.2.3",
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^6.1.2",
     "@ionic/angular-toolkit": "^12.1.1",
     "@types/jasmine": "~5.1.0",
