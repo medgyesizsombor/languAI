@@ -21,7 +21,7 @@ export class LanguageLevelPipe implements PipeTransform {
       }
       case 2: {
         return returnOnlyInEnglish
-          ? 'INTERMEDIATE'
+          ? INTERMEDIATE
           : this.translateService.instant(INTERMEDIATE);
       }
       default: {

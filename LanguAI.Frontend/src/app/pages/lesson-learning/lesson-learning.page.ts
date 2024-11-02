@@ -70,7 +70,8 @@ export class LessonLearningPage {
           if (description && cardListId) {
             return this.chatGPTService.receiveExercisesFromChatGpt$Json({
               LanguageLevel: this.languageLevelPipe.transform(
-                this.localDataService.currentLevel ?? undefined
+                this.localDataService.currentLevel ?? undefined,
+                true
               ),
               TopicDescription: description ?? '',
               UserId: this.localStorageService.getUserId()!,

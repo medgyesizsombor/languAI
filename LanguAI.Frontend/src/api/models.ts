@@ -36,6 +36,7 @@ export { SaveCardRequest } from './models/save-card-request';
 export { SaveInteractionRequestViewModel } from './models/save-interaction-request-view-model';
 export { SaveLearningRequestViewModel } from './models/save-learning-request-view-model';
 export { SavePostRequest } from './models/save-post-request';
+export { SentenceAssemblyExerciseWord } from './models/sentence-assembly-exercise-word';
 export { Topic } from './models/topic';
 export { TopicOfCurrentLearningViewModel } from './models/topic-of-current-learning-view-model';
 export { User } from './models/user';

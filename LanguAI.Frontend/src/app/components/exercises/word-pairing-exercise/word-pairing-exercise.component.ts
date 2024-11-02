@@ -2,12 +2,13 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { CardViewModel } from 'src/api/models';
+import { CardViewModel, ExerciseViewModel } from 'src/api/models';
 import { WordPairingExerciseWord } from 'src/app/util/models/word-pairing-exercise-word';
 import { AnimationService } from 'src/app/util/services/animation.service';
 
@@ -21,6 +22,7 @@ export class WordPairingExerciseComponent implements OnInit {
     | QueryList<ElementRef>
     | undefined;
 
+  @Input() exercise: ExerciseViewModel | undefined;
   @Output() showCorrectButton = new EventEmitter<void>();
 
   clickedWord: WordPairingExerciseWord | null = null;

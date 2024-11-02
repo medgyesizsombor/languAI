@@ -7,14 +7,17 @@
       <!-- <div *ngIf="showOverlay" class="overlay"></div> -->
       <ng-container *ngFor="let exercise of exerciseList">
         <app-missing-word-exercise
+          [exercise]="exercise"
           (showCorrectButton)="showContinueButton()"
           *ngIf="exercise.exerciseType === exerciseTypeEnum.MissingWordExercise
             && exercise.isActive"></app-missing-word-exercise>
         <app-sentence-assembly-exercise
+          [exercise]="exercise"
           (showCorrectButton)="showContinueButton()"
           *ngIf="exercise.exerciseType === exerciseTypeEnum.SentenceAssemblyExercise
             && exercise.isActive"></app-sentence-assembly-exercise>
         <app-word-pairing-exercise
+          [exercise]="exercise"
           (showCorrectButton)="showContinueButton()"
           *ngIf="exercise.exerciseType === exerciseTypeEnum.WordPairingExercise
             && exercise.isActive"></app-word-pairing-exercise>
@@ -24,6 +27,7 @@
           *ngIf="exercise.exerciseType === exerciseTypeEnum.MistakeCorrectingExercise
             && exercise.isActive"></app-mistake-correcting-exercise>
         <app-question-answering-exercise
+          [exercise]="exercise"
           (showCorrectButton)="showContinueButton()"
           *ngIf="exercise.exerciseType === exerciseTypeEnum.QuestionAnsweringExercise
             && exercise.isActive"></app-question-answering-exercise>
