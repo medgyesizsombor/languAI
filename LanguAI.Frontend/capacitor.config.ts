@@ -6,6 +6,17 @@ const config: CapacitorConfig = {
   webDir: 'www',
   server: {
     androidScheme: 'https'
+  },
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: false,
+      backgroundColor: '#FFFFFF',
+      showSpinner: true,
+      androidSpinnerStyle: 'large',
+      iosSpinnerStyle: 'large',
+      spinnerColor: '#a6b1e1',
+      androidScaleType: 'CENTER_CROP'
+    }
   }
 };
 
