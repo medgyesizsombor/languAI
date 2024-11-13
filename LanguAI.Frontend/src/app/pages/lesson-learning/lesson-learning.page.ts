@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { ExerciseTypeEnum, ExerciseViewModel } from 'src/api/models';
 import { ChatGptService } from 'src/api/services';
+import { Statistics } from 'src/app/util/models/statistic-view-model';
 import { LanguageLevelPipe } from 'src/app/util/pipes/language-level.pipe';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalDataService } from 'src/app/util/services/local-data.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
+import { TimerService } from 'src/app/util/services/timer.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
+import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-lesson-learning',
@@ -21,6 +25,8 @@ export class LessonLearningPage {
   exerciseList: Array<ExerciseViewModel> = [];
   showOverlay = false;
   isLoading = true;
+  statistics: Statistics | undefined;
+  showSummary = false;
 
   receiveExercisesSub: Subscription | undefined;
   loadQueryParamSub: Subscription | undefined;
@@ -33,7 +39,9 @@ export class LessonLearningPage {
     private loadingService: LoadingService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private timerService: TimerService,
+    private navController: NavController
   ) {}
 
   async ionViewDidEnter() {
@@ -48,8 +56,25 @@ export class LessonLearningPage {
     this.showOverlay = true;
   }
 
-  nextExercise() {
-    this.showOverlay = false;
+  nextExercise(index: number) {
+    this.exerciseList[index].isActive = false;
+    if (index === this.exerciseList?.length - 1) {
+      //TODO statisztikánál kéne majd, hogy hány hiba, hány jó
+      this.statistics = {
+        allAnswer: this.exerciseList?.length,
+        correctAnswer: this.exerciseList?.length,
+        time: this.timerService.getTime(),
+        mistakes: 1
+      };
+      this.showSummary = true;
+    } else {
+      this.exerciseList[index + 1].isActive = true;
+      this.showOverlay = false;
+    }
+  }
+
+  navigateToLessons() {
+    this.navController.navigateForward(LESSONS_NAVIGATION);
   }
 
   /**

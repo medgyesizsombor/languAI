@@ -23,7 +23,7 @@ export class WordPairingExerciseComponent implements OnInit {
     | undefined;
 
   @Input() exercise: ExerciseViewModel | undefined;
-  @Output() showCorrectButton = new EventEmitter<void>();
+  @Output() showContinueButton = new EventEmitter<void>();
 
   clickedWord: WordPairingExerciseWord | null = null;
   nativeWords: Array<WordPairingExerciseWord> = [];
@@ -92,7 +92,7 @@ export class WordPairingExerciseComponent implements OnInit {
     }
 
     if (this.nativeWords.every(w => w.paired)) {
-      this.showCorrectButton.emit();
+      this.showContinueButton.emit();
     }
   }
 }

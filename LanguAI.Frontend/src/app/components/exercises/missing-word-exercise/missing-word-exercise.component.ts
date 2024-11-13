@@ -11,7 +11,7 @@ export class MissingWordExerciseComponent implements OnInit {
   @ViewChildren('container', { read: ElementRef }) container: QueryList<ElementRef> | undefined;
   
   @Input() exercise: ExerciseViewModel | undefined;
-  @Output() showCorrectButton = new EventEmitter<void>();
+  @Output() showContinueButton = new EventEmitter<void>();
 
   isCorrect: boolean | null = null;
 
@@ -27,7 +27,7 @@ export class MissingWordExerciseComponent implements OnInit {
   checkWord(word: string) {
     if (this.exercise?.correctWord === word) {
       this.isCorrect = true;
-      this.showCorrectButton.emit();
+      this.showContinueButton.emit();
     } else {
       this.isCorrect = false;
       this.animationService.rotateAnimation(this.container);
