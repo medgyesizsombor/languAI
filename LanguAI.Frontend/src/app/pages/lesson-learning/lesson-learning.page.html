@@ -1,41 +1,45 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="exerciseList?.length; else missingExercises">
-      <ion-header class="ion-no-border">
-        <app-progress-bar></app-progress-bar>
-      </ion-header>
-      <!-- <div *ngIf="showOverlay" class="overlay"></div> -->
-      <ng-container *ngFor="let exercise of exerciseList">
-        <app-missing-word-exercise
-          [exercise]="exercise"
-          (showCorrectButton)="showContinueButton()"
-          *ngIf="exercise.exerciseType === exerciseTypeEnum.MissingWordExercise
+      <ng-container *ngIf="!showSummary; else showSummaryTemplate">
+        <ion-header class="ion-no-border">
+          <app-progress-bar></app-progress-bar>
+        </ion-header>
+        <!-- <div *ngIf="showOverlay" class="overlay"></div> -->
+        <ng-container *ngFor="let exercise of exerciseList; let index = index">
+          <app-missing-word-exercise
+            [exercise]="exercise"
+            (showContinueButton)="showContinueButton()"
+            *ngIf="exercise.exerciseType === exerciseTypeEnum.MissingWordExercise
             && exercise.isActive"></app-missing-word-exercise>
-        <app-sentence-assembly-exercise
-          [exercise]="exercise"
-          (showCorrectButton)="showContinueButton()"
-          *ngIf="exercise.exerciseType === exerciseTypeEnum.SentenceAssemblyExercise
+          <app-sentence-assembly-exercise
+            [exercise]="exercise"
+            (showContinueButton)="showContinueButton()"
+            *ngIf="exercise.exerciseType === exerciseTypeEnum.SentenceAssemblyExercise
             && exercise.isActive"></app-sentence-assembly-exercise>
-        <app-word-pairing-exercise
-          [exercise]="exercise"
-          (showCorrectButton)="showContinueButton()"
-          *ngIf="exercise.exerciseType === exerciseTypeEnum.WordPairingExercise
+          <app-word-pairing-exercise
+            [exercise]="exercise"
+            (showContinueButton)="showContinueButton()"
+            *ngIf="exercise.exerciseType === exerciseTypeEnum.WordPairingExercise
             && exercise.isActive"></app-word-pairing-exercise>
-        <app-mistake-correcting-exercise
-          [exercise]="exercise"
-          (showCorrectButton)="showContinueButton()"
-          *ngIf="exercise.exerciseType === exerciseTypeEnum.MistakeCorrectingExercise
+          <app-mistake-correcting-exercise
+            [exercise]="exercise"
+            (showContinueButton)="showContinueButton()"
+            *ngIf="exercise.exerciseType === exerciseTypeEnum.MistakeCorrectingExercise
             && exercise.isActive"></app-mistake-correcting-exercise>
-        <app-question-answering-exercise
-          [exercise]="exercise"
-          (showCorrectButton)="showContinueButton()"
-          *ngIf="exercise.exerciseType === exerciseTypeEnum.QuestionAnsweringExercise
+          <app-question-answering-exercise
+            [exercise]="exercise"
+            (showContinueButton)="showContinueButton()"
+            *ngIf="exercise.exerciseType === exerciseTypeEnum.QuestionAnsweringExercise
             && exercise.isActive"></app-question-answering-exercise>
-        <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
-          <button class="continue-button no-shadow" (click)="nextExercise()">
-            {{ 'CONTINUE' | translate }}
-          </button>
-        </div>
+          <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
+            <button
+              class="continue-button no-shadow"
+              (click)="nextExercise(index)">
+              {{ 'CONTINUE' | translate }}
+            </button>
+          </div>
+        </ng-container>
       </ng-container>
     </ng-container>
   </ng-container>
@@ -43,4 +47,9 @@
 
 <ng-template #saveButton></ng-template>
 
+<!-- TODO -->
 <ng-template #missingExercises></ng-template>
+
+<ng-template #showSummaryTemplate>
+  <app-summary [statistics]="statistics" (navigateToLessonsEmit)="navigateToLessons()"></app-summary>
+</ng-template>

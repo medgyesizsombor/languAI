@@ -25,6 +25,7 @@ import { NewLearningModalComponent } from '../components/modals/new-learning-mod
 import { LanguageLevelPipe } from './pipes/language-level.pipe';
 import { TopicNamePipe } from './pipes/topic-name.pipe';
 import { LanguageNamePipe } from './pipes/language-name.pipe';
+import { SummaryComponent } from '../components/summary/summary.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -49,7 +50,8 @@ export function createTranslateLoader(http: HttpClient) {
     NewLearningModalComponent,
     LanguageLevelPipe,
     TopicNamePipe,
-    LanguageNamePipe
+    LanguageNamePipe,
+    SummaryComponent
   ],
   imports: [
     CommonModule,
@@ -81,7 +83,8 @@ export function createTranslateLoader(http: HttpClient) {
     NewLearningModalComponent,
     LanguageLevelPipe,
     TopicNamePipe,
-    LanguageNamePipe
+    LanguageNamePipe,
+    SummaryComponent
   ],
   providers: [LanguageLevelPipe]
 })

@@ -42,13 +42,6 @@ export class CardPage {
     if (id?.length) {
       //TODO loading the cards of the list
     } else {
-      // this.cards = [
-      //   {
-      //     wordInLearningLanguage: 'hungary',
-      //     wordInNativeLanguage: 'magyarország'
-      //   },
-      //   { wordInLearningLanguage: 'english', wordInNativeLanguage: 'anglia' }
-      // ];
       this.loadingService
         .showLoading(this.translateService.instant('GENERATING_THE_CARDS'))
         .then(() => {
@@ -63,7 +56,6 @@ export class CardPage {
                 this.loadingService.hideLoading();
                 if (res?.length) {
                   this.cards = [...res];
-                  console.log(this.cards);
                 } else {
                   this.toastrService.presentErrorToast(
                     this.translateService.instant(

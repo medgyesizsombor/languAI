@@ -24,7 +24,7 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
     | undefined;
 
   @Input() exercise: ExerciseViewModel | undefined;
-  @Output() showCorrectButton = new EventEmitter<void>();
+  @Output() showContinueButton = new EventEmitter<void>();
 
   correctSentence: Array<SentenceAssemblyExerciseWord> = [];
   clickedWords: Array<SentenceAssemblyExerciseWord> = [];
@@ -35,7 +35,6 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.exercise);
     this.loadData();
   }
 
@@ -64,7 +63,7 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
   check() {
     const isCorrect = this.isSolutionCorrect();
     if (isCorrect) {
-      this.showCorrectButton.emit();
+      this.showContinueButton.emit();
     } else {
       this.animationService.rotateAnimation(this.container);
     }

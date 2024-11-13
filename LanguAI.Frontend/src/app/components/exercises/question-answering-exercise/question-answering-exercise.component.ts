@@ -25,7 +25,7 @@ export class QuestionAnsweringExerciseComponent implements OnInit {
     | undefined;
 
   @Input() exercise: ExerciseViewModel | undefined;
-  @Output() showCorrectButton = new EventEmitter<void>();
+  @Output() showContinueButton = new EventEmitter<void>();
 
   constructor(private animationService: AnimationService) {}
 
@@ -35,7 +35,7 @@ export class QuestionAnsweringExerciseComponent implements OnInit {
 
   checkSentence(sentence: IsCorrectAndTextSentenceViewModel) {
     if (sentence.isCorrect) {
-      this.showCorrectButton.emit();
+      this.showContinueButton.emit();
     } else {
       this.animationService.rotateAnimation(this.container);
     }
