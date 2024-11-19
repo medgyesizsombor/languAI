@@ -5,6 +5,7 @@ import { Capacitor } from '@capacitor/core';
 import { LocalDataService } from './util/services/local-data.service';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { LocalStorageService } from './util/services/localstorage.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent {
   constructor(
     private translateService: TranslateService,
     private localDataService: LocalDataService,
-    private platform: Platform
+    private platform: Platform,
+    private localStorageService: LocalStorageService
   ) {
     if (Capacitor.getPlatform() !== 'web') {
       ScreenOrientation.lock({ orientation: 'portrait' });
@@ -33,6 +35,10 @@ export class AppComponent {
 
   private initializeApp() {
     this.translateService.setDefaultLang('hu');
+    this.translateService.use(
+      this.localDataService.nativeLanguageCode ??
+        this.translateService.defaultLang
+    );
     this.localDataService.setValues();
   }
 }

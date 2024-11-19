@@ -133,5 +133,8 @@
   "GENERATING_THE_EXERCISES_IT_MAY_TAKE_A_WHILE": "Feladatok generálása, eltarthat egy ideig",
   "UNSUCCESSFUL_GENERATE_EXERCISE": "Sikertelen feladat generálás",
   "MAKE_A_SENTENCE_FROM_THIS_WORDS": "Állítsd össze a mondatot az alábbi szavakkal!",
-  "CLICK_ON_THE_MISSING_WORD": "Kattints a hiányzó szóra!"
+  "CLICK_ON_THE_MISSING_WORD": "Kattints a hiányzó szóra!",
+  "SELECT_A_LANGUAGE": "Válassz egy nyelvet!",
+  "HUNGARIAN": "Magyar",
+  "ENGLISH": "Angol"
 }
