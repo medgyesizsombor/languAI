@@ -42,7 +42,7 @@
     <ion-col>{{ 'DARK_MODE' | translate }}</ion-col>
   </ion-row>
 
-  <ion-row class="settings-row mx-4 mt-3">
+  <ion-row (click)="openLanguageModal()" class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="phone-portrait-outline"></ion-icon>
     </ion-col>

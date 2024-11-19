@@ -16,7 +16,6 @@ import { WordPairingExerciseComponent } from '../components/exercises/word-pairi
 import { MistakeCorrectingExerciseComponent } from '../components/exercises/mistake-correcting-exercise/mistake-correcting-exercise.component';
 import { QuestionAnsweringExerciseComponent } from '../components/exercises/question-answering-exercise/question-answering-exercise.component';
 import { CreateNewMessageModalComponent } from '../components/modals/create-new-message-modal/create-new-message-modal.component';
-import { LanguageSelectModalComponent } from '../components/modals/language-select-modal/language-select-modal.component';
 import { EditAccesFabComponent } from '../components/edit-acces-fab/edit-acces-fab.component';
 import { PostComponent } from '../components/post/post.component';
 import { CommentComponent } from '../components/comment/comment.component';
@@ -42,7 +41,6 @@ export function createTranslateLoader(http: HttpClient) {
     MistakeCorrectingExerciseComponent,
     QuestionAnsweringExerciseComponent,
     CreateNewMessageModalComponent,
-    LanguageSelectModalComponent,
     EditAccesFabComponent,
     PostComponent,
     CommentComponent,
@@ -74,7 +72,6 @@ export function createTranslateLoader(http: HttpClient) {
     MistakeCorrectingExerciseComponent,
     QuestionAnsweringExerciseComponent,
     CreateNewMessageModalComponent,
-    LanguageSelectModalComponent,
     EditAccesFabComponent,
     PostComponent,
     CommentComponent,

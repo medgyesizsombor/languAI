@@ -16,7 +16,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { ModalController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/util/services/alert.service';
-import { LanguageSelectModalComponent } from 'src/app/components/modals/language-select-modal/language-select-modal.component';
 import { BadgeEnum } from 'src/app/util/enums/badge-enum';
 import { FriendshipStatusEnum } from 'src/api/models';
 import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
@@ -191,28 +190,6 @@ export class ProfilePage {
         l => l.id === this.profileForm?.controls['language'].value
       )?.name!
     );
-  }
-
-  async openLanguageSelect() {
-    this.loadingService.showLoading().then(async () => {
-      this.languages = [];
-      if (!this.languages?.length) {
-        //todo befejezni
-        this.getLanguagesSub;
-      }
-      const modal = await this.modalController.create({
-        component: LanguageSelectModalComponent,
-        componentProps: {
-          allLanguages: this.languages
-        }
-      });
-      modal.present();
-
-      const { data, role } = await modal.onWillDismiss();
-
-      if (role === 'confirm') {
-      }
-    });
   }
 
   /**

@@ -17,6 +17,9 @@ import { FriendshipRequestService } from 'src/app/util/services/friendship-reque
 import { Subscription } from 'rxjs';
 import { SettingsNavigationEnum } from 'src/app/util/enums/settings-navigation-enum';
 import { Capacitor } from '@capacitor/core';
+import { AlertService } from 'src/app/util/services/alert.service';
+import { LanguageEnum } from 'src/app/util/enums/language-enum';
+import { LocalDataService } from 'src/app/util/services/local-data.service';
 
 @Component({
   selector: 'app-settings',
@@ -43,7 +46,9 @@ export class SettingsPage {
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
     private toastrService: ToastrService,
-    private friendshipRequestService: FriendshipRequestService
+    private friendshipRequestService: FriendshipRequestService,
+    private alertService: AlertService,
+    private localDataService: LocalDataService
   ) {}
 
   ionViewWillEnter() {
@@ -88,8 +93,6 @@ export class SettingsPage {
     }
   }
 
-  private patchModel() {}
-
   /**
    * Logout
    */
@@ -126,6 +129,27 @@ export class SettingsPage {
         }
       });
     });
+  }
+
+  /**
+   * Open language modal
+   */
+  async openLanguageModal() {
+    console.log(this.translateService.currentLang);
+    const currentLanguage =
+      this.translateService.currentLang === 'hu'
+        ? LanguageEnum.hungarian
+        : LanguageEnum.english;
+    console.log(currentLanguage);
+    this.alertService
+      .showLanguageAlert(currentLanguage)
+      .then((lang: string | null) => {
+        if (lang && this.translateService.currentLang !== lang) {
+          this.localStorageService.setLangugageCode(lang);
+          this.localDataService.setNativeLanguages(lang);
+          this.translateService.use(lang);
+        }
+      });
   }
 
   private removeJwtToken() {

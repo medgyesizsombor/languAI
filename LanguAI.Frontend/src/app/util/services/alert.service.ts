@@ -6,6 +6,7 @@ import { LoadingService } from './loading.service';
 import { UserService } from 'src/api/services';
 import { LocalStorageService } from './localstorage.service';
 import { AccessEnum } from 'src/api/models';
+import { LanguageEnum } from '../enums/language-enum';
 
 @Injectable({
   providedIn: 'root'
@@ -495,6 +496,52 @@ export class AlertService {
             role: 'confirm',
             handler: () => {
               resolve(true);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show language select alert
+   */
+  async showLanguageAlert(
+    currentLanguage: LanguageEnum
+  ): Promise<string | null> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('LANGUAGE_OF_APPLICATION'),
+        message: this.translateService.instant('SELECT_A_LANGUAGE'),
+        inputs: [
+          {
+            label: this.translateService.instant('HUNGARIAN'),
+            type: 'radio',
+            value: LanguageEnum.hungarian,
+            checked: currentLanguage === LanguageEnum.hungarian
+          },
+          {
+            label: this.translateService.instant('ENGLISH'),
+            type: 'radio',
+            value: LanguageEnum.english,
+            checked: currentLanguage === LanguageEnum.english
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve(null);
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              resolve(data === LanguageEnum.hungarian ? 'hu' : 'en');
             }
           }
         ]
