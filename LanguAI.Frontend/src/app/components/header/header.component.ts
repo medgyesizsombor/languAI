@@ -16,6 +16,7 @@ export class HeaderComponent {
   @Input() showSaveButton = false;
   @Input() showAddButton = false;
   @Input() showSavingMissed = false;
+  @Input() showSendingMissed = false;
 
   @Output() saveButtonEmit = new EventEmitter<void>();
   @Output() addButtonEmit = new EventEmitter<void>();
@@ -32,6 +33,14 @@ export class HeaderComponent {
   navigateBack() {
     if (this.showSavingMissed) {
       this.alertService.showSavingMissedAlert().then(quit => {
+        if (quit) {
+          this.navigateBackWithoutSavingEmit.emit(true);
+        } else {
+          return;
+        }
+      });
+    } else if (this.showSendingMissed) {
+      this.alertService.showSendingMissedAlert().then(quit => {
         if (quit) {
           this.navigateBackWithoutSavingEmit.emit(true);
         } else {

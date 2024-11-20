@@ -136,5 +136,9 @@
   "CLICK_ON_THE_MISSING_WORD": "Kattints a hiányzó szóra!",
   "SELECT_A_LANGUAGE": "Válassz egy nyelvet!",
   "HUNGARIAN": "Magyar",
-  "ENGLISH": "Angol"
+  "ENGLISH": "Angol",
+  "MESSAGE_WAS_NOT_SENT": "Üzenet nem lett elküldve",
+  "IF_YOU_QUIT_YOUR_MESSAGE_WONT_BE_SENT": "Ha elhagyod az oldalt, az üzenet nem lesz elküldve",
+  "CHANGES_ARE_NOT_SAVED": "A változások nincsenek elmentve",
+  "IF_YOU_QUIT_YOUR_CHANGES_WONT_BE_SAVED": "Ha elhagyod az oldalt, a változások nem lesznek elmentve"
 }

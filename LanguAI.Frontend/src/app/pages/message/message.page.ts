@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,7 +10,7 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { CHAT_GPT_ID } from 'src/app/util/util.constants';
-import { IonContent } from '@ionic/angular';
+import { IonContent, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-message',
@@ -39,7 +39,8 @@ export class MessagePage {
     private messageService: MessageService,
     private translateService: TranslateService,
     private toastrService: ToastrService,
-    private chatGPTService: ChatGptService
+    private chatGPTService: ChatGptService,
+    private navController: NavController
   ) {}
 
   async ionViewWillEnter() {
@@ -125,6 +126,15 @@ export class MessagePage {
 
   isMessageValid() {
     this.isValid = this.chatForm?.controls['message'].value?.trim()?.length;
+  }
+
+  /**
+   * Navigate back without saving
+   */
+  navigateBackWithoutSaving(quit: boolean) {
+    if (quit) {
+      this.navController.back();
+    }
   }
 
   /**
