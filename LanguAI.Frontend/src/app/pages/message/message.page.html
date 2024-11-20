@@ -1,6 +1,8 @@
 <app-header
   [title]="otherUser?.username ?? ''"
-  [showBackArrow]="true"></app-header>
+  [showBackArrow]="true"
+  [showSendingMissed]="this.chatForm?.controls?.['message']?.value?.length"
+  (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 <ion-content #content>
   <ion-row
     class="ion-margin-top message-row"
