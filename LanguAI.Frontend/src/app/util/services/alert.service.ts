@@ -20,7 +20,7 @@ export class AlertService {
     private toastrService: ToastrService,
     private loadingService: LoadingService,
     private userService: UserService,
-    private localStorage: LocalStorageService
+    private localStorageService: LocalStorageService
   ) {}
 
   /**
@@ -195,35 +195,35 @@ export class AlertService {
   /**
    * Show Alert if sending message was missed
    */
-    async showSendingMissedAlert(): Promise<boolean> {
-      return new Promise(async resolve => {
-        this.alert = await this.alertController.create({
-          header: this.translateService.instant('MESSAGE_WAS_NOT_SENT'),
-          subHeader: this.translateService.instant(
-            'IF_YOU_QUIT_YOUR_MESSAGE_WONT_BE_SENT'
-          ),
-          cssClass: 'ion-input',
-          buttons: [
-            {
-              text: this.translateService.instant('CANCEL'),
-              role: 'cancel',
-              handler: () => {
-                resolve(false);
-              }
-            },
-            {
-              text: this.translateService.instant('CONFIRM'),
-              role: 'confirm',
-              handler: () => {
-                resolve(true);
-              }
+  async showSendingMissedAlert(): Promise<boolean> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('MESSAGE_WAS_NOT_SENT'),
+        subHeader: this.translateService.instant(
+          'IF_YOU_QUIT_YOUR_MESSAGE_WONT_BE_SENT'
+        ),
+        cssClass: 'ion-input',
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve(false);
             }
-          ]
-        });
-  
-        this.alert.present();
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: () => {
+              resolve(true);
+            }
+          }
+        ]
       });
-    }
+
+      this.alert.present();
+    });
+  }
 
   /**
    * Show Alert if there are too few cards to learn
@@ -303,7 +303,7 @@ export class AlertService {
                       body: {
                         newPassword: data.newPassword,
                         oldPassword: data.oldPassword,
-                        userId: this.localStorage.getUserId()!
+                        userId: this.localStorageService.getUserId()!
                       }
                     })
                     .subscribe({

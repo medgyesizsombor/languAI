@@ -102,7 +102,7 @@ export class ForumPage {
               this.loadingService.hideLoading();
             },
             error: (err: Error) => {
-              console.log(err.message);
+              console.error(err.message);
               this.isLoading = false;
               this.loadingService.hideLoading();
             }

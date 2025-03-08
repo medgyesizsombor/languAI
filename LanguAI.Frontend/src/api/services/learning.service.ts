@@ -17,10 +17,10 @@ import { getCardListOfCurrentLearningGroupByTopic$Json } from '../fn/learning/ge
 import { GetCardListOfCurrentLearningGroupByTopic$Json$Params } from '../fn/learning/get-card-list-of-current-learning-group-by-topic-json';
 import { getCardListOfCurrentLearningGroupByTopic$Plain } from '../fn/learning/get-card-list-of-current-learning-group-by-topic-plain';
 import { GetCardListOfCurrentLearningGroupByTopic$Plain$Params } from '../fn/learning/get-card-list-of-current-learning-group-by-topic-plain';
-import { getLearningsOfUsers$Json } from '../fn/learning/get-learnings-of-users-json';
-import { GetLearningsOfUsers$Json$Params } from '../fn/learning/get-learnings-of-users-json';
-import { getLearningsOfUsers$Plain } from '../fn/learning/get-learnings-of-users-plain';
-import { GetLearningsOfUsers$Plain$Params } from '../fn/learning/get-learnings-of-users-plain';
+import { getLearningsOfUser$Json } from '../fn/learning/get-learnings-of-user-json';
+import { GetLearningsOfUser$Json$Params } from '../fn/learning/get-learnings-of-user-json';
+import { getLearningsOfUser$Plain } from '../fn/learning/get-learnings-of-user-plain';
+import { GetLearningsOfUser$Plain$Params } from '../fn/learning/get-learnings-of-user-plain';
 import { LearningViewModel } from '../models/learning-view-model';
 import { saveLearning$Json } from '../fn/learning/save-learning-json';
 import { SaveLearning$Json$Params } from '../fn/learning/save-learning-json';
@@ -81,49 +81,49 @@ export class LearningService extends BaseService {
     );
   }
 
-  /** Path part for operation `getLearningsOfUsers()` */
-  static readonly GetLearningsOfUsersPath = '/Learning/GetLearningsOfUsers';
+  /** Path part for operation `getLearningsOfUser()` */
+  static readonly GetLearningsOfUserPath = '/Learning/GetLearningsOfUser';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getLearningsOfUsers$Plain()` instead.
+   * To access only the response body, use `getLearningsOfUser$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getLearningsOfUsers$Plain$Response(params?: GetLearningsOfUsers$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LearningViewModel>>> {
-    return getLearningsOfUsers$Plain(this.http, this.rootUrl, params, context);
+  getLearningsOfUser$Plain$Response(params?: GetLearningsOfUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LearningViewModel>>> {
+    return getLearningsOfUser$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getLearningsOfUsers$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `getLearningsOfUser$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getLearningsOfUsers$Plain(params?: GetLearningsOfUsers$Plain$Params, context?: HttpContext): Observable<Array<LearningViewModel>> {
-    return this.getLearningsOfUsers$Plain$Response(params, context).pipe(
+  getLearningsOfUser$Plain(params?: GetLearningsOfUser$Plain$Params, context?: HttpContext): Observable<Array<LearningViewModel>> {
+    return this.getLearningsOfUser$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<LearningViewModel>>): Array<LearningViewModel> => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getLearningsOfUsers$Json()` instead.
+   * To access only the response body, use `getLearningsOfUser$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getLearningsOfUsers$Json$Response(params?: GetLearningsOfUsers$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LearningViewModel>>> {
-    return getLearningsOfUsers$Json(this.http, this.rootUrl, params, context);
+  getLearningsOfUser$Json$Response(params?: GetLearningsOfUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LearningViewModel>>> {
+    return getLearningsOfUser$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getLearningsOfUsers$Json$Response()` instead.
+   * To access the full response (for headers, for example), `getLearningsOfUser$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getLearningsOfUsers$Json(params?: GetLearningsOfUsers$Json$Params, context?: HttpContext): Observable<Array<LearningViewModel>> {
-    return this.getLearningsOfUsers$Json$Response(params, context).pipe(
+  getLearningsOfUser$Json(params?: GetLearningsOfUser$Json$Params, context?: HttpContext): Observable<Array<LearningViewModel>> {
+    return this.getLearningsOfUser$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<LearningViewModel>>): Array<LearningViewModel> => r.body)
     );
   }

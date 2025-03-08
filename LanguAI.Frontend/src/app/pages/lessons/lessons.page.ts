@@ -3,11 +3,9 @@ import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { TopicOfCurrentLearningViewModel } from 'src/api/models';
-import { CardService, ChatGptService, LearningService } from 'src/api/services';
-import { LanguageLevelPipe } from 'src/app/util/pipes/language-level.pipe';
+import { LearningService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
-import { LocalDataService } from 'src/app/util/services/local-data.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
@@ -30,18 +28,18 @@ export class LessonsPage {
 
   constructor(
     private translateService: TranslateService,
-    private cardService: CardService,
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
     private toastrService: ToastrService,
     private learningService: LearningService,
     private navController: NavController,
-    protected localDataService: LocalDataService,
     private alertService: AlertService
   ) {}
 
   ionViewWillEnter() {
-    this.cardLists();
+    if (this.localStorageService.getLanguageCode()?.length) {
+      this.loadCardLists();
+    }
   }
 
   ionViewDidLeave() {
@@ -93,7 +91,7 @@ export class LessonsPage {
   /**
    * Load user's cardLists
    */
-  private async cardLists() {
+  private async loadCardLists() {
     this.isLoading = true;
     await this.loadingService.showLoading();
 

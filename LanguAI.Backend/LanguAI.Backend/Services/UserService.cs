@@ -2,7 +2,9 @@
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.Utils;
+using LanguAI.Backend.ViewModels.Learning;
 using LanguAI.Backend.ViewModels.User;
+using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
 
@@ -13,6 +15,8 @@ public interface IUserService
     bool EditUser(UserViewModel request, int currentUserId);
     bool ChangePassword(ChangePasswordRequestViewModel request);
     bool DeleteUser(int userId);
+    int GetStreakOfCurrentUser(int userId);
+    UserDataViewModel GetDataOfUser(int userId);
 }
 
 public class UserService : BaseService, IUserService
@@ -60,7 +64,8 @@ public class UserService : BaseService, IUserService
             Language = user.Language,
             DateOfBirth = user.DateOfBirth,
             Email = user.Email,
-            IsActive = user.IsActive
+            IsActive = user.IsActive,
+            Streak = user.Streak
         };
     }
 
@@ -161,5 +166,66 @@ public class UserService : BaseService, IUserService
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// Get current user's streak
+    /// </summary>
+    /// <param name="userId">Current user's Id</param>
+    /// <returns></returns>
+    public int GetStreakOfCurrentUser(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var user = _context.User.FirstOrDefault(u => u.Id == userId);
+
+        ArgumentNullException.ThrowIfNull(user);
+
+        return user.Streak;
+    }
+
+    /// <summary>
+    /// Get current user's data
+    /// </summary>
+    /// <param name="userId">Current user's Id</param>
+    /// <returns></returns>
+    public UserDataViewModel GetDataOfUser(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var user = _context.User
+            .Include(u => u.Learnings)
+            .ThenInclude(l => l.LearningLanguage)
+            .Include(u => u.Learnings)
+            .ThenInclude(l => l.NativeLanguage)
+            .FirstOrDefault(u => u.Id == userId
+                && u.IsActive);
+
+        ArgumentNullException.ThrowIfNull(user);
+
+        var currentLearning = user.Learnings
+            .Where(l => l.IsActive
+                && l.UserId == userId)
+            .Select(l => new LearningViewModel
+            {
+                Id = l.Id,
+                LanguageLevel = l.LanguageLevel,
+                LearningLanguageId = l.LearningLanguageId,
+                UserId = userId,
+                IsActive = l.IsActive,
+                LearningLanguageCode = l.LearningLanguage.Code,
+                LearningLanguageName = l.LearningLanguage.Name,
+                LearningLanguageNameInHun = l.LearningLanguage.NameInHun
+            }).FirstOrDefault();
+
+        return new UserDataViewModel
+        {
+            DateOfBirth = user.DateOfBirth,
+            LanguageId = user.Language,
+            Streak = user.Streak,
+            Username = user.Username,
+            Id = userId,
+            CurrentLearning = currentLearning
+        };
     }
 }

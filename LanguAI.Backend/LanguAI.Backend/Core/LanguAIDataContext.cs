@@ -22,6 +22,7 @@ namespace LanguAI.Backend.Core
         public virtual DbSet<Topic> Topic { get; set; }
         public virtual DbSet<Learning> Learning { get; set; }
         public virtual DbSet<Language> Language { get; set; }
+        public virtual DbSet<Gameplay> Gameplay { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -103,6 +104,12 @@ namespace LanguAI.Backend.Core
                 .HasOne(c => c.LearningLanguage)
                 .WithMany(l => l.LearningLanguageOfCardLists)
                 .HasForeignKey(c => c.LearningLanguageId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Gameplay>()
+                .HasOne(g => g.User)
+                .WithMany(u => u.Gameplays)
+                .HasForeignKey(g => g.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

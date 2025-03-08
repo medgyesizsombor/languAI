@@ -52,15 +52,15 @@ public class LearningController : ControllerBase
     /// Get current user's learnings
     /// </summary>
     /// <returns></returns>
-    [HttpGet(Name = "GetLearningsOfUsers")]
-    public ActionResult<List<LearningViewModel>> GetLearningsOfUsers()
+    [HttpGet(Name = "GetLearningsOfUser")]
+    public ActionResult<List<LearningViewModel>> GetLearningsOfUser()
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
         try
         {
-            return Ok(_learningService.GetLearningsOfUsers((int)currentUserId));
+            return Ok(_learningService.GetLearningsOfUser((int)currentUserId));
         }
         catch (Exception e)
         {

@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { Capacitor } from '@capacitor/core';
-import { LocalDataService } from './util/services/local-data.service';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { LocalStorageService } from './util/services/localstorage.service';
+import { UserService } from 'src/api/services';
+import { ToastrService } from './util/services/toastr.service';
+import { UserDataViewModel } from 'src/api/models';
+import { HUNGARIAN_LANGUAGE_CODE } from './util/util.constants';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +18,10 @@ import { LocalStorageService } from './util/services/localstorage.service';
 export class AppComponent {
   constructor(
     private translateService: TranslateService,
-    private localDataService: LocalDataService,
     private platform: Platform,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private userService: UserService,
+    private toastrService: ToastrService
   ) {
     if (Capacitor.getPlatform() !== 'web') {
       ScreenOrientation.lock({ orientation: 'portrait' });
@@ -34,11 +38,22 @@ export class AppComponent {
   }
 
   private initializeApp() {
-    this.translateService.setDefaultLang('hu');
+    this.translateService.setDefaultLang(HUNGARIAN_LANGUAGE_CODE);
     this.translateService.use(
-      this.localDataService.nativeLanguageCode ??
+      this.localStorageService.getLanguageCode() ??
         this.translateService.defaultLang
     );
-    this.localDataService.setValues();
+    if (this.localStorageService.getJwtToken()?.length) {
+      this.userService.getDataOfUser$Json().subscribe({
+        next: (user: UserDataViewModel) => {
+          this.localStorageService.setDataOfUser(user);
+        },
+        error: () => {
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('UNSUCCESSFUL_LOADING_USERS_DATA')
+          );
+        }
+      });
+    }
   }
 }

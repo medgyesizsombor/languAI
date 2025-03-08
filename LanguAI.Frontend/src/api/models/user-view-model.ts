@@ -6,5 +6,6 @@ export interface UserViewModel {
   id?: number;
   isActive?: boolean;
   language?: number;
+  streak?: number;
   username?: string | null;
 }

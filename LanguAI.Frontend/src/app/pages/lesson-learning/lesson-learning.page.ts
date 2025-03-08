@@ -8,7 +8,6 @@ import { ChatGptService } from 'src/api/services';
 import { Statistics } from 'src/app/util/models/statistic-view-model';
 import { LanguageLevelPipe } from 'src/app/util/pipes/language-level.pipe';
 import { LoadingService } from 'src/app/util/services/loading.service';
-import { LocalDataService } from 'src/app/util/services/local-data.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { TimerService } from 'src/app/util/services/timer.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
@@ -33,7 +32,6 @@ export class LessonLearningPage {
 
   constructor(
     private chatGPTService: ChatGptService,
-    private localDataService: LocalDataService,
     private languageLevelPipe: LanguageLevelPipe,
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
@@ -95,7 +93,8 @@ export class LessonLearningPage {
           if (description && cardListId) {
             return this.chatGPTService.receiveExercisesFromChatGpt$Json({
               LanguageLevel: this.languageLevelPipe.transform(
-                this.localDataService.currentLevel ?? undefined,
+                this.localStorageService.getLevelOfCurrentLanguage() ??
+                  undefined,
                 true
               ),
               TopicDescription: description ?? '',

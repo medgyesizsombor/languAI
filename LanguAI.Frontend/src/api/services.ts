@@ -2,6 +2,7 @@ export { AuthenticationService } from './services/authentication.service';
 export { CardService } from './services/card.service';
 export { ChatGptService } from './services/chat-gpt.service';
 export { FriendshipService } from './services/friendship.service';
+export { GameplayService } from './services/gameplay.service';
 export { InteractionService } from './services/interaction.service';
 export { LanguageService } from './services/language.service';
 export { LearningService } from './services/learning.service';

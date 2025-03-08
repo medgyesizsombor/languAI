@@ -12,7 +12,7 @@ namespace LanguAI.Backend.Services;
 public interface ILearningService
 {
     int SaveLearning(SaveLearningRequestViewModel request);
-    List<LearningViewModel> GetLearningsOfUsers(int userId);
+    List<LearningViewModel> GetLearningsOfUser(int userId);
     bool ChangeActiveLearning(int userId, int learningId);
     List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId);
     LearningViewModel GetCurrentLearningOfUser(int userId);
@@ -86,7 +86,7 @@ public class LearningService : BaseService, ILearningService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public List<LearningViewModel> GetLearningsOfUsers(int userId)
+    public List<LearningViewModel> GetLearningsOfUser(int userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
 

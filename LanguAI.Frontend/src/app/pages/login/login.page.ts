@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-import { AuthenticationService } from 'src/api/services';
+import { EMPTY, Subscription, switchMap } from 'rxjs';
+import { UserDataViewModel, UserViewModel } from 'src/api/models';
+import { AuthenticationService, UserService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
@@ -31,7 +32,8 @@ export class LoginPage {
     private loadingService: LoadingService,
     private translateService: TranslateService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {
     library.addIcons(faUser);
   }
@@ -47,44 +49,59 @@ export class LoginPage {
   /**
    * login
    */
-  login() {
+  async login() {
     if (this.isValid()) {
-      this.loadingService
-        .showLoading(this.translateService.instant('LOGGING_IN'))
-        .then(() => {
-          this.authenticationSub = this.authenticationService
-            .authenticate$Json({
-              body: {
-                username: this.loginForm?.controls['username'].value,
-                password: this.loginForm?.controls['password'].value
-              }
-            })
-            .subscribe({
-              next: res => {
-                this.loadingService.hideLoading();
-                if (res?.length) {
-                  this.toastrService.presentSuccessToast(
-                    this.translateService.instant('SUCCESSFUL_SIGN_IN')
-                  );
-                  this.localStorageService.setJwtToken(res);
-                  this.router.navigate(['/' + LESSONS_NAVIGATION]);
-                } else {
-                  this.toastrService.presentErrorToast(
-                    this.translateService.instant(
-                      'ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN'
-                    )
-                  );
-                }
-              },
-              error: () => {
-                this.loadingService.hideLoading();
-                this.toastrService.presentErrorToast(
-                  this.translateService.instant(
-                    'ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN'
-                  )
-                );
-              }
-            });
+      await this.loadingService.showLoading(
+        this.translateService.instant('LOGGING_IN')
+      );
+
+      this.authenticationSub = this.authenticationService
+        .authenticate$Json({
+          body: {
+            username: this.loginForm?.controls['username'].value,
+            password: this.loginForm?.controls['password'].value
+          }
+        })
+        .pipe(
+          switchMap((res: string) => {
+            if (res?.length > 0) {
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant('SUCCESSFUL_SIGN_IN')
+              );
+              this.localStorageService.setJwtToken(res);
+            } else {
+              this.loadingService.hideLoading();
+              this.toastrService.presentErrorToast(
+                this.translateService.instant(
+                  'ERROR_HAPPEND_WHEN_TRIED_TO_SIGN_IN'
+                )
+              );
+
+              return EMPTY;
+            }
+
+            return this.userService.getDataOfUser$Json();
+          })
+        )
+        .subscribe({
+          next: (user: UserDataViewModel) => {
+            if (user) {
+              this.localStorageService.setDataOfUser(user);
+              this.loadingService.hideLoading();
+              this.router.navigate(['/' + LESSONS_NAVIGATION]);
+            } else {
+              this.loadingService.hideLoading();
+              this.toastrService.presentErrorToast(
+                'UNSUCCESSFUL_LOADING_USERS_DATA'
+              );
+            }
+          },
+          error: () => {
+            this.loadingService.hideLoading();
+            this.toastrService.presentErrorToast(
+              'UNSUCCESSFUL_LOADING_USERS_DATA'
+            );
+          }
         });
     }
   }
