@@ -8,11 +8,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { LearningViewModel } from '../../models/learning-view-model';
 
-export interface GetLearningsOfUsers$Plain$Params {
+export interface GetLearningsOfUser$Plain$Params {
 }
 
-export function getLearningsOfUsers$Plain(http: HttpClient, rootUrl: string, params?: GetLearningsOfUsers$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LearningViewModel>>> {
-  const rb = new RequestBuilder(rootUrl, getLearningsOfUsers$Plain.PATH, 'get');
+export function getLearningsOfUser$Plain(http: HttpClient, rootUrl: string, params?: GetLearningsOfUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LearningViewModel>>> {
+  const rb = new RequestBuilder(rootUrl, getLearningsOfUser$Plain.PATH, 'get');
   if (params) {
   }
 
@@ -26,4 +26,4 @@ export function getLearningsOfUsers$Plain(http: HttpClient, rootUrl: string, par
   );
 }
 
-getLearningsOfUsers$Plain.PATH = '/Learning/GetLearningsOfUsers';
+getLearningsOfUser$Plain.PATH = '/Learning/GetLearningsOfUser';

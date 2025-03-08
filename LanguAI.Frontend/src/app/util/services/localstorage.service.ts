@@ -1,19 +1,40 @@
 import { Injectable } from '@angular/core';
 import {
+  CURRENT_LEARNING,
+  ENGLISH_LANGUAGE_CODE,
+  ENGLISH_LANGUAGE_ID,
+  HUNGARIAN_LANGUAGE_CODE,
+  HUNGARIAN_LANGUAGE_ID,
   JWT_TOKEN,
   LANGUAGE_CODE,
   LANGUAGE_ID,
   LEVEL_OF_CURRENT_LANGUAGE,
   NUMBER_OF_FRIENDSHIP_REQUEST,
+  STREAK,
   USER_ID
 } from '../util.constants';
-import { LanguageLevelEnum } from 'src/api/models';
+import {
+  LanguageLevelEnum,
+  LearningViewModel,
+  UserDataViewModel
+} from 'src/api/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
   constructor() {}
+
+  /**
+   * Set values of the user
+   */
+  setDataOfUser(user?: UserDataViewModel) {
+    this.setUserId(user?.id!);
+    this.setStreak(user?.streak!);
+    this.setCurrentLearning(user?.currentLearning!);
+    this.setLevelOfCurrentLanguage(user?.currentLearning?.languageLevel!);
+    this.setNativeLanguagesById(user?.languageId!);
+  }
 
   /**
    * Set Jwt token to localStorage
@@ -149,7 +170,7 @@ export class LocalStorageService {
   }
 
   /**
-   * Set Id of language
+   * Set Id of native language
    */
   setLangugageId(languageId: number) {
     if (languageId) {
@@ -161,7 +182,7 @@ export class LocalStorageService {
   }
 
   /**
-   * Get Id of language
+   * Get Id of native language
    */
   getLanguageId(): number | null {
     const languageId = localStorage.getItem(LANGUAGE_ID);
@@ -195,8 +216,8 @@ export class LocalStorageService {
   /**
    * Get Id of language
    */
-  getLanguageCode(): string {
-    return localStorage.getItem(LANGUAGE_CODE) ?? '';
+  getLanguageCode(): string | null {
+    return localStorage.getItem(LANGUAGE_CODE);
   }
 
   /**
@@ -204,5 +225,96 @@ export class LocalStorageService {
    */
   removeLanguageCode() {
     localStorage.removeItem(LANGUAGE_CODE);
+  }
+
+  /**
+   * Set Streak
+   */
+  setStreak(streak: number) {
+    if (streak >= 0) {
+      localStorage.setItem(STREAK, streak.toString());
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get number of streak
+   */
+  getStreak(): number {
+    const streak = localStorage.getItem(STREAK);
+
+    if (streak?.length) {
+      return +streak;
+    }
+
+    return 0;
+  }
+
+  /**
+   * Remove number of streak
+   */
+  removeStreak() {
+    localStorage.removeItem(STREAK);
+  }
+
+  /**
+   * Set native languages by code
+   */
+  setNativeLanguagesByCode(languageCode = HUNGARIAN_LANGUAGE_CODE) {
+    this.setLangugageCode(languageCode);
+    this.setLangugageId(
+      languageCode === HUNGARIAN_LANGUAGE_CODE
+        ? HUNGARIAN_LANGUAGE_ID
+        : ENGLISH_LANGUAGE_ID
+    );
+  }
+
+  /**
+   * Set native languages by id
+   */
+  setNativeLanguagesById(languageId = HUNGARIAN_LANGUAGE_ID) {
+    this.setLangugageId(languageId);
+    this.setLangugageCode(
+      languageId === HUNGARIAN_LANGUAGE_ID
+        ? HUNGARIAN_LANGUAGE_CODE
+        : ENGLISH_LANGUAGE_CODE
+    );
+  }
+
+  /**
+   * Get current learning
+   */
+  getCurrentLearning(): LearningViewModel | null {
+    const currentLearning = localStorage.getItem(CURRENT_LEARNING);
+
+    if (currentLearning?.length) {
+      return JSON.parse(currentLearning);
+    }
+
+    return null;
+  }
+
+  /**
+   * Remove current learning
+   */
+  removeCurrentLearning() {
+    localStorage.removeItem(STREAK);
+  }
+
+  /**
+   * Set current learning
+   */
+  setCurrentLearning(learning: LearningViewModel) {
+    localStorage.setItem(CURRENT_LEARNING, JSON.stringify(learning));
+  }
+
+
+  /**
+   * Clear the local storage
+   */
+  clearLocalStorage() {
+    localStorage.clear();
   }
 }

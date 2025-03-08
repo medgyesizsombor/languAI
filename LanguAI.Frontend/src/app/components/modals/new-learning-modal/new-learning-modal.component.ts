@@ -95,7 +95,9 @@ export class NewLearningModalComponent implements OnInit, OnDestroy {
 
     this.loadLanguagesSub = this.languageService
       .getAllLanguage$Json({
-        languageCode: this.localStorageService.getLanguageCode()
+        languageCode:
+          this.localStorageService.getLanguageCode() ??
+          this.translateService.getDefaultLang()
       })
       .subscribe({
         next: (res: Array<IntSelectorModel>) => {

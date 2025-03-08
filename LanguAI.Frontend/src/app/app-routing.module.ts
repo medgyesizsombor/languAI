@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuardFunction, LoginGuardFunction } from './util/util.guard';
 import {
   CARD_LEARNING_NAVIGATION,
   CARD_LIST_NAVIGATION,
@@ -20,6 +19,9 @@ import {
   REGISTER_NAVIGATION,
   SETTINGS_NAVIGATION
 } from './util/util.constants';
+import { LearningGuardFunction } from './util/guards/learning.guard';
+import { LoginGuardFunction } from './util/guards/login.guard';
+import { AuthGuardFunction } from './util/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -30,7 +32,8 @@ const routes: Routes = [
   {
     path: LESSONS_NAVIGATION,
     loadChildren: () =>
-      import('./pages/lessons/lessons.module').then(m => m.LessonsPageModule)
+      import('./pages/lessons/lessons.module').then(m => m.LessonsPageModule),
+    canActivate: [LearningGuardFunction]
   },
   {
     path: LOGIN_NAVIGATION,
@@ -83,12 +86,14 @@ const routes: Routes = [
   {
     path: POST_NAVIGATION + '/:id',
     loadChildren: () =>
-      import('./pages/post/post.module').then(m => m.PostPageModule)
+      import('./pages/post/post.module').then(m => m.PostPageModule),
+    canActivate: [LearningGuardFunction]
   },
   {
     path: CARD_NAVIGATION,
     loadChildren: () =>
-      import('./pages/card/card.module').then(m => m.CardPageModule)
+      import('./pages/card/card.module').then(m => m.CardPageModule),
+    canActivate: [LearningGuardFunction]
   },
   {
     path: CARD_LIST_NAVIGATION + '/:id',

@@ -21,6 +21,18 @@ import { getAllUsers$Json } from '../fn/user/get-all-users-json';
 import { GetAllUsers$Json$Params } from '../fn/user/get-all-users-json';
 import { getAllUsers$Plain } from '../fn/user/get-all-users-plain';
 import { GetAllUsers$Plain$Params } from '../fn/user/get-all-users-plain';
+import { getCurrentUser$Json } from '../fn/user/get-current-user-json';
+import { GetCurrentUser$Json$Params } from '../fn/user/get-current-user-json';
+import { getCurrentUser$Plain } from '../fn/user/get-current-user-plain';
+import { GetCurrentUser$Plain$Params } from '../fn/user/get-current-user-plain';
+import { getDataOfUser$Json } from '../fn/user/get-data-of-user-json';
+import { GetDataOfUser$Json$Params } from '../fn/user/get-data-of-user-json';
+import { getDataOfUser$Plain } from '../fn/user/get-data-of-user-plain';
+import { GetDataOfUser$Plain$Params } from '../fn/user/get-data-of-user-plain';
+import { getStreakOfCurrentUser$Json } from '../fn/user/get-streak-of-current-user-json';
+import { GetStreakOfCurrentUser$Json$Params } from '../fn/user/get-streak-of-current-user-json';
+import { getStreakOfCurrentUser$Plain } from '../fn/user/get-streak-of-current-user-plain';
+import { GetStreakOfCurrentUser$Plain$Params } from '../fn/user/get-streak-of-current-user-plain';
 import { getUserById$Json } from '../fn/user/get-user-by-id-json';
 import { GetUserById$Json$Params } from '../fn/user/get-user-by-id-json';
 import { getUserById$Plain } from '../fn/user/get-user-by-id-plain';
@@ -29,6 +41,7 @@ import { saveUser$Json } from '../fn/user/save-user-json';
 import { SaveUser$Json$Params } from '../fn/user/save-user-json';
 import { saveUser$Plain } from '../fn/user/save-user-plain';
 import { SaveUser$Plain$Params } from '../fn/user/save-user-plain';
+import { UserDataViewModel } from '../models/user-data-view-model';
 import { UserViewModel } from '../models/user-view-model';
 
 @Injectable({ providedIn: 'root' })
@@ -127,6 +140,53 @@ export class UserService extends BaseService {
    */
   getUserById$Json(params?: GetUserById$Json$Params, context?: HttpContext): Observable<UserViewModel> {
     return this.getUserById$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserViewModel>): UserViewModel => r.body)
+    );
+  }
+
+  /** Path part for operation `getCurrentUser()` */
+  static readonly GetCurrentUserPath = '/User/GetCurrentUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCurrentUser$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCurrentUser$Plain$Response(params?: GetCurrentUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<UserViewModel>> {
+    return getCurrentUser$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCurrentUser$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCurrentUser$Plain(params?: GetCurrentUser$Plain$Params, context?: HttpContext): Observable<UserViewModel> {
+    return this.getCurrentUser$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserViewModel>): UserViewModel => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCurrentUser$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCurrentUser$Json$Response(params?: GetCurrentUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserViewModel>> {
+    return getCurrentUser$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCurrentUser$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCurrentUser$Json(params?: GetCurrentUser$Json$Params, context?: HttpContext): Observable<UserViewModel> {
+    return this.getCurrentUser$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<UserViewModel>): UserViewModel => r.body)
     );
   }
@@ -269,6 +329,100 @@ export class UserService extends BaseService {
   deleteUser$Json(params?: DeleteUser$Json$Params, context?: HttpContext): Observable<boolean> {
     return this.deleteUser$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `getStreakOfCurrentUser()` */
+  static readonly GetStreakOfCurrentUserPath = '/User/GetStreakOfCurrentUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getStreakOfCurrentUser$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStreakOfCurrentUser$Plain$Response(params?: GetStreakOfCurrentUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return getStreakOfCurrentUser$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getStreakOfCurrentUser$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStreakOfCurrentUser$Plain(params?: GetStreakOfCurrentUser$Plain$Params, context?: HttpContext): Observable<number> {
+    return this.getStreakOfCurrentUser$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getStreakOfCurrentUser$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStreakOfCurrentUser$Json$Response(params?: GetStreakOfCurrentUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return getStreakOfCurrentUser$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getStreakOfCurrentUser$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStreakOfCurrentUser$Json(params?: GetStreakOfCurrentUser$Json$Params, context?: HttpContext): Observable<number> {
+    return this.getStreakOfCurrentUser$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getDataOfUser()` */
+  static readonly GetDataOfUserPath = '/User/GetDataOfUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDataOfUser$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDataOfUser$Plain$Response(params?: GetDataOfUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDataViewModel>> {
+    return getDataOfUser$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDataOfUser$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDataOfUser$Plain(params?: GetDataOfUser$Plain$Params, context?: HttpContext): Observable<UserDataViewModel> {
+    return this.getDataOfUser$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserDataViewModel>): UserDataViewModel => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDataOfUser$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDataOfUser$Json$Response(params?: GetDataOfUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDataViewModel>> {
+    return getDataOfUser$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDataOfUser$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDataOfUser$Json(params?: GetDataOfUser$Json$Params, context?: HttpContext): Observable<UserDataViewModel> {
+    return this.getDataOfUser$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserDataViewModel>): UserDataViewModel => r.body)
     );
   }
 

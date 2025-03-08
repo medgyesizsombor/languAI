@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { LearningViewModel } from '../../models/learning-view-model';
+import { UserViewModel } from '../../models/user-view-model';
 
-export interface GetLearningsOfUsers$Json$Params {
+export interface GetCurrentUser$Json$Params {
 }
 
-export function getLearningsOfUsers$Json(http: HttpClient, rootUrl: string, params?: GetLearningsOfUsers$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LearningViewModel>>> {
-  const rb = new RequestBuilder(rootUrl, getLearningsOfUsers$Json.PATH, 'get');
+export function getCurrentUser$Json(http: HttpClient, rootUrl: string, params?: GetCurrentUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserViewModel>> {
+  const rb = new RequestBuilder(rootUrl, getCurrentUser$Json.PATH, 'get');
   if (params) {
   }
 
@@ -21,9 +21,9 @@ export function getLearningsOfUsers$Json(http: HttpClient, rootUrl: string, para
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<LearningViewModel>>;
+      return r as StrictHttpResponse<UserViewModel>;
     })
   );
 }
 
-getLearningsOfUsers$Json.PATH = '/Learning/GetLearningsOfUsers';
+getCurrentUser$Json.PATH = '/User/GetCurrentUser';

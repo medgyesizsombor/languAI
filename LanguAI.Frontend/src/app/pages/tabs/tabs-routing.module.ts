@@ -8,6 +8,7 @@ import {
   MESSAGES_NAVIGATION,
   SETTINGS_NAVIGATION
 } from 'src/app/util/util.constants';
+import { LearningGuardFunction } from 'src/app/util/guards/learning.guard';
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
       {
         path: LESSONS_NAVIGATION,
         loadChildren: () =>
-          import('../lessons/lessons.module').then(m => m.LessonsPageModule)
+          import('../lessons/lessons.module').then(m => m.LessonsPageModule),
+        canActivate: [LearningGuardFunction]
       },
       {
         path: CARD_LISTS_NAVIGATION,

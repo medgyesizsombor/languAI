@@ -9,7 +9,7 @@ import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import {HUNGARIAN_LANGUAGE_ID} from 'src/app/util/util.constants';
+import { HUNGARIAN_LANGUAGE_ID } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-learnings',
@@ -53,7 +53,7 @@ export class LearningPage {
     await this.loadingService.showLoading();
 
     this.loadLearningsSub = this.learningService
-      .getLearningsOfUsers$Json()
+      .getLearningsOfUser$Json()
       .subscribe({
         next: (res: Array<LearningViewModel>) => {
           this.learnings = [...res];

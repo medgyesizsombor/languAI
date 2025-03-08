@@ -25,6 +25,8 @@ public class User
     [Required]
     public bool IsActive { get; set; } = true;
 
+    public int Streak { get; set; } = 0;
+
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual ICollection<CardList> CardLists { get; set; } = new List<CardList>();
@@ -40,4 +42,6 @@ public class User
     public virtual ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
 
     public virtual ICollection<Learning> Learnings { get; set; } = new List<Learning>();
+
+    public virtual ICollection<Gameplay> Gameplays { get; set; } = new List<Gameplay>();
 }

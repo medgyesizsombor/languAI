@@ -19,7 +19,6 @@ import { SettingsNavigationEnum } from 'src/app/util/enums/settings-navigation-e
 import { Capacitor } from '@capacitor/core';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LanguageEnum } from 'src/app/util/enums/language-enum';
-import { LocalDataService } from 'src/app/util/services/local-data.service';
 
 @Component({
   selector: 'app-settings',
@@ -47,8 +46,7 @@ export class SettingsPage {
     private loadingService: LoadingService,
     private toastrService: ToastrService,
     private friendshipRequestService: FriendshipRequestService,
-    private alertService: AlertService,
-    private localDataService: LocalDataService
+    private alertService: AlertService
   ) {}
 
   ionViewWillEnter() {
@@ -94,13 +92,6 @@ export class SettingsPage {
   }
 
   /**
-   * Logout
-   */
-  logout() {
-    this.removeJwtToken();
-  }
-
-  /**
    * Delete the profile
    */
   deleteProfile() {
@@ -109,7 +100,7 @@ export class SettingsPage {
         next: (success: boolean) => {
           if (success) {
             this.loadingService.hideLoading();
-            this.removeJwtToken();
+            this.logout();
           } else {
             this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
@@ -135,7 +126,6 @@ export class SettingsPage {
    * Open language modal
    */
   async openLanguageModal() {
-    console.log(this.translateService.currentLang);
     const currentLanguage =
       this.translateService.currentLang === 'hu'
         ? LanguageEnum.hungarian
@@ -145,15 +135,17 @@ export class SettingsPage {
       .showLanguageAlert(currentLanguage)
       .then((lang: string | null) => {
         if (lang && this.translateService.currentLang !== lang) {
-          this.localStorageService.setLangugageCode(lang);
-          this.localDataService.setNativeLanguages(lang);
+          this.localStorageService.setNativeLanguagesByCode(lang);
           this.translateService.use(lang);
         }
       });
   }
 
-  private removeJwtToken() {
-    this.localStorageService.removeJwtToken();
+  /**
+   * Clear the local storage and navigate to the login navigation
+   */
+  logout() {
+    this.localStorageService.clearLocalStorage();
     this.router.navigate(['/' + LOGIN_NAVIGATION]);
   }
 

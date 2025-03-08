@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { CardList } from '../models/card-list';
 import { Friendship } from '../models/friendship';
+import { Gameplay } from '../models/gameplay';
 import { Interaction } from '../models/interaction';
 import { Learning } from '../models/learning';
 import { Message } from '../models/message';
@@ -10,6 +11,7 @@ export interface User {
   cardLists?: Array<CardList> | null;
   dateOfBirth: string;
   email: string;
+  gameplays?: Array<Gameplay> | null;
   id: number;
   interactions?: Array<Interaction> | null;
   isActive: boolean;
@@ -21,5 +23,6 @@ export interface User {
   receivedMessages?: Array<Message> | null;
   sentFriendships?: Array<Friendship> | null;
   sentMessages?: Array<Message> | null;
+  streak?: number;
   username: string;
 }

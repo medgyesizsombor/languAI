@@ -64,6 +64,27 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
+    /// Get current user
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet(Name = "GetCurrentUser")]
+    public ActionResult<UserViewModel> GetCurrentUser()
+    {
+        try
+        {
+            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+
+            ArgumentNullException.ThrowIfNull(currentUserId);
+
+            return Ok(_userService.GetUserById((int)currentUserId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
     /// Save user
     /// </summary>
     /// <param name="request">User ViewModel</param>
@@ -126,6 +147,46 @@ public class UserController : ControllerBase
         try
         {
             return Ok(_userService.DeleteUser((int)currentUserId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Get current user's streak
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet(Name = "GetStreakOfCurrentUser")]
+    public ActionResult<int> GetStreakOfCurrentUser()
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            return Ok(_userService.GetStreakOfCurrentUser((int)currentUserId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Get user's data
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet(Name = "GetDataOfUser")]
+    public ActionResult<UserDataViewModel> GetDataOfUser()
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            return Ok(_userService.GetDataOfUser((int)currentUserId));
         }
         catch (Exception e)
         {

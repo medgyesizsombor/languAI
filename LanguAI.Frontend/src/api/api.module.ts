@@ -8,6 +8,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { CardService } from './services/card.service';
 import { ChatGptService } from './services/chat-gpt.service';
 import { FriendshipService } from './services/friendship.service';
+import { GameplayService } from './services/gameplay.service';
 import { InteractionService } from './services/interaction.service';
 import { LanguageService } from './services/language.service';
 import { LearningService } from './services/learning.service';
@@ -28,6 +29,7 @@ import { UserService } from './services/user.service';
     CardService,
     ChatGptService,
     FriendshipService,
+    GameplayService,
     InteractionService,
     LanguageService,
     LearningService,

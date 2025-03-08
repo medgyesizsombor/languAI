@@ -13,4 +13,6 @@ public class UserViewModel
     public string Email { get; set; }
 
     public bool IsActive { get; set; }
+
+    public int Streak { get; set; }
 }
