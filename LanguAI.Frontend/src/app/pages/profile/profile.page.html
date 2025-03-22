@@ -1,9 +1,6 @@
-<ion-content [fullscreen]="true" class="ion-padding">
-  <app-header
-    [useNavController]="true"
-    [showBackArrow]="true"
-    [title]="title"></app-header>
+<app-header [title]="title" [showBackArrow]="true"></app-header>
 
+<ion-content [fullscreen]="true" class="ion-padding">
   <!-- ACTION BUTTONS -->
   <ion-row class="pb-5" *ngIf="isProfileOfSomeoneElse">
     <ion-col class="ion-align-items-center me-1">
