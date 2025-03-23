@@ -9,8 +9,14 @@
     *ngFor="let message of messages"
     [ngClass]="message.senderId === userId ? 'own-row' : 'received-row'">
     <ion-card
-      [ngClass]="message.senderId === userId ? 'own-card' : 'received-card'">
+      class="d-flex ion-align-items-center"
+      [ngClass]="{ 'own-card': message.senderId === userId, 'received-card': message.senderId !== userId, 'unsent-message': message.senderId === userId && message.status === messageStatusEnum.Unsent }"
+      (click)="message.status === messageStatusEnum.Unsent ? resendMessage(message) : null">
       {{ message.text }}
+      <ion-icon
+        *ngIf="message.status === messageStatusEnum.Unsent"
+        class="fs-18 ms-1"
+        name="repeat-outline"></ion-icon>
     </ion-card>
   </ion-row>
 </ion-content>

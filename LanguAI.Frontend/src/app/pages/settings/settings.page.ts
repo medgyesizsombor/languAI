@@ -130,7 +130,6 @@ export class SettingsPage {
       this.translateService.currentLang === 'hu'
         ? LanguageEnum.hungarian
         : LanguageEnum.english;
-    console.log(currentLanguage);
     this.alertService
       .showLanguageAlert(currentLanguage)
       .then((lang: string | null) => {

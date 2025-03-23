@@ -85,6 +85,8 @@ public class MessageService : BaseService, IMessageService
                 Status = m.Status,
                 SentAt = m.SentAt,
                 Text = m.Text
-            }).ToList();
+            })
+            .OrderBy(m => m.SentAt)
+            .ToList();
     }
 }

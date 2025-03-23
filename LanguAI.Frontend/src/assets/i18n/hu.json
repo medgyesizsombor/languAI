@@ -140,5 +140,10 @@
   "MESSAGE_WAS_NOT_SENT": "Üzenet nem lett elküldve",
   "IF_YOU_QUIT_YOUR_MESSAGE_WONT_BE_SENT": "Ha elhagyod az oldalt, az üzenet nem lesz elküldve",
   "CHANGES_ARE_NOT_SAVED": "A változások nincsenek elmentve",
-  "IF_YOU_QUIT_YOUR_CHANGES_WONT_BE_SAVED": "Ha elhagyod az oldalt, a változások nem lesznek elmentve"
+  "IF_YOU_QUIT_YOUR_CHANGES_WONT_BE_SAVED": "Ha elhagyod az oldalt, a változások nem lesznek elmentve",
+  "THIS_MESSAGE_DOESNT_CONTAIN_TEXT": "Ez az üzenet nem tartalmaz szöveget",
+  "UNSENT_MESSAGE": "Elküldetlen üzenet",
+  "WOULD_YOU_LIKE_TO_TRY_RESEND_THE_MESSAGE": "Szeretné megpróbálni elküldeni újra?",
+  "SENDING_MESSAGE": "Üzenet küldése",
+  "UNSUCCESSFUL_SENDING": "Sikertelen küldés"
 }

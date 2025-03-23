@@ -11,6 +11,7 @@ import { LocalStorageService } from 'src/app/util/services/localstorage.service'
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { CHAT_GPT_ID } from 'src/app/util/util.constants';
 import { IonContent, NavController } from '@ionic/angular';
+import { AlertService } from 'src/app/util/services/alert.service';
 
 @Component({
   selector: 'app-message',
@@ -26,6 +27,7 @@ export class MessagePage {
   messages: Array<MessageViewModel> = [];
   otherUser: UserViewModel | undefined;
   isValid = false;
+  messageStatusEnum = MessageStatusEnum;
 
   loadDataSub: Subscription | undefined;
   sendMessageSub: Subscription | undefined;
@@ -40,7 +42,8 @@ export class MessagePage {
     private translateService: TranslateService,
     private toastrService: ToastrService,
     private chatGPTService: ChatGptService,
-    private navController: NavController
+    private navController: NavController,
+    private alertService: AlertService
   ) {}
 
   async ionViewWillEnter() {
@@ -59,30 +62,64 @@ export class MessagePage {
    * Send message
    * If the other user is ChatGPT, then asking for response too
    */
-  async sendMessage() {
+  async sendMessage(again = false, message?: MessageViewModel) {
     if (this.isValid) {
-      await this.loadingService.showLoading();
+      await this.loadingService.showLoading(
+        this.translateService.instant('SENDING_MESSAGE')
+      );
+      let newMessage: MessageViewModel;
+      if (again) {
+        if (message) {
+          newMessage = { ...message, status: MessageStatusEnum.Sent };
+        } else {
+          this.loadingService.hideLoading();
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('UNSUCCESSFUL_SENDING')
+          );
+          return;
+        }
+      } else {
+        newMessage = {
+          recipientId: this.otherUser?.id,
+          senderId: this.userId!,
+          status: this.isChatGPT
+            ? MessageStatusEnum.Read
+            : MessageStatusEnum.Sent,
+          text: again ? message?.text : this.chatForm?.controls['message'].value
+        };
+      }
       this.sendMessageSub = this.messageService
         .sendMessage$Json({
-          body: {
-            recipientId: this.otherUser?.id,
-            senderId: this.userId!,
-            status: this.isChatGPT
-              ? MessageStatusEnum.Read
-              : MessageStatusEnum.Sent,
-            text: this.chatForm?.controls['message'].value
-          }
+          body: { ...newMessage }
         })
         .pipe(
           switchMap((success: boolean) => {
             if (success) {
-              this.chatForm?.controls['message'].patchValue(null);
+              if (again) {
+                const sentMessageIndex = this.messages.findIndex(
+                  m => m.sentAt === message?.sentAt
+                );
+                if (sentMessageIndex) {
+                  this.messages[sentMessageIndex] = {
+                    ...this.messages[sentMessageIndex],
+                    status: MessageStatusEnum.Sent
+                  };
+                }
+              } else {
+                this.messages.push({ ...newMessage });
+                setTimeout(() => {
+                  this.content?.scrollToBottom();
+                }, 200);
+                this.chatForm?.controls['message'].patchValue(null);
+              }
               this.loadingService.hideLoading();
 
               return this.messageService.getMessageListByUserId$Json({
                 friendId: this.otherUser?.id
               });
             } else {
+              newMessage.status = MessageStatusEnum.Unsent;
+              this.messages.push({ ...newMessage });
               this.loadingService.hideLoading();
               this.toastrService.presentErrorToast(
                 this.translateService.instant('ERROR_SENDING_MESSAGE')
@@ -92,7 +129,9 @@ export class MessagePage {
           }),
           switchMap((res: Array<MessageViewModel>) => {
             this.messages = [...res];
-            this.content?.scrollToBottom();
+            setTimeout(() => {
+              this.content?.scrollToBottom();
+            }, 1000);
             this.loadingService.hideLoading();
 
             if (this.isChatGPT) {
@@ -115,12 +154,50 @@ export class MessagePage {
             this.loadingService.hideLoading();
           },
           error: () => {
+            newMessage.status = MessageStatusEnum.Unsent;
+            this.messages.push({ ...newMessage });
+            newMessage.sentAt = new Date().toDateString();
+            setTimeout(() => {
+              this.chatForm?.controls['message'].patchValue(null);
+              this.content?.scrollToBottom();
+            }, 200);
             this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
-              this.translateService.instant('ERROR_REFRESH_CHAT')
+              this.translateService.instant('UNSUCCESSFUL_SENDING')
             );
           }
         });
+    } else {
+      this.toastrService.presentErrorToast(
+        this.translateService.instant('THIS_MESSAGE_DOESNT_CONTAIN_TEXT')
+      );
+    }
+  }
+
+  /**
+   * Resend the unsent message
+   */
+  resendMessage(message: MessageViewModel) {
+    if (message && message.text?.length) {
+      this.alertService
+        .showConfirmAlert(
+          this.translateService.instant('UNSENT_MESSAGE'),
+          this.translateService.instant(
+            'WOULD_YOU_LIKE_TO_TRY_RESEND_THE_MESSAGE'
+          ),
+          this.translateService.instant('YES')
+        )
+        .then(async (confirm: boolean) => {
+          if (confirm) {
+            await this.loadingService.showLoading();
+            this.sendMessage(true, message);
+            this.loadingService.hideLoading();
+          }
+        });
+    } else {
+      this.toastrService.presentErrorToast(
+        this.translateService.instant('THIS_MESSAGE_DOESNT_CONTAIN_TEXT')
+      );
     }
   }
 
