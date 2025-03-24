@@ -11,9 +11,9 @@ public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
     private readonly IAuthenticationService _authenticationService;
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<PostController> _logger;
 
-    public PostController(ILogger<UserController> logger, IPostService postService, IAuthenticationService authenticationService)
+    public PostController(ILogger<PostController> logger, IPostService postService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _postService = postService;

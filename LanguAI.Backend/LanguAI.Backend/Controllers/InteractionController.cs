@@ -13,9 +13,9 @@ public class InteractionController : ControllerBase
     private readonly IAuthenticationService _authenticationService;
     private readonly IInteractionService _interactionService;
 
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<InteractionController> _logger;
 
-    public InteractionController(ILogger<UserController> logger, IAuthenticationService authenticationService, IInteractionService interactionService)
+    public InteractionController(ILogger<InteractionController> logger, IAuthenticationService authenticationService, IInteractionService interactionService)
     {
         _logger = logger;
         _interactionService = interactionService;
@@ -40,9 +40,9 @@ public class InteractionController : ControllerBase
         {
             return Ok(_interactionService.SaveInteraction(request));
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(e.Message);
         }
     }
 
@@ -64,9 +64,9 @@ public class InteractionController : ControllerBase
         {
             return Ok(_interactionService.Dislike(request));
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(e.Message);
         }
     }
 
@@ -88,9 +88,9 @@ public class InteractionController : ControllerBase
         {
             return Ok(_interactionService.DeleteComment(request));
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(e.Message);
         }
     }
 }

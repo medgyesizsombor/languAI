@@ -126,7 +126,7 @@ public class UserService : BaseService, IUserService
             return true;
 
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
             return false;
         }

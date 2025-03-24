@@ -180,7 +180,7 @@ public class CardService : BaseService, ICardService
                  .Select(c => ConvertCardListToCardListViewModel(c))
                  .ToList();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
             return null;
         }

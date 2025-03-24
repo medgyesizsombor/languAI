@@ -16,9 +16,9 @@ public class ChatGPTController : ControllerBase
     private readonly ILearningService _learningService;
     private readonly ICardService _cardService;
 
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<ChatGPTController> _logger;
 
-    public ChatGPTController(ILogger<UserController> logger, IChatGPTService chatGPTService, IAuthenticationService authenticationService, IMessageService messageService, ICardService cardService)
+    public ChatGPTController(ILogger<ChatGPTController> logger, IChatGPTService chatGPTService, IAuthenticationService authenticationService, IMessageService messageService, ICardService cardService)
     {
         _logger = logger;
         _chatGPTService = chatGPTService;

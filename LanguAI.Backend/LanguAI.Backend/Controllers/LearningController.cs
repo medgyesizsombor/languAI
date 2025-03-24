@@ -15,9 +15,9 @@ public class LearningController : ControllerBase
     private readonly IAuthenticationService _authenticationService;
     private readonly ILearningService _learningService;
 
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<LearningController> _logger;
 
-    public LearningController(ILogger<UserController> logger, IAuthenticationService authenticationService, ILearningService learningService)
+    public LearningController(ILogger<LearningController> logger, IAuthenticationService authenticationService, ILearningService learningService)
     {
         _logger = logger;
         _authenticationService = authenticationService;
