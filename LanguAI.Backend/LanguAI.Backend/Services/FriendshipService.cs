@@ -191,7 +191,7 @@ public class FriendshipService : BaseService, IFriendshipService
 
             return true;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
             return false;
         }

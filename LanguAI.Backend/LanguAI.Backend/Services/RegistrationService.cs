@@ -50,7 +50,7 @@ public class RegistrationService : BaseService, IRegistrationService
 
             return user.Id;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
             return null;
         }

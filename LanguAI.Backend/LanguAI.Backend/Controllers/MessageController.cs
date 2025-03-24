@@ -11,9 +11,9 @@ public class MessageController : ControllerBase
     private readonly IMessageService _messageService;
     private readonly IAuthenticationService _authenticationService;
 
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<MessageController> _logger;
 
-    public MessageController(ILogger<UserController> logger, IMessageService messageService, IAuthenticationService authenticationService)
+    public MessageController(ILogger<MessageController> logger, IMessageService messageService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _messageService = messageService;

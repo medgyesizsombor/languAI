@@ -1,6 +1,8 @@
 ﻿using LanguAI.Backend.Core;
 using LanguAI.Backend.Services;
+using LanguAI.Backend.Utils.HealthCheck;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace LanguAI.Backend.Configuration;
 
@@ -16,6 +18,7 @@ public static class DependencyInjectionConfig
             config.AddConsole();
         });
 
+        services.AddSingleton<IHealthCheck, FrontendHealthCheck>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IRegistrationService, RegistrationService>();

@@ -1,6 +1,9 @@
 ﻿using LanguAI.Backend.Configuration;
 using LanguAI.Backend.Core;
+using LanguAI.Backend.Utils;
+using LanguAI.Backend.Utils.HealthCheck;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace LanguAI;
 
@@ -25,6 +28,8 @@ public class Startup
         services.ConfigureCors();
 
         services.ConfigureAuthentication();
+
+        services.ConfigureHealthCheck();
 
         services.ConfigureSwagger();
     }
@@ -55,9 +60,16 @@ public class Startup
 
         app.UseAuthorization();
 
+        app.EnableHealthCheck();
+
+        app.UseMiddleware<ExceptionMiddleware>();
+
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers();
+            endpoints.MapGet("/", async context =>
+            {
+                await context.Response.WriteAsync("Server is running.");
+            });
         });
     }
 }

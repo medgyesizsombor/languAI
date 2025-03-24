@@ -12,9 +12,9 @@ public class FriendshipController : ControllerBase
 {
     private readonly IFriendshipService _friendshipService;
     private readonly IAuthenticationService _authenticationService;
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<FriendshipController> _logger;
 
-    public FriendshipController(ILogger<UserController> logger, IFriendshipService friendshipService, IAuthenticationService authenticationService)
+    public FriendshipController(ILogger<FriendshipController> logger, IFriendshipService friendshipService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _friendshipService = friendshipService;

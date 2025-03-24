@@ -10,10 +10,10 @@ namespace LanguAI.Backend.Controllers;
 public class CardController : ControllerBase
 {
     private readonly ICardService _cardService;
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<CardController> _logger;
     private readonly IAuthenticationService _authenticationService;
 
-    public CardController(ILogger<UserController> logger, ICardService cardService, IAuthenticationService authenticationService)
+    public CardController(ILogger<CardController> logger, ICardService cardService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _cardService = cardService;

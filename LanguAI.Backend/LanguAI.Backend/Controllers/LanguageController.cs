@@ -10,8 +10,8 @@ public class LanguageController : Controller
 {
     private readonly ILanguageService _languageService;
 
-    private readonly ILogger<UserController> _logger;
-    public LanguageController(ILogger<UserController> logger, ILanguageService languageService)
+    private readonly ILogger<LanguageController> _logger;
+    public LanguageController(ILogger<LanguageController> logger, ILanguageService languageService)
     {
         _logger = logger;
         _languageService = languageService;
