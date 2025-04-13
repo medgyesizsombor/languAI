@@ -37,6 +37,6 @@ public static class SettingsConfig
         var storageSettings = configuration.GetSection("StorageSettings");
 
         EnvironmentSettings.StorageConnectionString = storageSettings["ConnectionString"];
-        EnvironmentSettings.StorageContainer = storageSettings["Container"];
+        EnvironmentSettings.StorageContainer = configuration["StorageConnectionString"];
     }
 }
