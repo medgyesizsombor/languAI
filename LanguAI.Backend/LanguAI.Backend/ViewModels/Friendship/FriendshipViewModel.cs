@@ -1,4 +1,6 @@
-﻿namespace LanguAI.Backend.ViewModels.Friendship;
+﻿using LanguAI.Backend.Core.Enums;
+
+namespace LanguAI.Backend.ViewModels.Friendship;
 
 public class FriendshipViewModel
 {
@@ -8,7 +10,7 @@ public class FriendshipViewModel
 
     public int RecipientId { get; set; }
 
-    public int Status { get; set; }
+    public FriendshipStatusEnum Status { get; set; }
 
     public bool IsCloseFriendship { get; set; }
 

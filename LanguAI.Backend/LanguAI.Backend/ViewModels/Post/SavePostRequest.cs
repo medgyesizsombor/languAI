@@ -1,4 +1,5 @@
 ﻿using LanguAI.Backend.Core.Enums;
+using LanguAI.Backend.ViewModels.Image;
 
 namespace LanguAI.Backend.ViewModels.Post;
 
@@ -13,4 +14,6 @@ public class SavePostRequest
     public DateTime Created { get; set; } = DateTime.Now;
 
     public AccessEnum Access { get; set; }
+
+    public ImageViewModel Image { get; set; }
 }

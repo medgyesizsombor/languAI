@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LanguAI.Backend.Core.Models;
 
@@ -26,6 +27,11 @@ public class User
     public bool IsActive { get; set; } = true;
 
     public int Streak { get; set; } = 0;
+
+    public int? ImageId { get; set; }
+
+    [ForeignKey(nameof(ImageId))]
+    public virtual Image Image { get; set; }
 
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 

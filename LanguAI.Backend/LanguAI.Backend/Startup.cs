@@ -9,7 +9,7 @@ public class Startup
 {
     public Startup(IConfiguration configuration)
     {
-        configuration.ConfigureAppSettings();
+        configuration.ConfigureSettings();
     }
 
     public IConfiguration Configuration { get; }

@@ -2,6 +2,7 @@
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.Utils;
+using LanguAI.Backend.ViewModels.Image;
 using LanguAI.Backend.ViewModels.Learning;
 using LanguAI.Backend.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +18,16 @@ public interface IUserService
     bool DeleteUser(int userId);
     int GetStreakOfCurrentUser(int userId);
     UserDataViewModel GetDataOfUser(int userId);
+    Task<bool> SetProfilePicture(ImageViewModel request, int userId);
 }
 
 public class UserService : BaseService, IUserService
 {
+    private readonly IStorageService _storageService;
 
-    public UserService(LanguAIDataContext context) : base(context)
+    public UserService(LanguAIDataContext context, IStorageService storageService) : base(context)
     {
+        _storageService = storageService;
     }
 
     /// <summary>
@@ -227,5 +231,32 @@ public class UserService : BaseService, IUserService
             Id = userId,
             CurrentLearning = currentLearning
         };
+    }
+
+    public async Task<bool> SetProfilePicture(ImageViewModel request, int userId)
+    {
+        byte[] blobContent = Convert.FromBase64String(request.ContentAsString);
+
+        await _storageService.UploadBlob(request);
+
+        Image image = new Image
+        {
+            Name = request.Name
+        };
+
+        _context.Image.Add(image);
+
+        var user = _context.User.FirstOrDefault(u => u.Id == userId);
+
+        if (user == null)
+        {
+            throw new Exception("User is not found");
+        }
+
+        user.ImageId = image.Id;
+
+        _context.SaveChanges();
+
+        return true;
     }
 }

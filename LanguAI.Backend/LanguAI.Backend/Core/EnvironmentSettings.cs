@@ -11,4 +11,8 @@ public class EnvironmentSettings
     public static string ChatGPTApiKey { get; set; }
 
     public static int ChatGPTId { get; set; }
+
+    public static string StorageContainer {  get; set; }
+
+    public static string StorageConnectionString { get; set; }
 }

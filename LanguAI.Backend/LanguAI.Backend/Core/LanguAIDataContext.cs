@@ -1,116 +1,139 @@
 ﻿using LanguAI.Backend.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LanguAI.Backend.Core
+namespace LanguAI.Backend.Core;
+
+public partial class LanguAIDataContext : DbContext
 {
-    public partial class LanguAIDataContext : DbContext
+    public LanguAIDataContext() { }
+
+    public LanguAIDataContext(DbContextOptions<LanguAIDataContext> options) : base(options) { }
+
+    public virtual DbSet<User> User { get; set; }
+    public virtual DbSet<Post> Post { get; set; }
+    public virtual DbSet<Friendship> Friendship { get; set; }
+    public virtual DbSet<Card> Card { get; set; }
+    public virtual DbSet<CardList> CardList { get; set; }
+    public virtual DbSet<Message> Message { get; set; }
+    public virtual DbSet<Interaction> Interaction { get; set; }
+    public virtual DbSet<Topic> Topic { get; set; }
+    public virtual DbSet<Learning> Learning { get; set; }
+    public virtual DbSet<Language> Language { get; set; }
+    public virtual DbSet<Gameplay> Gameplay { get; set; }
+    public virtual DbSet<Image> Image { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public LanguAIDataContext() { }
+        base.OnModelCreating(modelBuilder);
 
-        public LanguAIDataContext(DbContextOptions<LanguAIDataContext> options)
-        : base(options)
-        {
-        }
+        modelBuilder.Entity<Friendship>()
+            .HasOne(f => f.Requester)
+            .WithMany(u => u.SentFriendships)
+            .HasForeignKey(f => f.RequesterId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<Post> Post { get; set; }
-        public virtual DbSet<Friendship> Friendship { get; set; }
-        public virtual DbSet<Card> Card { get; set; }
-        public virtual DbSet<CardList> CardList { get; set; }
-        public virtual DbSet<Message> Message { get; set; }
-        public virtual DbSet<Interaction> Interaction { get; set; }
-        public virtual DbSet<Topic> Topic { get; set; }
-        public virtual DbSet<Learning> Learning { get; set; }
-        public virtual DbSet<Language> Language { get; set; }
-        public virtual DbSet<Gameplay> Gameplay { get; set; }
+        modelBuilder.Entity<Friendship>()
+            .HasOne(f => f.Recipient)
+            .WithMany(u => u.ReceivedFriendships)
+            .HasForeignKey(f => f.RecipientId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany(u => u.SentMessages)
+            .HasForeignKey(fr => fr.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Friendship>()
-                .HasOne(f => f.Requester)
-                .WithMany(u => u.SentFriendships)
-                .HasForeignKey(f => f.RequesterId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Recipient)
+            .WithMany(u => u.ReceivedMessages)
+            .HasForeignKey(fr => fr.RecipientId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Friendship>()
-                .HasOne(f => f.Recipient)
-                .WithMany(u => u.ReceivedFriendships)
-                .HasForeignKey(f => f.RecipientId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Interaction>()
+            .HasOne(i => i.User)
+            .WithMany(u => u.Interactions)
+            .HasForeignKey(i => i.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.Sender)
-                .WithMany(u => u.SentMessages)
-                .HasForeignKey(fr => fr.SenderId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Interaction>()
+            .HasOne(i => i.ParentInteraction)
+            .WithMany(p => p.ChildInteractions)
+            .HasForeignKey(i => i.ParentInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.Recipient)
-                .WithMany(u => u.ReceivedMessages)
-                .HasForeignKey(fr => fr.RecipientId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Interaction>()
+            .HasOne(i => i.Post)
+            .WithMany(p => p.Interactions)
+            .HasForeignKey(i => i.PostId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Interaction>()
-                .HasOne(i => i.User)
-                .WithMany(u => u.Interactions)
-                .HasForeignKey(i => i.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Learning>()
+            .HasOne(l => l.User)
+            .WithMany(u => u.Learnings)
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Interaction>()
-                .HasOne(i => i.ParentInteraction)
-                .WithMany(p => p.ChildInteractions)
-                .HasForeignKey(i => i.ParentInteractionId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Learning>()
+            .HasOne(l => l.LearningLanguage)
+            .WithMany(l => l.LearningLanguageOfLearnings)
+            .HasForeignKey(l => l.LearningLanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Interaction>()
-                .HasOne(i => i.Post)
-                .WithMany(p => p.Interactions)
-                .HasForeignKey(i => i.PostId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Learning>()
+            .HasOne(l => l.NativeLanguage)
+            .WithMany(l => l.NativeLanguageOfLearnings)
+            .HasForeignKey(l => l.NativeLanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Learning>()
-                .HasOne(l => l.User)
-                .WithMany(u => u.Learnings)
-                .HasForeignKey(l => l.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<CardList>()
+            .HasOne(c => c.Topic)
+            .WithMany(t => t.CardLists)
+            .HasForeignKey(c => c.TopicId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Learning>()
-                .HasOne(l => l.LearningLanguage)
-                .WithMany(l => l.LearningLanguageOfLearnings)
-                .HasForeignKey(l => l.LearningLanguageId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<CardList>()
+            .HasOne(c => c.NativeLanguage)
+            .WithMany(l => l.NativeLanguageOfCardLists)
+            .HasForeignKey(c => c.NativeLanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Learning>()
-                .HasOne(l => l.NativeLanguage)
-                .WithMany(l => l.NativeLanguageOfLearnings)
-                .HasForeignKey(l => l.NativeLanguageId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<CardList>()
+            .HasOne(c => c.LearningLanguage)
+            .WithMany(l => l.LearningLanguageOfCardLists)
+            .HasForeignKey(c => c.LearningLanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<CardList>()
-                .HasOne(c => c.Topic)
-                .WithMany(t => t.CardLists)
-                .HasForeignKey(c => c.TopicId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Gameplay>()
+            .HasOne(g => g.User)
+            .WithMany(u => u.Gameplays)
+            .HasForeignKey(g => g.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<CardList>()
-                .HasOne(c => c.NativeLanguage)
-                .WithMany(l => l.NativeLanguageOfCardLists)
-                .HasForeignKey(c => c.NativeLanguageId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Post>()
+            .HasOne(p => p.Image)
+            .WithOne(i => i.Post)
+            .HasForeignKey<Post>(p => p.ImageId)
+            .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<CardList>()
-                .HasOne(c => c.LearningLanguage)
-                .WithMany(l => l.LearningLanguageOfCardLists)
-                .HasForeignKey(c => c.LearningLanguageId)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Post>()
+            .HasOne(p => p.User)
+            .WithMany(u => u.Posts)
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Gameplay>()
-                .HasOne(g => g.User)
-                .WithMany(u => u.Gameplays)
-                .HasForeignKey(g => g.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
+        modelBuilder.Entity<Card>()
+            .HasOne(c => c.CardList)
+            .WithMany(cl => cl.Cards)
+            .HasForeignKey(c => c.CardListId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Image)
+            .WithOne(i => i.User)
+            .HasForeignKey<User>(u => u.ImageId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        //TODO rethink the DeleteBehaviors whether should be soft delete or normal delete
     }
 }

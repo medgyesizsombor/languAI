@@ -1,4 +1,5 @@
 using LanguAI.Backend.Services;
+using LanguAI.Backend.ViewModels.Image;
 using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,15 +12,16 @@ namespace LanguAI.Backend.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
-
     private readonly ILogger<UserController> _logger;
     private readonly IAuthenticationService _authenticationService;
+    private readonly IStorageService _storageService;
 
-    public UserController(ILogger<UserController> logger, IUserService userService, IAuthenticationService authenticationService)
+    public UserController(ILogger<UserController> logger, IUserService userService, IAuthenticationService authenticationService, IStorageService storageService)
     {
         _logger = logger;
         _userService = userService;
         _authenticationService = authenticationService;
+        _storageService = storageService;
     }
 
     /// <summary>
@@ -190,6 +192,32 @@ public class UserController : ControllerBase
         }
         catch (Exception e)
         {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost(Name = "SetProfilePicture")]
+    public async Task<ActionResult<bool>> SetProfilePicture(ImageViewModel request)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            var success = await _userService.SetProfilePicture(request, (int)currentUserId);
+
+            if (success)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

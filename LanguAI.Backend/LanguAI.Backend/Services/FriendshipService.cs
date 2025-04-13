@@ -13,7 +13,7 @@ public interface IFriendshipService
     List<IntSelectorModel> GetFriendList(int userId);
     FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId);
     FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
-    bool ReceivingFriendshipRequest(int friendshipRequestId, int status);
+    bool ReceivingFriendshipRequest(int friendshipRequestId, FriendshipStatusEnum status);
     int ChangeFriendshipStatus(int oldStatus, int newStatus);
     bool CreateFriendshipWithChatGPT(int userId);
     List<FriendshipRequestViewModel> GetFriendshipRequestList(int currentUserId);
@@ -111,7 +111,7 @@ public class FriendshipService : BaseService, IFriendshipService
                             && f.RecipientId == otherUserId)
                         || (f.RequesterId == otherUserId
                             && f.RecipientId == currentUserId))
-                    && f.Status != (int)FriendshipStatusEnum.Deleted)
+                    && f.Status != FriendshipStatusEnum.Deleted)
             .Select(f => new FriendshipViewModel
             {
                 RecipientId = f.RecipientId,
@@ -151,14 +151,14 @@ public class FriendshipService : BaseService, IFriendshipService
             Friendship friendship = _context.Friendship
                 .FirstOrDefault(f => f.RequesterId == requesterId
                     && f.RecipientId == currentUserId
-                    && f.Status == (int)FriendshipStatusEnum.Requested);
+                    && f.Status == FriendshipStatusEnum.Requested);
 
             if (requester == null || recipient == null || friendship == null)
             {
                 return FriendshipStatusEnum.Requested;
             }
 
-            friendship.Status = (int)friendshipStatus;
+            friendship.Status = friendshipStatus;
 
             _context.SaveChanges();
             return friendshipStatus;
@@ -175,7 +175,7 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <param name="friendshipId">Id of the Friendship</param>
     /// <param name="status">Status of friendship</param>
     /// <returns></returns>
-    public bool ReceivingFriendshipRequest(int friendshipId, int status)
+    public bool ReceivingFriendshipRequest(int friendshipId, FriendshipStatusEnum status)
     {
         Friendship friendship = _context.Friendship.FirstOrDefault(f => f.Id == friendshipId);
 
@@ -224,7 +224,7 @@ public class FriendshipService : BaseService, IFriendshipService
             {
                 RequesterId = userId,
                 RecipientId = EnvironmentSettings.ChatGPTId,
-                Status = (int)FriendshipStatusEnum.Accepted
+                Status = FriendshipStatusEnum.Accepted
             };
 
             _context.Friendship.Add(friendship);
@@ -249,7 +249,7 @@ public class FriendshipService : BaseService, IFriendshipService
         try
         {
             return _context.Friendship
-                .Where(f => f.RecipientId == currentUserId && f.Status == (int)FriendshipStatusEnum.Requested)
+                .Where(f => f.RecipientId == currentUserId && f.Status == FriendshipStatusEnum.Requested)
                 .Select(f => new FriendshipRequestViewModel
                 {
                     Id = f.Id,
@@ -277,7 +277,7 @@ public class FriendshipService : BaseService, IFriendshipService
         try
         {
             return _context.Friendship
-                .Where(f => f.RecipientId == currentUserId && f.Status == (int)FriendshipStatusEnum.Requested)
+                .Where(f => f.RecipientId == currentUserId && f.Status == FriendshipStatusEnum.Requested)
                 .Select(f => f.Id)
                 .ToList()
                 .Count;
