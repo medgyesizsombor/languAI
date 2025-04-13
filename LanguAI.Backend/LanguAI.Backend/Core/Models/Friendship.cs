@@ -25,7 +25,7 @@ public class Friendship
     public DateTime Created { get; set; } = DateTime.UtcNow;
 
     [Required]
-    public int Status { get; set; } = (int)FriendshipStatusEnum.Requested;
+    public FriendshipStatusEnum Status { get; set; } = FriendshipStatusEnum.Requested;
 
     [Required]
     public bool IsCloseFriendship { get; set; } = false;

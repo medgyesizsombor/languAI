@@ -204,7 +204,7 @@ public class CardService : BaseService, ICardService
                          || (c.Access == AccessEnum.Protected
                              && (_context.Friendship
                                  .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == c.UserId)
-                                     || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == (int)FriendshipStatusEnum.Accepted)))))
+                                     || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == FriendshipStatusEnum.Accepted)))))
             .Select(c => ConvertCardListToCardListViewModel(c))
             .ToList();
     }
