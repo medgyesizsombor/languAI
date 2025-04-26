@@ -7,7 +7,7 @@
   <ng-container *ngIf="!isLoading; else loader"></ng-container>
   <app-post-component
     [post]="post"
-    (likeButtonEmit)="like()"
+    (likeButtonEmit)="like($event)"
     [showCommentButton]="false"></app-post-component>
   <app-comment
     *ngFor="let comment of post?.comments"

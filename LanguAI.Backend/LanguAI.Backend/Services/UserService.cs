@@ -12,13 +12,13 @@ namespace LanguAI.Backend.Services;
 public interface IUserService
 {
     List<UserViewModel> GetAllUsers();
-    UserViewModel GetUserById(int userId);
-    bool EditUser(UserViewModel request, int currentUserId);
+    Task<UserViewModel> GetUserById(int userId);
+    bool SaveUser(SaveUserRequest request, int currentUserId);
     bool ChangePassword(ChangePasswordRequestViewModel request);
     bool DeleteUser(int userId);
     int GetStreakOfCurrentUser(int userId);
     UserDataViewModel GetDataOfUser(int userId);
-    Task<bool> SetProfilePicture(ImageViewModel request, int userId);
+    bool SetProfilePicture(int imageId, int userId);
 }
 
 public class UserService : BaseService, IUserService
@@ -50,15 +50,25 @@ public class UserService : BaseService, IUserService
     /// </summary>
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
-    public UserViewModel GetUserById(int userId)
+    public async Task<UserViewModel> GetUserById(int userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        User user = _context.User.FirstOrDefault(u => u.Id == userId && u.IsActive);
+        User user = _context.User
+            .Include(u => u.Image)
+            .FirstOrDefault(u => u.Id == userId
+                && u.IsActive);
 
         if (user == null)
         {
             return null;
+        }
+
+        string pictureContentAsString = null;
+        if (user.ImageId != null)
+        {
+            var bytes = await _storageService.DownloadBlob((int)user.ImageId);
+            pictureContentAsString = Convert.ToBase64String(bytes);
         }
 
         return new UserViewModel
@@ -69,7 +79,16 @@ public class UserService : BaseService, IUserService
             DateOfBirth = user.DateOfBirth,
             Email = user.Email,
             IsActive = user.IsActive,
-            Streak = user.Streak
+            Streak = user.Streak,
+            ProfilePicture = string.IsNullOrEmpty(pictureContentAsString)
+                ? null
+                : new ImageViewModel
+                {
+                    ContentAsString = pictureContentAsString,
+                    Id = user.ImageId,
+                    Name = user.Image.Name,
+                    Type = user.Image.Type,
+                }
         };
     }
 
@@ -78,7 +97,7 @@ public class UserService : BaseService, IUserService
     /// </summary>
     /// <param name="request">User ViewModel</param>
     /// <returns></returns>
-    public bool EditUser(UserViewModel request, int currentUserId)
+    public bool SaveUser(SaveUserRequest request, int currentUserId)
     {
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
@@ -94,7 +113,7 @@ public class UserService : BaseService, IUserService
 
             user.DateOfBirth = request.DateOfBirth;
             user.Username = request.Username;
-            user.Language = request.Language;
+            user.Email = request.Email;
 
             _context.SaveChanges();
             return true;
@@ -233,27 +252,17 @@ public class UserService : BaseService, IUserService
         };
     }
 
-    public async Task<bool> SetProfilePicture(ImageViewModel request, int userId)
+    public bool SetProfilePicture(int imageId, int userId)
     {
-        byte[] blobContent = Convert.FromBase64String(request.ContentAsString);
-
-        await _storageService.UploadBlob(request);
-
-        Image image = new Image
-        {
-            Name = request.Name
-        };
-
-        _context.Image.Add(image);
-
-        var user = _context.User.FirstOrDefault(u => u.Id == userId);
+        var user = _context.User
+            .FirstOrDefault(u => u.Id == userId);
 
         if (user == null)
         {
             throw new Exception("User is not found");
         }
 
-        user.ImageId = image.Id;
+        user.ImageId = imageId;
 
         _context.SaveChanges();
 

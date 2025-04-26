@@ -124,6 +124,8 @@ export class MessagePage {
               this.toastrService.presentErrorToast(
                 this.translateService.instant('ERROR_SENDING_MESSAGE')
               );
+
+              this.loadingService.hideLoading();
               return EMPTY;
             }
           }),

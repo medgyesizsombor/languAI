@@ -103,6 +103,7 @@ export class LessonLearningPage {
             });
           }
 
+          this.loadingService.hideLoading();
           return EMPTY;
         })
       )

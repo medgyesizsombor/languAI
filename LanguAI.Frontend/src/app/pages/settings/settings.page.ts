@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   LEARNINGS_NAVIGATION,
   LOGIN_NAVIGATION,
@@ -19,18 +19,20 @@ import { SettingsNavigationEnum } from 'src/app/util/enums/settings-navigation-e
 import { Capacitor } from '@capacitor/core';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LanguageEnum } from 'src/app/util/enums/language-enum';
+import { UserViewModel } from 'src/api/models';
+import { FileService } from 'src/app/util/services/file.service';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss']
 })
-export class SettingsPage {
+export class SettingsPage implements OnInit {
   title = this.translateService.instant(SETTINGS_TITLE);
   numberOfFriendshipRequest = 0;
+  imageSrc: string | undefined;
 
-  profile = {
-    image: 'asd',
+  profile: UserViewModel = {
     username: 'asd1',
     email: 'asd@asd.com'
   };
@@ -46,18 +48,34 @@ export class SettingsPage {
     private loadingService: LoadingService,
     private toastrService: ToastrService,
     private friendshipRequestService: FriendshipRequestService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private fileService: FileService
   ) {}
 
-  ionViewWillEnter() {
+  async ngOnInit() {
+    await this.loadingService.showLoading();
     this.loadData();
-    //TODO befejezni
-    // this.userService.getUserById$Json({ userId: 7 }).subscribe(res => {
-    //   if (res) {
-    //     console.log(res);
-    //     // patchModel();
-    //   }
-    // });
+    this.userService
+      .getUserById$Json({ userId: this.localStorageService.getUserId()! })
+      .subscribe({
+        next: (res: UserViewModel) => {
+          if (res) {
+            this.profile = { ...res };
+            this.imageSrc = this.fileService.getImageSrc(
+              this.profile.profilePicture?.contentAsString,
+              this.profile.profilePicture?.type
+            );
+          } else {
+            //TODO szöveg
+            this.toastrService.presentErrorToast('random');
+          }
+          this.loadingService.hideLoading();
+        },
+        error: err => {
+          //TODO szöveg
+          this.toastrService.presentErrorToast(err.message);
+        }
+      });
   }
 
   ionViewDidLeave() {
@@ -94,23 +112,14 @@ export class SettingsPage {
   /**
    * Delete the profile
    */
-  deleteProfile() {
-    this.loadingService.showLoading().then(() => {
-      this.userService.deleteUser$Json().subscribe({
-        next: (success: boolean) => {
-          if (success) {
-            this.loadingService.hideLoading();
-            this.logout();
-          } else {
-            this.loadingService.hideLoading();
-            this.toastrService.presentErrorToast(
-              this.translateService.instant(
-                'ERROR_HAPPEND_WHEN_TRIED_TO_DELETE_PROFILE'
-              )
-            );
-          }
-        },
-        error: () => {
+  async deleteProfile() {
+    await this.loadingService.showLoading();
+    this.userService.deleteUser$Json().subscribe({
+      next: (success: boolean) => {
+        if (success) {
+          this.loadingService.hideLoading();
+          this.logout();
+        } else {
           this.loadingService.hideLoading();
           this.toastrService.presentErrorToast(
             this.translateService.instant(
@@ -118,7 +127,15 @@ export class SettingsPage {
             )
           );
         }
-      });
+      },
+      error: () => {
+        this.loadingService.hideLoading();
+        this.toastrService.presentErrorToast(
+          this.translateService.instant(
+            'ERROR_HAPPEND_WHEN_TRIED_TO_DELETE_PROFILE'
+          )
+        );
+      }
     });
   }
 

@@ -57,7 +57,7 @@ public class LearningService : BaseService, ILearningService
 
             learning.LanguageLevel = request.LanguageLevel;
             learning.LearningLanguageId = request.LanguageId;
-            //TODO NativaLanguageId
+            learning.NativeLanguageId = request.NativeLanguageId;
             learning.UserId = request.UserId;
             learning.IsActive = true;
 

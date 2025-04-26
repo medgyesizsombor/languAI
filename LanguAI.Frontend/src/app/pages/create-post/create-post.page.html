@@ -10,22 +10,41 @@
     <form *ngIf="postForm" [formGroup]="postForm">
       <ion-row
         class="input-row ion-padding-horizontal ion-justify-content-between pt-2">
-        <ion-input
-          type="text"
+        <ion-textarea
+          [spellcheck]="false"
+          [autoGrow]="true"
+          [maxlength]="250"
+          [counter]="true"
+          autocapitalize="sentences"
           id="text"
           class="form-control"
           formControlName="text"
           placeholder="{{ 'WRITE_HERE_THE_CONTEXT_OF_POST' | translate }}"
-          (keyup)="isValid()"></ion-input>
+          (keyup)="isValid()"></ion-textarea>
       </ion-row>
-      <ion-row>
-        <ion-item lines="none">
-          <ion-icon name="image-outline"></ion-icon>
-        </ion-item>
-      </ion-row>
+      <ng-container *ngIf="!this.image; else imageTemplate">
+        <ion-row>
+          <ion-item lines="none">
+            <ion-icon
+              name="image-outline"
+              (click)="openImageModal()"></ion-icon>
+          </ion-item>
+        </ion-row>
+      </ng-container>
     </form>
   </ion-card>
   <app-edit-acces-fab
     [currentAccess]="currentAccessOfPost"
     (changeAccessEmit)="changeAccess($event)"></app-edit-acces-fab>
 </ion-content>
+
+<ng-template #imageTemplate>
+  <ion-row
+    class="pb-4 ion-padding-horizontal ion-justify-content-between ion-align-items-center">
+    <app-image class="mini-image" [imageString]="image?.contentAsString" [type]="image?.type"></app-image>
+    <ion-icon
+      class="fs-20 error-color"
+      name="trash-outline"
+      (click)="removeImage()"></ion-icon>
+  </ion-row>
+</ng-template>

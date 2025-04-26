@@ -25,6 +25,8 @@ import { LanguageLevelPipe } from './pipes/language-level.pipe';
 import { TopicNamePipe } from './pipes/topic-name.pipe';
 import { LanguageNamePipe } from './pipes/language-name.pipe';
 import { SummaryComponent } from '../components/summary/summary.component';
+import { ImageComponent } from '../components/image/image.component';
+import { AvatarComponent } from '../components/avatar/avatar.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -49,7 +51,9 @@ export function createTranslateLoader(http: HttpClient) {
     LanguageLevelPipe,
     TopicNamePipe,
     LanguageNamePipe,
-    SummaryComponent
+    SummaryComponent,
+    ImageComponent,
+    AvatarComponent
   ],
   imports: [
     CommonModule,
@@ -81,7 +85,9 @@ export function createTranslateLoader(http: HttpClient) {
     LanguageLevelPipe,
     TopicNamePipe,
     LanguageNamePipe,
-    SummaryComponent
+    SummaryComponent,
+    ImageComponent,
+    AvatarComponent
   ],
   providers: [LanguageLevelPipe]
 })

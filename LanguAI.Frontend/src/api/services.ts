@@ -9,4 +9,5 @@ export { LearningService } from './services/learning.service';
 export { MessageService } from './services/message.service';
 export { PostService } from './services/post.service';
 export { RegistrationService } from './services/registration.service';
+export { StorageService } from './services/storage.service';
 export { UserService } from './services/user.service';

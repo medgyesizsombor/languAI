@@ -15,6 +15,7 @@ import { LearningService } from './services/learning.service';
 import { MessageService } from './services/message.service';
 import { PostService } from './services/post.service';
 import { RegistrationService } from './services/registration.service';
+import { StorageService } from './services/storage.service';
 import { UserService } from './services/user.service';
 
 /**
@@ -36,6 +37,7 @@ import { UserService } from './services/user.service';
     MessageService,
     PostService,
     RegistrationService,
+    StorageService,
     UserService,
     ApiConfiguration
   ],

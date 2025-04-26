@@ -30,10 +30,12 @@ public class StorageService : BaseService, IStorageService
         {
             var newImage = new Image
             {
-                Name = image.Name
+                Name = image.Name,
+                Type = image.Type
             };
 
             _context.Image.Add(newImage);
+
             _context.SaveChanges();
 
             BlobClient blobClient = new BlobClient(

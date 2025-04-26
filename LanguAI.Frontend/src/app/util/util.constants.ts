@@ -38,3 +38,4 @@ export const INTERMEDIATE = 'INTERMEDIATE';
 export const ADVANCED = 'ADVANCED';
 export const STREAK = 'streak';
 export const CURRENT_LEARNING = 'current-learning';
+export const FULLSIZE_IMAGE_NAVIGATION = 'fullsize-image';

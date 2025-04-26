@@ -63,7 +63,7 @@ public class PostController : ControllerBase
     /// <param name="postId">Id of the post</param>
     /// <returns></returns>
     [HttpGet(Name = "GetPostById")]
-    public ActionResult<PostViewModel> GetPostById(int postId)
+    public async Task<ActionResult<PostViewModel>> GetPostById(int postId)
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
@@ -71,7 +71,7 @@ public class PostController : ControllerBase
 
         try
         {
-            return Ok(_postService.GetPostById(postId, (int)currentUserId));
+            return Ok(await _postService.GetPostById(postId, (int)currentUserId));
         }
         catch (Exception e)
         {
@@ -109,7 +109,7 @@ public class PostController : ControllerBase
     /// <param name="userId">The current user's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetPostsFromForum")]
-    public ActionResult<List<PostViewModel>> GetPostsFromForum(int userId) {
+    public async Task<ActionResult<List<PostViewModel>>> GetPostsFromForumAsync(int userId) {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(userId);
@@ -118,7 +118,7 @@ public class PostController : ControllerBase
 
         try
         {
-            return Ok(_postService.GetPostsFromForum(userId));
+            return Ok(await _postService.GetPostsFromForum(userId));
         }
         catch (Exception e)
         {

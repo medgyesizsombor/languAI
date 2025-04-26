@@ -1,4 +1,6 @@
-﻿namespace LanguAI.Backend.ViewModels.User;
+﻿using LanguAI.Backend.ViewModels.Image;
+
+namespace LanguAI.Backend.ViewModels.User;
 
 public class UserViewModel
 {
@@ -15,4 +17,6 @@ public class UserViewModel
     public bool IsActive { get; set; }
 
     public int Streak { get; set; }
+
+    public ImageViewModel ProfilePicture { get; set; }
 }

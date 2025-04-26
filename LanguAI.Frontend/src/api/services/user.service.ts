@@ -41,6 +41,10 @@ import { saveUser$Json } from '../fn/user/save-user-json';
 import { SaveUser$Json$Params } from '../fn/user/save-user-json';
 import { saveUser$Plain } from '../fn/user/save-user-plain';
 import { SaveUser$Plain$Params } from '../fn/user/save-user-plain';
+import { setProfilePicture$Json } from '../fn/user/set-profile-picture-json';
+import { SetProfilePicture$Json$Params } from '../fn/user/set-profile-picture-json';
+import { setProfilePicture$Plain } from '../fn/user/set-profile-picture-plain';
+import { SetProfilePicture$Plain$Params } from '../fn/user/set-profile-picture-plain';
 import { UserDataViewModel } from '../models/user-data-view-model';
 import { UserViewModel } from '../models/user-view-model';
 
@@ -423,6 +427,53 @@ export class UserService extends BaseService {
   getDataOfUser$Json(params?: GetDataOfUser$Json$Params, context?: HttpContext): Observable<UserDataViewModel> {
     return this.getDataOfUser$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<UserDataViewModel>): UserDataViewModel => r.body)
+    );
+  }
+
+  /** Path part for operation `setProfilePicture()` */
+  static readonly SetProfilePicturePath = '/User/SetProfilePicture';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `setProfilePicture$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setProfilePicture$Plain$Response(params?: SetProfilePicture$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return setProfilePicture$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `setProfilePicture$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setProfilePicture$Plain(params?: SetProfilePicture$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.setProfilePicture$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `setProfilePicture$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setProfilePicture$Json$Response(params?: SetProfilePicture$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return setProfilePicture$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `setProfilePicture$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setProfilePicture$Json(params?: SetProfilePicture$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.setProfilePicture$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

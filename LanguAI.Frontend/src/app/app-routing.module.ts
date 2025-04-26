@@ -7,6 +7,7 @@ import {
   CARD_NAVIGATION,
   CREATE_POST_NAVIGATION,
   FORUM_NAVIGATION,
+  FULLSIZE_IMAGE_NAVIGATION,
   LEARNINGS_NAVIGATION,
   LESSON_LEARNING_NAVIGATION,
   LESSONS_NAVIGATION,
@@ -140,6 +141,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/learnings/learnings.module').then(
         m => m.LearningPageModule
+      )
+  },
+  {
+    path: FULLSIZE_IMAGE_NAVIGATION,
+    loadChildren: () =>
+      import('./pages/fullsize-image/fullsize-image.module').then(
+        m => m.FullsizeImagePageModule
       )
   }
 ];

@@ -12,5 +12,7 @@ public class SaveLearningRequestViewModel
 
     public int LanguageId { get; set; }
 
+    public int NativeLanguageId { get; set; }
+
     public bool IsActive { get; set; } = true;
 }

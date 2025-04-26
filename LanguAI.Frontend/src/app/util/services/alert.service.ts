@@ -585,6 +585,92 @@ export class AlertService {
   }
 
   /**
+   * Show image alert
+   */
+  async showImageUploadAlert(): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('UPLOAD_PHOTO'),
+        message: this.translateService.instant('CAPTURE_OR_CHOOSE_PHOTO'),
+        inputs: [
+          {
+            label: this.translateService.instant('CAPTURE_PHOTO'),
+            type: 'radio',
+            value: true,
+            checked: true
+          },
+          {
+            label: this.translateService.instant('CHOOSE_FROM_GALLERY'),
+            type: 'radio',
+            value: false
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              reject();
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              resolve(data);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+    /**
+   * Show image alert
+   */
+    async showProfilePictureAlert(): Promise<boolean> {
+      return new Promise(async (resolve, reject) => {
+        this.alert = await this.alertController.create({
+          header: this.translateService.instant('PROFILE_PICTURE'),
+          message: this.translateService.instant('OPEN_OR_UPLOAD_PHOTO'),
+          inputs: [
+            {
+              label: this.translateService.instant('OPEN'),
+              type: 'radio',
+              value: true,
+              checked: true
+            },
+            {
+              label: this.translateService.instant('UPLOAD'),
+              type: 'radio',
+              value: false
+            }
+          ],
+          buttons: [
+            {
+              text: this.translateService.instant('CANCEL'),
+              role: 'cancel',
+              handler: () => {
+                reject();
+              }
+            },
+            {
+              text: this.translateService.instant('CONFIRM'),
+              role: 'confirm',
+              handler: data => {
+                resolve(data);
+              }
+            }
+          ]
+        });
+  
+        this.alert.present();
+      });
+    }
+
+  /**
    * The name is not taken
    */
   private isNameValid(title: string, namesOfCardLists: Array<string>): boolean {

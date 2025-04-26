@@ -46,6 +46,7 @@ export class ForumPage {
    * Searching for friend
    */
   searchForFriend() {
+    //TOOD
     console.log('asd');
   }
 

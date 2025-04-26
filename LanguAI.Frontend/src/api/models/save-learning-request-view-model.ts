@@ -6,5 +6,6 @@ export interface SaveLearningRequestViewModel {
   isActive?: boolean;
   languageId?: number;
   languageLevel?: LanguageLevelEnum;
+  nativeLanguageId?: number;
   userId?: number;
 }

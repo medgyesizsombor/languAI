@@ -9,8 +9,10 @@
   </ion-row>
   <ion-row>
     <ion-card class="w-100">
-      <ion-card-header>
-        <ion-label>image</ion-label>
+      <ion-card-header *ngIf="post?.image?.contentAsString?.length">
+        <app-image
+          [imageString]="post?.image?.contentAsString"
+          [type]="post?.image?.type"></app-image>
       </ion-card-header>
       <ion-card-content>
         <ion-row>

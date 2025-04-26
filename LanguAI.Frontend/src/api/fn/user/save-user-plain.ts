@@ -6,10 +6,10 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserViewModel } from '../../models/user-view-model';
+import { SaveUserRequest } from '../../models/save-user-request';
 
 export interface SaveUser$Plain$Params {
-      body?: UserViewModel
+      body?: SaveUserRequest
 }
 
 export function saveUser$Plain(http: HttpClient, rootUrl: string, params?: SaveUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {

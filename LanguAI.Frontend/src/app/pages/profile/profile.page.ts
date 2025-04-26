@@ -3,10 +3,15 @@ import { CARD_LIST_NAVIGATION, PROFILE_TITLE } from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FriendshipService, UserService } from 'src/api/services';
+import {
+  FriendshipService,
+  StorageService,
+  UserService
+} from 'src/api/services';
 import {
   CardListViewModel,
   FriendshipViewModel,
+  ImageViewModel,
   IntSelectorModel,
   UserViewModel
 } from 'src/api/models';
@@ -19,6 +24,7 @@ import { AlertService } from 'src/app/util/services/alert.service';
 import { BadgeEnum } from 'src/app/util/enums/badge-enum';
 import { FriendshipStatusEnum } from 'src/api/models';
 import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
+import { FileService } from 'src/app/util/services/file.service';
 
 @Component({
   selector: 'app-profile',
@@ -75,18 +81,16 @@ export class ProfilePage {
     //   userId: 8
     // }
   ];
-
-  languages: Array<IntSelectorModel> = [
-    { id: 1, name: 'hu' },
-    { id: 2, name: 'en' }
-  ];
+  showingFullsizeImage = false;
+  imageSrc: string | undefined;
 
   sendFriendshipRequestSub: Subscription | undefined;
   reactFriendshipRequestSub: Subscription | undefined;
   getUserSub: Subscription | undefined;
   loadDataSub: Subscription | undefined;
   saveSub: Subscription | undefined;
-  getLanguagesSub: Subscription | undefined;
+
+  isLoading = true;
 
   /**
    * To make BadgeEnum usable in the template
@@ -106,7 +110,9 @@ export class ProfilePage {
     private activatedRoute: ActivatedRoute,
     private modalController: ModalController,
     private friendshipService: FriendshipService,
-    private friendshipRequestService: FriendshipRequestService
+    private friendshipRequestService: FriendshipRequestService,
+    private fileService: FileService,
+    private storageService: StorageService
   ) {}
 
   ionViewWillEnter() {
@@ -119,7 +125,6 @@ export class ProfilePage {
     this.loadDataSub?.unsubscribe();
     this.sendFriendshipRequestSub?.unsubscribe();
     this.reactFriendshipRequestSub?.unsubscribe();
-    this.getLanguagesSub?.unsubscribe();
   }
 
   /**
@@ -130,7 +135,7 @@ export class ProfilePage {
 
     const method = this.isEdit ? 'enable' : 'disable';
 
-    ['username', 'email', 'dateOfBirth', 'language'].forEach(control => {
+    ['username', 'email', 'dateOfBirth'].forEach(control => {
       this.profileForm?.controls[control][method]();
     });
   }
@@ -182,14 +187,6 @@ export class ProfilePage {
    */
   changePassword() {
     this.alertService.showChangePasswordAlert();
-  }
-
-  changeLanguage() {
-    this.translateService.use(
-      this.languages.find(
-        l => l.id === this.profileForm?.controls['language'].value
-      )?.name!
-    );
   }
 
   /**
@@ -250,6 +247,60 @@ export class ProfilePage {
       });
   }
 
+  changeProfilePicture(image: ImageViewModel) {
+    this.storageService
+      .uploadBlob$Json({ body: image })
+      .pipe(
+        switchMap((imageId: number) => {
+          if (imageId) {
+            return this.userService.setProfilePicture$Json({ imageId });
+          }
+
+          this.loadingService.hideLoading();
+          return EMPTY;
+        })
+      )
+      .subscribe({
+        next: (success: boolean) => {
+          if (success) {
+            this.loadData();
+          } else {
+            this.toastrService.presentErrorToast(
+              'UNSUCCESSFUL_CHANGING_PROFILE_PICTURE'
+            );
+          }
+        },
+        error: () => {
+          this.toastrService.presentErrorToast(
+            'UNSUCCESSFUL_CHANGING_PROFILE_PICTURE'
+          );
+        }
+      });
+  }
+
+  openImageModal() {
+    this.alertService.showProfilePictureAlert().then((isOpen: boolean) => {
+      if (isOpen) {
+        this.showingFullsizeImage = true;
+      } else {
+        this.alertService
+          .showImageUploadAlert()
+          .then((isCapturing: boolean) => {
+            if (isCapturing) {
+              this.fileService.createPhoto().then((image: ImageViewModel) => {
+                this.changeProfilePicture(image);
+              });
+            } else {
+              this.fileService.pickPhoto().then((image: ImageViewModel) => {
+                this.changeProfilePicture(image);
+              });
+            }
+          })
+          .catch(() => {});
+      }
+    });
+  }
+
   /**
    * Initialize
    */
@@ -267,53 +318,60 @@ export class ProfilePage {
    */
   private loadData() {
     this.userId = this.localStorageService.getUserId();
-    this.profileModel = {
-      id: this.userId!,
-      language: 1,
-      dateOfBirth: '1998-04-20',
-      email: 'teszt@teszt.com',
-      username: 'zsombi'
-    };
-    this.isProfileOfSomeoneElse = true;
-    this.originalProfileModel = { ...this.profileModel };
-    this.fillForm();
-    this.loadingService.hideLoading();
-    // this.loadDataSub = this.activatedRoute.params
-    //   .pipe(
-    //     switchMap((params: Params) => {
-    //       const idFromParam = +params['id'];
-    //       this.isProfileOfSomeoneElse = idFromParam
-    //         ? this.userId !== idFromParam
-    //         : false;
+    // this.profileModel = {
+    //   id: this.userId!,
+    //   language: 1,
+    //   dateOfBirth: '1998-04-20',
+    //   email: 'teszt@teszt.com',
+    //   username: 'zsombi'
+    // };
+    // this.isProfileOfSomeoneElse = true;
+    // this.originalProfileModel = { ...this.profileModel };
+    // this.fillForm();
+    // this.loadingService.hideLoading();
+    this.loadDataSub = this.activatedRoute.params
+      .pipe(
+        switchMap((params: Params) => {
+          const idFromParam = +params['id'];
+          this.isProfileOfSomeoneElse = idFromParam
+            ? this.userId !== idFromParam
+            : false;
 
-    //       return this.userService.getUserById$Json({
-    //         userId: idFromParam ? +idFromParam : this.userId!
-    //       });
-    //     }),
-    //     switchMap((res: UserViewModel) => {
-    //       this.profileModel = res;
-    //       this.fillForm();
-    //       if (!this.isProfileOfSomeoneElse) {
-    //         this.originalProfileModel = { ...this.profileModel };
-    //         return EMPTY;
-    //       }
+          return this.userService.getUserById$Json({
+            userId: idFromParam ? +idFromParam : this.userId!
+          });
+        }),
+        switchMap((res: UserViewModel) => {
+          this.profileModel = res;
+          this.fillForm();
+          if (!this.isProfileOfSomeoneElse) {
+            this.originalProfileModel = { ...this.profileModel };
+            this.imageSrc = this.fileService.getImageSrc(
+              this.originalProfileModel?.profilePicture?.contentAsString,
+              this.originalProfileModel?.profilePicture?.type
+            );
+            this.loadingService.hideLoading();
+            this.isLoading = false;
+            return EMPTY;
+          }
 
-    //       return this.friendshipService.getFriendshipByUserId$Json({
-    //         currentUserId: this.userId!,
-    //         otherUserId: this.profileModel.id
-    //       });
-    //     })
-    //   )
-    //   .subscribe({
-    //     next: (res: FriendshipViewModel) => {
-    //       this.loadingService.hideLoading();
-    //       this.friendshipViewModel = res;
-    //     },
-    //     error: () => {
-    //       this.loadingService.hideLoading();
-    //       this.toastrService.presentErrorToast('DATA_ERROR');
-    //     }
-    //   });
+          return this.friendshipService.getFriendshipByUserId$Json({
+            otherUserId: this.profileModel.id
+          });
+        })
+      )
+      .subscribe({
+        next: (res: FriendshipViewModel) => {
+          this.loadingService.hideLoading();
+          this.friendshipViewModel = res;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.loadingService.hideLoading();
+          this.isLoading = false;
+          this.toastrService.presentErrorToast('DATA_ERROR');
+        }
+      });
   }
 
   /**
@@ -326,8 +384,7 @@ export class ProfilePage {
         { value: '', disabled: true },
         [Validators.required, Validators.email]
       ],
-      dateOfBirth: [{ value: '', disabled: true }, [Validators.required]],
-      language: [{ value: '', disabled: true }, [Validators.required]]
+      dateOfBirth: [{ value: '', disabled: true }, [Validators.required]]
     });
   }
 
@@ -338,8 +395,7 @@ export class ProfilePage {
     this.profileForm?.patchValue({
       username: this.profileModel.username,
       email: this.profileModel.email,
-      dateOfBirth: this.profileModel.dateOfBirth,
-      language: this.profileModel.language
+      dateOfBirth: this.profileModel.dateOfBirth
     });
   }
 

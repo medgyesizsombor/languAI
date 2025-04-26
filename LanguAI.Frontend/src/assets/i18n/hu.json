@@ -145,5 +145,14 @@
   "UNSENT_MESSAGE": "Elküldetlen üzenet",
   "WOULD_YOU_LIKE_TO_TRY_RESEND_THE_MESSAGE": "Szeretné megpróbálni elküldeni újra?",
   "SENDING_MESSAGE": "Üzenet küldése",
-  "UNSUCCESSFUL_SENDING": "Sikertelen küldés"
+  "UNSUCCESSFUL_SENDING": "Sikertelen küldés",
+  "YOU_DONT_HAVE_ANY_LEARNINGS_YET": "Még nincs tanulmányod",
+  "PROFILE_PICTURE": "Profilkép",
+  "OPEN_OR_UPLOAD_PHOTO": "Kép megnyitása vagy feltöltése",
+  "OPEN": "Megnyitás",
+  "UPLOAD": "Feltöltés",
+  "UPLOAD_PHOTO": "Fénykép feltöltése",
+  "CAPTURE_OR_CHOOSE_PHOTO": "Kép készítése vagy kiválasztása",
+  "CAPTURE_PHOTO": "Kép készítése",
+  "CHOOSE_FROM_GALLERY": "Gallériából kiválasztás"
 }

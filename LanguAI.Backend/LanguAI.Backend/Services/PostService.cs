@@ -2,6 +2,7 @@
 using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
+using LanguAI.Backend.ViewModels.Image;
 using LanguAI.Backend.ViewModels.Interaction;
 using LanguAI.Backend.ViewModels.Post;
 using Microsoft.EntityFrameworkCore;
@@ -12,19 +13,23 @@ public interface IPostService
 {
     List<PostViewModel> GetAllPost();
     List<PostViewModel> GetPosts(GetPostRequest request);
-    PostViewModel GetPostById(int postId, int currentUserId);
+    Task<PostViewModel> GetPostById(int postId, int currentUserId);
     bool SavePost(SavePostRequest request, int currentUserId);
-    List<PostViewModel> GetPostsFromForum(int currentUserId);
+    Task<List<PostViewModel>> GetPostsFromForum(int currentUserId);
 }
 
 public class PostService : BaseService, IPostService
 {
-    public PostService(LanguAIDataContext context) : base(context) { }
+    private readonly IStorageService _storageService;
+
+    public PostService(LanguAIDataContext context, IStorageService storageService) : base(context)
+    {
+        _storageService = storageService;
+    }
 
     /// <summary>
     /// Get all post
     /// </summary>
-    /// <param name="request">Filter</param>
     /// <returns></returns>
     public List<PostViewModel> GetAllPost()
     {
@@ -70,11 +75,11 @@ public class PostService : BaseService, IPostService
     /// </summary>
     /// <param name="postId">postId</param>
     /// <returns></returns>
-    public PostViewModel GetPostById(int postId, int currentUserId)
+    public async Task<PostViewModel> GetPostById(int postId, int currentUserId)
     {
         ArgumentNullException.ThrowIfNull(postId);
 
-        return _context.Post
+        var post = _context.Post
             .Include(p => p.User)
             .Include(p => p.Interactions)
             .Where(p => p.Id == postId)
@@ -88,6 +93,7 @@ public class PostService : BaseService, IPostService
                 Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && !i.IsDeleted),
                 NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
                 NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0),
+                Image = p.ImageId == null ? null : new ImageViewModel { Name = p.Image.Name, Type = p.Image.Type, Id = p.ImageId },
                 Comments = p.Interactions.Where(i => i.InteractionType == InteractionEnum.Comment && !i.IsDeleted).Select(i => new CommentViewModel
                 {
                     Id = i.Id,
@@ -102,6 +108,14 @@ public class PostService : BaseService, IPostService
                 .ToList()
             })
             .FirstOrDefault();
+
+        if (post.Image != null)
+        {
+            var bytes = await _storageService.DownloadBlob((int)post.Image.Id);
+            post.Image.ContentAsString = Convert.ToBase64String(bytes);
+        }
+
+        return post;
     }
 
     /// <summary>
@@ -137,6 +151,7 @@ public class PostService : BaseService, IPostService
         post.Created = request.Created;
         post.UserId = currentUserId;
         post.Access = request.Access;
+        post.ImageId = request.ImageId;
 
         if (!isEdit)
         {
@@ -153,13 +168,14 @@ public class PostService : BaseService, IPostService
     /// </summary>
     /// <param name="currentUserId">The current user's Id</param>
     /// <returns></returns>
-    public List<PostViewModel> GetPostsFromForum(int currentUserId)
+    public async Task<List<PostViewModel>> GetPostsFromForum(int currentUserId)
     {
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        return _context.Post
+        var posts = _context.Post
             .Include(p => p.User)
             .Include(p => p.Interactions)
+            .Include(p => p.Image)
             .Where(p => p.UserId == currentUserId
                 || (p.Access == AccessEnum.Public)
                 || (p.Access == AccessEnum.Protected && (_context.Friendship
@@ -174,8 +190,20 @@ public class PostService : BaseService, IPostService
                 Username = p.User.Username,
                 Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && i.IsDeleted == false),
                 NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
-                NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0)
+                NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0),
+                Image = p.ImageId == null ? null : new ImageViewModel { Name = p.Image.Name, Type = p.Image.Type, Id = p.ImageId }
             })
             .ToList();
+
+        foreach (var post in posts)
+        {
+            if (post.Image != null)
+            {
+                var bytes = await _storageService.DownloadBlob((int)post.Image.Id);
+                post.Image.ContentAsString = Convert.ToBase64String(bytes);
+            }
+        }
+
+        return posts;
     }
 }

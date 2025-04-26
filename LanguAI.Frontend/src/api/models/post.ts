@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import { AccessEnum } from '../models/access-enum';
+import { Image } from '../models/image';
 import { Interaction } from '../models/interaction';
 import { User } from '../models/user';
 export interface Post {
@@ -8,6 +9,8 @@ export interface Post {
   content: string;
   created: string;
   id: number;
+  image?: Image;
+  imageId?: number | null;
   interactions?: Array<Interaction> | null;
   user?: User;
   userId: number;

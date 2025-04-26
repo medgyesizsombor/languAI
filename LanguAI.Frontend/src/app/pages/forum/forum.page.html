@@ -4,13 +4,13 @@
   (addButtonEmit)="navigateToPost()"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngIf="!isLoading; else loader">
-    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <!-- <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
       <ion-refresher-content
         pullingIcon="chevron-down-circle-outline"
         pullingText="Pull to refresh"
         refreshingSpinner="circles"
         refreshingText="Refreshing..."></ion-refresher-content>
-    </ion-refresher>
+    </ion-refresher> -->
     <ng-container *ngIf="posts.length; else missingPosts">
       <app-post-component
         *ngFor="let post of posts"

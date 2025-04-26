@@ -1,5 +1,4 @@
 ﻿using LanguAI.Backend.Core.Enums;
-using LanguAI.Backend.ViewModels.Image;
 
 namespace LanguAI.Backend.ViewModels.Post;
 
@@ -15,5 +14,5 @@ public class SavePostRequest
 
     public AccessEnum Access { get; set; }
 
-    public ImageViewModel Image { get; set; }
+    public int ImageId { get; set; }
 }

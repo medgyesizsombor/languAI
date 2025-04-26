@@ -47,7 +47,7 @@ public class UserController : ControllerBase
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetUserById")]
-    public ActionResult<UserViewModel> GetUserById(int userId)
+    public async Task<ActionResult<UserViewModel>> GetUserById(int userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
@@ -57,7 +57,7 @@ public class UserController : ControllerBase
 
             ArgumentNullException.ThrowIfNull(currentUserId);
 
-            return Ok(_userService.GetUserById(userId));
+            return Ok(await _userService.GetUserById(userId));
         }
         catch (Exception e)
         {
@@ -70,7 +70,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet(Name = "GetCurrentUser")]
-    public ActionResult<UserViewModel> GetCurrentUser()
+    public async Task<ActionResult<UserViewModel>> GetCurrentUser()
     {
         try
         {
@@ -78,7 +78,7 @@ public class UserController : ControllerBase
 
             ArgumentNullException.ThrowIfNull(currentUserId);
 
-            return Ok(_userService.GetUserById((int)currentUserId));
+            return Ok(await _userService.GetUserById((int)currentUserId));
         }
         catch (Exception e)
         {
@@ -92,15 +92,16 @@ public class UserController : ControllerBase
     /// <param name="request">User ViewModel</param>
     /// <returns></returns>
     [HttpPost(Name = "SaveUser")]
-    public ActionResult<bool> SaveUser(UserViewModel request)
+    public ActionResult<bool> SaveUser(SaveUserRequest request)
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
+        if (request.Id != currentUserId) throw new ArgumentException("You can't edit other's profile");
 
         try
         {
-            return Ok(_userService.EditUser(request, (int)currentUserId));
+            return Ok(_userService.SaveUser(request, (int)currentUserId));
         }
         catch (Exception e)
         {
@@ -197,14 +198,14 @@ public class UserController : ControllerBase
     }
 
     [HttpPost(Name = "SetProfilePicture")]
-    public async Task<ActionResult<bool>> SetProfilePicture(ImageViewModel request)
+    public ActionResult<bool> SetProfilePicture(int imageId)
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
         try
         {
-            var success = await _userService.SetProfilePicture(request, (int)currentUserId);
+            var success = _userService.SetProfilePicture(imageId, (int)currentUserId);
 
             if (success)
             {

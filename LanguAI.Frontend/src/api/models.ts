@@ -18,6 +18,8 @@ export { FriendshipRequestViewModel } from './models/friendship-request-view-mod
 export { FriendshipStatusEnum } from './models/friendship-status-enum';
 export { FriendshipViewModel } from './models/friendship-view-model';
 export { Gameplay } from './models/gameplay';
+export { Image } from './models/image';
+export { ImageViewModel } from './models/image-view-model';
 export { Interaction } from './models/interaction';
 export { InteractionEnum } from './models/interaction-enum';
 export { IntSelectorModel } from './models/int-selector-model';
@@ -38,6 +40,7 @@ export { SaveGameplayRequestViewModel } from './models/save-gameplay-request-vie
 export { SaveInteractionRequestViewModel } from './models/save-interaction-request-view-model';
 export { SaveLearningRequestViewModel } from './models/save-learning-request-view-model';
 export { SavePostRequest } from './models/save-post-request';
+export { SaveUserRequest } from './models/save-user-request';
 export { SentenceAssemblyExerciseWord } from './models/sentence-assembly-exercise-word';
 export { Topic } from './models/topic';
 export { TopicOfCurrentLearningViewModel } from './models/topic-of-current-learning-view-model';
