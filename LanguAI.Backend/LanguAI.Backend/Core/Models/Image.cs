@@ -11,9 +11,12 @@ public class Image
     [Required]
     public string Name { get; set; }
 
-    public DateTime? Uploaded {  get; set; } = DateTime.UtcNow;
+    public DateTime? Uploaded { get; set; } = DateTime.UtcNow;
 
     public bool IsDeleted { get; set; } = false;
+
+    [Required]
+    public string Type { get; set; }
 
     public virtual User User { get; set; }
 

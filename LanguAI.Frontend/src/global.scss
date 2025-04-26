@@ -52,6 +52,15 @@ ion-input {
   --highlight-color: none !important;
 }
 
+ion-textarea {
+  --highlight-color-focused: none !important;
+  --highlight-background: none !important;
+  --highlight-color-invalid: none !important;
+  --highlight-color-valid: none !important;
+  --highlight-color: none !important;
+  --border: none !important;
+}
+
 ion-card {
   margin: 0;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

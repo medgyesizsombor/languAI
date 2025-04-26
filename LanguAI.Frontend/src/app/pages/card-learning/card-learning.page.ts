@@ -93,6 +93,7 @@ export class CardLearningPage {
             }
           },
           error: () => {
+            this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
               this.translateService.instant('DATA_ERROR')
             );

@@ -77,6 +77,7 @@ export class LoginPage {
                 )
               );
 
+              this.loadingService.hideLoading();
               return EMPTY;
             }
 

@@ -1,4 +1,5 @@
 ﻿using LanguAI.Backend.Core.Enums;
+using LanguAI.Backend.ViewModels.Image;
 using LanguAI.Backend.ViewModels.Interaction;
 
 namespace LanguAI.Backend.ViewModels.Post;
@@ -22,4 +23,6 @@ public class PostViewModel
     public int NumberOfComments { get; set; }
 
     public List<CommentViewModel> Comments { get; set; }
+
+    public ImageViewModel Image { get; set; }
 }

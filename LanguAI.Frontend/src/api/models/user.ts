@@ -3,6 +3,7 @@
 import { CardList } from '../models/card-list';
 import { Friendship } from '../models/friendship';
 import { Gameplay } from '../models/gameplay';
+import { Image } from '../models/image';
 import { Interaction } from '../models/interaction';
 import { Learning } from '../models/learning';
 import { Message } from '../models/message';
@@ -13,6 +14,8 @@ export interface User {
   email: string;
   gameplays?: Array<Gameplay> | null;
   id: number;
+  image?: Image;
+  imageId?: number | null;
   interactions?: Array<Interaction> | null;
   isActive: boolean;
   language: number;

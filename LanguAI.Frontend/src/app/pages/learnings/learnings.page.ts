@@ -105,7 +105,8 @@ export class LearningPage {
           body: {
             languageId: data.languageId,
             languageLevel: data.languageLevel,
-            userId: this.localStorageService.getUserId()!
+            userId: this.localStorageService.getUserId()!,
+            nativeLanguageId: this.localStorageService.getLanguageId()!
           }
         })
         .subscribe({

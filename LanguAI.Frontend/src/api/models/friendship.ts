@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+import { FriendshipStatusEnum } from '../models/friendship-status-enum';
 import { User } from '../models/user';
 export interface Friendship {
   created: string;
@@ -9,5 +10,5 @@ export interface Friendship {
   recipientId: number;
   requester?: User;
   requesterId: number;
-  status: number;
+  status: FriendshipStatusEnum;
 }
