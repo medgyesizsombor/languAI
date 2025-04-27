@@ -627,48 +627,135 @@ export class AlertService {
     });
   }
 
-    /**
-   * Show image alert
+  /**
+   * Show profile picture alert
    */
-    async showProfilePictureAlert(): Promise<boolean> {
-      return new Promise(async (resolve, reject) => {
-        this.alert = await this.alertController.create({
-          header: this.translateService.instant('PROFILE_PICTURE'),
-          message: this.translateService.instant('OPEN_OR_UPLOAD_PHOTO'),
-          inputs: [
-            {
-              label: this.translateService.instant('OPEN'),
-              type: 'radio',
-              value: true,
-              checked: true
-            },
-            {
-              label: this.translateService.instant('UPLOAD'),
-              type: 'radio',
-              value: false
+  async showProfilePictureAlert(): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('PROFILE_PICTURE'),
+        message: this.translateService.instant('OPEN_OR_UPLOAD_PHOTO'),
+        inputs: [
+          {
+            label: this.translateService.instant('OPEN'),
+            type: 'radio',
+            value: true,
+            checked: true
+          },
+          {
+            label: this.translateService.instant('UPLOAD'),
+            type: 'radio',
+            value: false
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              reject();
             }
-          ],
-          buttons: [
-            {
-              text: this.translateService.instant('CANCEL'),
-              role: 'cancel',
-              handler: () => {
-                reject();
-              }
-            },
-            {
-              text: this.translateService.instant('CONFIRM'),
-              role: 'confirm',
-              handler: data => {
-                resolve(data);
-              }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              resolve(data);
             }
-          ]
-        });
-  
-        this.alert.present();
+          }
+        ]
       });
-    }
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show chatGPT alert
+   */
+  async showChatGPTAlert(): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('REQUEST_HELP_FROM_CHATGPT'),
+        inputs: [
+          {
+            label: this.translateService.instant('ASSISTANCE_WITH_PHRASING'),
+            type: 'radio',
+            value: true,
+            checked: true
+          },
+          {
+            label: this.translateService.instant('CORRECTING_MISTAKES_IN_TEXT'),
+            type: 'radio',
+            value: false
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              reject();
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              resolve(data);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show create card list alert
+   */
+  async showPhrasingAlert(): Promise<string | null> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('PHRASING'),
+        message: this.translateService.instant('WHAT_SHOULD_BE_YOUR_POST_BASED_ON'),
+        cssClass: 'ion-input',
+        inputs: [
+          {
+            type: 'text',
+            name: 'title',
+            attributes: {
+              autocomplete: 'off'
+            }
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve(null);
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              console.log(data)
+              if (data?.title?.length) {
+                resolve(data?.title?.trim());
+              } else {
+                resolve(null);
+              }
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
 
   /**
    * The name is not taken

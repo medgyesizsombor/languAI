@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { AccessEnum, ImageViewModel, SavePostRequest } from 'src/api/models';
-import { PostService, StorageService } from 'src/api/services';
+import { ChatGptService, PostService, StorageService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { FileService } from 'src/app/util/services/file.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
@@ -24,6 +24,10 @@ export class CreatePostPage {
   image: ImageViewModel | undefined;
   imageSrc: string | undefined;
 
+  savePostSub: Subscription | undefined;
+  getPostCorrectionFromChatGptSub: Subscription | undefined;
+  getPostPhrasingSub: Subscription | undefined;
+
   constructor(
     private navController: NavController,
     private postService: PostService,
@@ -34,10 +38,9 @@ export class CreatePostPage {
     private localStorageService: LocalStorageService,
     private alertService: AlertService,
     private fileService: FileService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private chatGPTService: ChatGptService
   ) {}
-
-  savePostSub: Subscription | undefined;
 
   ionViewWillEnter() {
     this.createForm();
@@ -45,6 +48,8 @@ export class CreatePostPage {
 
   ionViewDidLeave() {
     this.savePostSub?.unsubscribe();
+    this.getPostCorrectionFromChatGptSub?.unsubscribe();
+    this.getPostPhrasingSub?.unsubscribe();
   }
 
   async savePost() {
@@ -138,6 +143,67 @@ export class CreatePostPage {
   removeImage() {
     this.image = undefined;
     this.imageSrc = undefined;
+  }
+
+  async openChatGPTModal() {
+    this.alertService.showChatGPTAlert().then((isPhrasing: boolean) => {
+      if (isPhrasing) {
+        this.alertService
+          .showPhrasingAlert()
+          .then(async (data: string | null) => {
+            console.log(data)
+            if (data?.length) {
+              await this.loadingService.showLoading();
+              this.getPostPhrasingSub = this.chatGPTService
+                .getPostPhrasing$Json({ about: data })
+                .subscribe({
+                  next: (response: string) => {
+                    console.log('itt')
+                    console.log(response)
+                    if (response.length) {
+                      this.postForm?.controls['text'].patchValue(response);
+                      this.loadingService.hideLoading();
+                    } else {
+                      this.loadingService.hideLoading();
+                      this.toastrService.presentErrorToast('/TODO');
+                    }
+                  },
+                  error: err => {
+                    this.loadingService.hideLoading();
+                    this.toastrService.presentErrorToast('/TODO');
+                  }
+                });
+            }
+          });
+      } else {
+        if (this.postForm?.controls['text'].value?.trim()?.length) {
+          this.getPostCorrectionFromChatGptSub = this.chatGPTService
+            .getPostCorrectionFromChatGpt$Json({
+              text: this.postForm?.controls['text'].value
+            })
+            .subscribe({
+              next: async (response: string) => {
+                await this.loadingService.showLoading();
+                if (response.length) {
+                  this.postForm?.controls['text'].patchValue(response);
+                  this.loadingService.hideLoading();
+                } else {
+                  this.loadingService.hideLoading();
+                  this.toastrService.presentErrorToast('/TODO');
+                }
+              },
+              error: err => {
+                this.loadingService.hideLoading();
+                this.toastrService.presentErrorToast('/TODO');
+              }
+            });
+        } else {
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('YOU_HAVE_TO_WRITE_SOMETHING_FIRST')
+          );
+        }
+      }
+    });
   }
 
   /**

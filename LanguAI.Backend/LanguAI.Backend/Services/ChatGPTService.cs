@@ -1,12 +1,9 @@
 ﻿using LanguAI.Backend.Core;
 using LanguAI.Backend.Core.Enums;
-using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Card;
 using LanguAI.Backend.ViewModels.Exercise;
 using LanguAI.Backend.ViewModels.Message;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
@@ -19,6 +16,8 @@ public interface IChatGPTService
     Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level, string topic);
     Task<MessageViewModel> GetResponseToConversation(int currentUserId);
     Task<List<ExerciseViewModel>> ReceiveExercisesFromChatGPT(ExerciseRequestViewModel request, string words);
+    Task<string> GetPostCorrectionFromChatGPT(string text);
+    Task<string> GetPostPhrasing(string about);
 }
 
 public class ChatGPTService : BaseService, IChatGPTService
@@ -237,5 +236,51 @@ public class ChatGPTService : BaseService, IChatGPTService
         }
 
         return result.Choices[0].Message;
+    }
+
+    /// <summary>
+    /// Get correction of the post
+    /// </summary>
+    /// <param name="text">Text of the post</param>
+    /// <returns></returns>
+    public async Task<string> GetPostCorrectionFromChatGPT(string text)
+    {
+        try
+        {
+            string messageFromSystem = "Correct the text for a post in the same language as the text";
+            ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
+            ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, text);
+
+            ChatMessage result = await SendRequestToChatGPTAsync(systemMessage, userMessage);
+
+            return result.TextContent;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Post phrasing about the text from param
+    /// </summary>
+    /// <param name="about">The text that the post should be based on</param>
+    /// <returns></returns>
+    public async Task<string> GetPostPhrasing(string about)
+    {
+        try
+        {
+            string messageFromSystem = $"Phrase a post about the text you get the language as the {about}, and it can only be maximum 250-length";
+            ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
+            ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, about);
+
+            ChatMessage result = await SendRequestToChatGPTAsync(systemMessage, userMessage);
+
+            return result.TextContent;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

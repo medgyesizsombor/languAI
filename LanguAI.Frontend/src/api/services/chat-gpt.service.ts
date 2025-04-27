@@ -10,6 +10,14 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { ExerciseViewModel } from '../models/exercise-view-model';
+import { getPostCorrectionFromChatGpt$Json } from '../fn/chat-gpt/get-post-correction-from-chat-gpt-json';
+import { GetPostCorrectionFromChatGpt$Json$Params } from '../fn/chat-gpt/get-post-correction-from-chat-gpt-json';
+import { getPostCorrectionFromChatGpt$Plain } from '../fn/chat-gpt/get-post-correction-from-chat-gpt-plain';
+import { GetPostCorrectionFromChatGpt$Plain$Params } from '../fn/chat-gpt/get-post-correction-from-chat-gpt-plain';
+import { getPostPhrasing$Json } from '../fn/chat-gpt/get-post-phrasing-json';
+import { GetPostPhrasing$Json$Params } from '../fn/chat-gpt/get-post-phrasing-json';
+import { getPostPhrasing$Plain } from '../fn/chat-gpt/get-post-phrasing-plain';
+import { GetPostPhrasing$Plain$Params } from '../fn/chat-gpt/get-post-phrasing-plain';
 import { MessageViewModel } from '../models/message-view-model';
 import { receiveExercisesFromChatGpt$Json } from '../fn/chat-gpt/receive-exercises-from-chat-gpt-json';
 import { ReceiveExercisesFromChatGpt$Json$Params } from '../fn/chat-gpt/receive-exercises-from-chat-gpt-json';
@@ -168,6 +176,100 @@ export class ChatGptService extends BaseService {
   receiveExercisesFromChatGpt$Json(params?: ReceiveExercisesFromChatGpt$Json$Params, context?: HttpContext): Observable<Array<ExerciseViewModel>> {
     return this.receiveExercisesFromChatGpt$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<ExerciseViewModel>>): Array<ExerciseViewModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `getPostCorrectionFromChatGpt()` */
+  static readonly GetPostCorrectionFromChatGptPath = '/ChatGPT/GetPostCorrectionFromChatGPT';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPostCorrectionFromChatGpt$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostCorrectionFromChatGpt$Plain$Response(params?: GetPostCorrectionFromChatGpt$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return getPostCorrectionFromChatGpt$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPostCorrectionFromChatGpt$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostCorrectionFromChatGpt$Plain(params?: GetPostCorrectionFromChatGpt$Plain$Params, context?: HttpContext): Observable<string> {
+    return this.getPostCorrectionFromChatGpt$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPostCorrectionFromChatGpt$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostCorrectionFromChatGpt$Json$Response(params?: GetPostCorrectionFromChatGpt$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return getPostCorrectionFromChatGpt$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPostCorrectionFromChatGpt$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostCorrectionFromChatGpt$Json(params?: GetPostCorrectionFromChatGpt$Json$Params, context?: HttpContext): Observable<string> {
+    return this.getPostCorrectionFromChatGpt$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /** Path part for operation `getPostPhrasing()` */
+  static readonly GetPostPhrasingPath = '/ChatGPT/GetPostPhrasing';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPostPhrasing$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostPhrasing$Plain$Response(params?: GetPostPhrasing$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return getPostPhrasing$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPostPhrasing$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostPhrasing$Plain(params?: GetPostPhrasing$Plain$Params, context?: HttpContext): Observable<string> {
+    return this.getPostPhrasing$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPostPhrasing$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostPhrasing$Json$Response(params?: GetPostPhrasing$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return getPostPhrasing$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPostPhrasing$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPostPhrasing$Json(params?: GetPostPhrasing$Json$Params, context?: HttpContext): Observable<string> {
+    return this.getPostPhrasing$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 

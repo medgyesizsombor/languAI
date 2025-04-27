@@ -154,5 +154,11 @@
   "UPLOAD_PHOTO": "Fénykép feltöltése",
   "CAPTURE_OR_CHOOSE_PHOTO": "Kép készítése vagy kiválasztása",
   "CAPTURE_PHOTO": "Kép készítése",
-  "CHOOSE_FROM_GALLERY": "Gallériából kiválasztás"
+  "CHOOSE_FROM_GALLERY": "Gallériából kiválasztás",
+  "REQUEST_HELP_FROM_CHATGPT": "Segítség kérés ChatGPT-től",
+  "ASSISTANCE_WITH_PHRASING": "Szöveg megfogalmazása",
+  "CORRECTING_MISTAKES_IN_TEXT": "Szöveg hibajavítása",
+  "PHRASING": "Megfogalmazás",
+  "WHAT_SHOULD_BE_YOUR_POST_BASED_ON": "Miről szóljon a posztod?",
+  "YOU_HAVE_TO_WRITE_SOMETHING_FIRST": "Elsőnek be kell írni valamit"
 }
