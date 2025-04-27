@@ -140,4 +140,44 @@ public class ChatGPTController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    /// <summary>
+    /// Get correction of the post
+    /// </summary>
+    /// <param name="text">Text of the post</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetPostCorrectionFromChatGPT")]
+    public async Task<ActionResult<string>> GetPostCorrectionFromChatGPT(string text)
+    {
+        try
+        {
+            var response = await _chatGPTService.GetPostCorrectionFromChatGPT(text);
+
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Post phrasing about the text from param
+    /// </summary>
+    /// <param name="about">The text that the post should be based on</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetPostPhrasing")]
+    public async Task<ActionResult<string>> GetPostPhrasing(string about)
+    {
+        try
+        {
+            var response = await _chatGPTService.GetPostPhrasing(about);
+
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 }

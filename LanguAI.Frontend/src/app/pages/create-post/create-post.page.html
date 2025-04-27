@@ -23,11 +23,16 @@
           (keyup)="isValid()"></ion-textarea>
       </ion-row>
       <ng-container *ngIf="!this.image; else imageTemplate">
-        <ion-row>
+        <ion-row class="ion-justify-content-between">
           <ion-item lines="none">
             <ion-icon
               name="image-outline"
               (click)="openImageModal()"></ion-icon>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-icon
+              name="help-outline"
+              (click)="openChatGPTModal()"></ion-icon>
           </ion-item>
         </ion-row>
       </ng-container>
@@ -41,7 +46,10 @@
 <ng-template #imageTemplate>
   <ion-row
     class="pb-4 ion-padding-horizontal ion-justify-content-between ion-align-items-center">
-    <app-image class="mini-image" [imageString]="image?.contentAsString" [type]="image?.type"></app-image>
+    <app-image
+      class="mini-image"
+      [imageString]="image?.contentAsString"
+      [type]="image?.type"></app-image>
     <ion-icon
       class="fs-20 error-color"
       name="trash-outline"
