@@ -742,7 +742,6 @@ export class AlertService {
             text: this.translateService.instant('CONFIRM'),
             role: 'confirm',
             handler: data => {
-              console.log(data)
               if (data?.title?.length) {
                 resolve(data?.title?.trim());
               } else {

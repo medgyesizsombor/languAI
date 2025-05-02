@@ -151,7 +151,7 @@ export class SettingsPage implements OnInit {
       .showLanguageAlert(currentLanguage)
       .then((lang: string | null) => {
         if (lang && this.translateService.currentLang !== lang) {
-          this.localStorageService.setNativeLanguagesByCode(lang);
+          this.localStorageService.setMobileLangugageCode(lang);
           this.translateService.use(lang);
         }
       });

@@ -28,6 +28,7 @@ export const CHAT_GPT_ID = 2;
 export const LEVEL_OF_CURRENT_LANGUAGE = 'level-of-current-language';
 export const LANGUAGE_ID = 'language-id';
 export const LANGUAGE_CODE = 'language-code';
+export const MOBILE_LANGUAGE_CODE = 'mobile-language-code';
 export const LEARNINGS_NAVIGATION = 'learnings';
 export const HUNGARIAN_LANGUAGE_CODE = 'hu';
 export const ENGLISH_LANGUAGE_CODE = 'en';

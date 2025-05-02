@@ -1,5 +1,4 @@
 using LanguAI.Backend.Services;
-using LanguAI.Backend.ViewModels.Image;
 using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +13,12 @@ public class UserController : ControllerBase
     private readonly IUserService _userService;
     private readonly ILogger<UserController> _logger;
     private readonly IAuthenticationService _authenticationService;
-    private readonly IStorageService _storageService;
 
-    public UserController(ILogger<UserController> logger, IUserService userService, IAuthenticationService authenticationService, IStorageService storageService)
+    public UserController(ILogger<UserController> logger, IUserService userService, IAuthenticationService authenticationService)
     {
         _logger = logger;
         _userService = userService;
         _authenticationService = authenticationService;
-        _storageService = storageService;
     }
 
     /// <summary>

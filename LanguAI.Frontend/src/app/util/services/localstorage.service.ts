@@ -9,6 +9,7 @@ import {
   LANGUAGE_CODE,
   LANGUAGE_ID,
   LEVEL_OF_CURRENT_LANGUAGE,
+  MOBILE_LANGUAGE_CODE,
   NUMBER_OF_FRIENDSHIP_REQUEST,
   STREAK,
   USER_ID
@@ -310,11 +311,36 @@ export class LocalStorageService {
     localStorage.setItem(CURRENT_LEARNING, JSON.stringify(learning));
   }
 
-
   /**
    * Clear the local storage
    */
   clearLocalStorage() {
     localStorage.clear();
+  }
+
+  /**
+   * Set Code  of language
+   */
+  setMobileLangugageCode(languageCode: string) {
+    if (languageCode) {
+      localStorage.setItem(MOBILE_LANGUAGE_CODE, languageCode);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get Id of language
+   */
+  getMobileLanguageCode(): string | null {
+    return localStorage.getItem(MOBILE_LANGUAGE_CODE);
+  }
+
+  /**
+   * Remove Code of language
+   */
+  removeMobileLanguageCode() {
+    localStorage.removeItem(MOBILE_LANGUAGE_CODE);
   }
 }
