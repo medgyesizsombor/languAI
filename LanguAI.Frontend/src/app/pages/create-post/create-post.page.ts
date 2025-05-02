@@ -151,15 +151,12 @@ export class CreatePostPage {
         this.alertService
           .showPhrasingAlert()
           .then(async (data: string | null) => {
-            console.log(data)
             if (data?.length) {
               await this.loadingService.showLoading();
               this.getPostPhrasingSub = this.chatGPTService
                 .getPostPhrasing$Json({ about: data })
                 .subscribe({
                   next: (response: string) => {
-                    console.log('itt')
-                    console.log(response)
                     if (response.length) {
                       this.postForm?.controls['text'].patchValue(response);
                       this.loadingService.hideLoading();

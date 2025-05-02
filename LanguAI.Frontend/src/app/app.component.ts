@@ -40,7 +40,7 @@ export class AppComponent {
   private initializeApp() {
     this.translateService.setDefaultLang(HUNGARIAN_LANGUAGE_CODE);
     this.translateService.use(
-      this.localStorageService.getLanguageCode() ??
+      this.localStorageService.getMobileLanguageCode() ??
         this.translateService.defaultLang
     );
     if (this.localStorageService.getJwtToken()?.length) {
