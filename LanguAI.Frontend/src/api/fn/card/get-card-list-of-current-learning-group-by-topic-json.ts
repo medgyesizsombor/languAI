@@ -28,4 +28,4 @@ export function getCardListOfCurrentLearningGroupByTopic$Json(http: HttpClient, 
   );
 }
 
-getCardListOfCurrentLearningGroupByTopic$Json.PATH = '/Learning/GetCardListOfCurrentLearningGroupByTopic';
+getCardListOfCurrentLearningGroupByTopic$Json.PATH = '/Card/GetCardListOfCurrentLearningGroupByTopic';

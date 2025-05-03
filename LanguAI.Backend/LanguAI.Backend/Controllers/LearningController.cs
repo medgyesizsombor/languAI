@@ -92,27 +92,4 @@ public class LearningController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
-    /// <summary>
-    /// Get the card lists of current learning
-    /// </summary>
-    /// <param name="userId">User's Id</param>
-    /// <returns></returns>
-    [HttpGet(Name = "GetCardListOfCurrentLearningGroupByTopic")]
-    public ActionResult<List<TopicOfCurrentLearningViewModel>> GetCardListOfCurrentLearningGroupByTopic(int userId)
-    {
-        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-        ArgumentNullException.ThrowIfNull(currentUserId);
-
-        if (currentUserId != userId) throw new UnauthorizedAccessException();
-
-        try
-        {
-            return Ok(_learningService.GetCardListOfCurrentLearningGroupByTopic(userId));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
 }

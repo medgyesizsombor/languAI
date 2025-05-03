@@ -75,7 +75,7 @@ namespace LanguAI.Backend.Migrations
                 table: "CardList",
                 type: "int",
                 nullable: false,
-                defaultValue: 1);
+                defaultValue: 15);
 
             migrationBuilder.CreateTable(
                 name: "Language",

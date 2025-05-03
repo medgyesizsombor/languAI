@@ -21,7 +21,7 @@ public class GameplayController : ControllerBase
     /// Saving gameplay
     /// </summary>
     /// <param name="request">Save Gameplay Request</param>
-    /// <returns></returns>
+    /// <returns>Has streak changed</returns>
     [HttpPost(Name = "SaveGameplay")]
     public ActionResult<bool> SaveGameplay(SaveGameplayRequestViewModel request)
     {

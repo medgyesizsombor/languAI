@@ -3,6 +3,8 @@ using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Card;
+using LanguAI.Backend.ViewModels.SelectorModel;
+using LanguAI.Backend.ViewModels.Topic;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
@@ -19,6 +21,7 @@ public interface ICardService
     bool CopyCardListOfOtherUser(int currentUserId, int cardListId);
     bool ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request);
     string GetLanguageWordsAsOneStringByCardListId(int cardListId);
+    List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId);
 }
 
 public class CardService : BaseService, ICardService
@@ -324,6 +327,46 @@ public class CardService : BaseService, ICardService
         }
 
         return words;
+    }
+
+    /// <summary>
+    /// Get the card lists of current learning
+    /// </summary>
+    /// <param name="userId">User's Id</param>
+    /// <returns></returns>
+    public List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var currentLearning = _context.Learning.FirstOrDefault(l => l.IsActive && l.UserId == userId);
+
+        if (currentLearning == null) return null;
+
+        var topicList = _context.Topic
+            .Include(t => t.CardLists)
+            .Where(t => t.LanguageLevel == currentLearning.LanguageLevel
+                && t.CardLists
+                    .Any(c => c.UserId == userId
+                    && !c.IsDeleted
+                    && c.LearningLanguageId == currentLearning.LearningLanguageId))
+            .Select(t => new TopicOfCurrentLearningViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                NameInHun = t.NameInHun,
+                Description = t.Description,
+                DescriptionInHun = t.DescriptionInHun,
+                CardListNamesAndIds = t.CardLists
+                    .Select(c => new IntSelectorModel
+                    {
+                        Id = c.Id,
+                        Name = c.Name
+                    })
+                    .ToList()
+            })
+            .ToList();
+
+        return topicList;
     }
 
     /// <summary>

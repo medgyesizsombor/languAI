@@ -4,3 +4,16 @@
   padding-left: 13px;
   text-align: center;
 }
+
+.streak-cards {
+  position: absolute;
+  top: calc(50vh - 75px);
+  left: calc(50vw - 75px);
+  transition: none;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}

@@ -1,34 +1,55 @@
-<ion-row class="exercise-title">
-  <ion-label>
-    {{ 'SUMMARY' | translate }}
-  </ion-label>
-</ion-row>
-<!-- TODO képet iderakni -->
-<ion-row class="ion-justify-content-center">KÉP IDE</ion-row>
-<ion-row *ngIf="statistics" class="ion-justify-content-around ion-padding-top">
-  <ion-col size="5">
-    <ion-card>
-      <ion-card-title class="time-card-header">
-        {{ 'TIME' | translate }}
-      </ion-card-title>
-      <ion-card-content class="ion-text-center">
-        {{ statistics.time }}
-      </ion-card-content>
-    </ion-card>
-  </ion-col>
-  <ion-col size="5">
-    <ion-card>
-      <ion-card-title class="time-card-header">
-        {{ 'EXP' | translate }}
-      </ion-card-title>
-      <ion-card-content class="ion-text-center">
-        {{ exp }}
-      </ion-card-content>
-    </ion-card>
-  </ion-col>
-</ion-row>
-<ion-row class="ion-justify-content-center ion-padding-top">
-  <ion-button (click)="navigateToLessons()">
-    {{ 'GO_BACK_TO_LESSONS' | translate }}
-  </ion-button>
-</ion-row>
+<ng-container>
+  <ion-row class="exercise-title">
+    <ion-label>
+      {{ 'SUMMARY' | translate }}
+    </ion-label>
+  </ion-row>
+  <!-- TODO képet iderakni -->
+  <ion-row class="ion-justify-content-center">KÉP IDE</ion-row>
+  <ion-row
+    *ngIf="statistics"
+    class="ion-justify-content-around ion-padding-top">
+    <ion-col size="5">
+      <ion-card>
+        <ion-card-title class="time-card-header">
+          {{ 'TIME' | translate }}
+        </ion-card-title>
+        <ion-card-content class="ion-text-center">
+          {{ statistics.time }}
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size="5">
+      <ion-card>
+        <ion-card-title class="time-card-header">
+          {{ 'EXP' | translate }}
+        </ion-card-title>
+        <ion-card-content class="ion-text-center">
+          {{ exp }}
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center ion-padding-top">
+    <ion-button *ngIf="!showStreakAnimation || showNavigateToLessons" (click)="navigateToLessons()">
+      {{ 'GO_BACK_TO_LESSONS' | translate }}
+    </ion-button>
+    <ion-button *ngIf="showStreakAnimation && !showNavigateToLessons" (click)="startAnimation()">
+      {{ 'OK' | translate }}
+    </ion-button>
+  </ion-row>
+  <ion-card #previousStreakCard class="streak-cards secondary-card">
+    <ion-card-content
+      class="fs-24 d-flex ion-justify-content-center ion-align-items-center">
+      <span>{{ streak }}</span>
+      <ion-icon class="error-color fs-32" name="flame-outline"></ion-icon>
+    </ion-card-content>
+  </ion-card>
+  <ion-card #newStreakCard class="streak-cards secondary-card">
+    <ion-card-content
+      class="fs-24 d-flex ion-justify-content-center ion-align-items-center">
+      <span>{{ streak + 1 }}</span>
+      <ion-icon class="error-color fs-32" name="flame-outline"></ion-icon>
+    </ion-card-content>
+  </ion-card>
+</ng-container>

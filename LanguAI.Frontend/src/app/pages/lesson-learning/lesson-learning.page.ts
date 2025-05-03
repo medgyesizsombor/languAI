@@ -7,6 +7,7 @@ import { ExerciseTypeEnum, ExerciseViewModel } from 'src/api/models';
 import { ChatGptService } from 'src/api/services';
 import { Statistics } from 'src/app/util/models/statistic-view-model';
 import { LanguageLevelPipe } from 'src/app/util/pipes/language-level.pipe';
+import { TimePipe } from 'src/app/util/pipes/time.pipe';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { TimerService } from 'src/app/util/services/timer.service';
@@ -23,7 +24,7 @@ export class LessonLearningPage {
   exerciseTypeEnum = ExerciseTypeEnum;
   exerciseList: Array<ExerciseViewModel> = [];
   showOverlay = false;
-  isLoading = true;
+  isLoading = false;
   statistics: Statistics | undefined;
   showSummary = false;
 
@@ -39,7 +40,8 @@ export class LessonLearningPage {
     private toastrService: ToastrService,
     private translateService: TranslateService,
     private timerService: TimerService,
-    private navController: NavController
+    private navController: NavController,
+    private timePipe: TimePipe
   ) {}
 
   async ionViewDidEnter() {
@@ -61,7 +63,7 @@ export class LessonLearningPage {
       this.statistics = {
         allAnswer: this.exerciseList?.length,
         correctAnswer: this.exerciseList?.length,
-        time: this.timerService.getTime(),
+        time: this.timePipe.transform(this.timerService.getTime()),
         mistakes: 1
       };
       this.showSummary = true;

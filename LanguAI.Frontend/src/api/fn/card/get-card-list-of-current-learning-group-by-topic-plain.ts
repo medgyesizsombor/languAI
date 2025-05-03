@@ -28,4 +28,4 @@ export function getCardListOfCurrentLearningGroupByTopic$Plain(http: HttpClient,
   );
 }
 
-getCardListOfCurrentLearningGroupByTopic$Plain.PATH = '/Learning/GetCardListOfCurrentLearningGroupByTopic';
+getCardListOfCurrentLearningGroupByTopic$Plain.PATH = '/Card/GetCardListOfCurrentLearningGroupByTopic';

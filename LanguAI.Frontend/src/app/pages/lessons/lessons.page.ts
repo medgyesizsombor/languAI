@@ -3,7 +3,7 @@ import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { TopicOfCurrentLearningViewModel } from 'src/api/models';
-import { LearningService } from 'src/api/services';
+import { CardService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -31,7 +31,7 @@ export class LessonsPage {
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
     private toastrService: ToastrService,
-    private learningService: LearningService,
+    private cardService: CardService,
     private navController: NavController,
     private alertService: AlertService
   ) {}
@@ -95,7 +95,7 @@ export class LessonsPage {
     this.isLoading = true;
     await this.loadingService.showLoading();
 
-    this.getCardListsOfCurrentUserSub = this.learningService
+    this.getCardListsOfCurrentUserSub = this.cardService
       .getCardListOfCurrentLearningGroupByTopic$Json({
         userId: this.localStorageService.getUserId()!
       })
