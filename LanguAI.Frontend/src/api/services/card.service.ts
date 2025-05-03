@@ -23,6 +23,10 @@ import { getCardListById$Json } from '../fn/card/get-card-list-by-id-json';
 import { GetCardListById$Json$Params } from '../fn/card/get-card-list-by-id-json';
 import { getCardListById$Plain } from '../fn/card/get-card-list-by-id-plain';
 import { GetCardListById$Plain$Params } from '../fn/card/get-card-list-by-id-plain';
+import { getCardListOfCurrentLearningGroupByTopic$Json } from '../fn/card/get-card-list-of-current-learning-group-by-topic-json';
+import { GetCardListOfCurrentLearningGroupByTopic$Json$Params } from '../fn/card/get-card-list-of-current-learning-group-by-topic-json';
+import { getCardListOfCurrentLearningGroupByTopic$Plain } from '../fn/card/get-card-list-of-current-learning-group-by-topic-plain';
+import { GetCardListOfCurrentLearningGroupByTopic$Plain$Params } from '../fn/card/get-card-list-of-current-learning-group-by-topic-plain';
 import { getCardListsOfCurrentUser$Json } from '../fn/card/get-card-lists-of-current-user-json';
 import { GetCardListsOfCurrentUser$Json$Params } from '../fn/card/get-card-lists-of-current-user-json';
 import { getCardListsOfCurrentUser$Plain } from '../fn/card/get-card-lists-of-current-user-plain';
@@ -47,6 +51,7 @@ import { saveCards$Json } from '../fn/card/save-cards-json';
 import { SaveCards$Json$Params } from '../fn/card/save-cards-json';
 import { saveCards$Plain } from '../fn/card/save-cards-plain';
 import { SaveCards$Plain$Params } from '../fn/card/save-cards-plain';
+import { TopicOfCurrentLearningViewModel } from '../models/topic-of-current-learning-view-model';
 
 @Injectable({ providedIn: 'root' })
 export class CardService extends BaseService {
@@ -474,6 +479,53 @@ export class CardService extends BaseService {
   changeAccessOfCardList$Json(params?: ChangeAccessOfCardList$Json$Params, context?: HttpContext): Observable<boolean> {
     return this.changeAccessOfCardList$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `getCardListOfCurrentLearningGroupByTopic()` */
+  static readonly GetCardListOfCurrentLearningGroupByTopicPath = '/Card/GetCardListOfCurrentLearningGroupByTopic';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardListOfCurrentLearningGroupByTopic$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListOfCurrentLearningGroupByTopic$Plain$Response(params?: GetCardListOfCurrentLearningGroupByTopic$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TopicOfCurrentLearningViewModel>>> {
+    return getCardListOfCurrentLearningGroupByTopic$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardListOfCurrentLearningGroupByTopic$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListOfCurrentLearningGroupByTopic$Plain(params?: GetCardListOfCurrentLearningGroupByTopic$Plain$Params, context?: HttpContext): Observable<Array<TopicOfCurrentLearningViewModel>> {
+    return this.getCardListOfCurrentLearningGroupByTopic$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<TopicOfCurrentLearningViewModel>>): Array<TopicOfCurrentLearningViewModel> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardListOfCurrentLearningGroupByTopic$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListOfCurrentLearningGroupByTopic$Json$Response(params?: GetCardListOfCurrentLearningGroupByTopic$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TopicOfCurrentLearningViewModel>>> {
+    return getCardListOfCurrentLearningGroupByTopic$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardListOfCurrentLearningGroupByTopic$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardListOfCurrentLearningGroupByTopic$Json(params?: GetCardListOfCurrentLearningGroupByTopic$Json$Params, context?: HttpContext): Observable<Array<TopicOfCurrentLearningViewModel>> {
+    return this.getCardListOfCurrentLearningGroupByTopic$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<TopicOfCurrentLearningViewModel>>): Array<TopicOfCurrentLearningViewModel> => r.body)
     );
   }
 

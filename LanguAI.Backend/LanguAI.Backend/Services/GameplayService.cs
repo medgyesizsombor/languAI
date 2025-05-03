@@ -18,10 +18,12 @@ public class GameplayService : BaseService, IGameplayService
     /// Save gameplay
     /// </summary>
     /// <param name="request">Save gameplay request</param>
-    /// <returns></returns>
+    /// <returns>Has streak changed</returns>
     public bool SaveGameplay(SaveGameplayRequestViewModel request)
     {
         ArgumentNullException.ThrowIfNull(request);
+
+        var hasStreakChanged = false;
 
         Gameplay gameplay = new Gameplay
         {
@@ -39,11 +41,13 @@ public class GameplayService : BaseService, IGameplayService
             var user = _context.User.FirstOrDefault(u => u.Id == request.UserId);
 
             user.Streak += 1;
+
+            hasStreakChanged = true;
         }
         _context.Gameplay.Add(gameplay);
 
         _context.SaveChanges();
 
-        return true;
+        return hasStreakChanged;
     }
 }

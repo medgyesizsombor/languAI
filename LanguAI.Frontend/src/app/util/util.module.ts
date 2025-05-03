@@ -27,6 +27,7 @@ import { LanguageNamePipe } from './pipes/language-name.pipe';
 import { SummaryComponent } from '../components/summary/summary.component';
 import { ImageComponent } from '../components/image/image.component';
 import { AvatarComponent } from '../components/avatar/avatar.component';
+import { TimePipe } from './pipes/time.pipe';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -53,7 +54,8 @@ export function createTranslateLoader(http: HttpClient) {
     LanguageNamePipe,
     SummaryComponent,
     ImageComponent,
-    AvatarComponent
+    AvatarComponent,
+    TimePipe
   ],
   imports: [
     CommonModule,
@@ -87,8 +89,9 @@ export function createTranslateLoader(http: HttpClient) {
     LanguageNamePipe,
     SummaryComponent,
     ImageComponent,
-    AvatarComponent
+    AvatarComponent,
+    TimePipe
   ],
-  providers: [LanguageLevelPipe]
+  providers: [LanguageLevelPipe, TimePipe]
 })
 export class UtilModule {}

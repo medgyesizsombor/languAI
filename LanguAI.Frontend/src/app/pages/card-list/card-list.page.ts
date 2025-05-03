@@ -3,11 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
-import {
-  AccessEnum,
-  CardListViewModel,
-  CardViewModel
-} from 'src/api/models';
+import { AccessEnum, CardListViewModel, CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
@@ -92,8 +88,7 @@ export class CardListPage {
           next: (cardList: CardListViewModel) => {
             this.title = cardList?.name ?? '';
             if (cardList?.cardViewModelList?.length) {
-              this.accessOfCardList =
-                cardList.access ?? AccessEnum.Public;
+              this.accessOfCardList = cardList.access ?? AccessEnum.Public;
               this.cards = [...cardList?.cardViewModelList];
               this.originalCards = [...cardList?.cardViewModelList];
             }
@@ -104,6 +99,7 @@ export class CardListPage {
             this.loadingService.hideLoading();
           },
           error: () => {
+            this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
               this.translateService.instant('DATA_ERROR')
             );
