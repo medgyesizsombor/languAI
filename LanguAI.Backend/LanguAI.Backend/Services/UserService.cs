@@ -162,8 +162,6 @@ public class UserService : BaseService, IUserService
     /// <returns></returns>
     public bool DeleteUser(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         var currentUserId = 7;
 
         try
@@ -198,8 +196,6 @@ public class UserService : BaseService, IUserService
     /// <returns></returns>
     public int GetStreakOfCurrentUser(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         var user = _context.User.FirstOrDefault(u => u.Id == userId);
 
         ArgumentNullException.ThrowIfNull(user);
@@ -214,8 +210,6 @@ public class UserService : BaseService, IUserService
     /// <returns></returns>
     public UserDataViewModel GetDataOfUser(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         var user = _context.User
             .Include(u => u.Learnings)
             .ThenInclude(l => l.LearningLanguage)
@@ -238,7 +232,11 @@ public class UserService : BaseService, IUserService
                 IsActive = l.IsActive,
                 LearningLanguageCode = l.LearningLanguage.Code,
                 LearningLanguageName = l.LearningLanguage.Name,
-                LearningLanguageNameInHun = l.LearningLanguage.NameInHun
+                LearningLanguageNameInHun = l.LearningLanguage.NameInHun,
+                NativeLanguageCode = l.NativeLanguage.Code,
+                NativeLanguageName = l.NativeLanguage.Name,
+                NativeLanguageNameInHun = l.NativeLanguage.NameInHun,
+                NativeLanguageId = l.NativeLanguageId
             }).FirstOrDefault();
 
         return new UserDataViewModel

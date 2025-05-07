@@ -97,6 +97,12 @@ const routes: Routes = [
     canActivate: [LearningGuardFunction]
   },
   {
+    path: CARD_NAVIGATION + '/:cardId',
+    loadChildren: () =>
+      import('./pages/card/card.module').then(m => m.CardPageModule),
+    canActivate: [LearningGuardFunction]
+  },
+  {
     path: CARD_LIST_NAVIGATION + '/:id',
     loadChildren: () =>
       import('./pages/card-list/card-list.module').then(

@@ -12,7 +12,7 @@ export interface GetWordList$Json$Params {
   nativeLanguage?: string;
   learningLanguage?: string;
   level?: string;
-  topic?: string;
+  topicId?: number;
 }
 
 export function getWordList$Json(http: HttpClient, rootUrl: string, params?: GetWordList$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
@@ -21,7 +21,7 @@ export function getWordList$Json(http: HttpClient, rootUrl: string, params?: Get
     rb.query('nativeLanguage', params.nativeLanguage, {});
     rb.query('learningLanguage', params.learningLanguage, {});
     rb.query('level', params.level, {});
-    rb.query('topic', params.topic, {});
+    rb.query('topicId', params.topicId, {});
   }
 
   return http.request(

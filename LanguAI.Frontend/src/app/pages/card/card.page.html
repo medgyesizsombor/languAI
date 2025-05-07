@@ -1,6 +1,68 @@
+<app-header
+  title="{{ 'CARD_EDITING' | translate }}"
+  *ngIf="cardId; else createTemplate"
+  [showBackArrow]="true"
+  [showSavingMissed]="hasCardChanged"
+  (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
+
 <ion-content [fullscreen]="true" class="ion-padding">
-  <app-header [title]="'SZERKESZTENI'"></app-header>
-  <ion-row>{{ 'ADD' | translate }}</ion-row>
-  <ion-row></ion-row>
-  <ion-row>{{ 'DELETE' | translate }}</ion-row>
+  <form *ngIf="cardForm" [formGroup]="cardForm">
+    <ion-row>
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          type="text"
+          id="wordInNativeLanguage"
+          class="form-control"
+          formControlName="wordInNativeLanguage"
+          label="{{ true | learning | translate }}"
+          labelPlacement="stacked"
+          (ionInput)="modelChanged($event)"></ion-input>
+        <span
+          *ngIf="cardForm.get('wordInNativeLanguage')?.hasError('required') && cardForm.get('wordInNativeLanguage')?.dirty"
+          class="error-text">
+          {{ 'FIELD_IS_REQUIRED' | translate }}
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding-bottom">
+      <ion-col class="ion-margin-horizontal">
+        <ion-input
+          type="wordInLearningLanguage"
+          id="wordInLearningLanguage"
+          class="form-control"
+          formControlName="wordInLearningLanguage"
+          label="{{ false | learning | translate }}"
+          labelPlacement="stacked"
+          (ionInput)="modelChanged($event, false)"></ion-input>
+        <span
+          *ngIf="cardForm.get('wordInLearningLanguage')?.hasError('required') && cardForm.get('wordInLearningLanguage')?.dirty"
+          class="error-text">
+          {{ 'FIELD_IS_REQUIRED' | translate }}
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          [disabled]="!hasCardChanged"
+          class="ion-padding-horizontal primary-button w-100"
+          (click)="save()">
+          {{'SAVE' | translate}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="cardId">
+      <ion-col>
+        <ion-button
+          class="ion-padding-horizontal secondary-button w-100"
+          (click)="deleteCard()">
+          {{'DELETE' | translate }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>
+
+<ng-template #createTemplate>
+  <app-header title="{{ 'CARD_CREATING' | translate }}"></app-header>
+</ng-template>

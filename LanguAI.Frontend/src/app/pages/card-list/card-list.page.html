@@ -13,7 +13,7 @@
         *ngFor="let word of cards; let index = index"
         lines="none"
         class="border-bottom-line ion-no-padding ion-item-no-padding-end p-inner-v-2">
-        <ion-col class="word-col">
+        <ion-col class="word-col" (click)="openCard(index)">
           <span class="me-1">{{ word.wordInNativeLanguage }}</span>
           -
           <span class="ms-1">{{ word.wordInLearningLanguage }}</span>
