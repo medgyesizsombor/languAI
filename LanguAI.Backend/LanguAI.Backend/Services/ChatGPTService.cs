@@ -13,7 +13,7 @@ namespace LanguAI.Backend.Services;
 
 public interface IChatGPTService
 {
-    Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level, string topic);
+    Task<List<CardViewModel>> GetWordsForCards(string nativeLanguage, string learningLanguage, string level, int topicId);
     Task<MessageViewModel> GetResponseToConversation(int currentUserId);
     Task<List<ExerciseViewModel>> ReceiveExercisesFromChatGPT(ExerciseRequestViewModel request, string words);
     Task<string> GetPostCorrectionFromChatGPT(string text);
@@ -34,12 +34,16 @@ public class ChatGPTService : BaseService, IChatGPTService
     /// </summary>
     /// <param name="language"></param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordsForCards(string systemLanguage, string learningLanguage, string level, string topic)
+    public async Task<List<CardViewModel>> GetWordsForCards(string nativeLanguage, string learningLanguage, string level, int topicId)
     {
+        var topic = _context.Topic.FirstOrDefault(t => t.Id == topicId);
+
+        ArgumentNullException.ThrowIfNull(topic);
+
         List<CardViewModel> cards = new List<CardViewModel>();
 
-        string messageFromSystem = $"Answer in JSON where the format is like {{{systemLanguage} : {learningLanguage}}}";
-        string messageFromUser = $"Give me 4 one- or two-word phrases in {learningLanguage} dictionary form at {level} level related to the topic of {topic}";
+        string messageFromSystem = $"Answer in JSON where the format is like {{{nativeLanguage} : {learningLanguage}}}";
+        string messageFromUser = $"Give me 4 one- or two-word phrases in {learningLanguage} dictionary form at {level} level related to the topic of {topic.Description}";
         ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
         ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, messageFromUser);
 

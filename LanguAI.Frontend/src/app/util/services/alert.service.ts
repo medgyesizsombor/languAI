@@ -719,7 +719,9 @@ export class AlertService {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
         header: this.translateService.instant('PHRASING'),
-        message: this.translateService.instant('WHAT_SHOULD_BE_YOUR_POST_BASED_ON'),
+        message: this.translateService.instant(
+          'WHAT_SHOULD_BE_YOUR_POST_BASED_ON'
+        ),
         cssClass: 'ion-input',
         inputs: [
           {

@@ -1,7 +1,7 @@
 ﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Card;
+using LanguAI.Backend.ViewModels.SelectorModel;
 using LanguAI.Backend.ViewModels.Topic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
@@ -29,16 +29,15 @@ public class CardController : ControllerBase
     /// <param name="level">In which language the words are needed</param>
     /// <returns></returns>
     [HttpPost(Name = "GetWordList")]
-    public async Task<ActionResult<List<CardViewModel>>> GetWordList(string nativeLanguage, string learningLanguage, string level, string topic)
+    public async Task<ActionResult<List<CardViewModel>>> GetWordList(string nativeLanguage, string learningLanguage, string level, int topicId)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(nativeLanguage);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(learningLanguage);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(level);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(topic);
 
         try
         {
-            return Ok(await _cardService.GetWordList(nativeLanguage, learningLanguage, level, topic));
+            return Ok(await _cardService.GetWordList(nativeLanguage, learningLanguage, level, topicId));
         }
         catch (Exception)
         {
@@ -96,8 +95,6 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetCardsOfCardList")]
     public ActionResult<List<CardViewModel>> GetCardsOfCardList(int cardListId)
     {
-        ArgumentNullException.ThrowIfNull(cardListId);
-
         try
         {
             return Ok(_cardService.GetCardsOfCardList(cardListId));
@@ -116,8 +113,6 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetCardListById")]
     public ActionResult<CardListViewModel> GetCardListById(int cardListId)
     {
-        ArgumentNullException.ThrowIfNull(cardListId);
-
         try
         {
             return Ok(_cardService.GetCardListById(cardListId));
@@ -136,15 +131,17 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetCardListsOfCurrentUser")]
     public ActionResult<List<CardListViewModel>> GetCardListsOfCurrentUser(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+
+        if (!currentUserId.HasValue)
+        {
+            throw new ArgumentNullException(nameof(currentUserId));
+        };
+
+        if (userId != currentUserId) throw new UnauthorizedAccessException();
 
         try
         {
-            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-            ArgumentNullException.ThrowIfNull(currentUserId);
-
-            if (userId != currentUserId) throw new UnauthorizedAccessException();
-
             return Ok(_cardService.GetCardListsOfCurrentUser(userId));
         }
         catch (Exception)
@@ -164,7 +161,6 @@ public class CardController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(otherUserId);
 
         try
         {
@@ -186,7 +182,6 @@ public class CardController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(cardListId);
 
         try
         {
@@ -241,6 +236,81 @@ public class CardController : ControllerBase
         try
         {
             return Ok(_cardService.GetCardListOfCurrentLearningGroupByTopic(userId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Get card by id
+    /// </summary>
+    /// <param name="cardId">Id of the card</param>
+    [HttpGet(Name = "GetCardById")]
+    public ActionResult<CardViewModel> GetCardById(int cardId)
+    {
+        try
+        {
+            return Ok(_cardService.GetCardById(cardId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Delete card by id
+    /// </summary>
+    /// <param name="cardId">Id of the card</param>
+    [HttpDelete(Name = "DeleteCardById")]
+    public ActionResult DeleteCardById(int cardId)
+    {
+        try
+        {
+            _cardService.DeleteCardById(cardId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Get all topics by learning id
+    /// </summary>
+    /// <param name="learningId">Learning Id</param>
+    /// <returns></returns>
+    [HttpGet(Name = "GetAllTopicsByCurrentLearning")]
+    public ActionResult<List<IntSelectorModel>> GetAllTopicsByCurrentLearning(int learningId)
+    {
+        try
+        {
+            return Ok(_cardService.GetAllTopicsByCurrentLearning(learningId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost(Name = "SaveCard")]
+    public ActionResult SaveCard(CardViewModel request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(request.Id);
+        if (string.IsNullOrEmpty(request.WordInLearningLanguage) || string.IsNullOrEmpty(request.WordInNativeLanguage))
+        {
+            throw new ArgumentNullException("One of the word is missing");
+        }
+
+        try
+        {
+            _cardService.SaveCard(request);
+
+            return Ok();
         }
         catch (Exception e)
         {

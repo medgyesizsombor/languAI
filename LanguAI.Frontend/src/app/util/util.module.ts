@@ -28,6 +28,8 @@ import { SummaryComponent } from '../components/summary/summary.component';
 import { ImageComponent } from '../components/image/image.component';
 import { AvatarComponent } from '../components/avatar/avatar.component';
 import { TimePipe } from './pipes/time.pipe';
+import { LearningPipe } from './pipes/learning.pipe';
+import { NewCardlistModalComponent } from '../components/modals/new-cardlist/new-cardlist-modal.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -55,7 +57,9 @@ export function createTranslateLoader(http: HttpClient) {
     SummaryComponent,
     ImageComponent,
     AvatarComponent,
-    TimePipe
+    TimePipe,
+    LearningPipe,
+    NewCardlistModalComponent
   ],
   imports: [
     CommonModule,
@@ -90,8 +94,10 @@ export function createTranslateLoader(http: HttpClient) {
     SummaryComponent,
     ImageComponent,
     AvatarComponent,
-    TimePipe
+    TimePipe,
+    LearningPipe,
+    NewCardlistModalComponent
   ],
-  providers: [LanguageLevelPipe, TimePipe]
+  providers: [LanguageLevelPipe, TimePipe, LearningPipe]
 })
 export class UtilModule {}

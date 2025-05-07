@@ -66,14 +66,12 @@ export class SettingsPage implements OnInit {
               this.profile.profilePicture?.type
             );
           } else {
-            //TODO szöveg
-            this.toastrService.presentErrorToast('random');
+            this.toastrService.presentErrorToast('ERROR_WHILE_LOADING_USER');
           }
           this.loadingService.hideLoading();
         },
-        error: err => {
-          //TODO szöveg
-          this.toastrService.presentErrorToast(err.message);
+        error: () => {
+          this.toastrService.presentErrorToast('ERROR_WHILE_LOADING_USER');
         }
       });
   }

@@ -19,6 +19,16 @@ import { copyCardListOfOtherUser$Json } from '../fn/card/copy-card-list-of-other
 import { CopyCardListOfOtherUser$Json$Params } from '../fn/card/copy-card-list-of-other-user-json';
 import { copyCardListOfOtherUser$Plain } from '../fn/card/copy-card-list-of-other-user-plain';
 import { CopyCardListOfOtherUser$Plain$Params } from '../fn/card/copy-card-list-of-other-user-plain';
+import { deleteCardById } from '../fn/card/delete-card-by-id';
+import { DeleteCardById$Params } from '../fn/card/delete-card-by-id';
+import { getAllTopicsByCurrentLearning$Json } from '../fn/card/get-all-topics-by-current-learning-json';
+import { GetAllTopicsByCurrentLearning$Json$Params } from '../fn/card/get-all-topics-by-current-learning-json';
+import { getAllTopicsByCurrentLearning$Plain } from '../fn/card/get-all-topics-by-current-learning-plain';
+import { GetAllTopicsByCurrentLearning$Plain$Params } from '../fn/card/get-all-topics-by-current-learning-plain';
+import { getCardById$Json } from '../fn/card/get-card-by-id-json';
+import { GetCardById$Json$Params } from '../fn/card/get-card-by-id-json';
+import { getCardById$Plain } from '../fn/card/get-card-by-id-plain';
+import { GetCardById$Plain$Params } from '../fn/card/get-card-by-id-plain';
 import { getCardListById$Json } from '../fn/card/get-card-list-by-id-json';
 import { GetCardListById$Json$Params } from '../fn/card/get-card-list-by-id-json';
 import { getCardListById$Plain } from '../fn/card/get-card-list-by-id-plain';
@@ -43,6 +53,9 @@ import { getWordList$Json } from '../fn/card/get-word-list-json';
 import { GetWordList$Json$Params } from '../fn/card/get-word-list-json';
 import { getWordList$Plain } from '../fn/card/get-word-list-plain';
 import { GetWordList$Plain$Params } from '../fn/card/get-word-list-plain';
+import { IntSelectorModel } from '../models/int-selector-model';
+import { saveCard } from '../fn/card/save-card';
+import { SaveCard$Params } from '../fn/card/save-card';
 import { saveCardList$Json } from '../fn/card/save-card-list-json';
 import { SaveCardList$Json$Params } from '../fn/card/save-card-list-json';
 import { saveCardList$Plain } from '../fn/card/save-card-list-plain';
@@ -526,6 +539,150 @@ export class CardService extends BaseService {
   getCardListOfCurrentLearningGroupByTopic$Json(params?: GetCardListOfCurrentLearningGroupByTopic$Json$Params, context?: HttpContext): Observable<Array<TopicOfCurrentLearningViewModel>> {
     return this.getCardListOfCurrentLearningGroupByTopic$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<TopicOfCurrentLearningViewModel>>): Array<TopicOfCurrentLearningViewModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `getCardById()` */
+  static readonly GetCardByIdPath = '/Card/GetCardById';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardById$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardById$Plain$Response(params?: GetCardById$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CardViewModel>> {
+    return getCardById$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardById$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardById$Plain(params?: GetCardById$Plain$Params, context?: HttpContext): Observable<CardViewModel> {
+    return this.getCardById$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CardViewModel>): CardViewModel => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCardById$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardById$Json$Response(params?: GetCardById$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CardViewModel>> {
+    return getCardById$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCardById$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCardById$Json(params?: GetCardById$Json$Params, context?: HttpContext): Observable<CardViewModel> {
+    return this.getCardById$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CardViewModel>): CardViewModel => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteCardById()` */
+  static readonly DeleteCardByIdPath = '/Card/DeleteCardById';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteCardById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCardById$Response(params?: DeleteCardById$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteCardById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteCardById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCardById(params?: DeleteCardById$Params, context?: HttpContext): Observable<void> {
+    return this.deleteCardById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllTopicsByCurrentLearning()` */
+  static readonly GetAllTopicsByCurrentLearningPath = '/Card/GetAllTopicsByCurrentLearning';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllTopicsByCurrentLearning$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllTopicsByCurrentLearning$Plain$Response(params?: GetAllTopicsByCurrentLearning$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<IntSelectorModel>>> {
+    return getAllTopicsByCurrentLearning$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllTopicsByCurrentLearning$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllTopicsByCurrentLearning$Plain(params?: GetAllTopicsByCurrentLearning$Plain$Params, context?: HttpContext): Observable<Array<IntSelectorModel>> {
+    return this.getAllTopicsByCurrentLearning$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<IntSelectorModel>>): Array<IntSelectorModel> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllTopicsByCurrentLearning$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllTopicsByCurrentLearning$Json$Response(params?: GetAllTopicsByCurrentLearning$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<IntSelectorModel>>> {
+    return getAllTopicsByCurrentLearning$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllTopicsByCurrentLearning$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllTopicsByCurrentLearning$Json(params?: GetAllTopicsByCurrentLearning$Json$Params, context?: HttpContext): Observable<Array<IntSelectorModel>> {
+    return this.getAllTopicsByCurrentLearning$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<IntSelectorModel>>): Array<IntSelectorModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `saveCard()` */
+  static readonly SaveCardPath = '/Card/SaveCard';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `saveCard()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  saveCard$Response(params?: SaveCard$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return saveCard(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `saveCard$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  saveCard(params?: SaveCard$Params, context?: HttpContext): Observable<void> {
+    return this.saveCard$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

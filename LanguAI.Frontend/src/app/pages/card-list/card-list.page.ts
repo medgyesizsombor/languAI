@@ -1,15 +1,20 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { AccessEnum, CardListViewModel, CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
+import { NewCardlistModalComponent } from 'src/app/components/modals/new-cardlist/new-cardlist-modal.component';
+import { LanguageLevelPipe } from 'src/app/util/pipes/language-level.pipe';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import { CARD_LEARNING_NAVIGATION } from 'src/app/util/util.constants';
+import {
+  CARD_LEARNING_NAVIGATION,
+  CARD_NAVIGATION
+} from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-card-list',
@@ -39,7 +44,9 @@ export class CardListPage {
     private toastrService: ToastrService,
     private alertService: AlertService,
     private navController: NavController,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private languageLevelPipe: LanguageLevelPipe,
+    private modalController: ModalController
   ) {}
 
   ionViewWillEnter() {
@@ -53,117 +60,50 @@ export class CardListPage {
   }
 
   /**
-   * Loading the data
+   * Generate words with ChatGPT API
    */
-  private loadData() {
-    // this.cards = [
-    //   {
-    //     id: 1,
-    //     wordInLearningLanguage: 'english',
-    //     wordInNativeLanguage: 'angol'
-    //   },
-    //   {
-    //     id: 2,
-    //     wordInLearningLanguage: 'hungarian',
-    //     wordInNativeLanguage: 'magyar'
-    //   }
-    // ];
-    this.loadingService.showLoading().then(() => {
-      this.getCardListSub = this.activatedRoute.params
-        .pipe(
-          switchMap((params: Params) => {
-            this.cardListId = params['id'];
+  async generateCards() {
+    const modal = await this.modalController.create({
+      component: NewCardlistModalComponent
+    });
+    await modal.present();
 
-            if (!this.cardListId) {
-              this.loadingService.hideLoading();
-              return EMPTY;
-            }
-
-            return this.cardService.getCardListById$Json({
-              cardListId: this.cardListId
-            });
-          })
-        )
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      const currentLearning = this.localStorageService.getCurrentLearning();
+      this.cardService
+        .getWordList$Json({
+          learningLanguage: currentLearning?.learningLanguageName!,
+          level: this.languageLevelPipe.transform(
+            currentLearning?.languageLevel
+          ),
+          nativeLanguage: currentLearning?.nativeLanguageName!,
+          topicId: data
+        })
         .subscribe({
-          next: (cardList: CardListViewModel) => {
-            this.title = cardList?.name ?? '';
-            if (cardList?.cardViewModelList?.length) {
-              this.accessOfCardList = cardList.access ?? AccessEnum.Public;
-              this.cards = [...cardList?.cardViewModelList];
-              this.originalCards = [...cardList?.cardViewModelList];
-            }
-
-            this.isCardListOfOtherUser =
-              cardList?.userId !== this.localStorageService.getUserId();
-
+          next: (res: Array<CardViewModel>) => {
             this.loadingService.hideLoading();
+            if (res?.length) {
+              this.generatedCards = [...res];
+              this.showSwiper = true;
+            } else {
+              this.toastrService.presentErrorToast(
+                this.translateService.instant(
+                  'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
+                )
+              );
+            }
           },
           error: () => {
             this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
-              this.translateService.instant('DATA_ERROR')
+              this.translateService.instant(
+                'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
+              )
             );
           }
         });
-    });
-  }
-
-  /**
-   * Generate words with ChatGPT API
-   */
-  generateCards() {
-    this.alertService.showCreateCardsAlert().then((topic: string | null) => {
-      if (topic?.length) {
-        this.loadingService
-          .showLoading(this.translateService.instant('GENERATING_THE_CARDS'))
-          .then(() => {
-            this.loadingService.hideLoading();
-            this.showSwiper = true;
-            // this.generatedCards = [
-            //   {
-            //     wordInLearningLanguage: 'hungarian',
-            //     wordInNativeLanguage: 'magyar'
-            //   },
-            //   {
-            //     wordInLearningLanguage: 'english',
-            //     wordInNativeLanguage: 'angol'
-            //   }
-            // ];
-
-            //TODO: learning language, level és a native language localStorageből jöjjön
-            this.cardService
-              .getWordList$Json({
-                learningLanguage: 'hungarian',
-                level: 'A1',
-                nativeLanguage: 'english',
-                topic
-              })
-              .subscribe({
-                next: (res: Array<CardViewModel>) => {
-                  this.loadingService.hideLoading();
-                  if (res?.length) {
-                    this.generatedCards = [...res];
-                    this.showSwiper = true;
-                  } else {
-                    this.toastrService.presentErrorToast(
-                      this.translateService.instant(
-                        'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
-                      )
-                    );
-                  }
-                },
-                error: () => {
-                  this.loadingService.hideLoading();
-                  this.toastrService.presentErrorToast(
-                    this.translateService.instant(
-                      'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
-                    )
-                  );
-                }
-              });
-          });
-      }
-    });
+    }
   }
 
   /**
@@ -333,6 +273,59 @@ export class CardListPage {
             this.loadingService.hideLoading();
             this.toastrService.presentSuccessToast(
               this.translateService.instant('SUCCESSFUL_ACCESS_CHANGE')
+            );
+          }
+        });
+    });
+  }
+
+  /**
+   * Open the card
+   */
+  openCard(index: number) {
+    this.navController.navigateForward(
+      CARD_NAVIGATION + '/' + this.cards[index].id
+    );
+  }
+
+  /**
+   * Loading the data
+   */
+  private loadData() {
+    this.loadingService.showLoading().then(() => {
+      this.getCardListSub = this.activatedRoute.params
+        .pipe(
+          switchMap((params: Params) => {
+            this.cardListId = params['id'];
+
+            if (!this.cardListId) {
+              this.loadingService.hideLoading();
+              return EMPTY;
+            }
+
+            return this.cardService.getCardListById$Json({
+              cardListId: this.cardListId
+            });
+          })
+        )
+        .subscribe({
+          next: (cardList: CardListViewModel) => {
+            this.title = cardList?.name ?? '';
+            if (cardList?.cardViewModelList?.length) {
+              this.accessOfCardList = cardList.access ?? AccessEnum.Public;
+              this.cards = [...cardList?.cardViewModelList];
+              this.originalCards = [...cardList?.cardViewModelList];
+            }
+
+            this.isCardListOfOtherUser =
+              cardList?.userId !== this.localStorageService.getUserId();
+
+            this.loadingService.hideLoading();
+          },
+          error: () => {
+            this.loadingService.hideLoading();
+            this.toastrService.presentErrorToast(
+              this.translateService.instant('DATA_ERROR')
             );
           }
         });

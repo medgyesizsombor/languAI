@@ -9,7 +9,8 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
-  CARD_LIST_NAVIGATION
+  CARD_LIST_NAVIGATION,
+  HUNGARIAN_LANGUAGE_CODE
 } from 'src/app/util/util.constants';
 
 @Component({
@@ -66,14 +67,19 @@ export class CardListsPage {
             this.createCardListSub = this.cardService
               .saveCardList$Json({
                 body: {
-                  userId: 7,
-                  learningLanguageId: 23,
-                  nativeLanguageId: 35,
+                  userId: this.localStorageService.getUserId()!,
+                  learningLanguageId:
+                    this.localStorageService.getCurrentLearning()!
+                      .learningLanguageId,
+                  nativeLanguageId:
+                    this.localStorageService.getCurrentLearning()!
+                      .nativeLanguageId,
                   name
                 }
               })
               .subscribe({
                 next: cardListId => {
+                  this.generateSuggestedCardListName();
                   this.loadingService.hideLoading();
                   if (cardListId) {
                     this.openCardList(cardListId);
@@ -133,7 +139,20 @@ export class CardListsPage {
    * Generate a Suggested CardList name
    */
   private generateSuggestedCardListName() {
-    //TODO ezt meg kell csinálni úgy, hogy nativNyelv-tanulósNyelv-következőSzám
-    //this.cardLists.forEach(a => console.log(a));
+    const currentLearning = this.localStorageService.getCurrentLearning()!;
+
+    const nativeLanguage =
+      this.localStorageService.getMobileLanguageCode() ===
+      HUNGARIAN_LANGUAGE_CODE
+        ? currentLearning.nativeLanguageNameInHun
+        : currentLearning.nativeLanguageName;
+    const learningLanguage =
+      this.localStorageService.getMobileLanguageCode() ===
+      HUNGARIAN_LANGUAGE_CODE
+        ? currentLearning.learningLanguageNameInHun
+        : currentLearning.learningLanguageName;
+    this.suggestedName = `${nativeLanguage}${learningLanguage}${
+      this.cardLists?.length + 1
+    }`;
   }
 }

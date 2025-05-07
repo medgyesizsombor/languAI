@@ -11,7 +11,7 @@ namespace LanguAI.Backend.Services;
 
 public interface ICardService
 {
-    Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level, string topic);
+    Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level, int topicId);
     int? SaveCardList(SaveCardListRequest request);
     bool SaveCards(SaveCardRequest request);
     List<CardViewModel> GetCardsOfCardList(int cardListId);
@@ -22,11 +22,16 @@ public interface ICardService
     bool ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request);
     string GetLanguageWordsAsOneStringByCardListId(int cardListId);
     List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId);
+    CardViewModel GetCardById(int cardId);
+    void DeleteCardById(int cardId);
+    List<IntSelectorModel> GetAllTopicsByCurrentLearning(int learningId);
+    void SaveCard(CardViewModel card);
 }
 
 public class CardService : BaseService, ICardService
 {
-    IChatGPTService _chatGPTService;
+    private readonly IChatGPTService _chatGPTService;
+    private const int HUNGARIAN_LANGUAGE_ID = 35;
 
     public CardService(LanguAIDataContext context, IChatGPTService chatGPTService) : base(context)
     {
@@ -36,13 +41,14 @@ public class CardService : BaseService, ICardService
     /// <summary>
     /// Send a request to ChatGPT API and get the response message
     /// </summary>
-    /// <param name="systemLanguage"></param>
-    /// <param name="learningLanguage"></param>
-    /// <param name="level"></param>
+    /// <param name="nativeLanguage">Native language</param>
+    /// <param name="learningLanguage">Learning language</param>
+    /// <param name="level">Level of learning</param>
+    /// <param name="topicId">Id of the selected topic</param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level, string topic)
+    public async Task<List<CardViewModel>> GetWordList(string nativeLanguage, string learningLanguage, string level, int topicId)
     {
-        List<CardViewModel> result = await _chatGPTService.GetWordsForCards(systemLanguage, learningLanguage, level, topic);
+        List<CardViewModel> result = await _chatGPTService.GetWordsForCards(nativeLanguage, learningLanguage, level, topicId);
 
         return result;
     }
@@ -370,20 +376,92 @@ public class CardService : BaseService, ICardService
     }
 
     /// <summary>
+    /// Get card by Id
+    /// </summary>
+    /// <param name="cardId">id of the card</param>
+    public CardViewModel GetCardById(int cardId)
+    {
+        var card = _context.Card.FirstOrDefault(c => c.Id == cardId);
+
+        if (card == null) return null;
+
+        return new CardViewModel
+        {
+            Id = card.Id,
+            WordInLearningLanguage = card.WordInLearningLanguage,
+            WordInNativeLanguage = card.WordInNativeLanguage
+        };
+    }
+
+    /// <summary>
+    /// Delete card by id
+    /// </summary>
+    /// <param name="cardId">Id of the card</param>
+    public void DeleteCardById(int cardId)
+    {
+        var card = _context.Card.FirstOrDefault(c => c.Id == cardId);
+
+        if (card == null) throw new ArgumentNullException(nameof(card));
+
+        _context.Remove(card);
+
+        _context.SaveChanges();
+    }
+
+    /// <summary>
+    /// Get all topics by learning id
+    /// </summary>
+    /// <param name="learningId">Learning Id</param>
+    /// <returns></returns>
+    public List<IntSelectorModel> GetAllTopicsByCurrentLearning(int learningId)
+    {
+        var currentLearning = _context.Learning.FirstOrDefault(l => l.Id == learningId);
+
+        if (currentLearning == null) throw new ArgumentException(nameof(currentLearning));
+
+        var learnings = _context.Topic
+            .Where(t => t.LanguageLevel == currentLearning.LanguageLevel)
+            .Select(t => new IntSelectorModel
+            {
+                Id = t.Id,
+                Name = currentLearning.NativeLanguageId == HUNGARIAN_LANGUAGE_ID
+                    ? t.NameInHun
+                    : t.Name
+            })
+            .ToList();
+
+        return learnings;
+    }
+
+    public void SaveCard(CardViewModel request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var card = _context.Card.FirstOrDefault(c => c.Id == request.Id);
+
+        ArgumentNullException.ThrowIfNull(card);
+
+        card.WordInNativeLanguage = request.WordInNativeLanguage;
+        card.WordInLearningLanguage = request.WordInLearningLanguage;
+        
+        _context.SaveChanges();
+    }
+
+    /// <summary>
     /// Convert a list of cards to list of card view models
     /// </summary>
     /// <param name="cardList">List of cards</param>
-    /// <returns></returns>
     private static List<CardViewModel> ConvertCardListToCardViewModelList(List<Card> cardList)
     {
-        if (cardList == null) { return null; }
+        if (cardList == null) return null;
 
         List<CardViewModel> cardViewModelList = new List<CardViewModel>() { };
 
         cardList.ForEach(c => cardViewModelList.Add(new CardViewModel
         {
             WordInNativeLanguage = c.WordInNativeLanguage,
-            WordInLearningLanguage = c.WordInLearningLanguage
+            WordInLearningLanguage = c.WordInLearningLanguage,
+            Id = c.Id
         }));
 
         return cardViewModelList;

@@ -98,7 +98,10 @@ public class LearningService : BaseService, ILearningService
                 IsActive = l.IsActive,
                 LearningLanguageCode = l.LearningLanguage.Code,
                 LearningLanguageName = l.LearningLanguage.Name,
-                LearningLanguageNameInHun = l.LearningLanguage.NameInHun
+                LearningLanguageNameInHun = l.LearningLanguage.NameInHun,
+                NativeLanguageCode = l.NativeLanguage.Code,
+                NativeLanguageName = l.NativeLanguage.Name,
+                NativeLanguageNameInHun = l.NativeLanguage.NameInHun
             })
             .ToList();
     }
