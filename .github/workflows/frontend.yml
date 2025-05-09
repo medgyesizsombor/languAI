@@ -10,7 +10,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: languAI/LanguAI.Frontend
+        working-directory: LanguAI.Frontend
 
     steps:
     - uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
       with:
         node-version: '20.19.0'
 
-    - name: Clean install
+    - name: Install Dependencies
       run: npm i
 
     - name: Install ionic cli
