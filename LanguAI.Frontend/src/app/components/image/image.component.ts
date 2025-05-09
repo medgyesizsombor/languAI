@@ -9,7 +9,8 @@ import {
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
-  styleUrls: ['./image.component.scss']
+  styleUrls: ['./image.component.scss'],
+  standalone: false
 })
 export class ImageComponent implements OnInit, OnChanges {
   @Input() imageString: string | undefined | null;

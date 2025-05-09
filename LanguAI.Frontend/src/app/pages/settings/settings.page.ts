@@ -25,7 +25,8 @@ import { FileService } from 'src/app/util/services/file.service';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
-  styleUrls: ['./settings.page.scss']
+  styleUrls: ['./settings.page.scss'],
+  standalone: false
 })
 export class SettingsPage implements OnInit {
   title = this.translateService.instant(SETTINGS_TITLE);

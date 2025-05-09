@@ -16,7 +16,6 @@ import { environment } from 'src/environments/environment';
 import { ApiModule } from 'src/api/api.module';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { JwtInterceptor } from './util/interceptors/jwt-interceptor';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -38,8 +37,7 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    ApiModule.forRoot({ rootUrl: environment.apiUrl }),
-    FontAwesomeModule
+    ApiModule.forRoot({ rootUrl: environment.apiUrl })
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

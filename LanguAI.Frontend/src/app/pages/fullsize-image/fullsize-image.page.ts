@@ -7,7 +7,8 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 @Component({
   selector: 'app-fullsize-image',
   templateUrl: './fullsize-image.page.html',
-  styleUrls: ['./fullsize-image.page.scss']
+  styleUrls: ['./fullsize-image.page.scss'],
+  standalone: false
 })
 export class FullsizeImagePage implements OnInit {
   getImageSub: Subscription | undefined;

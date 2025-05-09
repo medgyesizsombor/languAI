@@ -14,7 +14,8 @@ import { HUNGARIAN_LANGUAGE_ID } from 'src/app/util/util.constants';
 @Component({
   selector: 'app-learnings',
   templateUrl: './learnings.page.html',
-  styleUrls: ['./learnings.page.scss']
+  styleUrls: ['./learnings.page.scss'],
+  standalone: false
 })
 export class LearningPage {
   isLoading = true;

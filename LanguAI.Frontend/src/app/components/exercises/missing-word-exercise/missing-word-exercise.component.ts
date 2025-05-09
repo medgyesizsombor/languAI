@@ -5,7 +5,8 @@ import { AnimationService } from 'src/app/util/services/animation.service';
 @Component({
   selector: 'app-missing-word-exercise',
   templateUrl: './missing-word-exercise.component.html',
-  styleUrls: ['./missing-word-exercise.component.scss']
+  styleUrls: ['./missing-word-exercise.component.scss'],
+  standalone: false
 })
 export class MissingWordExerciseComponent implements OnInit {
   @ViewChildren('container', { read: ElementRef }) container: QueryList<ElementRef> | undefined;

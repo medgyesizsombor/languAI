@@ -17,7 +17,8 @@ import { AnimationService } from 'src/app/util/services/animation.service';
 @Component({
   selector: 'app-mistake-correcting-exercise',
   templateUrl: './mistake-correcting-exercise.component.html',
-  styleUrls: ['./mistake-correcting-exercise.component.scss']
+  styleUrls: ['./mistake-correcting-exercise.component.scss'],
+  standalone: false
 })
 export class MistakeCorrectingExerciseComponent implements OnInit {
   @ViewChildren('container', { read: ElementRef }) container:

@@ -1,20 +1,22 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { RegistrationService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import { LESSONS_NAVIGATION, LOGIN_NAVIGATION } from 'src/app/util/util.constants';
+import {
+  LESSONS_NAVIGATION,
+  LOGIN_NAVIGATION
+} from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
-  styleUrls: ['./register.page.scss']
+  styleUrls: ['./register.page.scss'],
+  standalone: false
 })
 export class RegisterPage {
   registerForm: FormGroup | undefined;
@@ -23,16 +25,13 @@ export class RegisterPage {
 
   constructor(
     private formBuilder: FormBuilder,
-    library: FaIconLibrary,
     private loadingService: LoadingService,
     private registrationService: RegistrationService,
     private translateService: TranslateService,
     private toastrService: ToastrService,
     private router: Router,
     private navController: NavController
-  ) {
-    library.addIcons(faUser);
-  }
+  ) {}
 
   ionViewWillEnter() {
     this.createForm();

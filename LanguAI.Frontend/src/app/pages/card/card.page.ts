@@ -15,7 +15,8 @@ import { CARD_LIST_NAVIGATION } from 'src/app/util/util.constants';
 @Component({
   selector: 'app-card',
   templateUrl: './card.page.html',
-  styleUrls: ['./card.page.scss']
+  styleUrls: ['./card.page.scss'],
+  standalone: false
 })
 export class CardPage {
   originalCard: CardViewModel | undefined;

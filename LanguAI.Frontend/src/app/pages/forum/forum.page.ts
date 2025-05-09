@@ -16,7 +16,8 @@ import {
 @Component({
   selector: 'app-forum',
   templateUrl: './forum.page.html',
-  styleUrls: ['./forum.page.scss']
+  styleUrls: ['./forum.page.scss'],
+  standalone: false
 })
 export class ForumPage {
   title = this.translateService.instant(FORUM_TITLE);

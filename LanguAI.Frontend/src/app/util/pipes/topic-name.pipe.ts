@@ -4,7 +4,8 @@ import { HUNGARIAN_LANGUAGE_ID } from '../util.constants';
 import { LocalStorageService } from '../services/localstorage.service';
 
 @Pipe({
-  name: 'topicName'
+  name: 'topicName',
+  standalone: false
 })
 export class TopicNamePipe implements PipeTransform {
   constructor(private localStorageService: LocalStorageService) {}

@@ -4,7 +4,8 @@ import { LanguageLevelEnum } from 'src/api/models';
 import { ADVANCED, BEGINNER, INTERMEDIATE } from '../util.constants';
 
 @Pipe({
-  name: 'languageLevel'
+  name: 'languageLevel',
+  standalone: false
 })
 export class LanguageLevelPipe implements PipeTransform {
   constructor(private translateService: TranslateService) {}

@@ -17,7 +17,8 @@ import {
 @Component({
   selector: 'app-lessons',
   templateUrl: './lessons.page.html',
-  styleUrls: ['./lessons.page.scss']
+  styleUrls: ['./lessons.page.scss'],
+  standalone: false
 })
 export class LessonsPage {
   isLoading = false;

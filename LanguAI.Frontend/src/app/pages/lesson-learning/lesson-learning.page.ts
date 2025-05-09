@@ -17,7 +17,8 @@ import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
 @Component({
   selector: 'app-lesson-learning',
   templateUrl: './lesson-learning.page.html',
-  styleUrls: ['./lesson-learning.page.scss']
+  styleUrls: ['./lesson-learning.page.scss'],
+  standalone: false
 })
 export class LessonLearningPage {
   currentExercise: ExerciseTypeEnum | undefined;

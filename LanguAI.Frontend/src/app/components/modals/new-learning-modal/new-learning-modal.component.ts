@@ -17,7 +17,8 @@ import {
 @Component({
   selector: 'app-new-learning-modal',
   templateUrl: './new-learning-modal.component.html',
-  styleUrls: ['./new-learning-modal.component.scss']
+  styleUrls: ['./new-learning-modal.component.scss'],
+  standalone: false
 })
 export class NewLearningModalComponent implements OnInit, OnDestroy {
   isLoading = true;
