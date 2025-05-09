@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Ionic CI
 
 on:
   push:
@@ -8,9 +8,9 @@ jobs:
   build:
     runs-on: windows-latest
 
-    strategy:
-      matrix:
-        node-version: [20.19]
+    defaults:
+      run:
+        working-directory: languAI/LanguAI.Frontend
 
     steps:
     - uses: actions/checkout@v4
@@ -18,13 +18,13 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '20.19.0'
 
     - name: Clean install
       run: npm i
 
-    - name: Install ionic
-      run: npm i -g ionic/cli
+    - name: Install ionic cli
+      run: npm i -g @ionic/cli
 
     - name: Build
       run: npm run build-prod
