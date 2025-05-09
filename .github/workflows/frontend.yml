@@ -21,7 +21,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Clean install
-      run: npm ci
+      run: npm i
 
     - name: Install ionic
       run: npm i -g ionic/cli
