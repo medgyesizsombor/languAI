@@ -5,7 +5,8 @@ import { LocalStorageService } from 'src/app/util/services/localstorage.service'
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
-  styleUrls: ['tabs.page.scss']
+  styleUrls: ['tabs.page.scss'],
+  standalone: false
 })
 export class TabsPage {
   numberOfFriendshipRequest = 0;

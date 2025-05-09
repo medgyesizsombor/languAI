@@ -3,8 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import {
   FriendshipRequestViewModel,
-  FriendshipStatusEnum,
-  FriendshipViewModel
+  FriendshipStatusEnum
 } from 'src/api/models';
 import { FriendshipService } from 'src/api/services';
 import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
@@ -15,7 +14,8 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.page.html',
-  styleUrls: ['./notifications.page.scss']
+  styleUrls: ['./notifications.page.scss'],
+  standalone: false
 })
 export class NotificationsPage {
   friendshipRequests: Array<FriendshipRequestViewModel> = [

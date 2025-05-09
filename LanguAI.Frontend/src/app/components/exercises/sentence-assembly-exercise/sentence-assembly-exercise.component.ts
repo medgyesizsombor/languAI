@@ -16,7 +16,8 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 @Component({
   selector: 'app-sentence-assembly-exercise',
   templateUrl: './sentence-assembly-exercise.component.html',
-  styleUrls: ['./sentence-assembly-exercise.component.scss']
+  styleUrls: ['./sentence-assembly-exercise.component.scss'],
+  standalone: false
 })
 export class SentenceAssemblyExerciseComponent implements OnInit {
   @ViewChildren('container', { read: ElementRef }) container:

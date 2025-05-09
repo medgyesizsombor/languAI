@@ -15,7 +15,8 @@ import { AnimationService } from 'src/app/util/services/animation.service';
 @Component({
   selector: 'app-word-pairing-exercise',
   templateUrl: './word-pairing-exercise.component.html',
-  styleUrls: ['./word-pairing-exercise.component.scss']
+  styleUrls: ['./word-pairing-exercise.component.scss'],
+  standalone: false
 })
 export class WordPairingExerciseComponent implements OnInit {
   @ViewChildren('container', { read: ElementRef }) container:

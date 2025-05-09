@@ -17,7 +17,8 @@ import { AnimationService } from 'src/app/util/services/animation.service';
 @Component({
   selector: 'app-question-answering-exercise',
   templateUrl: './question-answering-exercise.component.html',
-  styleUrls: ['./question-answering-exercise.component.scss']
+  styleUrls: ['./question-answering-exercise.component.scss'],
+  standalone: false
 })
 export class QuestionAnsweringExerciseComponent implements OnInit {
   @ViewChildren('container', { read: ElementRef }) container:

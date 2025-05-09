@@ -21,7 +21,8 @@ import {
 @Component({
   selector: 'app-card-swiper',
   templateUrl: './card-swiper.component.html',
-  styleUrls: ['./card-swiper.component.scss']
+  styleUrls: ['./card-swiper.component.scss'],
+  standalone: false
 })
 export class CardSwiperComponent implements OnInit, OnChanges {
   @ViewChildren('deck', { read: ElementRef }) deck:

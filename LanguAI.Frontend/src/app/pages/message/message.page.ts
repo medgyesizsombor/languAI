@@ -16,7 +16,8 @@ import { AlertService } from 'src/app/util/services/alert.service';
 @Component({
   selector: 'app-message',
   templateUrl: './message.page.html',
-  styleUrls: ['./message.page.scss']
+  styleUrls: ['./message.page.scss'],
+  standalone: false
 })
 export class MessagePage {
   @ViewChild('content') content: IonContent | undefined;

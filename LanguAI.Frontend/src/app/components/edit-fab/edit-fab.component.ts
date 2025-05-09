@@ -3,7 +3,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'app-edit-fab',
   templateUrl: './edit-fab.component.html',
-  styleUrls: ['./edit-fab.component.scss']
+  styleUrls: ['./edit-fab.component.scss'],
+  standalone: false
 })
 export class EditFabComponent implements OnInit {
   @Input('cardsNumber') cardsNumber = 0;

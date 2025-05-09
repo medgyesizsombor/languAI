@@ -19,7 +19,8 @@ import {
 @Component({
   selector: 'app-card-list',
   templateUrl: './card-list.page.html',
-  styleUrls: ['./card-list.page.scss']
+  styleUrls: ['./card-list.page.scss'],
+  standalone: false
 })
 export class CardListPage {
   accessOfCardList = AccessEnum.Public;

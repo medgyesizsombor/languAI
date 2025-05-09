@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
-import { UserDataViewModel, UserViewModel } from 'src/api/models';
+import { UserDataViewModel } from 'src/api/models';
 import { AuthenticationService, UserService } from 'src/api/services';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -15,7 +13,8 @@ import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss']
+  styleUrls: ['./login.page.scss'],
+  standalone: false
 })
 export class LoginPage {
   loginForm: FormGroup | undefined;
@@ -26,7 +25,6 @@ export class LoginPage {
 
   constructor(
     private formBuilder: FormBuilder,
-    library: FaIconLibrary,
     private authenticationService: AuthenticationService,
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
@@ -34,9 +32,7 @@ export class LoginPage {
     private toastrService: ToastrService,
     private router: Router,
     private userService: UserService
-  ) {
-    library.addIcons(faUser);
-  }
+  ) {}
 
   ionViewWillEnter() {
     this.createForm();

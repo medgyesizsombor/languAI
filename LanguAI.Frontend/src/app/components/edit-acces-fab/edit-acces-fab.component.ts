@@ -5,7 +5,8 @@ import { AlertService } from 'src/app/util/services/alert.service';
 @Component({
   selector: 'app-edit-acces-fab',
   templateUrl: './edit-acces-fab.component.html',
-  styleUrls: ['./edit-acces-fab.component.scss']
+  styleUrls: ['./edit-acces-fab.component.scss'],
+  standalone: false
 })
 export class EditAccesFabComponent implements OnInit {
   @Input() currentAccess: AccessEnum | undefined;

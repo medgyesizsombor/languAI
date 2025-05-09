@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MESSAGE_NAVIGATION, MESSAGES_TITLE } from '../../util/util.constants';
 import { TranslateService } from '@ngx-translate/core';
 import { IntSelectorModel } from 'src/api/models';
@@ -14,7 +14,8 @@ import { CreateNewMessageModalComponent } from 'src/app/components/modals/create
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.page.html',
-  styleUrls: ['./messages.page.scss']
+  styleUrls: ['./messages.page.scss'],
+  standalone: false
 })
 export class MessagesPage {
   title = this.translateService.instant(MESSAGES_TITLE);

@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { LocalStorageService } from '../services/localstorage.service';
-import { ENGLISH_LANGUAGE_CODE } from '../util.constants';
 
 @Pipe({
-  name: 'learning'
+  name: 'learning',
+  standalone: false
 })
 export class LearningPipe implements PipeTransform {
   constructor(private localStorageService: LocalStorageService) {}

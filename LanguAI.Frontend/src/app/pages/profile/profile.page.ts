@@ -29,7 +29,8 @@ import { FileService } from 'src/app/util/services/file.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss']
+  styleUrls: ['./profile.page.scss'],
+  standalone: false
 })
 export class ProfilePage {
   profileForm: FormGroup | undefined;

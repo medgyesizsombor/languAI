@@ -16,7 +16,8 @@ import {
 @Component({
   selector: 'app-card-lists',
   templateUrl: './card-lists.page.html',
-  styleUrls: ['./card-lists.page.scss']
+  styleUrls: ['./card-lists.page.scss'],
+  standalone: false
 })
 export class CardListsPage {
   userId: number | null | undefined;

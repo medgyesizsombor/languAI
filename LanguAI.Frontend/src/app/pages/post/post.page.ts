@@ -14,7 +14,8 @@ import { UserInteractionService } from 'src/app/util/services/user-interaction.s
 @Component({
   selector: 'app-post',
   templateUrl: './post.page.html',
-  styleUrls: ['./post.page.scss']
+  styleUrls: ['./post.page.scss'],
+  standalone: false
 })
 export class PostPage {
   commentForm: FormGroup | undefined;

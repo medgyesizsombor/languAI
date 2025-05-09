@@ -14,7 +14,8 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 @Component({
   selector: 'app-create-post',
   templateUrl: './create-post.page.html',
-  styleUrls: ['./create-post.page.scss']
+  styleUrls: ['./create-post.page.scss'],
+  standalone: false
 })
 export class CreatePostPage {
   postForm: FormGroup | undefined;

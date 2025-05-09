@@ -11,7 +11,8 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 @Component({
   selector: 'app-card-learning',
   templateUrl: './card-learning.page.html',
-  styleUrls: ['./card-learning.page.scss']
+  styleUrls: ['./card-learning.page.scss'],
+  standalone: false
 })
 export class CardLearningPage {
   cardListId: number | undefined | null;

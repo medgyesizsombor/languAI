@@ -4,7 +4,8 @@ import { LearningViewModel } from 'src/api/models';
 import { HUNGARIAN_LANGUAGE_ID } from '../util.constants';
 
 @Pipe({
-  name: 'languageName'
+  name: 'languageName',
+  standalone: false
 })
 export class LanguageNamePipe implements PipeTransform {
   constructor(private localStorageService: LocalStorageService) {}

@@ -7,7 +7,8 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 @Component({
   selector: 'app-create-new-message-modal',
   templateUrl: './create-new-message-modal.component.html',
-  styleUrls: ['./create-new-message-modal.component.scss']
+  styleUrls: ['./create-new-message-modal.component.scss'],
+  standalone: false
 })
 export class CreateNewMessageModalComponent implements OnInit {
   @Input('friendList') friendList: Array<IntSelectorModel> = [];

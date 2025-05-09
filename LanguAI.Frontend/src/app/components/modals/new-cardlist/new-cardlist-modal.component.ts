@@ -12,7 +12,8 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 @Component({
   selector: 'app-new-cardlist-modal',
   templateUrl: './new-cardlist-modal.component.html',
-  styleUrls: ['./new-cardlist-modal.component.scss']
+  styleUrls: ['./new-cardlist-modal.component.scss'],
+  standalone: false
 })
 export class NewCardlistModalComponent implements OnInit, OnDestroy {
   isLoading = true;
