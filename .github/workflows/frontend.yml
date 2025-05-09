@@ -1,0 +1,30 @@
+name: NodeJS with Webpack
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [20.19]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Clean install
+      run: npm ci
+
+    - name: Install ionic
+      run: npm i -g ionic/cli
+
+    - name: Build
+      run: npm run build-prod
