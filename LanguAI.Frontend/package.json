@@ -18,7 +18,7 @@
     "@angular/animations": "^18.2.3",
     "@angular/common": "^18.2.3",
     "@angular/compiler": "^18.2.3",
-    "@angular/core": "^18.2.3",
+    "@angular/core": "^19.2.10",
     "@angular/forms": "^18.2.3",
     "@angular/platform-browser": "^18.2.3",
     "@angular/platform-browser-dynamic": "^18.2.3",
@@ -61,7 +61,7 @@
     "@angular-eslint/eslint-plugin-template": "^18.3.0",
     "@angular-eslint/schematics": "^18.3.0",
     "@angular-eslint/template-parser": "^18.3.0",
-    "@angular/cli": "^18.2.3",
+    "@angular/cli": "^19.2.11",
     "@angular/compiler-cli": "^18.2.3",
     "@angular/language-service": "^18.2.3",
     "@capacitor/assets": "^3.0.5",
@@ -82,7 +82,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.5.4"
+    "typescript": "5.6"
   },
   "description": "An Ionic project"
 }
