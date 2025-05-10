@@ -9,19 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { CardViewModel } from '../../models/card-view-model';
 
 export interface GetWordList$Plain$Params {
-  nativeLanguage?: string;
-  learningLanguage?: string;
-  level?: string;
-  topicId?: number;
+  cardListId?: number;
 }
 
 export function getWordList$Plain(http: HttpClient, rootUrl: string, params?: GetWordList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
   const rb = new RequestBuilder(rootUrl, getWordList$Plain.PATH, 'post');
   if (params) {
-    rb.query('nativeLanguage', params.nativeLanguage, {});
-    rb.query('learningLanguage', params.learningLanguage, {});
-    rb.query('level', params.level, {});
-    rb.query('topicId', params.topicId, {});
+    rb.query('cardListId', params.cardListId, {});
   }
 
   return http.request(

@@ -151,8 +151,6 @@ public class LearningService : BaseService, ILearningService
     /// <returns></returns>
     public LearningViewModel GetCurrentLearningOfUser(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         var currentLearning = _context.Learning
             .Include(l => l.LearningLanguage)
             .Include(l => l.NativeLanguage)

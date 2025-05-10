@@ -3,6 +3,14 @@
 <ion-content>
   <ng-container *ngIf="!isLoading">
     <form *ngIf="newCardlistForm" [formGroup]="newCardlistForm" class="px-4">
+      <ion-input
+        type="text"
+        id="name"
+        class="form-control"
+        label="{{ 'NAME' | translate }}"
+        labelPlacement="stacked"
+        formControlName="name"></ion-input>
+
       <ion-select
         formControlName="topicId"
         [label]="'TOPIC' | translate"

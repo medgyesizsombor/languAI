@@ -7,11 +7,25 @@
   <ion-list
     *ngIf="!isLoading"
     class="d-flex ion-wrap ion-justify-content-center ion-no-padding">
+    <ion-row>
+      <ion-col size="11" class="d-flex ion-align-items-center">
+        <ion-searchbar
+          show-clear-button="always"
+          clear-icon="trash-bin-outline"
+          placeholder="{{ 'SEARCH' | translate }}"
+          (ionInput)="search($event)"
+          (ionClear)="clearSearchbar()"></ion-searchbar>
+      </ion-col>
+      <ion-col
+        class="d-flex ion-align-items-center ion-justify-content-end"
+        (click)="openSortModal()">
+        <ion-icon name="funnel-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
     <ion-card
       class="border-2"
       *ngFor="let cardList of cardLists"
       (click)="openCardList(cardList.id!)">
-      <!--TODO megcsinálni a listát-->
       <ion-card-header class="ion-text-center border-2-bottom-line">
         {{ cardList.modified | date:'YYYY. MM. dd' }}
       </ion-card-header>

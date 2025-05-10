@@ -7,6 +7,7 @@ import { UserService } from 'src/api/services';
 import { LocalStorageService } from './localstorage.service';
 import { AccessEnum } from 'src/api/models';
 import { LanguageEnum } from '../enums/language-enum';
+import { CardlistsSortEnum } from '../enums/cardlists-sort-enum';
 
 @Injectable({
   providedIn: 'root'
@@ -115,41 +116,26 @@ export class AlertService {
   /**
    * Show create cards alert
    */
-  async showCreateCardsAlert(): Promise<string | null> {
+  async showCreateCardsAlert(name: string): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
-        header: this.translateService.instant(
-          'ENTER_A_TOPIC_YOU_WANT_TO_LEARN_ABOUT'
-        ),
-        cssClass: 'ion-input',
-        inputs: [
-          {
-            type: 'text',
-            name: 'topic',
-            attributes: {
-              autocomplete: 'off'
-            }
-          }
-        ],
+        header: this.translateService.instant('CREATING_CARDS'),
+        message: this.translateService.instant('DO_YOU_WANT_CREATE_CARDS_FOR', {
+          name
+        }),
         buttons: [
           {
             text: this.translateService.instant('CANCEL'),
             role: 'cancel',
             handler: () => {
-              resolve(null);
+              resolve(false);
             }
           },
           {
             text: this.translateService.instant('CONFIRM'),
             role: 'confirm',
-            handler: data => {
-              if (!data?.topic?.length) {
-                this.toastrService.presentErrorToast(
-                  this.translateService.instant('TOPIC_IS_EMPTY')
-                );
-              } else {
-                resolve(data.topic);
-              }
+            handler: () => {
+              resolve(true);
             }
           }
         ]
@@ -749,6 +735,64 @@ export class AlertService {
               } else {
                 resolve(null);
               }
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show sort alert
+   */
+  async showSortAlert(
+    currentSort: CardlistsSortEnum
+  ): Promise<CardlistsSortEnum | null> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('SORT'),
+        message: this.translateService.instant('WHAT_SHOULD_BE_THE_ORDER'),
+        inputs: [
+          {
+            label: this.translateService.instant('DATE_ASC'),
+            type: 'radio',
+            value: CardlistsSortEnum.dateDesc,
+            checked: currentSort === CardlistsSortEnum.dateDesc
+          },
+          {
+            label: this.translateService.instant('DATE_DESC'),
+            type: 'radio',
+            value: CardlistsSortEnum.dateAsc,
+            checked: currentSort === CardlistsSortEnum.dateAsc
+          },
+          {
+            label: this.translateService.instant('ALPHABETIC_ASC'),
+            type: 'radio',
+            value: CardlistsSortEnum.alphabetAsc,
+            checked: currentSort === CardlistsSortEnum.alphabetAsc
+          },
+          {
+            label: this.translateService.instant('ALPHABETIC_DESC'),
+            type: 'radio',
+            value: CardlistsSortEnum.alphabetDesc,
+            checked: currentSort === CardlistsSortEnum.alphabetDesc
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve(null);
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              resolve(data);
             }
           }
         ]

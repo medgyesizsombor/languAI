@@ -64,47 +64,37 @@ export class CardListPage {
    * Generate words with ChatGPT API
    */
   async generateCards() {
-    const modal = await this.modalController.create({
-      component: NewCardlistModalComponent
-    });
-    await modal.present();
-
-    const { data } = await modal.onDidDismiss();
-    if (data) {
-      const currentLearning = this.localStorageService.getCurrentLearning();
-      this.cardService
-        .getWordList$Json({
-          learningLanguage: currentLearning?.learningLanguageName!,
-          level: this.languageLevelPipe.transform(
-            currentLearning?.languageLevel
-          ),
-          nativeLanguage: currentLearning?.nativeLanguageName!,
-          topicId: data
-        })
-        .subscribe({
-          next: (res: Array<CardViewModel>) => {
-            this.loadingService.hideLoading();
-            if (res?.length) {
-              this.generatedCards = [...res];
-              this.showSwiper = true;
-            } else {
+    this.alertService.showCreateCardsAlert(this.title).then(result => {
+      if (result) {
+        this.cardService
+          .getWordList$Json({
+            cardListId: this.cardListId!
+          })
+          .subscribe({
+            next: (res: Array<CardViewModel>) => {
+              this.loadingService.hideLoading();
+              if (res?.length) {
+                this.generatedCards = [...res];
+                this.showSwiper = true;
+              } else {
+                this.toastrService.presentErrorToast(
+                  this.translateService.instant(
+                    'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
+                  )
+                );
+              }
+            },
+            error: () => {
+              this.loadingService.hideLoading();
               this.toastrService.presentErrorToast(
                 this.translateService.instant(
                   'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
                 )
               );
             }
-          },
-          error: () => {
-            this.loadingService.hideLoading();
-            this.toastrService.presentErrorToast(
-              this.translateService.instant(
-                'ERROR_HAPPEND_WHILE_GENERATING_WORDS'
-              )
-            );
-          }
-        });
-    }
+          });
+      }
+    });
   }
 
   /**
@@ -151,6 +141,7 @@ export class CardListPage {
             }
           },
           error: () => {
+            this.toastrService.presentErrorToast('UNSUCCESSFULL_SAVING');
             this.loadingService.hideLoading();
           }
         });

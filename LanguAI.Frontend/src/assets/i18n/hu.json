@@ -253,7 +253,17 @@
   },
   "CARD_EDITING": "Kártya szerkesztése",
   "CARD_CREATING": "Kártya készítése",
-  "CARDLIST_CREATING": "Kártyagyűjtemény létrehozása",
   "UNSUCCESSFUL_CARDLIST_CREATE": "Hiba a kártyagyűjtemény készítése során!",
-  "TOPIC": "Témakör"
+  "TOPIC": "Témakör",
+  "SEARCH": "Keresés...",
+  "ENTER_A_NAME": "Adj meg egy nevet",
+  "CREATE_CARDLIST": "Kártyagyűjtemény készítés",
+  "NAME": "Név",
+  "DO_YOU_WANT_CREATE_CARDS_FOR": "Szeretnél kártyákat generáltatni a {{ name }} nevű kártyagyűjteménybe?",
+  "DATE_ASC": "Dátum növ.",
+  "DATE_DESC": "Dátum csök.",
+  "ALPHABETIC_ASC": "ABC növ.",
+  "ALPHABETIC_DESC": "ABC csök.",
+  "WHAT_SHOULD_BE_THE_ORDER": "Mi legyen a sorrend?",
+  "SORT": "Sorrend"
 }

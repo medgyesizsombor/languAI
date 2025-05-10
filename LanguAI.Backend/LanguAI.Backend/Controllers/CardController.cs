@@ -29,15 +29,15 @@ public class CardController : ControllerBase
     /// <param name="level">In which language the words are needed</param>
     /// <returns></returns>
     [HttpPost(Name = "GetWordList")]
-    public async Task<ActionResult<List<CardViewModel>>> GetWordList(string nativeLanguage, string learningLanguage, string level, int topicId)
+    public async Task<ActionResult<List<CardViewModel>>> GetWordList(int cardListId)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(nativeLanguage);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(learningLanguage);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(level);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+
+        if (currentUserId == null) return Unauthorized();
 
         try
         {
-            return Ok(await _cardService.GetWordList(nativeLanguage, learningLanguage, level, topicId));
+            return Ok(await _cardService.GetWordList(cardListId, (int)currentUserId));
         }
         catch (Exception)
         {

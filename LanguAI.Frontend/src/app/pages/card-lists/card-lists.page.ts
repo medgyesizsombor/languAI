@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
+import {
+  IonSearchbarCustomEvent,
+  SearchbarInputEventDetail
+} from '@ionic/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CardListViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
+import { NewCardlistModalComponent } from 'src/app/components/modals/new-cardlist/new-cardlist-modal.component';
+import { CardlistsSortEnum } from 'src/app/util/enums/cardlists-sort-enum';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -21,11 +27,12 @@ import {
 })
 export class CardListsPage {
   userId: number | null | undefined;
+  originalCardLists: Array<CardListViewModel> = [];
   cardLists: Array<CardListViewModel> = [];
-
   suggestedName: string | undefined;
-
   isLoading = true;
+  sortedAsc = true;
+  currentSort = CardlistsSortEnum.dateDesc;
 
   getCardListsOfCurrentUserSub: Subscription | undefined;
   createCardListSub: Subscription | undefined;
@@ -37,7 +44,8 @@ export class CardListsPage {
     private toastrService: ToastrService,
     private translateService: TranslateService,
     private alertService: AlertService,
-    private navController: NavController
+    private navController: NavController,
+    private modalController: ModalController
   ) {}
 
   ionViewWillEnter() {
@@ -51,53 +59,49 @@ export class CardListsPage {
     this.createCardListSub?.unsubscribe();
   }
 
-  addCardList() {
-    const namesOfCardLists: Array<string> = this.cardLists
-      ?.map(c => c.name)
-      ?.filter((name): name is string => name !== null && name !== undefined);
+  async addCardList() {
+    const modal = await this.modalController.create({
+      component: NewCardlistModalComponent,
+      componentProps: {
+        suggestedName: this.suggestedName
+      }
+    });
+    await modal.present();
 
-    this.alertService
-      .showCreateCardListAlert(
-        namesOfCardLists?.length ? namesOfCardLists : [],
-        'asd'
-      )
-      .then((name: string | null) => {
-        if (name?.length) {
-          this.loadingService.showLoading('CREATING_CARD_LIST').then(() => {
-            // TODO continue, to not make it automatically
-            this.createCardListSub = this.cardService
-              .saveCardList$Json({
-                body: {
-                  userId: this.localStorageService.getUserId()!,
-                  learningLanguageId:
-                    this.localStorageService.getCurrentLearning()!
-                      .learningLanguageId,
-                  nativeLanguageId:
-                    this.localStorageService.getCurrentLearning()!
-                      .nativeLanguageId,
-                  name
-                }
-              })
-              .subscribe({
-                next: cardListId => {
-                  this.generateSuggestedCardListName();
-                  this.loadingService.hideLoading();
-                  if (cardListId) {
-                    this.openCardList(cardListId);
-                  } else {
-                    this.translateService.instant(
-                      'ERROR_WHILE_SAVING_CARD_LIST'
-                    );
-                  }
-                },
-                error: () => {
-                  this.loadingService.hideLoading();
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      const currentLearning = this.localStorageService.getCurrentLearning();
+
+      if (data.name.length) {
+        this.loadingService.showLoading('CREATING_CARD_LIST').then(() => {
+          this.createCardListSub = this.cardService
+            .saveCardList$Json({
+              body: {
+                userId: this.localStorageService.getUserId()!,
+                learningLanguageId: currentLearning?.learningLanguageId,
+                nativeLanguageId: currentLearning?.nativeLanguageId,
+                name: data.name,
+                topicId: data.topicId
+              }
+            })
+            .subscribe({
+              next: cardListId => {
+                this.generateSuggestedCardListName();
+                this.loadingService.hideLoading();
+                if (cardListId) {
+                  this.openCardList(cardListId);
+                } else {
                   this.translateService.instant('ERROR_WHILE_SAVING_CARD_LIST');
                 }
-              });
-          });
-        }
-      });
+              },
+              error: () => {
+                this.loadingService.hideLoading();
+                this.translateService.instant('ERROR_WHILE_SAVING_CARD_LIST');
+              }
+            });
+        });
+      }
+    }
   }
 
   /**
@@ -105,6 +109,59 @@ export class CardListsPage {
    */
   openCardList(cardListId: number) {
     this.navController.navigateForward(CARD_LIST_NAVIGATION + '/' + cardListId);
+  }
+
+  search(event: IonSearchbarCustomEvent<SearchbarInputEventDetail>) {
+    if (event.detail.value?.length) {
+      this.cardLists = [...this.originalCardLists].filter(cl =>
+        cl.name?.startsWith(event.detail.value!)
+      );
+      this.sort();
+    } else {
+      this.clearSearchbar();
+    }
+  }
+
+  clearSearchbar() {
+    this.cardLists = [...this.originalCardLists];
+  }
+
+  /**
+   * Open sort modal
+   */
+  openSortModal() {
+    this.alertService.showSortAlert(this.currentSort).then(newSort => {
+      this.currentSort = newSort ?? this.currentSort;
+    });
+  }
+
+  sort() {
+    switch (this.currentSort) {
+      case CardlistsSortEnum.alphabetDesc: {
+        this.cardLists = this.cardLists.sort((a, b) =>
+          a.name! < b.name! ? 1 : -1
+        );
+        break;
+      }
+      case CardlistsSortEnum.alphabetAsc: {
+        this.cardLists = this.cardLists.sort((a, b) =>
+          a.name! < b.name! ? -1 : 1
+        );
+        break;
+      }
+      case CardlistsSortEnum.dateDesc: {
+        this.cardLists = this.cardLists.sort((a, b) =>
+          a.created! < b.created! ? -1 : 1
+        );
+        break;
+      }
+      default: {
+        this.cardLists = this.cardLists.sort((a, b) =>
+          a.created! < b.created! ? 1 : -1
+        );
+        break;
+      }
+    }
   }
 
   /**
@@ -122,6 +179,7 @@ export class CardListsPage {
               this.loadingService.hideLoading();
               this.isLoading = false;
               this.cardLists = [...res];
+              this.originalCardLists = [...res];
               this.generateSuggestedCardListName();
             },
             error: () => {

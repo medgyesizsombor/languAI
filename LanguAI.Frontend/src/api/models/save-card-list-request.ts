@@ -5,5 +5,6 @@ export interface SaveCardListRequest {
   learningLanguageId?: number;
   name?: string | null;
   nativeLanguageId?: number;
+  topicId?: number;
   userId?: number;
 }

@@ -11,4 +11,6 @@ public class SaveCardListRequest
     public int NativeLanguageId { get; set; }
 
     public string Name { get; set; }
+
+    public int TopicId { get; set; }
 }
