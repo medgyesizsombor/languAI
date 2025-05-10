@@ -22,4 +22,6 @@ public class CardListViewModel
     public AccessEnum Access { get; set; }
 
     public List<CardViewModel> CardViewModelList { get; set; } = new List<CardViewModel>();
+
+    public int TopicId { get; set; }
 }

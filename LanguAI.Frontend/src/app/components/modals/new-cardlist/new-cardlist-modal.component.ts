@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,6 +16,7 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   standalone: false
 })
 export class NewCardlistModalComponent implements OnInit, OnDestroy {
+  @Input() suggestedName: string | undefined;
   isLoading = true;
   newCardlistForm: FormGroup | undefined;
   topicList: Array<IntSelectorModel> = [];
@@ -48,7 +49,8 @@ export class NewCardlistModalComponent implements OnInit, OnDestroy {
   confirm() {
     if (this.isFormValid()) {
       this.modalController.dismiss({
-        topicId: this.newCardlistForm?.controls?.['topicId']?.value
+        topicId: this.newCardlistForm?.controls?.['topicId']?.value,
+        name: this.newCardlistForm?.controls?.['name']?.value
       });
     }
   }
@@ -58,6 +60,7 @@ export class NewCardlistModalComponent implements OnInit, OnDestroy {
    */
   private createForm() {
     this.newCardlistForm = this.formBuilder.group({
+      name: [this.suggestedName, [Validators.required]],
       topicId: ['', [Validators.required]]
     });
   }
@@ -77,8 +80,7 @@ export class NewCardlistModalComponent implements OnInit, OnDestroy {
 
     this.loadTopicListSub = this.cardService
       .getAllTopicsByCurrentLearning$Json({
-        learningId:
-          this.localStorageService.getCurrentLearning()!.id
+        learningId: this.localStorageService.getCurrentLearning()!.id
       })
       .subscribe({
         next: (res: Array<IntSelectorModel>) => {

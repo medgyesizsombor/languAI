@@ -11,7 +11,7 @@ namespace LanguAI.Backend.Services;
 
 public interface ICardService
 {
-    Task<List<CardViewModel>> GetWordList(string systemLanguage, string learningLanguage, string level, int topicId);
+    Task<List<CardViewModel>> GetWordList(int cardListId, int userId);
     int? SaveCardList(SaveCardListRequest request);
     bool SaveCards(SaveCardRequest request);
     List<CardViewModel> GetCardsOfCardList(int cardListId);
@@ -30,12 +30,14 @@ public interface ICardService
 
 public class CardService : BaseService, ICardService
 {
+    private readonly ILearningService _learningService;
     private readonly IChatGPTService _chatGPTService;
     private const int HUNGARIAN_LANGUAGE_ID = 35;
 
-    public CardService(LanguAIDataContext context, IChatGPTService chatGPTService) : base(context)
+    public CardService(LanguAIDataContext context, IChatGPTService chatGPTService, ILearningService learningService) : base(context)
     {
         _chatGPTService = chatGPTService;
+        _learningService = learningService;
     }
 
     /// <summary>
@@ -46,9 +48,17 @@ public class CardService : BaseService, ICardService
     /// <param name="level">Level of learning</param>
     /// <param name="topicId">Id of the selected topic</param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordList(string nativeLanguage, string learningLanguage, string level, int topicId)
+    public async Task<List<CardViewModel>> GetWordList(int cardListId, int userId)
     {
-        List<CardViewModel> result = await _chatGPTService.GetWordsForCards(nativeLanguage, learningLanguage, level, topicId);
+        var currentLearning = _learningService.GetCurrentLearningOfUser(userId);
+
+        var cardList = GetCardListById(cardListId);
+
+        List<CardViewModel> result = await _chatGPTService.GetWordsForCards
+            (currentLearning.NativeLanguageName,
+            currentLearning.LearningLanguageName,
+            currentLearning.LanguageLevel.ToString(),
+            cardList.TopicId);
 
         return result;
     }
@@ -83,6 +93,7 @@ public class CardService : BaseService, ICardService
         cardList.LearningLanguageId = request.LearningLanguageId;
         cardList.NativeLanguageId = request.NativeLanguageId;
         cardList.Name = request.Name;
+        cardList.TopicId = request.TopicId;
 
         if (isEdit)
         {
@@ -149,8 +160,6 @@ public class CardService : BaseService, ICardService
     /// <param name="cardListId">cardList Id</param>
     public List<CardViewModel> GetCardsOfCardList(int cardListId)
     {
-        ArgumentNullException.ThrowIfNull(cardListId);
-
         return ConvertCardListToCardViewModelList(_context.Card
             .Where(c => c.CardListId == cardListId)
             .ToList());
@@ -163,9 +172,9 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public CardListViewModel GetCardListById(int cardListId)
     {
-        ArgumentNullException.ThrowIfNull(cardListId);
-
-        var cardList = _context.CardList.Include(c => c.Cards).FirstOrDefault(c => c.Id == cardListId);
+        var cardList = _context.CardList
+            .Include(c => c.Cards)
+            .FirstOrDefault(c => c.Id == cardListId);
 
         return ConvertCardListToCardListViewModel(cardList);
     }
@@ -178,8 +187,6 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public List<CardListViewModel> GetCardListsOfCurrentUser(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         try
         {
             return _context.CardList
@@ -203,9 +210,6 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(otherUserId);
-
         return _context.CardList.Include(c => c.Cards)
             .Where(c => c.UserId == otherUserId
                     && !c.IsDeleted
@@ -226,9 +230,6 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public bool CopyCardListOfOtherUser(int currentUserId, int cardListId)
     {
-        ArgumentNullException.ThrowIfNull(cardListId);
-        ArgumentNullException.ThrowIfNull(currentUserId);
-
         CardList originalCardList = _context.CardList
             .Include(c => c.Cards)
             .Where(c => c.Id == cardListId && c.Cards.Count != 0 && !c.IsDeleted)
@@ -313,26 +314,12 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public string GetLanguageWordsAsOneStringByCardListId(int cardListId)
     {
-        ArgumentNullException.ThrowIfNull(cardListId);
-
         var wordList = _context.Card
             .Where(c => c.CardListId == cardListId)
             .Select(c => c.WordInLearningLanguage)
             .ToList();
 
-        string words = "";
-
-        for (int i = 0; i < wordList.Count; i++)
-        {
-            if (i == 0)
-            {
-                words = wordList[i];
-            }
-
-            words = words + ", " + wordList[i];
-        }
-
-        return words;
+        return string.Join(", ", wordList);
     }
 
     /// <summary>
@@ -342,8 +329,6 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         var currentLearning = _context.Learning.FirstOrDefault(l => l.IsActive && l.UserId == userId);
 
         if (currentLearning == null) return null;
@@ -443,7 +428,7 @@ public class CardService : BaseService, ICardService
 
         card.WordInNativeLanguage = request.WordInNativeLanguage;
         card.WordInLearningLanguage = request.WordInLearningLanguage;
-        
+
         _context.SaveChanges();
     }
 
@@ -514,7 +499,8 @@ public class CardService : BaseService, ICardService
             Name = cardList.Name,
             NativeLanguage = cardList.NativeLanguage,
             UserId = cardList.UserId,
-            Access = cardList.Access
+            Access = cardList.Access,
+            TopicId = cardList.TopicId
         };
     }
 }

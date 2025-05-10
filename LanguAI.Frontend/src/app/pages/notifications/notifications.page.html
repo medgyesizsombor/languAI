@@ -1,8 +1,9 @@
+<app-header
+  [useNavController]="true"
+  [showBackArrow]="true"
+  title="{{ 'NOTIFICATIONS_TITLE' | translate }}"></app-header>
+
 <ion-content [fullscreen]="true" class="ion-padding">
-  <app-header
-    [useNavController]="true"
-    [showBackArrow]="true"
-    title="{{ 'NOTIFICATIONS_TITLE' | translate }}"></app-header>
   <ion-list *ngIf="friendshipRequests?.length; else missingFriendshipRequest">
     <div
       class="ion-no-padding d-flex ion-justify-content-between align-item-center border-1-bottom-line"
