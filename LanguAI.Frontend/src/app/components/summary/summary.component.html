@@ -31,10 +31,14 @@
     </ion-col>
   </ion-row>
   <ion-row class="ion-justify-content-center ion-padding-top">
-    <ion-button *ngIf="!showStreakAnimation || showNavigateToLessons" (click)="navigateToLessons()">
-      {{ 'GO_BACK_TO_LESSONS' | translate }}
+    <ion-button
+      *ngIf="!showStreakAnimation || showNavigateToLessons"
+      (click)="navigateToLessons()">
+      {{ 'RETURN_TO_LESSONS' | translate }}
     </ion-button>
-    <ion-button *ngIf="showStreakAnimation && !showNavigateToLessons" (click)="startAnimation()">
+    <ion-button
+      *ngIf="showStreakAnimation && !showNavigateToLessons"
+      (click)="startAnimation()">
       {{ 'OK' | translate }}
     </ion-button>
   </ion-row>

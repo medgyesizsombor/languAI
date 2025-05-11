@@ -1,6 +1,4 @@
-﻿using LanguAI.Backend.ViewModels.Image;
-
-namespace LanguAI.Backend.ViewModels.User;
+﻿namespace LanguAI.Backend.ViewModels.User;
 
 public class SaveUserRequest
 {

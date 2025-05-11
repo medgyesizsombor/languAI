@@ -46,8 +46,6 @@ public class UserController : ControllerBase
     [HttpGet(Name = "GetUserById")]
     public async Task<ActionResult<UserViewModel>> GetUserById(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         try
         {
             var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);

@@ -52,8 +52,6 @@ public class UserService : BaseService, IUserService
     /// <returns></returns>
     public async Task<UserViewModel> GetUserById(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         User user = _context.User
             .Include(u => u.Image)
             .FirstOrDefault(u => u.Id == userId
@@ -99,7 +97,6 @@ public class UserService : BaseService, IUserService
     /// <returns></returns>
     public bool SaveUser(SaveUserRequest request, int currentUserId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
 
         try
