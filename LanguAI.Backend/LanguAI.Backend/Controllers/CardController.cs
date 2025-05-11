@@ -24,9 +24,7 @@ public class CardController : ControllerBase
     /// <summary>
     /// Get 50 words for the cards
     /// </summary>
-    /// <param name="nativeLanguage">In which language the words are needed</param>
-    /// <param name="learningLanguage">In which language the words are needed</param>
-    /// <param name="level">In which language the words are needed</param>
+    /// <param name="cardListId">Id of the cardlist</param>
     /// <returns></returns>
     [HttpPost(Name = "GetWordList")]
     public async Task<ActionResult<List<CardViewModel>>> GetWordList(int cardListId)

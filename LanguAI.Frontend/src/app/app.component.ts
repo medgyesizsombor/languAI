@@ -44,6 +44,10 @@ export class AppComponent {
       this.localStorageService.getMobileLanguageCode() ??
         this.translateService.defaultLang
     );
+    this.localStorageService.getMobileLanguageCode() ??
+      this.localStorageService.setMobileLangugageCode(
+        this.translateService.defaultLang
+      );
     if (this.localStorageService.getJwtToken()?.length) {
       this.userService.getDataOfUser$Json().subscribe({
         next: (user: UserDataViewModel) => {

@@ -132,6 +132,7 @@ export class CardListsPage {
   openSortModal() {
     this.alertService.showSortAlert(this.currentSort).then(newSort => {
       this.currentSort = newSort ?? this.currentSort;
+      this.sort();
     });
   }
 

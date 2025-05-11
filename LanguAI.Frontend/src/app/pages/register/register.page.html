@@ -18,6 +18,21 @@
       </ion-col>
     </ion-row>
     <ion-row>
+      <ion-col class="d-flex ion-justify-content-start" id="open-modal">
+        <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              presentation="date"
+              formControlName="dateOfBirth"
+              id="datetime"
+              [max]="today"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+    </ion-row>
+    <ion-row>
       <ion-col class="ion-margin-horizontal">
         <ion-input
           type="password"

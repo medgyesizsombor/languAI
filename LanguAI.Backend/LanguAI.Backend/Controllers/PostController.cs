@@ -67,7 +67,6 @@ public class PostController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(postId);
 
         try
         {
@@ -112,7 +111,6 @@ public class PostController : ControllerBase
     public async Task<ActionResult<List<PostViewModel>>> GetPostsFromForumAsync(int userId) {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(userId);
 
         if (currentUserId != userId) throw new UnauthorizedAccessException();
 

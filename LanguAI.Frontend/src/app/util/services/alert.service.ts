@@ -119,7 +119,7 @@ export class AlertService {
   async showCreateCardsAlert(name: string): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
-        header: this.translateService.instant('CREATING_CARDS'),
+        header: this.translateService.instant('GENERATING_CARDS'),
         message: this.translateService.instant('DO_YOU_WANT_CREATE_CARDS_FOR', {
           name
         }),

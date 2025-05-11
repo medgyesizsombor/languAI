@@ -43,10 +43,8 @@ public class CardService : BaseService, ICardService
     /// <summary>
     /// Send a request to ChatGPT API and get the response message
     /// </summary>
-    /// <param name="nativeLanguage">Native language</param>
-    /// <param name="learningLanguage">Learning language</param>
-    /// <param name="level">Level of learning</param>
-    /// <param name="topicId">Id of the selected topic</param>
+    /// <param name="cardListId">Id of the cardlist</param>
+    /// <param name="userId">Current user's Id</param>
     /// <returns></returns>
     public async Task<List<CardViewModel>> GetWordList(int cardListId, int userId)
     {

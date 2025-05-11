@@ -265,5 +265,9 @@
   "ALPHABETIC_ASC": "ABC növ.",
   "ALPHABETIC_DESC": "ABC csök.",
   "WHAT_SHOULD_BE_THE_ORDER": "Mi legyen a sorrend?",
-  "SORT": "Sorrend"
+  "SORT": "Sorrend",
+  "BIRTHDAY": "Születésnap",
+  "REGISTRATION": "Regisztráció...",
+  "GENERATING_CARDS": "Kártyák generálása",
+  "RETURN_TO_LESSONS": "Visszatérés a leckékhez"
 }

@@ -21,6 +21,8 @@ import {
 export class RegisterPage {
   registerForm: FormGroup | undefined;
 
+  today = new Date().toISOString();
+
   registerSub: Subscription | undefined;
 
   constructor(
@@ -52,7 +54,7 @@ export class RegisterPage {
               body: {
                 username: this.registerForm?.get('username')?.value,
                 email: this.registerForm?.get('email')?.value,
-                dateOfBirth: '1998-04-20',
+                dateOfBirth: this.registerForm?.get('dateOfBirth')?.value,
                 password: this.registerForm?.get('password')?.value,
                 language: 1
               }
@@ -61,7 +63,6 @@ export class RegisterPage {
               next: res => {
                 this.loadingService.hideLoading();
                 if (res) {
-                  //TODO: Bejelentkeztetni
                   this.toastrService.presentSuccessToast(
                     this.translateService.instant('SUCCESSFUL_REGISTRATION')
                   );
@@ -98,7 +99,7 @@ export class RegisterPage {
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
+      dateOfBirth: [new Date().toISOString(), Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     });

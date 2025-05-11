@@ -45,6 +45,8 @@ ion-button {
 }
 
 ion-input {
+  --placeholder-color: #424872 !important;
+  --placeholder-opacity: .5 !important;
   --highlight-color-focused: none !important;
   --highlight-background: none !important;
   --highlight-color-invalid: none !important;
