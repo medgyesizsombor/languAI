@@ -82,7 +82,8 @@ public class FriendshipService : BaseService, IFriendshipService
     public List<IntSelectorModel> GetFriendList(int userId)
     {
         return _context.Friendship
-            .Where(f => f.RequesterId == userId || f.RecipientId == userId)
+            .Where(f => (f.RequesterId == userId || f.RecipientId == userId)
+                && f.Status == FriendshipStatusEnum.Accepted)
             .Select(f => new IntSelectorModel
             {
                 Id = f.RequesterId == userId ? f.RecipientId : f.RequesterId,

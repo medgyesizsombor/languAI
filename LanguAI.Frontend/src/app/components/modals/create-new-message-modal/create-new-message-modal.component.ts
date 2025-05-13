@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { IntSelectorModel } from 'src/api/models';
-import { ToastrService } from 'src/app/util/services/toastr.service';
 
 @Component({
   selector: 'app-create-new-message-modal',
@@ -12,27 +11,40 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 })
 export class CreateNewMessageModalComponent implements OnInit {
   @Input('friendList') friendList: Array<IntSelectorModel> = [];
-
   friendId: number | undefined;
+  newMessageForm: FormGroup | undefined;
 
   constructor(
     private modalController: ModalController,
-    private toastrService: ToastrService,
-    private translateService: TranslateService
+    private formBuilder: FormBuilder
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.createForm();
+  }
 
   cancel() {
     return this.modalController.dismiss(null, 'cancel');
   }
 
   confirm() {
-    return this.modalController.dismiss(this.friendId, 'confirm');
+    return this.modalController.dismiss(
+      this.newMessageForm?.controls['userId'].value,
+      'confirm'
+    );
   }
 
   isSelectValueChanged(event: CustomEvent) {
     const friendId = event.detail.value;
     this.modalController.dismiss(friendId, 'confirm');
+  }
+
+  /**
+   * Create form
+   */
+  private createForm() {
+    this.newMessageForm = this.formBuilder.group({
+      userId: ['', [Validators.required]]
+    });
   }
 }
