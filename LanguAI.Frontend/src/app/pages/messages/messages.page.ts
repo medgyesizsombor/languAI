@@ -55,6 +55,7 @@ export class MessagesPage {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
+      this.navController.navigateForward(MESSAGE_NAVIGATION + '/' + data);
     }
   }
 
