@@ -9,6 +9,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deletePendingRequest } from '../fn/friendship/delete-pending-request';
+import { DeletePendingRequest$Params } from '../fn/friendship/delete-pending-request';
 import { FriendshipRequestViewModel } from '../models/friendship-request-view-model';
 import { FriendshipStatusEnum } from '../models/friendship-status-enum';
 import { FriendshipViewModel } from '../models/friendship-view-model';
@@ -24,6 +26,10 @@ import { getFriendshipRequestList$Json } from '../fn/friendship/get-friendship-r
 import { GetFriendshipRequestList$Json$Params } from '../fn/friendship/get-friendship-request-list-json';
 import { getFriendshipRequestList$Plain } from '../fn/friendship/get-friendship-request-list-plain';
 import { GetFriendshipRequestList$Plain$Params } from '../fn/friendship/get-friendship-request-list-plain';
+import { getListOfDiscoverableUser$Json } from '../fn/friendship/get-list-of-discoverable-user-json';
+import { GetListOfDiscoverableUser$Json$Params } from '../fn/friendship/get-list-of-discoverable-user-json';
+import { getListOfDiscoverableUser$Plain } from '../fn/friendship/get-list-of-discoverable-user-plain';
+import { GetListOfDiscoverableUser$Plain$Params } from '../fn/friendship/get-list-of-discoverable-user-plain';
 import { getNumberOfFriendshipRequest$Json } from '../fn/friendship/get-number-of-friendship-request-json';
 import { GetNumberOfFriendshipRequest$Json$Params } from '../fn/friendship/get-number-of-friendship-request-json';
 import { getNumberOfFriendshipRequest$Plain } from '../fn/friendship/get-number-of-friendship-request-plain';
@@ -37,6 +43,7 @@ import { requestFriendship$Json } from '../fn/friendship/request-friendship-json
 import { RequestFriendship$Json$Params } from '../fn/friendship/request-friendship-json';
 import { requestFriendship$Plain } from '../fn/friendship/request-friendship-plain';
 import { RequestFriendship$Plain$Params } from '../fn/friendship/request-friendship-plain';
+import { UserDiscoveryViewModel } from '../models/user-discovery-view-model';
 
 @Injectable({ providedIn: 'root' })
 export class FriendshipService extends BaseService {
@@ -323,6 +330,78 @@ export class FriendshipService extends BaseService {
   getNumberOfFriendshipRequest$Json(params?: GetNumberOfFriendshipRequest$Json$Params, context?: HttpContext): Observable<number> {
     return this.getNumberOfFriendshipRequest$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getListOfDiscoverableUser()` */
+  static readonly GetListOfDiscoverableUserPath = '/Friendship/GetListOfDiscoverableUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getListOfDiscoverableUser$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getListOfDiscoverableUser$Plain$Response(params?: GetListOfDiscoverableUser$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDiscoveryViewModel>>> {
+    return getListOfDiscoverableUser$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getListOfDiscoverableUser$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getListOfDiscoverableUser$Plain(params?: GetListOfDiscoverableUser$Plain$Params, context?: HttpContext): Observable<Array<UserDiscoveryViewModel>> {
+    return this.getListOfDiscoverableUser$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserDiscoveryViewModel>>): Array<UserDiscoveryViewModel> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getListOfDiscoverableUser$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getListOfDiscoverableUser$Json$Response(params?: GetListOfDiscoverableUser$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserDiscoveryViewModel>>> {
+    return getListOfDiscoverableUser$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getListOfDiscoverableUser$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getListOfDiscoverableUser$Json(params?: GetListOfDiscoverableUser$Json$Params, context?: HttpContext): Observable<Array<UserDiscoveryViewModel>> {
+    return this.getListOfDiscoverableUser$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserDiscoveryViewModel>>): Array<UserDiscoveryViewModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `deletePendingRequest()` */
+  static readonly DeletePendingRequestPath = '/Friendship/DeletePendingRequest';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deletePendingRequest()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deletePendingRequest$Response(params?: DeletePendingRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deletePendingRequest(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deletePendingRequest$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deletePendingRequest(params?: DeletePendingRequest$Params, context?: HttpContext): Observable<void> {
+    return this.deletePendingRequest$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

@@ -3,6 +3,7 @@ using LanguAI.Backend.ViewModels.Card;
 using LanguAI.Backend.ViewModels.SelectorModel;
 using LanguAI.Backend.ViewModels.Topic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace LanguAI.Backend.Controllers;
 
@@ -37,8 +38,9 @@ public class CardController : ControllerBase
         {
             return Ok(await _cardService.GetWordList(cardListId, (int)currentUserId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(null);
         }
     }
@@ -58,9 +60,9 @@ public class CardController : ControllerBase
         {
             return Ok(_cardService.SaveCards(request));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            //TODO: logolás
+            _logger.LogError(e.Message);
             return BadRequest(false);
         }
     }
@@ -79,8 +81,9 @@ public class CardController : ControllerBase
         {
             return Ok(_cardService.SaveCardList(request));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(null);
         }
     }
@@ -97,8 +100,9 @@ public class CardController : ControllerBase
         {
             return Ok(_cardService.GetCardsOfCardList(cardListId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(null);
         }
     }
@@ -115,8 +119,9 @@ public class CardController : ControllerBase
         {
             return Ok(_cardService.GetCardListById(cardListId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(null);
         }
     }
@@ -142,8 +147,9 @@ public class CardController : ControllerBase
         {
             return Ok(_cardService.GetCardListsOfCurrentUser(userId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(null);
         }
     }
@@ -164,8 +170,9 @@ public class CardController : ControllerBase
         {
             return Ok(_cardService.GetCardListsOfOtherUserByUserId((int)currentUserId, otherUserId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(null);
         }
     }
@@ -185,8 +192,9 @@ public class CardController : ControllerBase
         {
             return Ok(_cardService.CopyCardListOfOtherUser((int)currentUserId, cardListId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(null);
         }
     }
@@ -212,8 +220,9 @@ public class CardController : ControllerBase
 
             return Ok(_cardService.ChangeAccessOfCardList(request));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(false);
         }
     }
@@ -237,6 +246,7 @@ public class CardController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -254,6 +264,7 @@ public class CardController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -272,6 +283,7 @@ public class CardController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -290,6 +302,7 @@ public class CardController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -312,6 +325,7 @@ public class CardController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

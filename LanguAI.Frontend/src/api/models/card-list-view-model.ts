@@ -3,7 +3,6 @@
 import { AccessEnum } from '../models/access-enum';
 import { CardViewModel } from '../models/card-view-model';
 import { Language } from '../models/language';
-import { Topic } from '../models/topic';
 export interface CardListViewModel {
   access?: AccessEnum;
   cardViewModelList?: Array<CardViewModel> | null;
@@ -13,6 +12,6 @@ export interface CardListViewModel {
   modified?: string;
   name?: string | null;
   nativeLanguage?: Language;
-  topic?: Topic;
+  topicId?: number;
   userId?: number;
 }

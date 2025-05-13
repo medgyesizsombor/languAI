@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using LanguAI.Backend.Services;
+﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Post;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +10,7 @@ public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
     private readonly IAuthenticationService _authenticationService;
-    private readonly ILogger<PostController> _logger;
+    private readonly ILogger _logger;
 
     public PostController(ILogger<PostController> logger, IPostService postService, IAuthenticationService authenticationService)
     {
@@ -33,6 +32,7 @@ public class PostController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -53,6 +53,7 @@ public class PostController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -74,6 +75,7 @@ public class PostController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -98,6 +100,7 @@ public class PostController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -108,7 +111,8 @@ public class PostController : ControllerBase
     /// <param name="userId">The current user's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetPostsFromForum")]
-    public async Task<ActionResult<List<PostViewModel>>> GetPostsFromForumAsync(int userId) {
+    public async Task<ActionResult<List<PostViewModel>>> GetPostsFromForumAsync(int userId)
+    {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
@@ -120,6 +124,7 @@ public class PostController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

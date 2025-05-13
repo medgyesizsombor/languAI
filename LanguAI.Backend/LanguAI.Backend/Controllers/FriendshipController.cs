@@ -31,7 +31,6 @@ public class FriendshipController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(recipientId);
 
         try
         {
@@ -39,6 +38,7 @@ public class FriendshipController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -51,14 +51,13 @@ public class FriendshipController : ControllerBase
     [HttpGet(Name = "GetFriendList")]
     public ActionResult<List<IntSelectorModel>> GetFriendList(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         try
         {
             return Ok(_friendshipService.GetFriendList(userId));
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -73,7 +72,6 @@ public class FriendshipController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(otherUserId);
 
         try
         {
@@ -81,6 +79,7 @@ public class FriendshipController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -96,15 +95,14 @@ public class FriendshipController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(requesterId);
-        ArgumentNullException.ThrowIfNull(friendshipStatus);
 
         try
         {
             return Ok(_friendshipService.ReactFriendshipRequest((int)currentUserId, requesterId, friendshipStatus));
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return FriendshipStatusEnum.Requested;
         }
     }
@@ -123,9 +121,10 @@ public class FriendshipController : ControllerBase
         {
             return Ok(_friendshipService.GetFriendshipRequestList((int)currentUserId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return null;
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
         }
     }
 
@@ -143,9 +142,46 @@ public class FriendshipController : ControllerBase
         {
             return Ok(_friendshipService.GetNumberOfFriendshipRequest((int)currentUserId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return BadRequest(null);
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet(Name = "GetListOfDiscoverableUser")]
+    public ActionResult<List<UserDiscoveryViewModel>> GetListOfDiscoverableUser()
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            return Ok(_friendshipService.GetListOfDiscoverableUser((int)currentUserId));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpDelete(Name = "DeletePendingRequest")]
+    public ActionResult DeletePendingRequest(int otherUserId)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            _friendshipService.DeletePendingRequest((int)currentUserId, otherUserId);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest();
         }
     }
 }

@@ -1,7 +1,5 @@
-﻿using LanguAI.Backend.Core.Models;
-using LanguAI.Backend.Services;
+﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Learning;
-using LanguAI.Backend.ViewModels.Topic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +13,7 @@ public class LearningController : ControllerBase
     private readonly IAuthenticationService _authenticationService;
     private readonly ILearningService _learningService;
 
-    private readonly ILogger<LearningController> _logger;
+    private readonly ILogger _logger;
 
     public LearningController(ILogger<LearningController> logger, IAuthenticationService authenticationService, ILearningService learningService)
     {
@@ -44,6 +42,7 @@ public class LearningController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -64,6 +63,7 @@ public class LearningController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -79,7 +79,6 @@ public class LearningController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(learningId);
 
         if (currentUserId != userId) throw new UnauthorizedAccessException();
 
@@ -89,6 +88,7 @@ public class LearningController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

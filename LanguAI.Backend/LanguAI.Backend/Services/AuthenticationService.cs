@@ -27,26 +27,20 @@ public class AuthenticationService : BaseService, IAuthenticationService
     /// <returns></returns>
     public string Authenticate(AuthenticateRequestViewModel request)
     {
-        try
-        {
-            ArgumentNullException.ThrowIfNull(request);
 
-            User user = _context.User
-                .Where(u => u.Username == request.Username && u.IsActive)
-                .FirstOrDefault();
+        ArgumentNullException.ThrowIfNull(request);
 
-            if (user == null) return null;
+        User user = _context.User
+            .Where(u => u.Username == request.Username && u.IsActive)
+            .FirstOrDefault();
 
-            var verified = Hasher.Verify(request.Password, user.PasswordHash);
+        if (user == null) return null;
 
-            if (!verified) return null;
+        var verified = Hasher.Verify(request.Password, user.PasswordHash);
 
-            return CreateToken(user);
-        }
-        catch (Exception)
-        {
-            return null;
-        }
+        if (!verified) return null;
+
+        return CreateToken(user);
     }
 
     /// <summary>

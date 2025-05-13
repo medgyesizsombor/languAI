@@ -496,7 +496,7 @@ export class AlertService {
   async showConfirmAlert(
     header: string,
     message: string,
-    confirmText: string
+    confirmText = this.translateService.instant('CONFIRM')
   ): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
@@ -504,7 +504,7 @@ export class AlertService {
         message,
         buttons: [
           {
-            text: this.translateService.instant('NO'),
+            text: this.translateService.instant('CANCEL'),
             role: 'cancel',
             handler: () => {
               resolve(false);

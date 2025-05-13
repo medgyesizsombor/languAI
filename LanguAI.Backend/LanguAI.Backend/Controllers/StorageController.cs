@@ -11,7 +11,7 @@ namespace LanguAI.Backend.Controllers;
 public class StorageController : ControllerBase
 {
     private readonly IStorageService _storageService;
-    private readonly ILogger<StorageController> _logger;
+    private readonly ILogger _logger;
 
     public StorageController(ILogger<StorageController> logger, IStorageService storageService)
     {
@@ -26,14 +26,30 @@ public class StorageController : ControllerBase
     }
 
     [HttpGet(Name = "DownloadBlob")]
-    public async Task<byte[]> DownloadBlob(int imageId)
+    public async Task<ActionResult<byte[]>> DownloadBlob(int imageId)
     {
-        return await _storageService.DownloadBlob(imageId);
+        try
+        {
+            return Ok(await _storageService.DownloadBlob(imageId));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete(Name = "DeleteBlob")]
-    public async Task<bool> DeleteBlob(int imageId)
+    public async Task<ActionResult<bool>> DeleteBlob(int imageId)
     {
-        return await _storageService.DeleteBlob(imageId);
+        try
+        {
+            return Ok(await _storageService.DeleteBlob(imageId));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
     }
 }

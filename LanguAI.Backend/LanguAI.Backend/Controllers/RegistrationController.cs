@@ -10,11 +10,15 @@ public class RegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
     private readonly IFriendshipService _friendshipService;
+    private readonly ILogger _logger;
 
-    public RegistrationController(IRegistrationService registrationService, IFriendshipService friendshipService)
+    public RegistrationController(IRegistrationService registrationService,
+        IFriendshipService friendshipService,
+        ILogger<RegistrationController> logger)
     {
         _registrationService = registrationService;
         _friendshipService = friendshipService;
+        _logger = logger;
     }
 
     /// <summary>
@@ -42,6 +46,7 @@ public class RegistrationController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

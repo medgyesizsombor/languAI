@@ -13,9 +13,11 @@ public class InteractionController : ControllerBase
     private readonly IAuthenticationService _authenticationService;
     private readonly IInteractionService _interactionService;
 
-    private readonly ILogger<InteractionController> _logger;
+    private readonly ILogger _logger;
 
-    public InteractionController(ILogger<InteractionController> logger, IAuthenticationService authenticationService, IInteractionService interactionService)
+    public InteractionController(ILogger<InteractionController> logger,
+        IAuthenticationService authenticationService,
+        IInteractionService interactionService)
     {
         _logger = logger;
         _interactionService = interactionService;
@@ -42,6 +44,7 @@ public class InteractionController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -66,6 +69,7 @@ public class InteractionController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -90,6 +94,7 @@ public class InteractionController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

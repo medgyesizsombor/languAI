@@ -18,6 +18,7 @@ import {
   POST_NAVIGATION,
   PROFILE_NAVIGATION,
   REGISTER_NAVIGATION,
+  SEARCH_NEW_FRIENDS_NAVIGATION,
   SETTINGS_NAVIGATION
 } from './util/util.constants';
 import { LearningGuardFunction } from './util/guards/learning.guard';
@@ -155,6 +156,13 @@ const routes: Routes = [
       import('./pages/fullsize-image/fullsize-image.module').then(
         m => m.FullsizeImagePageModule
       )
+  },
+  {
+    path: SEARCH_NEW_FRIENDS_NAVIGATION,
+    loadChildren: () =>
+      import(
+        './pages/search-for-new-friends/search-for-new-friends.module'
+      ).then(m => m.SearchForNewFriendsPageModule)
   }
 ];
 @NgModule({
