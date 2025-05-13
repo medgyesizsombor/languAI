@@ -40,3 +40,5 @@ export const ADVANCED = 'ADVANCED';
 export const STREAK = 'streak';
 export const CURRENT_LEARNING = 'current-learning';
 export const FULLSIZE_IMAGE_NAVIGATION = 'fullsize-image';
+export const SEARCH_NEW_FRIENDS_TITLE = 'SEARCH_NEW_FRIENDS_TITLE';
+export const SEARCH_NEW_FRIENDS_NAVIGATION = 'search-new-friends';

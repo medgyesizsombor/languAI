@@ -1,0 +1,28 @@
+<app-header
+  [title]="title"
+  [useNavController]="true"
+  [showBackArrow]="true"></app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding-horizontal">
+  <ion-row
+    *ngFor="let user of userList; let index = index"
+    class="px-2 ion-justify-content-between">
+    <ion-col size="11" class="hidden-text" (click)="openProfile(user.userId)">
+      {{ user.username }}
+    </ion-col>
+    <ion-col
+      size="auto"
+      class="d-flex ion-align-items-center ion-justify-content-end">
+      <ion-icon
+        *ngIf="!user.friendshipStatusEnum"
+        class="fs-24"
+        (click)="sendFriendshipRequest(user.userId, index)"
+        name="person-add-outline"></ion-icon>
+      <ion-icon
+        *ngIf="user.friendshipStatusEnum === friendshipStatusEnum.Requested"
+        class="fs-24"
+        name="checkmark-circle-outline"
+        (click)="removePendingRequest(user.userId, index)"></ion-icon>
+    </ion-col>
+  </ion-row>
+</ion-content>

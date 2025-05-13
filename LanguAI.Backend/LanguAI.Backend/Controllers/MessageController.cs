@@ -11,7 +11,7 @@ public class MessageController : ControllerBase
     private readonly IMessageService _messageService;
     private readonly IAuthenticationService _authenticationService;
 
-    private readonly ILogger<MessageController> _logger;
+    private readonly ILogger _logger;
 
     public MessageController(ILogger<MessageController> logger, IMessageService messageService, IAuthenticationService authenticationService)
     {
@@ -36,6 +36,7 @@ public class MessageController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -50,7 +51,6 @@ public class MessageController : ControllerBase
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(friendId);
 
         try
         {
@@ -58,6 +58,7 @@ public class MessageController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

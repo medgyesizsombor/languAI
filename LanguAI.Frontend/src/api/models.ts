@@ -46,4 +46,5 @@ export { Topic } from './models/topic';
 export { TopicOfCurrentLearningViewModel } from './models/topic-of-current-learning-view-model';
 export { User } from './models/user';
 export { UserDataViewModel } from './models/user-data-view-model';
+export { UserDiscoveryViewModel } from './models/user-discovery-view-model';
 export { UserViewModel } from './models/user-view-model';

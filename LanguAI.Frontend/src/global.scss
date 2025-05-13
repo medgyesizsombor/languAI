@@ -46,7 +46,7 @@ ion-button {
 
 ion-input {
   --placeholder-color: #424872 !important;
-  --placeholder-opacity: .5 !important;
+  --placeholder-opacity: 0.5 !important;
   --highlight-color-focused: none !important;
   --highlight-background: none !important;
   --highlight-color-invalid: none !important;
@@ -278,9 +278,9 @@ ion-card {
     padding-bottom: 24px;
   }
 
-  &v-0 {
-    padding-bottom: 0;
-    padding-top: 0;
+  &x-2 {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 
   &s-0 {
@@ -449,4 +449,10 @@ ion-chip {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.hidden-text {
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
 }

@@ -10,7 +10,7 @@ public class LanguageController : Controller
 {
     private readonly ILanguageService _languageService;
 
-    private readonly ILogger<LanguageController> _logger;
+    private readonly ILogger _logger;
     public LanguageController(ILogger<LanguageController> logger, ILanguageService languageService)
     {
         _logger = logger;
@@ -23,17 +23,18 @@ public class LanguageController : Controller
     /// <param name="languageCode">The language of the mobile</param>
     /// <returns></returns>
     [HttpGet(Name = "GetAllLanguage")]
-    public List<IntSelectorModel> GetAllLanguage(string languageCode)
+    public ActionResult<List<IntSelectorModel>> GetAllLanguage(string languageCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(languageCode);
 
         try
         {
-            return _languageService.GetAllLanguage(languageCode);
+            return Ok(_languageService.GetAllLanguage(languageCode));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw;
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
         }
     }
 

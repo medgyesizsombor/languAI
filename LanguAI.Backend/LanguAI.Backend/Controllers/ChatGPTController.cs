@@ -80,8 +80,9 @@ public class ChatGPTController : ControllerBase
 
             return response;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return null;
         }
     }
@@ -107,8 +108,9 @@ public class ChatGPTController : ControllerBase
 
             return response;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return null;
         }
     }
@@ -137,6 +139,7 @@ public class ChatGPTController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -177,6 +180,7 @@ public class ChatGPTController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }

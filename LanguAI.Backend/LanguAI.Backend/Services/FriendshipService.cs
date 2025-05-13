@@ -18,11 +18,12 @@ public interface IFriendshipService
     bool CreateFriendshipWithChatGPT(int userId);
     List<FriendshipRequestViewModel> GetFriendshipRequestList(int currentUserId);
     int? GetNumberOfFriendshipRequest(int currentUserId);
+    List<UserDiscoveryViewModel> GetListOfDiscoverableUser(int userId);
+    void DeletePendingRequest(int currentUserId, int otherUserId);
 }
 
 public class FriendshipService : BaseService, IFriendshipService
 {
-
     public FriendshipService(LanguAIDataContext context) : base(context)
     {
     }
@@ -35,9 +36,6 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <returns></returns>
     public bool RequestFriendship(int currentUserId, int recipientId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(recipientId);
-
         try
         {
             User requester = _context.User
@@ -83,8 +81,6 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <returns></returns>
     public List<IntSelectorModel> GetFriendList(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         return _context.Friendship
             .Where(f => f.RequesterId == userId || f.RecipientId == userId)
             .Select(f => new IntSelectorModel
@@ -103,9 +99,6 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <returns></returns>
     public FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(otherUserId);
-
         FriendshipViewModel friendship = _context.Friendship
             .Where(f => ((f.RequesterId == currentUserId
                             && f.RecipientId == otherUserId)
@@ -135,10 +128,6 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <returns></returns>
     public FriendshipStatusEnum ReactFriendshipRequest(int currentUserId, int requesterId, FriendshipStatusEnum friendshipStatus)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
-        ArgumentNullException.ThrowIfNull(requesterId);
-        ArgumentNullException.ThrowIfNull(friendshipStatus);
-
         try
         {
             User recipient = _context.User
@@ -209,8 +198,6 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <returns></returns>
     public bool CreateFriendshipWithChatGPT(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         try
         {
             var isFriendshipAlreadyCreated = _context.Friendship.Any(f => f.RequesterId == userId && f.RecipientId == EnvironmentSettings.ChatGPTId);
@@ -244,8 +231,6 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <returns></returns>
     public List<FriendshipRequestViewModel> GetFriendshipRequestList(int currentUserId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
-
         try
         {
             return _context.Friendship
@@ -272,8 +257,6 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <returns></returns>
     public int? GetNumberOfFriendshipRequest(int currentUserId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
-
         try
         {
             return _context.Friendship
@@ -286,5 +269,58 @@ public class FriendshipService : BaseService, IFriendshipService
         {
             return null;
         }
+    }
+
+    public List<UserDiscoveryViewModel> GetListOfDiscoverableUser(int userId)
+    {
+        //TODO ezt holnap átnézni
+        var listOfFriendsId = new List<int>();
+
+        var result = new List<UserDiscoveryViewModel>();
+
+        var currentUserfriendships = _context.Friendship
+            .Where(f => f.RecipientId == userId || f.RequesterId == userId).ToList();
+
+        var acceptedFriendships = currentUserfriendships
+            .Where(f => f.Status == FriendshipStatusEnum.Accepted)
+            .Select(f => f.RequesterId == userId ? f.RecipientId : f.RequesterId)
+            .ToList();
+
+        return _context.User
+            .Where(u => !acceptedFriendships.Contains(u.Id)
+                && u.Id != userId
+                && u.IsActive)
+            .Select(u => new UserDiscoveryViewModel
+            {
+                UserId = u.Id,
+                Username = u.Username,
+                FriendshipStatusEnum = GetFriendshipStatusEnum(u.Id, currentUserfriendships)
+            })
+            .ToList();
+
+    }
+
+    /// <summary>
+    /// Delete pending request
+    /// </summary>
+    /// <param name="currentUserId">Current user's Id</param>
+    /// <param name="otherUserId">Other user's Id</param>
+    public void DeletePendingRequest(int currentUserId, int otherUserId)
+    {
+        var friendship = _context.Friendship.FirstOrDefault(f => f.Requester.Id == currentUserId && f.RecipientId == otherUserId);
+
+        if (friendship == null) return;
+        
+        _context.Friendship.Remove(friendship);
+        _context.SaveChanges();
+    }
+
+    private static FriendshipStatusEnum? GetFriendshipStatusEnum(int otherUserId, List<Friendship> friendships)
+    {
+        var friendship = friendships
+            .FirstOrDefault(f => f.RecipientId == otherUserId
+                || f.RequesterId == otherUserId);
+
+        return (friendship == null || friendship.Status == FriendshipStatusEnum.Deleted) ? null : friendship.Status;
     }
 }

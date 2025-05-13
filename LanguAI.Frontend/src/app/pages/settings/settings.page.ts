@@ -4,6 +4,7 @@ import {
   LOGIN_NAVIGATION,
   NOTIFICATIONS_NAVIGATION,
   PROFILE_NAVIGATION,
+  SEARCH_NEW_FRIENDS_NAVIGATION,
   SETTINGS_TITLE
 } from '../../util/util.constants';
 import { UserService } from 'src/api/services';
@@ -81,7 +82,9 @@ export class SettingsPage implements OnInit {
     this.deleteUserSub?.unsubscribe();
   }
 
-  openDarkModeModal() {}
+  openSearchForFriendsPage() {
+    this.navController.navigateForward(SEARCH_NEW_FRIENDS_NAVIGATION);
+  }
 
   navigate(settingsNavigationEnum: SettingsNavigationEnum) {
     const useNavController = Capacitor.getPlatform() === 'web';
