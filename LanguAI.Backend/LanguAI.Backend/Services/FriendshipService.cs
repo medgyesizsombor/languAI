@@ -273,7 +273,6 @@ public class FriendshipService : BaseService, IFriendshipService
 
     public List<UserDiscoveryViewModel> GetListOfDiscoverableUser(int userId)
     {
-        //TODO ezt holnap átnézni
         var listOfFriendsId = new List<int>();
 
         var result = new List<UserDiscoveryViewModel>();
@@ -281,13 +280,29 @@ public class FriendshipService : BaseService, IFriendshipService
         var currentUserfriendships = _context.Friendship
             .Where(f => f.RecipientId == userId || f.RequesterId == userId).ToList();
 
-        var acceptedFriendships = currentUserfriendships
+        var acceptedFriendshipIds = currentUserfriendships
             .Where(f => f.Status == FriendshipStatusEnum.Accepted)
-            .Select(f => f.RequesterId == userId ? f.RecipientId : f.RequesterId)
+            .Select(f => f.RequesterId == userId ? f.RecipientId : f.RequesterId);
+
+        var receivedFriendshipIds = currentUserfriendships
+            .Where(f => f.RecipientId == userId
+                && f.Status != FriendshipStatusEnum.Accepted)
+            .Select(f => f.RequesterId)
+            .ToList();
+
+        var sentFriendshipIds = currentUserfriendships
+            .Where(f => f.RequesterId == userId
+                && f.Status != FriendshipStatusEnum.Accepted)
+            .Select(f => f.RecipientId)
             .ToList();
 
         return _context.User
-            .Where(u => !acceptedFriendships.Contains(u.Id)
+            .Where(u => !acceptedFriendshipIds.Contains(u.Id) &&
+            (
+                (!receivedFriendshipIds.Contains(u.Id)
+                    && !sentFriendshipIds.Contains(u.Id))
+                || sentFriendshipIds.Contains(u.Id)
+            )
                 && u.Id != userId
                 && u.IsActive)
             .Select(u => new UserDiscoveryViewModel
@@ -297,7 +312,6 @@ public class FriendshipService : BaseService, IFriendshipService
                 FriendshipStatusEnum = GetFriendshipStatusEnum(u.Id, currentUserfriendships)
             })
             .ToList();
-
     }
 
     /// <summary>
@@ -310,7 +324,7 @@ public class FriendshipService : BaseService, IFriendshipService
         var friendship = _context.Friendship.FirstOrDefault(f => f.Requester.Id == currentUserId && f.RecipientId == otherUserId);
 
         if (friendship == null) return;
-        
+
         _context.Friendship.Remove(friendship);
         _context.SaveChanges();
     }
