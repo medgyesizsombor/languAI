@@ -43,47 +43,47 @@ export class RegisterPage {
     this.registerSub?.unsubscribe();
   }
 
-  register() {
+  async register() {
     if (this.isValid()) {
-      this.loadingService
-        .showLoading(this.translateService.instant('REGISTRATION'))
-        .then(() => {
-          //TODO: Ország selecttel majd kipótolni
-          this.registerSub = this.registrationService
-            .register$Json({
-              body: {
-                username: this.registerForm?.get('username')?.value,
-                email: this.registerForm?.get('email')?.value,
-                dateOfBirth: this.registerForm?.get('dateOfBirth')?.value,
-                password: this.registerForm?.get('password')?.value,
-                language: 1
-              }
-            })
-            .subscribe({
-              next: res => {
-                this.loadingService.hideLoading();
-                if (res) {
-                  this.toastrService.presentSuccessToast(
-                    this.translateService.instant('SUCCESSFUL_REGISTRATION')
-                  );
-                  this.router.navigate(['/' + LOGIN_NAVIGATION]);
-                } else {
-                  this.toastrService.presentErrorToast(
-                    this.translateService.instant(
-                      'ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER'
-                    )
-                  );
-                }
-              },
-              error: () => {
-                this.loadingService.hideLoading();
-                this.toastrService.presentErrorToast(
-                  this.translateService.instant(
-                    'ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER'
-                  )
-                );
-              }
-            });
+      await this.loadingService.showLoading(
+        this.translateService.instant('REGISTRATION_DOTDOTDOT')
+      );
+
+      //TODO: Ország selecttel majd kipótolni
+      this.registerSub = this.registrationService
+        .register$Json({
+          body: {
+            username: this.registerForm?.get('username')?.value,
+            email: this.registerForm?.get('email')?.value,
+            dateOfBirth: this.registerForm?.get('dateOfBirth')?.value,
+            password: this.registerForm?.get('password')?.value,
+            language: 1
+          }
+        })
+        .subscribe({
+          next: res => {
+            this.loadingService.hideLoading();
+            if (res) {
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant('SUCCESSFUL_REGISTRATION')
+              );
+              this.router.navigate(['/' + LOGIN_NAVIGATION]);
+            } else {
+              this.toastrService.presentErrorToast(
+                this.translateService.instant(
+                  'ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER'
+                )
+              );
+            }
+          },
+          error: () => {
+            this.loadingService.hideLoading();
+            this.toastrService.presentErrorToast(
+              this.translateService.instant(
+                'ERROR_HAPPEND_WHEN_TRIED_TO_REGISTER'
+              )
+            );
+          }
         });
     }
   }

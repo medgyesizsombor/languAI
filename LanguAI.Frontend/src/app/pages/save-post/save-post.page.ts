@@ -72,6 +72,7 @@ export class CreatePostPage {
       );
 
       let postViewModel: SavePostRequest | undefined = {
+        id: this.postId ?? undefined,
         access: this.postForm?.controls['access']?.value ?? AccessEnum.Public,
         content: this.postForm?.controls['text']?.value,
         userId: this.localStorageService.getUserId()!
@@ -242,6 +243,7 @@ export class CreatePostPage {
       .pipe(
         switchMap((params: Params) => {
           const postId = params['post-id'];
+          this.postId = postId;
 
           this.loadingService.hideLoading();
 

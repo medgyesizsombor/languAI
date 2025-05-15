@@ -86,7 +86,9 @@ export class PostPage {
    * Delete a comment
    */
   async deleteComment(commentId: number) {
-    await this.loadingService.showLoading('DELETING_THE_COMMENT_DOTDOTDOT');
+    await this.loadingService.showLoading(
+      this.translateService.instant('DELETING_THE_COMMENT_DOTDOTDOT')
+    );
 
     if (commentId) {
       const comment = this.post?.comments?.find(c => c.id === commentId);
