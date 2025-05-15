@@ -279,5 +279,10 @@
   "SENDING_FRIENDSHIP_REQUEST_LOADING": "Ismerős jelölés küldése...",
   "SUCCESSFUL_FRIENDSHIP_REQUEST_SENT": "Sikeres ismerősnek jelölés",
   "ERROR_HAPPEND_WHEN_SENT_FRIENDSHIP_REQUEST": "Hiba történt a jelölés közben!",
-  "ERROR_HAPPEND_WHEN_LOADED_USERS": "Hiba történt a felhasználók betöltése közben!"
+  "ERROR_HAPPEND_WHEN_LOADED_USERS": "Hiba történt a felhasználók betöltése közben!",
+  "EDIT_POST": "Bejegyzés szerkesztése",
+  "DELETE_POST": "Bejegyzés törlése",
+  "EDIT_OR_DELETE_QUESTION": "Szerkeszteni vagy törölni szeretnéd?",
+  "LEADERBOARD": "Ranglista",
+  "SUCCESSFUL_DELETING_POST": "Sikeresen kitörölted a bejegyzést"
 }

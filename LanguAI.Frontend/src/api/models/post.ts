@@ -12,6 +12,7 @@ export interface Post {
   image?: Image;
   imageId?: number | null;
   interactions?: Array<Interaction> | null;
+  isDeleted?: boolean;
   user?: User;
   userId: number;
 }

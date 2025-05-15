@@ -8,6 +8,7 @@ import { LocalStorageService } from './localstorage.service';
 import { AccessEnum } from 'src/api/models';
 import { LanguageEnum } from '../enums/language-enum';
 import { CardlistsSortEnum } from '../enums/cardlists-sort-enum';
+import { RoleBooleanDataViewModel } from '../models/role-boolean-data-view-model';
 
 @Injectable({
   providedIn: 'root'
@@ -793,6 +794,51 @@ export class AlertService {
             role: 'confirm',
             handler: data => {
               resolve(data);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  /**
+   * Show edit post alert
+   */
+  async showEditPostAlert(): Promise<RoleBooleanDataViewModel> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        header: this.translateService.instant('EDIT_POST'),
+        message: this.translateService.instant('EDIT_OR_DELETE_QUESTION'),
+        inputs: [
+          {
+            label: this.translateService.instant('EDIT_POST'),
+            type: 'radio',
+            value: true
+          },
+          {
+            label: this.translateService.instant('DELETE_POST'),
+            type: 'radio',
+            value: false
+          }
+        ],
+        buttons: [
+          {
+            text: this.translateService.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => {
+              resolve({
+                role: 'cancel',
+                data: undefined
+              });
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: data => {
+              resolve({ role: 'confirm', data });
             }
           }
         ]

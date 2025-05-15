@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { CreatePostPageRoutingModule } from './create-post-routing.module';
+import { CreatePostPageRoutingModule } from './save-post-routing.module';
 
-import { CreatePostPage } from './create-post.page';
+import { CreatePostPage } from './save-post.page';
 import { UtilModule } from 'src/app/util/util.module';
 
 @NgModule({

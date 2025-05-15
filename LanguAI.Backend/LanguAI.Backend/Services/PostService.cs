@@ -16,6 +16,7 @@ public interface IPostService
     Task<PostViewModel> GetPostById(int postId, int currentUserId);
     bool SavePost(SavePostRequest request, int currentUserId);
     Task<List<PostViewModel>> GetPostsFromForum(int currentUserId);
+    void SoftDeletePost(int postId, int userId);
 }
 
 public class PostService : BaseService, IPostService
@@ -34,13 +35,15 @@ public class PostService : BaseService, IPostService
     public List<PostViewModel> GetAllPost()
     {
         List<PostViewModel> postList = _context.Post.Include(p => p.User)
+            .Where(p => p.IsDeleted == false)
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
                 Username = p.User.Username,
                 Content = p.Content,
                 Created = p.Created,
-                Access = p.Access
+                Access = p.Access,
+                UserId = p.UserId
             }).ToList();
 
         return postList;
@@ -56,15 +59,17 @@ public class PostService : BaseService, IPostService
         ArgumentNullException.ThrowIfNull(request);
 
         List<PostViewModel> postList = _context.Post.Include(p => p.User)
-            .Where(p => string.IsNullOrEmpty(request.Username) || request.Username == p.User.Username
-                )
+            .Where(p => (string.IsNullOrEmpty(request.Username)
+                    || request.Username == p.User.Username)
+                && !p.IsDeleted)
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
                 Username = p.User.Username,
                 Content = p.Content,
                 Created = p.Created,
-                Access = p.Access
+                Access = p.Access,
+                UserId = p.UserId
             }).ToList();
 
         return postList;
@@ -77,12 +82,11 @@ public class PostService : BaseService, IPostService
     /// <returns></returns>
     public async Task<PostViewModel> GetPostById(int postId, int currentUserId)
     {
-        ArgumentNullException.ThrowIfNull(postId);
-
         var post = _context.Post
             .Include(p => p.User)
             .Include(p => p.Interactions)
-            .Where(p => p.Id == postId)
+            .Where(p => p.Id == postId
+                && !p.IsDeleted)
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
@@ -90,6 +94,7 @@ public class PostService : BaseService, IPostService
                 Created = p.Created,
                 Content = p.Content,
                 Username = p.User.Username,
+                UserId = p.UserId,
                 Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && !i.IsDeleted),
                 NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
                 NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0),
@@ -125,7 +130,6 @@ public class PostService : BaseService, IPostService
     /// <returns></returns>
     public bool SavePost(SavePostRequest request, int currentUserId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
 
         bool isEdit = false;
@@ -151,7 +155,7 @@ public class PostService : BaseService, IPostService
         post.Created = request.Created;
         post.UserId = currentUserId;
         post.Access = request.Access;
-        post.ImageId = request.ImageId;
+        post.ImageId = request.ImageId ?? null;
 
         if (!isEdit)
         {
@@ -170,17 +174,16 @@ public class PostService : BaseService, IPostService
     /// <returns></returns>
     public async Task<List<PostViewModel>> GetPostsFromForum(int currentUserId)
     {
-        ArgumentNullException.ThrowIfNull(currentUserId);
-
         var posts = _context.Post
             .Include(p => p.User)
             .Include(p => p.Interactions)
             .Include(p => p.Image)
-            .Where(p => p.UserId == currentUserId
+            .Where(p => !p.IsDeleted
+                && (p.UserId == currentUserId
                 || (p.Access == AccessEnum.Public)
                 || (p.Access == AccessEnum.Protected && (_context.Friendship
                                 .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == p.UserId)
-                                    || (f.RecipientId == currentUserId && f.RequesterId == p.UserId))))))
+                                    || (f.RecipientId == currentUserId && f.RequesterId == p.UserId)))))))
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
@@ -188,11 +191,13 @@ public class PostService : BaseService, IPostService
                 Created = p.Created,
                 Content = p.Content,
                 Username = p.User.Username,
+                UserId = p.UserId,
                 Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && i.IsDeleted == false),
                 NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
                 NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0),
                 Image = p.ImageId == null ? null : new ImageViewModel { Name = p.Image.Name, Type = p.Image.Type, Id = p.ImageId }
             })
+            .OrderByDescending(p => p.Created)
             .ToList();
 
         foreach (var post in posts)
@@ -205,5 +210,22 @@ public class PostService : BaseService, IPostService
         }
 
         return posts;
+    }
+
+    /// <summary>
+    /// Soft delete post - isDeleted = true
+    /// </summary>
+    /// <param name="postId">Id of the post</param>
+    /// <param name="userId">User's Id</param>
+    public void SoftDeletePost(int postId, int userId)
+    {
+        var post = _context.Post.FirstOrDefault(p => p.Id == postId
+            && p.UserId == userId
+            && !p.IsDeleted);
+
+        if (post == null) throw new ArgumentNullException();
+
+        post.IsDeleted = true;
+        _context.SaveChanges();
     }
 }

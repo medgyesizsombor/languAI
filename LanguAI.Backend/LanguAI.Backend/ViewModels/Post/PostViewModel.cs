@@ -12,6 +12,8 @@ public class PostViewModel
 
     public string Username { get; set; }
 
+    public int UserId { get; set; }
+
     public DateTime Created { get; set; }
 
     public AccessEnum Access { get; set; }

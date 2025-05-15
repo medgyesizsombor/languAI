@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  LEADERBOARD_NAVIGATION,
   LEARNINGS_NAVIGATION,
   LOGIN_NAVIGATION,
   NOTIFICATIONS_NAVIGATION,
@@ -33,11 +34,10 @@ export class SettingsPage implements OnInit {
   title = this.translateService.instant(SETTINGS_TITLE);
   numberOfFriendshipRequest = 0;
   imageSrc: string | undefined;
+  profile: UserViewModel | undefined;
 
-  profile: UserViewModel = {
-    username: 'asd1',
-    email: 'asd@asd.com'
-  };
+  //Flag to use the enum in the template
+  settingsNavigationEnum = SettingsNavigationEnum;
 
   deleteUserSub: Subscription | undefined;
 
@@ -82,10 +82,6 @@ export class SettingsPage implements OnInit {
     this.deleteUserSub?.unsubscribe();
   }
 
-  openSearchForFriendsPage() {
-    this.navController.navigateForward(SEARCH_NEW_FRIENDS_NAVIGATION);
-  }
-
   navigate(settingsNavigationEnum: SettingsNavigationEnum) {
     const useNavController = Capacitor.getPlatform() === 'web';
     let page = '';
@@ -101,6 +97,14 @@ export class SettingsPage implements OnInit {
       }
       case SettingsNavigationEnum.learnings: {
         page = LEARNINGS_NAVIGATION;
+        break;
+      }
+      case SettingsNavigationEnum.discoverFriends: {
+        page = SEARCH_NEW_FRIENDS_NAVIGATION;
+        break;
+      }
+      case SettingsNavigationEnum.leaderboard: {
+        page = LEADERBOARD_NAVIGATION;
         break;
       }
     }

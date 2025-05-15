@@ -128,4 +128,26 @@ public class PostController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    [HttpPost(Name = "SoftDeletePost")]
+    public ActionResult DeletePost(int postId, int userId)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+
+            if (currentUserId != userId) throw new UnauthorizedAccessException();
+
+            _postService.SoftDeletePost(postId, userId);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
+    }
 }

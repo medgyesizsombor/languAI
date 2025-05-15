@@ -1,5 +1,5 @@
 <app-header
-  title="{{ 'CREATING_POST' | translate }}"
+  [title]="title"
   [showSaveButton]="isPostValid"
   (saveButtonEmit)="savePost()"
   [showBackArrow]="true"

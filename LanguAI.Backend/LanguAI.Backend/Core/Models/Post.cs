@@ -30,4 +30,6 @@ public class Post
     public virtual Image Image { get; set; }
 
     public virtual ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
+
+    public bool IsDeleted { get; set; } = false;
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { CreatePostPage } from './create-post.page';
+import { CreatePostPage } from './save-post.page';
 
 const routes: Routes = [
   {

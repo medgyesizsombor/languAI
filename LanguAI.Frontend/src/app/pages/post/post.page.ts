@@ -156,11 +156,12 @@ export class PostPage {
         )
         .subscribe({
           next: (res: PostViewModel) => {
-            this.loadingService.hideLoading();
             if (res) {
               this.post = { ...res };
               this.commentForm?.controls['comment']?.patchValue(null);
+              this.loadingService.hideLoading();
             } else {
+              this.loadingService.hideLoading();
               this.toastrService.presentErrorToast(
                 this.translateService.instant('FAILED_TO_LOAD_POST')
               );

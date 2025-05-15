@@ -8,9 +8,10 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { UserInteractionService } from 'src/app/util/services/user-interaction.service';
 import {
-  CREATE_POST_NAVIGATION,
+  SAVE_POST_NAVIGATION,
   FORUM_TITLE,
-  POST_NAVIGATION
+  POST_NAVIGATION,
+  SEARCH_NEW_FRIENDS_NAVIGATION
 } from 'src/app/util/util.constants';
 
 @Component({
@@ -36,6 +37,7 @@ export class ForumPage {
   ) {}
 
   ionViewWillEnter() {
+    //FORUM is not loading every open
     this.loadPosts();
   }
 
@@ -47,8 +49,7 @@ export class ForumPage {
    * Searching for friend
    */
   searchForFriend() {
-    //TOOD
-    console.log('asd');
+    this.navController.navigateForward(SEARCH_NEW_FRIENDS_NAVIGATION);
   }
 
   /**
@@ -67,7 +68,7 @@ export class ForumPage {
     if (postId) {
       url = POST_NAVIGATION + '/' + postId;
     } else {
-      url = CREATE_POST_NAVIGATION;
+      url = SAVE_POST_NAVIGATION;
     }
     this.navController.navigateForward(url);
   }
@@ -79,7 +80,23 @@ export class ForumPage {
     const post = this.posts.find(p => p.id === postId);
     if (post) {
       await this.userInteractionService.like(post);
+
+      if (post.numberOfLikes) {
+        post.numberOfLikes = post.liked
+          ? post.numberOfLikes - 1
+          : post.numberOfLikes + 1;
+      } else if (post.numberOfLikes === 0 && !post.liked) {
+        post.numberOfLikes = 1;
+      }
     }
+  }
+
+  editPost(postId?: number) {
+    this.navController.navigateForward(SAVE_POST_NAVIGATION + '/' + postId);
+  }
+
+  removePost(postId?: number) {
+    this.loadPosts();
   }
 
   /**

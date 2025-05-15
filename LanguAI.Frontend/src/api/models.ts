@@ -26,6 +26,7 @@ export { IntSelectorModel } from './models/int-selector-model';
 export { IsCorrectAndTextSentenceViewModel } from './models/is-correct-and-text-sentence-view-model';
 export { Language } from './models/language';
 export { LanguageLevelEnum } from './models/language-level-enum';
+export { LeaderboardUserViewModel } from './models/leaderboard-user-view-model';
 export { Learning } from './models/learning';
 export { LearningViewModel } from './models/learning-view-model';
 export { Message } from './models/message';

@@ -45,4 +45,18 @@ public class GameplayController : ControllerBase
             return BadRequest(null);
         }
     }
+
+    [HttpGet(Name = "GetWeeklyLeaderboard")]
+    public ActionResult<List<LeaderboardUserViewModel>> GetWeeklyLeaderboard()
+    {
+        try
+        {
+            return Ok(_gameplayService.GetWeeklyLeaderboard());
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
+    }
 }
