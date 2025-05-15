@@ -86,7 +86,9 @@ export class PostPage {
    * Delete a comment
    */
   async deleteComment(commentId: number) {
-    await this.loadingService.showLoading('DELETING_THE_COMMENT_DOTDOTDOT');
+    await this.loadingService.showLoading(
+      this.translateService.instant('DELETING_THE_COMMENT_DOTDOTDOT')
+    );
 
     if (commentId) {
       const comment = this.post?.comments?.find(c => c.id === commentId);
@@ -156,11 +158,12 @@ export class PostPage {
         )
         .subscribe({
           next: (res: PostViewModel) => {
-            this.loadingService.hideLoading();
             if (res) {
               this.post = { ...res };
               this.commentForm?.controls['comment']?.patchValue(null);
+              this.loadingService.hideLoading();
             } else {
+              this.loadingService.hideLoading();
               this.toastrService.presentErrorToast(
                 this.translateService.instant('FAILED_TO_LOAD_POST')
               );

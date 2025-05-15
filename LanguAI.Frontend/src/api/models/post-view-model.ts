@@ -13,5 +13,6 @@ export interface PostViewModel {
   liked?: boolean;
   numberOfComments?: number;
   numberOfLikes?: number;
+  userId?: number;
   username?: string | null;
 }

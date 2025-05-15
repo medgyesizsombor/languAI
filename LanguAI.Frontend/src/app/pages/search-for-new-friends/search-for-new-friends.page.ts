@@ -70,7 +70,7 @@ export class SearchForNewFriendsPage implements OnInit, OnDestroy {
       .then(async (isDeleting: boolean) => {
         if (isDeleting) {
           await this.loadingService.showLoading(
-            this.translateService.instant('DELETE_FRIENDSHIP_REQUEST_LOADING')
+            this.translateService.instant('DELETE_FRIENDSHIP_REQUEST_DOTDOTDOT')
           );
           this.deletePendingRequestSub = this.friendshipService
             .deletePendingRequest({ otherUserId: userId })
@@ -100,7 +100,7 @@ export class SearchForNewFriendsPage implements OnInit, OnDestroy {
    */
   async sendFriendshipRequest(userId: number | undefined, index: number) {
     await this.loadingService.showLoading(
-      this.translateService.instant('SENDING_FRIENDSHIP_REQUEST_LOADING')
+      this.translateService.instant('SENDING_FRIENDSHIP_REQUEST_DOTDOTDOT')
     );
     this.sendFriendshipRequestSub = this.friendshipService
       .requestFriendship$Json({

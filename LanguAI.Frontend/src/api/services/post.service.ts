@@ -30,6 +30,8 @@ import { savePost$Json } from '../fn/post/save-post-json';
 import { SavePost$Json$Params } from '../fn/post/save-post-json';
 import { savePost$Plain } from '../fn/post/save-post-plain';
 import { SavePost$Plain$Params } from '../fn/post/save-post-plain';
+import { softDeletePost } from '../fn/post/soft-delete-post';
+import { SoftDeletePost$Params } from '../fn/post/soft-delete-post';
 
 @Injectable({ providedIn: 'root' })
 export class PostService extends BaseService {
@@ -269,6 +271,31 @@ export class PostService extends BaseService {
   getPostsFromForum$Json(params?: GetPostsFromForum$Json$Params, context?: HttpContext): Observable<Array<PostViewModel>> {
     return this.getPostsFromForum$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<PostViewModel>>): Array<PostViewModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `softDeletePost()` */
+  static readonly SoftDeletePostPath = '/Post/DeletePost';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `softDeletePost()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  softDeletePost$Response(params?: SoftDeletePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return softDeletePost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `softDeletePost$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  softDeletePost(params?: SoftDeletePost$Params, context?: HttpContext): Observable<void> {
+    return this.softDeletePost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

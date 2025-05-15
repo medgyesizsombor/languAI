@@ -6,19 +6,23 @@
       <app-avatar class="me-2 d-flex" [imageSrc]="imageSrc"></app-avatar>
     </ion-col>
     <ion-col class="ion-justify-content-between ion-align-items-center d-grid">
-      <ion-row>{{ profile.username }}</ion-row>
-      <ion-row>{{ profile.email}}</ion-row>
+      <ion-row>{{ profile?.username }}</ion-row>
+      <ion-row>{{ profile?.email}}</ion-row>
     </ion-col>
   </ion-row>
 
-  <ion-row (click)="navigate(1)" class="settings-row mx-4 mt-3">
+  <ion-row
+    (click)="navigate(settingsNavigationEnum.profile)"
+    class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="person-outline"></ion-icon>
     </ion-col>
     <ion-col>{{ 'MY_PROFILE' | translate }}</ion-col>
   </ion-row>
 
-  <ion-row (click)="navigate(2)" class="settings-row mx-4 mt-3">
+  <ion-row
+    (click)="navigate(settingsNavigationEnum.notifications)"
+    class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="notifications-outline"></ion-icon>
       <ion-badge
@@ -31,11 +35,22 @@
     <ion-col>{{ 'NOTIFICATION' | translate }}</ion-col>
   </ion-row>
 
-  <ion-row (click)="openSearchForFriendsPage()" class="settings-row mx-4 mt-3">
+  <ion-row
+    (click)="navigate(settingsNavigationEnum.discoverFriends)"
+    class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="search-outline"></ion-icon>
     </ion-col>
     <ion-col>{{ 'DISCOVER_FRIENDS' | translate }}</ion-col>
+  </ion-row>
+
+  <ion-row
+    (click)="navigate(settingsNavigationEnum.leaderboard)"
+    class="settings-row mx-4 mt-3">
+    <ion-col size="auto" class="align-item-center fs-24 me-2">
+      <ion-icon name="stats-chart-outline"></ion-icon>
+    </ion-col>
+    <ion-col>{{ 'LEADERBOARD' | translate }}</ion-col>
   </ion-row>
 
   <ion-row (click)="openLanguageModal()" class="settings-row mx-4 mt-3">
@@ -45,7 +60,9 @@
     <ion-col>{{ 'LANGUAGE_OF_APPLICATION' | translate }}</ion-col>
   </ion-row>
 
-  <ion-row (click)="navigate(3)" class="settings-row mx-4 mt-3">
+  <ion-row
+    (click)="navigate(settingsNavigationEnum.learnings)"
+    class="settings-row mx-4 mt-3">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="language-outline"></ion-icon>
     </ion-col>

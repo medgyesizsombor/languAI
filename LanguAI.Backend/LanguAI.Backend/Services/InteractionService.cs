@@ -41,14 +41,6 @@ public class InteractionService : BaseService, IInteractionService
         }
         else
         {
-            var existingInteraction = _context.Interaction.Any(i => i.InteractionType == InteractionEnum.Like
-                && i.PostId == request.PostId
-                && i.UserId == request.UserId
-                && i.ParentInteractionId == request.ParentInteractionId
-                && i.IsDeleted == false);
-
-            if (existingInteraction) return false;
-
             interaction = new Interaction();
         }
 

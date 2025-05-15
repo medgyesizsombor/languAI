@@ -14,5 +14,5 @@ public class SavePostRequest
 
     public AccessEnum Access { get; set; }
 
-    public int ImageId { get; set; }
+    public int? ImageId { get; set; } = null;
 }

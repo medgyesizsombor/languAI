@@ -6,6 +6,6 @@ export interface SavePostRequest {
   content?: string | null;
   created?: string;
   id?: number | null;
-  imageId?: number;
+  imageId?: number | null;
   userId?: number;
 }

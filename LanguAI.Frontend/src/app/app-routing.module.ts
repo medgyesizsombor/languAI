@@ -5,9 +5,9 @@ import {
   CARD_LIST_NAVIGATION,
   CARD_LISTS_NAVIGATION,
   CARD_NAVIGATION,
-  CREATE_POST_NAVIGATION,
   FORUM_NAVIGATION,
   FULLSIZE_IMAGE_NAVIGATION,
+  LEADERBOARD_NAVIGATION,
   LEARNINGS_NAVIGATION,
   LESSON_LEARNING_NAVIGATION,
   LESSONS_NAVIGATION,
@@ -18,6 +18,7 @@ import {
   POST_NAVIGATION,
   PROFILE_NAVIGATION,
   REGISTER_NAVIGATION,
+  SAVE_POST_NAVIGATION,
   SEARCH_NEW_FRIENDS_NAVIGATION,
   SETTINGS_NAVIGATION
 } from './util/util.constants';
@@ -137,9 +138,16 @@ const routes: Routes = [
       )
   },
   {
-    path: CREATE_POST_NAVIGATION,
+    path: SAVE_POST_NAVIGATION,
     loadChildren: () =>
-      import('./pages/create-post/create-post.module').then(
+      import('./pages/save-post/save-post.module').then(
+        m => m.CreatePostPageModule
+      )
+  },
+  {
+    path: SAVE_POST_NAVIGATION + '/:post-id',
+    loadChildren: () =>
+      import('./pages/save-post/save-post.module').then(
         m => m.CreatePostPageModule
       )
   },
@@ -163,6 +171,13 @@ const routes: Routes = [
       import(
         './pages/search-for-new-friends/search-for-new-friends.module'
       ).then(m => m.SearchForNewFriendsPageModule)
+  },
+  {
+    path: LEADERBOARD_NAVIGATION,
+    loadChildren: () =>
+      import('./pages/leaderboard/leaderboard.module').then(
+        m => m.LeaderboardPageModule
+      )
   }
 ];
 @NgModule({
