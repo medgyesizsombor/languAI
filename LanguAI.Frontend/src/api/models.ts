@@ -34,6 +34,7 @@ export { MessageStatusEnum } from './models/message-status-enum';
 export { MessageViewModel } from './models/message-view-model';
 export { Post } from './models/post';
 export { PostViewModel } from './models/post-view-model';
+export { ProfilePageDataViewModel } from './models/profile-page-data-view-model';
 export { RegisterRequestViewModel } from './models/register-request-view-model';
 export { SaveCardListRequest } from './models/save-card-list-request';
 export { SaveCardRequest } from './models/save-card-request';

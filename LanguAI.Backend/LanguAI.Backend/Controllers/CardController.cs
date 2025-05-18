@@ -27,8 +27,8 @@ public class CardController : ControllerBase
     /// </summary>
     /// <param name="cardListId">Id of the cardlist</param>
     /// <returns></returns>
-    [HttpPost(Name = "GetWordList")]
-    public async Task<ActionResult<List<CardViewModel>>> GetWordList(int cardListId)
+    [HttpPost(Name = "GenerateWordList")]
+    public async Task<ActionResult<List<CardViewModel>>> GenerateWordList(int cardListId)
     {
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
 
@@ -36,7 +36,7 @@ public class CardController : ControllerBase
 
         try
         {
-            return Ok(await _cardService.GetWordList(cardListId, (int)currentUserId));
+            return Ok(await _cardService.GenerateWordList(cardListId, (int)currentUserId));
         }
         catch (Exception e)
         {

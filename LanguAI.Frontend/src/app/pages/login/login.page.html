@@ -1,5 +1,6 @@
 <ion-content class="ion-padding" [fullscreen]="true">
   <h1 class="ion-text-center">LanguAI</h1>
+  <ion-img src="../../../assets/icon/small_logo.png"></ion-img>
   <form *ngIf="loginForm" [formGroup]="loginForm">
     <ion-row>
       <ion-col class="ion-margin-horizontal">
@@ -63,7 +64,9 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-center">
-        <ion-label>{{'CONTINUE_WITHOUT_SIGN_IN' | translate}}</ion-label>
+        <ion-label class="fs-14">
+          {{'CONTINUE_WITHOUT_SIGN_IN' | translate}}
+        </ion-label>
       </ion-col>
     </ion-row>
   </form>

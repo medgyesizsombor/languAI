@@ -617,11 +617,11 @@ export class AlertService {
   /**
    * Show profile picture alert
    */
-  async showProfilePictureAlert(): Promise<boolean> {
+  async showProfilePictureAlert(): Promise<RoleBooleanDataViewModel> {
     return new Promise(async (resolve, reject) => {
       this.alert = await this.alertController.create({
         header: this.translateService.instant('PROFILE_PICTURE'),
-        message: this.translateService.instant('OPEN_OR_UPLOAD_PHOTO'),
+        message: this.translateService.instant('OPEN_OR_CHANGE_PHOTO'),
         inputs: [
           {
             label: this.translateService.instant('OPEN'),
@@ -630,7 +630,7 @@ export class AlertService {
             checked: true
           },
           {
-            label: this.translateService.instant('UPLOAD'),
+            label: this.translateService.instant('CHANGE'),
             type: 'radio',
             value: false
           }
@@ -640,14 +640,14 @@ export class AlertService {
             text: this.translateService.instant('CANCEL'),
             role: 'cancel',
             handler: () => {
-              reject();
+              resolve({ data: undefined, role: 'cancel' });
             }
           },
           {
             text: this.translateService.instant('CONFIRM'),
             role: 'confirm',
             handler: data => {
-              resolve(data);
+              resolve({ role: 'confirm', data });
             }
           }
         ]

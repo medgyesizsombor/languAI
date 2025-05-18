@@ -28,6 +28,7 @@ export class LessonLearningPage {
   isLoading = false;
   statistics: Statistics | undefined;
   showSummary = false;
+  index = 0;
 
   receiveExercisesSub: Subscription | undefined;
   loadQueryParamSub: Subscription | undefined;
@@ -57,9 +58,9 @@ export class LessonLearningPage {
     this.showOverlay = true;
   }
 
-  nextExercise(index: number) {
-    this.exerciseList[index].isActive = false;
-    if (index === this.exerciseList?.length - 1) {
+  nextExercise() {
+    this.exerciseList[this.index].isActive = false;
+    if (this.index === this.exerciseList?.length - 1) {
       //TODO statisztikánál kéne majd, hogy hány hiba, hány jó
       this.statistics = {
         allAnswer: this.exerciseList?.length,
@@ -69,7 +70,8 @@ export class LessonLearningPage {
       };
       this.showSummary = true;
     } else {
-      this.exerciseList[index + 1].isActive = true;
+      this.index++;
+      this.exerciseList[this.index].isActive = true;
       this.showOverlay = false;
     }
   }
@@ -113,6 +115,7 @@ export class LessonLearningPage {
       .subscribe({
         next: (res: Array<ExerciseViewModel>) => {
           this.exerciseList = [...res];
+          this.index = 0;
           this.isLoading = false;
           this.loadingService.hideLoading();
         },

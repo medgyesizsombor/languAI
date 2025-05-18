@@ -19,15 +19,23 @@ public interface IUserService
     int GetStreakOfCurrentUser(int userId);
     UserDataViewModel GetDataOfUser(int userId);
     bool SetProfilePicture(int imageId, int userId);
+    Task<ProfilePageDataViewModel> GetProfilePageDataByIdAsync(int currentUserId, int userId);
 }
 
 public class UserService : BaseService, IUserService
 {
     private readonly IStorageService _storageService;
+    private readonly ICardService _cardService;
+    private readonly IFriendshipService _friendshipService;
 
-    public UserService(LanguAIDataContext context, IStorageService storageService) : base(context)
+    public UserService(LanguAIDataContext context,
+        IStorageService storageService,
+        ICardService cardService,
+        IFriendshipService friendshipService) : base(context)
     {
         _storageService = storageService;
+        _cardService = cardService;
+        _friendshipService = friendshipService;
     }
 
     /// <summary>
@@ -262,5 +270,22 @@ public class UserService : BaseService, IUserService
         _context.SaveChanges();
 
         return true;
+    }
+
+    public async Task<ProfilePageDataViewModel> GetProfilePageDataByIdAsync(int currentUserId, int userId)
+    {
+        try
+        {
+            var result = new ProfilePageDataViewModel();
+            result.User = await GetUserById(userId);
+            result.CardList = _cardService.GetCardListsOfOtherUserByUserId(currentUserId, userId);
+            result.FriendList = _friendshipService.GetFriendList(userId);
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 }

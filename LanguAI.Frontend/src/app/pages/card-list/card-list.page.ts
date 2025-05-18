@@ -67,7 +67,7 @@ export class CardListPage {
     this.alertService.showCreateCardsAlert(this.title).then(result => {
       if (result) {
         this.cardService
-          .getWordList$Json({
+          .generateWordList$Json({
             cardListId: this.cardListId!
           })
           .subscribe({

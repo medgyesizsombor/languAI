@@ -31,5 +31,15 @@
         </ion-fab-button>
       </ion-fab>
     </div>
+    <div class="absolute right-fab-container" *ngIf="showMessageButton">
+      <ion-fab class="right-fab" horizontal="end">
+        <ion-fab-button
+          size="small"
+          class="no-shadow ion-no-margin"
+          (click)="sendMessageButtonEmit.emit()">
+          <ion-icon name="mail-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
   </ion-toolbar>
 </ion-header>

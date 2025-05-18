@@ -1,4 +1,8 @@
-<app-header [title]="title" [showBackArrow]="true"></app-header>
+<app-header
+  [title]="title"
+  [showBackArrow]="true"
+  [showMessageButton]="isProfileOfSomeoneElse!"
+  (sendMessageButtonEmit)="navigateToChat()"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngIf="!isLoading">
@@ -41,8 +45,8 @@
       </ion-badge>
       <ion-badge
         class="me-4 px-4 py-1 mb-4"
-        [ngClass]="{ 'active-badge': activeBadge === badgeEnum.posts }"
-        (click)="setActiveBadge(badgeEnum.posts)">
+        [ngClass]="{ 'active-badge': activeBadge === badgeEnum.friendList }"
+        (click)="setActiveBadge(badgeEnum.friendList)">
         {{ 'POSTS' | translate }}
       </ion-badge>
       <ion-badge
@@ -55,17 +59,17 @@
 
     <div [ngSwitch]="activeBadge">
       <ng-container *ngSwitchCase="badgeEnum.details">
-        <ng-container *ngTemplateOutlet="details"></ng-container>
+        <ng-container *ngTemplateOutlet="detailsTemplate"></ng-container>
       </ng-container>
-      <ng-container *ngSwitchCase="badgeEnum.posts">
-        <ng-container *ngTemplateOutlet="posts"></ng-container>
+      <ng-container *ngSwitchCase="badgeEnum.friendList">
+        <ng-container *ngTemplateOutlet="friendListTemplate"></ng-container>
       </ng-container>
       <ng-container *ngSwitchCase="badgeEnum.cards">
-        <ng-container *ngTemplateOutlet="cards"></ng-container>
+        <ng-container *ngTemplateOutlet="cardsTemplate"></ng-container>
       </ng-container>
     </div>
 
-    <ng-template #details>
+    <ng-template #detailsTemplate>
       <!-- DETAILS -->
       <ion-row class="ion-justify-content-center">
         <app-avatar
@@ -73,7 +77,6 @@
           (click)="openImageModal()"
           [imageSrc]="imageSrc"></app-avatar>
       </ion-row>
-
       <form *ngIf="profileForm" [formGroup]="profileForm" class="pb-5">
         <!-- USERNAME -->
         <ion-row class="ion-margin-horizontal">
@@ -185,16 +188,24 @@
       </ion-row>
     </ng-template>
 
-    <!-- POSTS -->
-    <ng-template #posts></ng-template>
+    <!-- FRIENDLIST -->
+    <ng-template #friendListTemplate>
+      <ng-container *ngIf="friendList.length; else zeroFriendTemplate">
+        <ion-row
+          *ngFor="let friend of friendList"
+          (click)="navigateToUserPage(friend.userId!)">
+          <ion-col>{{ friend.username }}</ion-col>
+        </ion-row>
+      </ng-container>
+    </ng-template>
 
     <!-- CARD -->
-    <ng-template #cards>
+    <ng-template #cardsTemplate>
       <ion-list
         class="d-flex ion-wrap ion-justify-content-center ion-no-padding pt-4">
         <ion-card
           class="border-2 flash-cards"
-          *ngFor="let cardList of cardLists"
+          *ngFor="let cardList of profileModel.cardList"
           (click)="openCardList(cardList.id!)">
           <!--TODO megcsinálni a listát-->
           <ion-card-header class="ion-text-center border-2-bottom-line">
@@ -226,6 +237,10 @@
         (click)="reactFriendshipRequest(false)">
         <ion-icon name="close-circle-outline"></ion-icon>
       </ion-button>
+    </ng-template>
+
+    <ng-template #zeroFriendTemplate>
+      {{ 'USER_DOESNT_HAVE_ANY_FRIENDS' | translate }}
     </ng-template>
   </ng-container>
 </ion-content>

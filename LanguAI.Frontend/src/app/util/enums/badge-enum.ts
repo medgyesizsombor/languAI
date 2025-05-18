@@ -1,5 +1,5 @@
 export enum BadgeEnum {
   details = 1,
-  posts = 2,
+  friendList = 2,
   cards = 3
 }

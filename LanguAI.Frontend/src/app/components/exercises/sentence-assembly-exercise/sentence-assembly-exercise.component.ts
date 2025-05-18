@@ -90,6 +90,7 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
           this.exercise.sentenceAssemblyExerciseSentence
         )
       ];
+      //TODO itt módosítani kell a szavakon
       this.loadingService.hideLoading();
     } else {
       //TODO mi van, ha nem tölt be
@@ -136,7 +137,7 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
   private shuffleTheElements(
     sentence: Array<SentenceAssemblyExerciseWord>
   ): Array<SentenceAssemblyExerciseWord> {
-    if (sentence?.length > 1) {
+    if (sentence?.length) {
       let currentIndex = sentence?.length;
 
       while (currentIndex !== 0) {
