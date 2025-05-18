@@ -29,11 +29,7 @@ export class WordPairingExerciseComponent implements OnInit {
   clickedWord: WordPairingExerciseWord | null = null;
   nativeWords: Array<WordPairingExerciseWord> = [];
   learningWords: Array<WordPairingExerciseWord> = [];
-  originalWords: Array<CardViewModel> = [
-    { wordInLearningLanguage: 'hungarian', wordInNativeLanguage: 'magyar' },
-    { wordInLearningLanguage: 'english', wordInNativeLanguage: 'angol' },
-    { wordInLearningLanguage: 'german', wordInNativeLanguage: 'német' }
-  ];
+  originalWords: Array<CardViewModel> = [];
 
   constructor(private animationService: AnimationService) {}
 
@@ -42,22 +38,26 @@ export class WordPairingExerciseComponent implements OnInit {
   }
 
   private loadData() {
-    this.originalWords.forEach((w, index) => {
-      this.nativeWords.push({
-        text: w.wordInNativeLanguage!,
-        pair: index,
-        paired: false,
-        nativeWord: true
-      });
-      this.learningWords.push({
-        text: w.wordInLearningLanguage!,
-        pair: index,
-        paired: false,
-        nativeWord: false
-      });
-    });
+    if (this.exercise?.wordPairingExercise?.length) {
+      this.originalWords = [...this.exercise?.wordPairingExercise];
 
-    this.learningWords = [...this.randomizeArray(this.learningWords)];
+      this.originalWords.forEach((w, index) => {
+        this.nativeWords.push({
+          text: w.wordInNativeLanguage!,
+          pair: index,
+          paired: false,
+          nativeWord: true
+        });
+        this.learningWords.push({
+          text: w.wordInLearningLanguage!,
+          pair: index,
+          paired: false,
+          nativeWord: false
+        });
+      });
+
+      this.learningWords = [...this.randomizeArray(this.learningWords)];
+    }
   }
 
   randomizeArray(wordArray: Array<WordPairingExerciseWord>) {

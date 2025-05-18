@@ -11,7 +11,7 @@ namespace LanguAI.Backend.Services;
 
 public interface ICardService
 {
-    Task<List<CardViewModel>> GetWordList(int cardListId, int userId);
+    Task<List<CardViewModel>> GenerateWordList(int cardListId, int userId);
     int? SaveCardList(SaveCardListRequest request);
     bool SaveCards(SaveCardRequest request);
     List<CardViewModel> GetCardsOfCardList(int cardListId);
@@ -20,7 +20,7 @@ public interface ICardService
     List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId);
     bool CopyCardListOfOtherUser(int currentUserId, int cardListId);
     bool ChangeAccessOfCardList(ChangeAccessOfCardListViewModel request);
-    string GetLanguageWordsAsOneStringByCardListId(int cardListId);
+    string GetLanguageWordsAsOneStringByCardListId(int cardListId, bool learningLanguage = true);
     List<TopicOfCurrentLearningViewModel> GetCardListOfCurrentLearningGroupByTopic(int userId);
     CardViewModel GetCardById(int cardId);
     void DeleteCardById(int cardId);
@@ -46,17 +46,17 @@ public class CardService : BaseService, ICardService
     /// <param name="cardListId">Id of the cardlist</param>
     /// <param name="userId">Current user's Id</param>
     /// <returns></returns>
-    public async Task<List<CardViewModel>> GetWordList(int cardListId, int userId)
+    public async Task<List<CardViewModel>> GenerateWordList(int cardListId, int userId)
     {
         var currentLearning = _learningService.GetCurrentLearningOfUser(userId);
 
         var cardList = GetCardListById(cardListId);
 
-        List<CardViewModel> result = await _chatGPTService.GetWordsForCards
+        List<CardViewModel> result = await _chatGPTService.GenerateWordsForCards
             (currentLearning.NativeLanguageName,
             currentLearning.LearningLanguageName,
-            currentLearning.LanguageLevel.ToString(),
-            cardList.TopicId);
+            cardList.TopicId,
+            cardList.CardViewModelList);
 
         return result;
     }
@@ -212,10 +212,11 @@ public class CardService : BaseService, ICardService
             .Where(c => c.UserId == otherUserId
                     && !c.IsDeleted
                     && (c.Access == AccessEnum.Public
-                         || (c.Access == AccessEnum.Protected
-                             && (_context.Friendship
-                                 .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == c.UserId)
-                                     || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == FriendshipStatusEnum.Accepted)))))
+                        || (c.Access == AccessEnum.Private && currentUserId == otherUserId)
+                        || (c.Access == AccessEnum.Protected
+                            && (_context.Friendship
+                                .Any(f => ((f.RequesterId == currentUserId && f.RecipientId == c.UserId)
+                                    || (f.RecipientId == currentUserId && f.RequesterId == c.UserId)) && f.Status == FriendshipStatusEnum.Accepted)))))
             .Select(c => ConvertCardListToCardListViewModel(c))
             .ToList();
     }
@@ -310,11 +311,11 @@ public class CardService : BaseService, ICardService
     /// </summary>
     /// <param name="cardListId"></param>
     /// <returns></returns>
-    public string GetLanguageWordsAsOneStringByCardListId(int cardListId)
+    public string GetLanguageWordsAsOneStringByCardListId(int cardListId, bool learningLanguage = true)
     {
         var wordList = _context.Card
             .Where(c => c.CardListId == cardListId)
-            .Select(c => c.WordInLearningLanguage)
+            .Select(c => learningLanguage == true ? c.WordInLearningLanguage : c.WordInNativeLanguage)
             .ToList();
 
         return string.Join(", ", wordList);

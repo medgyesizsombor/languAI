@@ -225,4 +225,23 @@ public class UserController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    [HttpGet(Name = "GetProfilePageData")]
+    public async Task<ActionResult<ProfilePageDataViewModel>> GetProfilePageDataByIdAsync(int userId)
+    {
+        try
+        {
+            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+
+            ArgumentNullException.ThrowIfNull(currentUserId);
+
+            return Ok(await _userService.GetProfilePageDataByIdAsync((int)currentUserId, userId));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
+
+    }
 }

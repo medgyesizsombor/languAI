@@ -21,6 +21,10 @@ import { copyCardListOfOtherUser$Plain } from '../fn/card/copy-card-list-of-othe
 import { CopyCardListOfOtherUser$Plain$Params } from '../fn/card/copy-card-list-of-other-user-plain';
 import { deleteCardById } from '../fn/card/delete-card-by-id';
 import { DeleteCardById$Params } from '../fn/card/delete-card-by-id';
+import { generateWordList$Json } from '../fn/card/generate-word-list-json';
+import { GenerateWordList$Json$Params } from '../fn/card/generate-word-list-json';
+import { generateWordList$Plain } from '../fn/card/generate-word-list-plain';
+import { GenerateWordList$Plain$Params } from '../fn/card/generate-word-list-plain';
 import { getAllTopicsByCurrentLearning$Json } from '../fn/card/get-all-topics-by-current-learning-json';
 import { GetAllTopicsByCurrentLearning$Json$Params } from '../fn/card/get-all-topics-by-current-learning-json';
 import { getAllTopicsByCurrentLearning$Plain } from '../fn/card/get-all-topics-by-current-learning-plain';
@@ -49,10 +53,6 @@ import { getCardsOfCardList$Json } from '../fn/card/get-cards-of-card-list-json'
 import { GetCardsOfCardList$Json$Params } from '../fn/card/get-cards-of-card-list-json';
 import { getCardsOfCardList$Plain } from '../fn/card/get-cards-of-card-list-plain';
 import { GetCardsOfCardList$Plain$Params } from '../fn/card/get-cards-of-card-list-plain';
-import { getWordList$Json } from '../fn/card/get-word-list-json';
-import { GetWordList$Json$Params } from '../fn/card/get-word-list-json';
-import { getWordList$Plain } from '../fn/card/get-word-list-plain';
-import { GetWordList$Plain$Params } from '../fn/card/get-word-list-plain';
 import { IntSelectorModel } from '../models/int-selector-model';
 import { saveCard } from '../fn/card/save-card';
 import { SaveCard$Params } from '../fn/card/save-card';
@@ -72,49 +72,49 @@ export class CardService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getWordList()` */
-  static readonly GetWordListPath = '/Card/GetWordList';
+  /** Path part for operation `generateWordList()` */
+  static readonly GenerateWordListPath = '/Card/GenerateWordList';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getWordList$Plain()` instead.
+   * To access only the response body, use `generateWordList$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getWordList$Plain$Response(params?: GetWordList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
-    return getWordList$Plain(this.http, this.rootUrl, params, context);
+  generateWordList$Plain$Response(params?: GenerateWordList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
+    return generateWordList$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getWordList$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `generateWordList$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getWordList$Plain(params?: GetWordList$Plain$Params, context?: HttpContext): Observable<Array<CardViewModel>> {
-    return this.getWordList$Plain$Response(params, context).pipe(
+  generateWordList$Plain(params?: GenerateWordList$Plain$Params, context?: HttpContext): Observable<Array<CardViewModel>> {
+    return this.generateWordList$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<CardViewModel>>): Array<CardViewModel> => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getWordList$Json()` instead.
+   * To access only the response body, use `generateWordList$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getWordList$Json$Response(params?: GetWordList$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
-    return getWordList$Json(this.http, this.rootUrl, params, context);
+  generateWordList$Json$Response(params?: GenerateWordList$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
+    return generateWordList$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getWordList$Json$Response()` instead.
+   * To access the full response (for headers, for example), `generateWordList$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getWordList$Json(params?: GetWordList$Json$Params, context?: HttpContext): Observable<Array<CardViewModel>> {
-    return this.getWordList$Json$Response(params, context).pipe(
+  generateWordList$Json(params?: GenerateWordList$Json$Params, context?: HttpContext): Observable<Array<CardViewModel>> {
+    return this.generateWordList$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<CardViewModel>>): Array<CardViewModel> => r.body)
     );
   }

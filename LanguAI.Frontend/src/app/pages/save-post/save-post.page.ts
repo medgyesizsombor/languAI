@@ -274,7 +274,6 @@ export class CreatePostPage {
       text: post.content,
       access: post.access
     });
-    console.log(post.image);
     this.image = post.image;
   }
 }

@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
-import { CARD_LIST_NAVIGATION, PROFILE_TITLE } from '../../util/util.constants';
+import {
+  CARD_LIST_NAVIGATION,
+  MESSAGE_NAVIGATION,
+  PROFILE_NAVIGATION,
+  PROFILE_TITLE
+} from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import {
   FriendshipService,
   StorageService,
@@ -12,8 +17,8 @@ import {
   CardListViewModel,
   FriendshipViewModel,
   ImageViewModel,
-  IntSelectorModel,
-  UserViewModel
+  ProfilePageDataViewModel,
+  UserDiscoveryViewModel
 } from 'src/api/models';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
@@ -25,6 +30,7 @@ import { BadgeEnum } from 'src/app/util/enums/badge-enum';
 import { FriendshipStatusEnum } from 'src/api/models';
 import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
 import { FileService } from 'src/app/util/services/file.service';
+import { RoleBooleanDataViewModel } from 'src/app/util/models/role-boolean-data-view-model';
 
 @Component({
   selector: 'app-profile',
@@ -35,12 +41,13 @@ import { FileService } from 'src/app/util/services/file.service';
 export class ProfilePage {
   profileForm: FormGroup | undefined;
   title = this.translateService.instant(PROFILE_TITLE);
-  profileModel: UserViewModel = {};
+  profileModel: ProfilePageDataViewModel = {};
   isEdit = false;
-  originalProfileModel: UserViewModel = {};
+  originalProfileModel: ProfilePageDataViewModel = {};
   userId: number | null | undefined;
   isProfileOfSomeoneElse: boolean | undefined;
   activeBadge = 1;
+  friendList: Array<UserDiscoveryViewModel> = [];
   friendshipStatus: FriendshipStatusEnum | undefined;
   friendshipStatusEnum = FriendshipStatusEnum;
   friendshipViewModel: FriendshipViewModel | undefined;
@@ -101,7 +108,6 @@ export class ProfilePage {
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
-    private router: Router,
     private userService: UserService,
     private loadingService: LoadingService,
     private toastrService: ToastrService,
@@ -196,7 +202,7 @@ export class ProfilePage {
   sendRequest() {
     this.sendFriendshipRequestSub = this.friendshipService
       .requestFriendship$Json({
-        recipientId: this.profileModel.id
+        recipientId: this.profileModel.user?.id
       })
       .subscribe({
         next: (success: boolean) => {
@@ -229,7 +235,11 @@ export class ProfilePage {
    * Navigate to chat
    */
   navigateToChat() {
-    //TODO
+    this.navController.navigateForward(MESSAGE_NAVIGATION + '/' + this.userId);
+  }
+
+  navigateToUserPage(userId: number) {
+    this.navController.navigateForward(PROFILE_NAVIGATION + '/' + userId);
   }
 
   /**
@@ -280,26 +290,32 @@ export class ProfilePage {
   }
 
   openImageModal() {
-    this.alertService.showProfilePictureAlert().then((isOpen: boolean) => {
-      if (isOpen) {
-        this.showingFullsizeImage = true;
-      } else {
-        this.alertService
-          .showImageUploadAlert()
-          .then((isCapturing: boolean) => {
-            if (isCapturing) {
-              this.fileService.createPhoto().then((image: ImageViewModel) => {
-                this.changeProfilePicture(image);
-              });
-            } else {
-              this.fileService.pickPhoto().then((image: ImageViewModel) => {
-                this.changeProfilePicture(image);
-              });
-            }
-          })
-          .catch(() => {});
-      }
-    });
+    this.alertService
+      .showProfilePictureAlert()
+      .then((res: RoleBooleanDataViewModel) => {
+        if (res.role === 'confirm' && res.data) {
+          this.showingFullsizeImage = true;
+        } else if (res.role === 'confirm' && !res.data) {
+          this.alertService
+            .showImageUploadAlert()
+            .then((isCapturing: boolean) => {
+              if (isCapturing) {
+                this.fileService.createPhoto().then((image: ImageViewModel) => {
+                  this.changeProfilePicture(image);
+                });
+              } else {
+                this.fileService.pickPhoto().then((image: ImageViewModel) => {
+                  this.changeProfilePicture(image);
+                });
+              }
+            })
+            .catch(() => {
+              this.toastrService.presentErrorToast(
+                this.translateService.instant('PROFILE_PICTURE_ERROR')
+              );
+            });
+        }
+      });
   }
 
   /**
@@ -338,18 +354,18 @@ export class ProfilePage {
             ? this.userId !== idFromParam
             : false;
 
-          return this.userService.getUserById$Json({
+          return this.userService.getProfilePageData$Json({
             userId: idFromParam ? +idFromParam : this.userId!
           });
         }),
-        switchMap((res: UserViewModel) => {
+        switchMap((res: ProfilePageDataViewModel) => {
           this.profileModel = res;
           this.fillForm();
           if (!this.isProfileOfSomeoneElse) {
             this.originalProfileModel = { ...this.profileModel };
             this.imageSrc = this.fileService.getImageSrc(
-              this.originalProfileModel?.profilePicture?.contentAsString,
-              this.originalProfileModel?.profilePicture?.type
+              this.originalProfileModel?.user?.profilePicture?.contentAsString,
+              this.originalProfileModel?.user?.profilePicture?.type
             );
             this.loadingService.hideLoading();
             this.isLoading = false;
@@ -357,7 +373,7 @@ export class ProfilePage {
           }
 
           return this.friendshipService.getFriendshipByUserId$Json({
-            otherUserId: this.profileModel.id
+            otherUserId: this.profileModel.user?.id
           });
         })
       )
@@ -394,9 +410,9 @@ export class ProfilePage {
    */
   private fillForm() {
     this.profileForm?.patchValue({
-      username: this.profileModel.username,
-      email: this.profileModel.email,
-      dateOfBirth: this.profileModel.dateOfBirth
+      username: this.profileModel.user?.username,
+      email: this.profileModel.user?.email,
+      dateOfBirth: this.profileModel.user?.dateOfBirth
     });
   }
 

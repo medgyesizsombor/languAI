@@ -8,18 +8,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CardViewModel } from '../../models/card-view-model';
 
-export interface GetWordList$Plain$Params {
+export interface GenerateWordList$Json$Params {
   cardListId?: number;
 }
 
-export function getWordList$Plain(http: HttpClient, rootUrl: string, params?: GetWordList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
-  const rb = new RequestBuilder(rootUrl, getWordList$Plain.PATH, 'post');
+export function generateWordList$Json(http: HttpClient, rootUrl: string, params?: GenerateWordList$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CardViewModel>>> {
+  const rb = new RequestBuilder(rootUrl, generateWordList$Json.PATH, 'post');
   if (params) {
     rb.query('cardListId', params.cardListId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +28,4 @@ export function getWordList$Plain(http: HttpClient, rootUrl: string, params?: Ge
   );
 }
 
-getWordList$Plain.PATH = '/Card/GetWordList';
+generateWordList$Json.PATH = '/Card/GenerateWordList';

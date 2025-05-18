@@ -132,8 +132,9 @@ public class ChatGPTController : ControllerBase
             if (currentUserId != request.UserId) throw new UnauthorizedAccessException();
 
             var wordsInLearningLanguage = _cardService.GetLanguageWordsAsOneStringByCardListId(request.CardListId);
+            var wordsInNativeLanguage = _cardService.GetLanguageWordsAsOneStringByCardListId(request.CardListId, false);
 
-            var exercises = await _chatGPTService.ReceiveExercisesFromChatGPT(request, wordsInLearningLanguage);
+            var exercises = await _chatGPTService.ReceiveExercisesFromChatGPT(request, wordsInLearningLanguage, wordsInNativeLanguage);
 
             return Ok(exercises);
         }

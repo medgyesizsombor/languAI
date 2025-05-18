@@ -18,10 +18,12 @@ export class HeaderComponent {
   @Input() showAddButton = false;
   @Input() showSavingMissed = false;
   @Input() showSendingMissed = false;
+  @Input() showMessageButton = false;
 
   @Output() saveButtonEmit = new EventEmitter<void>();
   @Output() addButtonEmit = new EventEmitter<void>();
   @Output() navigateBackWithoutSavingEmit = new EventEmitter<boolean>();
+  @Output() sendMessageButtonEmit = new EventEmitter<void>();
 
   //TODO: mentés hiányában visszagomb
 

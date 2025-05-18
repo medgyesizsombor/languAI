@@ -1,4 +1,5 @@
 ﻿using LanguAI.Backend.Core.Enums;
+using LanguAI.Backend.ViewModels.Card;
 
 namespace LanguAI.Backend.ViewModels.Exercise;
 
@@ -23,4 +24,6 @@ public class ExerciseViewModel
     public List<string> Words { get; set; }
 
     public string CorrectWord { get; set; }
+    
+    public List<CardViewModel> WordPairingExercise { get; set; }
 }

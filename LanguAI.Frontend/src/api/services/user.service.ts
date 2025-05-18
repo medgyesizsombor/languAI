@@ -29,6 +29,10 @@ import { getDataOfUser$Json } from '../fn/user/get-data-of-user-json';
 import { GetDataOfUser$Json$Params } from '../fn/user/get-data-of-user-json';
 import { getDataOfUser$Plain } from '../fn/user/get-data-of-user-plain';
 import { GetDataOfUser$Plain$Params } from '../fn/user/get-data-of-user-plain';
+import { getProfilePageData$Json } from '../fn/user/get-profile-page-data-json';
+import { GetProfilePageData$Json$Params } from '../fn/user/get-profile-page-data-json';
+import { getProfilePageData$Plain } from '../fn/user/get-profile-page-data-plain';
+import { GetProfilePageData$Plain$Params } from '../fn/user/get-profile-page-data-plain';
 import { getStreakOfCurrentUser$Json } from '../fn/user/get-streak-of-current-user-json';
 import { GetStreakOfCurrentUser$Json$Params } from '../fn/user/get-streak-of-current-user-json';
 import { getStreakOfCurrentUser$Plain } from '../fn/user/get-streak-of-current-user-plain';
@@ -37,6 +41,7 @@ import { getUserById$Json } from '../fn/user/get-user-by-id-json';
 import { GetUserById$Json$Params } from '../fn/user/get-user-by-id-json';
 import { getUserById$Plain } from '../fn/user/get-user-by-id-plain';
 import { GetUserById$Plain$Params } from '../fn/user/get-user-by-id-plain';
+import { ProfilePageDataViewModel } from '../models/profile-page-data-view-model';
 import { saveUser$Json } from '../fn/user/save-user-json';
 import { SaveUser$Json$Params } from '../fn/user/save-user-json';
 import { saveUser$Plain } from '../fn/user/save-user-plain';
@@ -474,6 +479,53 @@ export class UserService extends BaseService {
   setProfilePicture$Json(params?: SetProfilePicture$Json$Params, context?: HttpContext): Observable<boolean> {
     return this.setProfilePicture$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `getProfilePageData()` */
+  static readonly GetProfilePageDataPath = '/User/GetProfilePageDataById';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProfilePageData$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProfilePageData$Plain$Response(params?: GetProfilePageData$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ProfilePageDataViewModel>> {
+    return getProfilePageData$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProfilePageData$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProfilePageData$Plain(params?: GetProfilePageData$Plain$Params, context?: HttpContext): Observable<ProfilePageDataViewModel> {
+    return this.getProfilePageData$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ProfilePageDataViewModel>): ProfilePageDataViewModel => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProfilePageData$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProfilePageData$Json$Response(params?: GetProfilePageData$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ProfilePageDataViewModel>> {
+    return getProfilePageData$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProfilePageData$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProfilePageData$Json(params?: GetProfilePageData$Json$Params, context?: HttpContext): Observable<ProfilePageDataViewModel> {
+    return this.getProfilePageData$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ProfilePageDataViewModel>): ProfilePageDataViewModel => r.body)
     );
   }
 
