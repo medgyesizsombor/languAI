@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ToastrService {
   constructor(private toastController: ToastController) {}
@@ -12,10 +12,11 @@ export class ToastrService {
    */
   async presentSuccessToast(message: string) {
     const toast = await this.toastController.create({
+      mode: 'md',
       message: message,
       duration: 2000,
       position: 'bottom',
-      cssClass: 'success-toastr',
+      cssClass: 'success-toastr'
     });
 
     await toast.present();
@@ -26,10 +27,11 @@ export class ToastrService {
    */
   async presentErrorToast(message: string) {
     const toast = await this.toastController.create({
+      mode: 'md',
       message,
       duration: 2000,
       position: 'bottom',
-      cssClass: 'error-toastr',
+      cssClass: 'error-toastr'
     });
 
     await toast.present();

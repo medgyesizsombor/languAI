@@ -4,11 +4,15 @@
   title="{{ 'NOTIFICATIONS_TITLE' | translate }}"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-list *ngIf="friendshipRequests?.length; else missingFriendshipRequest">
+  <ion-list
+    mode="md"
+    *ngIf="friendshipRequests?.length; else missingFriendshipRequest">
     <div
       class="ion-no-padding d-flex ion-justify-content-between align-item-center border-1-bottom-line"
       *ngFor="let friendshipRequest of friendshipRequests; let index = index">
-      <span>{{ friendshipRequest.requesterName }}</span>
+      <span (click)="navigateToProfilePage(friendshipRequest.requesterId!)">
+        {{ friendshipRequest.requesterName }}
+      </span>
       <ion-item class="ion-no-padding ion-item-no-padding-end" lines="none">
         <ion-icon
           class="me-2"

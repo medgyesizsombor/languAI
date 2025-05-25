@@ -32,5 +32,6 @@ public static class DependencyInjectionConfig
         services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<IGameplayService, GameplayService>();
+        services.AddScoped<ITopicService, TopicService>();
     }
 }

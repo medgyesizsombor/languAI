@@ -45,6 +45,7 @@ export class MessagesPage {
 
   async newMessage() {
     const modal = await this.modalController.create({
+      mode: 'md',
       component: CreateNewMessageModalComponent,
       componentProps: {
         friendList: this.friendList
@@ -78,6 +79,7 @@ export class MessagesPage {
           })
           .subscribe({
             next: (res: Array<IntSelectorModel>) => {
+              console.log(res)
               this.friendList = res;
               this.isLoading = false;
               this.loadingService.hideLoading();

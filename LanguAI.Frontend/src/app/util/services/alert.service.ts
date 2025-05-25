@@ -31,6 +31,7 @@ export class AlertService {
   async showRemoveAlert(message?: string): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('ATTENTION_TITLE'),
         subHeader: message,
         message: this.translateService.instant('REMOVE_QUESTION'),
@@ -65,6 +66,7 @@ export class AlertService {
   ): Promise<string | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('ENTER_A_NAME'),
         cssClass: 'ion-input',
         inputs: [
@@ -120,6 +122,7 @@ export class AlertService {
   async showCreateCardsAlert(name: string): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('GENERATING_CARDS'),
         message: this.translateService.instant('DO_YOU_WANT_CREATE_CARDS_FOR', {
           name
@@ -152,6 +155,7 @@ export class AlertService {
   async showSavingMissedAlert(): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('CHANGES_ARE_NOT_SAVED'),
         subHeader: this.translateService.instant(
           'IF_YOU_QUIT_YOUR_CHANGES_WONT_BE_SAVED'
@@ -185,6 +189,7 @@ export class AlertService {
   async showSendingMissedAlert(): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('MESSAGE_WAS_NOT_SENT'),
         subHeader: this.translateService.instant(
           'IF_YOU_QUIT_YOUR_MESSAGE_WONT_BE_SENT'
@@ -218,6 +223,7 @@ export class AlertService {
   async showTooFewCardsAlert(): Promise<void> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('TOO_FEW_OF_THE_CARDS'),
         subHeader: this.translateService.instant(
           'TO_LEARN_THIS_CARDS_THERE_HAS_TO_BE_AT_LEAST_30_CARDS'
@@ -243,6 +249,7 @@ export class AlertService {
   async showChangePasswordAlert(): Promise<string | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('CHANGE_PASSWORD'),
         cssClass: 'ion-input',
         inputs: [
@@ -352,6 +359,7 @@ export class AlertService {
   async showDeleteUserAlert(message?: string): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('ATTENTION_TITLE'),
         subHeader: message,
         message: this.translateService.instant('DELETE_PROFILE_QUESTION'),
@@ -384,6 +392,7 @@ export class AlertService {
   // async showDeleteUserAlert(message?: string): Promise<boolean> {
   //   return new Promise(async resolve => {
   //     this.alert = await this.alertController.create({
+  //      mode: 'md',
   //       header: this.translateService.instant('ATTENTION_TITLE'),
   //       subHeader: message,
   //       message: this.translateService.instant('DELETE_PROFILE_QUESTION'),
@@ -415,6 +424,7 @@ export class AlertService {
   async showAccessAlert(currentAccess: AccessEnum): Promise<AccessEnum | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('ACCESS_TITLE'),
         message: this.translateService.instant('WHO_CAN_SEE_THIS_QUESTION'),
         inputs: [
@@ -465,6 +475,7 @@ export class AlertService {
   async showExistingLearningAlert(): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('ATTENTION_TITLE'),
         message: this.translateService.instant(
           'YOU_ALREADY_HAVE_LEARNING_LIKE_THIS_WOULD_YOU_LIKE_TO_MAKE_THAT_ACTIVE_QUESTIONMARK'
@@ -501,6 +512,7 @@ export class AlertService {
   ): Promise<boolean> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header,
         message,
         buttons: [
@@ -533,6 +545,7 @@ export class AlertService {
   ): Promise<string | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('LANGUAGE_OF_APPLICATION'),
         message: this.translateService.instant('SELECT_A_LANGUAGE'),
         inputs: [
@@ -577,6 +590,7 @@ export class AlertService {
   async showImageUploadAlert(): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('UPLOAD_PHOTO'),
         message: this.translateService.instant('CAPTURE_OR_CHOOSE_PHOTO'),
         inputs: [
@@ -620,6 +634,7 @@ export class AlertService {
   async showProfilePictureAlert(): Promise<RoleBooleanDataViewModel> {
     return new Promise(async (resolve, reject) => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('PROFILE_PICTURE'),
         message: this.translateService.instant('OPEN_OR_CHANGE_PHOTO'),
         inputs: [
@@ -663,6 +678,7 @@ export class AlertService {
   async showChatGPTAlert(): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('REQUEST_HELP_FROM_CHATGPT'),
         inputs: [
           {
@@ -705,6 +721,7 @@ export class AlertService {
   async showPhrasingAlert(): Promise<string | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('PHRASING'),
         message: this.translateService.instant(
           'WHAT_SHOULD_BE_YOUR_POST_BASED_ON'
@@ -753,6 +770,7 @@ export class AlertService {
   ): Promise<CardlistsSortEnum | null> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('SORT'),
         message: this.translateService.instant('WHAT_SHOULD_BE_THE_ORDER'),
         inputs: [
@@ -809,6 +827,7 @@ export class AlertService {
   async showEditPostAlert(): Promise<RoleBooleanDataViewModel> {
     return new Promise(async resolve => {
       this.alert = await this.alertController.create({
+        mode: 'md',
         header: this.translateService.instant('EDIT_POST'),
         message: this.translateService.instant('EDIT_OR_DELETE_QUESTION'),
         inputs: [

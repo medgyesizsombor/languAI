@@ -15,16 +15,18 @@ public class ChatGPTController : ControllerBase
     private readonly IMessageService _messageService;
     private readonly ILearningService _learningService;
     private readonly ICardService _cardService;
+    private readonly ITopicService _topicService;
 
     private readonly ILogger<ChatGPTController> _logger;
 
-    public ChatGPTController(ILogger<ChatGPTController> logger, IChatGPTService chatGPTService, IAuthenticationService authenticationService, IMessageService messageService, ICardService cardService)
+    public ChatGPTController(ILogger<ChatGPTController> logger, IChatGPTService chatGPTService, IAuthenticationService authenticationService, IMessageService messageService, ICardService cardService, ITopicService topicService)
     {
         _logger = logger;
         _chatGPTService = chatGPTService;
         _authenticationService = authenticationService;
         _messageService = messageService;
         _cardService = cardService;
+        _topicService = topicService;
     }
 
     /// <summary>
@@ -121,18 +123,23 @@ public class ChatGPTController : ControllerBase
     /// <param name="request">Request for exercises</param>
     /// <returns></returns>
     [HttpGet(Name = "ReceiveExercisesFromChatGPT")]
-    public async Task<ActionResult<List<ExerciseViewModel>>> ReceiveExercisesFromChatGPTAsync([FromQuery] ExerciseRequestViewModel request)
+    public async Task<ActionResult<List<ExerciseViewModel>>> ReceiveExercisesFromChatGPTAsync(int topicId)
     {
         try
         {
             var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-            ArgumentNullException.ThrowIfNull(request);
             ArgumentNullException.ThrowIfNull(currentUserId);
 
-            if (currentUserId != request.UserId) throw new UnauthorizedAccessException();
+            var topic = _topicService.GetTopicById(topicId);
+            var wordsInLearningLanguage = _cardService.GetLanguageWordsAsOneStringByTopicId(topicId, (int)currentUserId);
+            var wordsInNativeLanguage = _cardService.GetLanguageWordsAsOneStringByTopicId(topicId, (int)currentUserId, false);
 
-            var wordsInLearningLanguage = _cardService.GetLanguageWordsAsOneStringByCardListId(request.CardListId);
-            var wordsInNativeLanguage = _cardService.GetLanguageWordsAsOneStringByCardListId(request.CardListId, false);
+            var request = new ExerciseRequestViewModel
+            {
+                TopicDescription = topic.Description,
+                UserId = (int)currentUserId,
+                LanguageLevel = topic.LanguageLevel
+            };
 
             var exercises = await _chatGPTService.ReceiveExercisesFromChatGPT(request, wordsInLearningLanguage, wordsInNativeLanguage);
 

@@ -1,6 +1,8 @@
-<app-header [title]="'CREATE_CARDLIST' | translate"></app-header>
+<app-header
+  [fontSizeClass]="'fs-24'"
+  [title]="'CREATE_CARDLIST' | translate"></app-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <ng-container *ngIf="!isLoading">
     <form *ngIf="newCardlistForm" [formGroup]="newCardlistForm" class="px-4">
       <ion-input
@@ -12,6 +14,8 @@
         formControlName="name"></ion-input>
 
       <ion-select
+        okText="{{ 'CONFIRM' | translate }}"
+        cancelText="{{ 'CANCEL' | translate }}"
         formControlName="topicId"
         [label]="'TOPIC' | translate"
         label-placement="stacked">
@@ -21,12 +25,19 @@
       </ion-select>
 
       <ion-row class="ion-margin-bottom w-100">
-        <ion-button class="primary-button no-shadow w-100" (click)="confirm()">
+        <ion-button
+          mode="md"
+          class="primary-button no-shadow w-100"
+          (click)="confirm()">
           {{ 'CONFIRM' | translate }}
         </ion-button>
       </ion-row>
+
       <ion-row class="w-100">
-        <ion-button class="error-outline-button w-100" (click)="dismiss()">
+        <ion-button
+          mode="md"
+          class="error-outline-button w-100"
+          (click)="dismiss()">
           {{ 'CANCEL' | translate }}
         </ion-button>
       </ion-row>

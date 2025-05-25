@@ -77,6 +77,7 @@ export class LearningPage {
    */
   async addLearning() {
     const modal = await this.modalController.create({
+      mode: 'md',
       component: NewLearningModalComponent
     });
     await modal.present();

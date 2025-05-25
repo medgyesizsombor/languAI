@@ -6,37 +6,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ExerciseTypeEnum } from '../../models/exercise-type-enum';
 import { ExerciseViewModel } from '../../models/exercise-view-model';
 
 export interface ReceiveExercisesFromChatGpt$Plain$Params {
-  UserId?: number;
-  LanguageLevel?: string;
-  TopicDescription?: string;
-
-/**
- * 1 = MissingWordExercise
- *
- * 2 = MistakeCorrectingExercise
- *
- * 3 = QuestionAnsweringExercise
- *
- * 4 = SentenceAssemblyExercise
- *
- * 5 = WordPairingExercise
- */
-  ExerciseType?: ExerciseTypeEnum;
-  CardListId?: number;
+  topicId?: number;
 }
 
 export function receiveExercisesFromChatGpt$Plain(http: HttpClient, rootUrl: string, params?: ReceiveExercisesFromChatGpt$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExerciseViewModel>>> {
   const rb = new RequestBuilder(rootUrl, receiveExercisesFromChatGpt$Plain.PATH, 'get');
   if (params) {
-    rb.query('UserId', params.UserId, {});
-    rb.query('LanguageLevel', params.LanguageLevel, {});
-    rb.query('TopicDescription', params.TopicDescription, {});
-    rb.query('ExerciseType', params.ExerciseType, {});
-    rb.query('CardListId', params.CardListId, {});
+    rb.query('topicId', params.topicId, {});
   }
 
   return http.request(

@@ -7,4 +7,23 @@
 
 ion-list {
   padding-top: 0;
+  margin-bottom: 32px;
+}
+
+app-edit-fab {
+  position: fixed;
+  top: calc(100dvh - 74px);
+  right: calc(70px);
+}
+
+app-edit-fab {
+  position: fixed;
+  top: calc(100dvh - 66px);
+  right: 71px;
+}
+
+app-edit-acces-fab {
+  position: fixed;
+  top: 100dvh;
+  left: 0;
 }

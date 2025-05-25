@@ -24,12 +24,16 @@ export class WordPairingExerciseComponent implements OnInit {
     | undefined;
 
   @Input() exercise: ExerciseViewModel | undefined;
-  @Output() showContinueButton = new EventEmitter<void>();
+  @Output() showContinueButton = new EventEmitter<number>();
 
   clickedWord: WordPairingExerciseWord | null = null;
   nativeWords: Array<WordPairingExerciseWord> = [];
   learningWords: Array<WordPairingExerciseWord> = [];
   originalWords: Array<CardViewModel> = [];
+  mistakes: number = 0;
+
+  leftColors: Array<string> = ['#EDAFB8', '#FDCA40', '#F79824', '#F1DAC4'];
+  rigthColors: Array<string> = ['#32CBFF', '#EF9CDA', '#8AB9B5', '#F4F1BB'];
 
   constructor(private animationService: AnimationService) {}
 
@@ -90,10 +94,11 @@ export class WordPairingExerciseComponent implements OnInit {
     } else {
       this.animationService.rotateAnimation(this.container);
       this.clickedWord = null;
+      this.mistakes++;
     }
 
     if (this.nativeWords.every(w => w.paired)) {
-      this.showContinueButton.emit();
+      this.showContinueButton.emit(this.mistakes);
     }
   }
 }

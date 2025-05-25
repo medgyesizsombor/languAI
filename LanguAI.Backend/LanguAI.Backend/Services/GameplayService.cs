@@ -2,6 +2,7 @@
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Gameplay;
+using LanguAI.Backend.ViewModels.Image;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
@@ -9,12 +10,17 @@ namespace LanguAI.Backend.Services;
 public interface IGameplayService
 {
     bool SaveGameplay(SaveGameplayRequestViewModel request);
-    List<LeaderboardUserViewModel> GetWeeklyLeaderboard();
+    Task<List<LeaderboardUserViewModel>> GetWeeklyLeaderboardAsync();
 }
 
 public class GameplayService : BaseService, IGameplayService
 {
-    public GameplayService(LanguAIDataContext context) : base(context) { }
+    private readonly IStorageService _storageService;
+    public GameplayService(LanguAIDataContext context, IStorageService storageService) : base(context)
+    {
+
+        _storageService = storageService;
+    }
 
     /// <summary>
     /// Save gameplay
@@ -53,7 +59,7 @@ public class GameplayService : BaseService, IGameplayService
         return hasStreakChanged;
     }
 
-    public List<LeaderboardUserViewModel> GetWeeklyLeaderboard()
+    public async Task<List<LeaderboardUserViewModel>> GetWeeklyLeaderboardAsync()
     {
         var firstDayOfCurrentWeek = DateTime.Now.Date;
         while (firstDayOfCurrentWeek.DayOfWeek != DayOfWeek.Monday)
@@ -61,17 +67,43 @@ public class GameplayService : BaseService, IGameplayService
             firstDayOfCurrentWeek = firstDayOfCurrentWeek.AddDays(-1);
         }
 
-        return _context.Gameplay
+        var result = _context.Gameplay
             .Include(gp => gp.User)
             .Where(gp => gp.Date >= firstDayOfCurrentWeek)
-            .GroupBy(g => new { g.UserId, g.User.Username })
+            .GroupBy(g => new { g.UserId, g.User.Username, g.User.ImageId })
             .Select(g => new LeaderboardUserViewModel
             {
                 UserId = g.Key.UserId,
                 Username = g.Key.Username,
+                ImageId = g.Key.ImageId,
                 Points = g.Sum(x => x.Point)
             })
             .OrderByDescending(g => g.Points)
             .ToList();
+
+        foreach (var res in result)
+        {
+            string pictureContentAsString = null;
+            Image image = null;
+
+            if (res.ImageId != null)
+            {
+                image = _context.Image.FirstOrDefault(i => i.Id == res.ImageId && !i.IsDeleted);
+                var bytes = await _storageService.DownloadBlob((int)res.ImageId);
+                pictureContentAsString = Convert.ToBase64String(bytes);
+            }
+
+            res.Image = string.IsNullOrEmpty(pictureContentAsString)
+                ? null
+                : new ImageViewModel
+                {
+                    ContentAsString = pictureContentAsString,
+                    Id = res.ImageId,
+                    Name = image.Name,
+                    Type = image.Type
+                };
+        }
+
+        return result;
     }
 }

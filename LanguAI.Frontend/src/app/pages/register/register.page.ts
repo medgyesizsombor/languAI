@@ -35,7 +35,8 @@ export class RegisterPage {
     private navController: NavController
   ) {}
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    await this.loadingService.showLoading();
     this.createForm();
   }
 
@@ -103,6 +104,8 @@ export class RegisterPage {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     });
+
+    this.loadingService.hideLoading();
   }
 
   /**

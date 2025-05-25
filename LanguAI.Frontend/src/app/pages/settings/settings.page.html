@@ -1,19 +1,13 @@
 <app-header [title]="title"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-row class="mx-4">
-    <ion-col size="auto">
-      <app-avatar class="me-2 d-flex" [imageSrc]="imageSrc"></app-avatar>
-    </ion-col>
-    <ion-col class="ion-justify-content-between ion-align-items-center d-grid">
-      <ion-row>{{ profile?.username }}</ion-row>
-      <ion-row>{{ profile?.email}}</ion-row>
-    </ion-col>
+  <ion-row class="mx-4 ion-justify-content-center">
+    <app-avatar class="me-2 d-flex" [imageSrc]="imageSrc"></app-avatar>
   </ion-row>
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.profile)"
-    class="settings-row mx-4 mt-3">
+    class="settings-row mx-4 mt-3 box-shadow">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="person-outline"></ion-icon>
     </ion-col>
@@ -22,10 +16,11 @@
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.notifications)"
-    class="settings-row mx-4 mt-3">
+    class="settings-row mx-4 mt-3 box-shadow">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="notifications-outline"></ion-icon>
       <ion-badge
+        mode="md"
         *ngIf="numberOfFriendshipRequest"
         id="notifications-badge"
         color="danger">
@@ -37,7 +32,7 @@
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.discoverFriends)"
-    class="settings-row mx-4 mt-3">
+    class="settings-row mx-4 mt-3 box-shadow">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="search-outline"></ion-icon>
     </ion-col>
@@ -46,14 +41,16 @@
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.leaderboard)"
-    class="settings-row mx-4 mt-3">
+    class="settings-row mx-4 mt-3 box-shadow">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="stats-chart-outline"></ion-icon>
     </ion-col>
     <ion-col>{{ 'LEADERBOARD' | translate }}</ion-col>
   </ion-row>
 
-  <ion-row (click)="openLanguageModal()" class="settings-row mx-4 mt-3">
+  <ion-row
+    (click)="openLanguageModal()"
+    class="settings-row mx-4 mt-3 box-shadow">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="phone-portrait-outline"></ion-icon>
     </ion-col>
@@ -62,7 +59,7 @@
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.learnings)"
-    class="settings-row mx-4 mt-3">
+    class="settings-row mx-4 mt-3 box-shadow">
     <ion-col size="auto" class="align-item-center fs-24 me-2">
       <ion-icon name="language-outline"></ion-icon>
     </ion-col>
@@ -72,6 +69,7 @@
   <ion-row class="mx-4 mt-4">
     <ion-col class="ion-text-center">
       <ion-button
+        mode="md"
         class="primary-button-outline w-100 no-shadow"
         (click)="logout()">
         {{'SIGN_OUT' | translate}}
@@ -82,6 +80,7 @@
   <ion-row class="mx-4">
     <ion-col class="ion-text-center">
       <ion-button
+        mode="md"
         class="error-outline-button w-100 no-shadow"
         (click)="deleteProfile()">
         {{'DELETE_PROFILE' | translate}}

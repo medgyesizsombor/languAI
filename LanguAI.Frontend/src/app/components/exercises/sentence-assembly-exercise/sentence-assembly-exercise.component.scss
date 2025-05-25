@@ -1,6 +1,7 @@
 ion-card {
-  background-color: #dcd6f7;
+  background-color: hsl(229, 50%, 98%);
   border-radius: 8px;
+  padding: 16px;
 }
 
 .word-cards {
@@ -35,11 +36,11 @@ ion-card {
 }
 
 .dark-background {
-  background-color: #f4eeff;
+  background-color: hsl(229, 50%, 98%);
   color: #424872;
 }
 
 .check-button {
   --background: #a6b1e1;
-  --color: #f4f5f8;
+  --color: hsl(229, 50%, 98%);
 }

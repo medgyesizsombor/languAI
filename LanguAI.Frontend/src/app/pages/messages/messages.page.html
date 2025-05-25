@@ -1,9 +1,10 @@
 <app-header
   [showAddButton]="true"
   [title]="title"
-  (addButtonEmit)="newMessage()"></app-header>
+  (addButtonEmit)="newMessage()"
+  [subtitle]="('MESSAGES_SUBTITLE' | translate)"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-list class="pt-0" *ngIf="!isLoading; else loader">
+  <ion-list mode="md" class="pt-0" *ngIf="!isLoading; else loader">
     <ion-item
       lines="none"
       *ngFor="let friend of friendList; let index = index"

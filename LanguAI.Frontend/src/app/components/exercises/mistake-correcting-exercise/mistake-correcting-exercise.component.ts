@@ -26,21 +26,21 @@ export class MistakeCorrectingExerciseComponent implements OnInit {
     | undefined;
 
   @Input() exercise: ExerciseViewModel | undefined;
-  @Output() showContinueButton = new EventEmitter<void>();
+  @Output() showContinueButton = new EventEmitter<number>();
+
+  mistakes: number = 0;
+  colors: Array<string> = ['#EDAFB8', '#FDCA40', '#F79824', '#F1DAC4'];
 
   constructor(private animationService: AnimationService) {}
 
-  ngOnInit() {
-    this.loadData;
-  }
+  ngOnInit() {}
 
   checkSentence(sentence: IsCorrectAndTextSentenceViewModel) {
     if (sentence.isCorrect) {
-      this.showContinueButton.emit();
+      this.showContinueButton.emit(this.mistakes);
     } else {
+      this.mistakes++;
       this.animationService.rotateAnimation(this.container);
     }
   }
-
-  private loadData() {}
 }

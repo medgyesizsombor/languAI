@@ -10,12 +10,14 @@ import { IntSelectorModel } from '../../models/int-selector-model';
 
 export interface GetFriendList$Plain$Params {
   userId?: number;
+  showChatGPT?: boolean;
 }
 
 export function getFriendList$Plain(http: HttpClient, rootUrl: string, params?: GetFriendList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<IntSelectorModel>>> {
   const rb = new RequestBuilder(rootUrl, getFriendList$Plain.PATH, 'get');
   if (params) {
     rb.query('userId', params.userId, {});
+    rb.query('showChatGPT', params.showChatGPT, {});
   }
 
   return http.request(

@@ -31,6 +31,7 @@ import { FriendshipStatusEnum } from 'src/api/models';
 import { FriendshipRequestService } from 'src/app/util/services/friendship-request.service';
 import { FileService } from 'src/app/util/services/file.service';
 import { RoleBooleanDataViewModel } from 'src/app/util/models/role-boolean-data-view-model';
+import { TopicImageSrcPipe } from 'src/app/util/pipes/topic-image-src.pipe';
 
 @Component({
   selector: 'app-profile',
@@ -40,55 +41,19 @@ import { RoleBooleanDataViewModel } from 'src/app/util/models/role-boolean-data-
 })
 export class ProfilePage {
   profileForm: FormGroup | undefined;
-  title = this.translateService.instant(PROFILE_TITLE);
+  title = this.translateService.instant('DETAILS');
+  subtitle = this.translateService.instant('DETAILS_SUBTITLE');
   profileModel: ProfilePageDataViewModel = {};
   isEdit = false;
   originalProfileModel: ProfilePageDataViewModel = {};
   userId: number | null | undefined;
   isProfileOfSomeoneElse: boolean | undefined;
-  activeBadge = 1;
+  activeBadge = BadgeEnum.friendList;
   friendList: Array<UserDiscoveryViewModel> = [];
   friendshipStatus: FriendshipStatusEnum | undefined;
   friendshipStatusEnum = FriendshipStatusEnum;
   friendshipViewModel: FriendshipViewModel | undefined;
-  cardLists: Array<CardListViewModel> = [
-    // {
-    //   id: 1,
-    //   created: new Date().toString(),
-    //   modified: new Date().toString(),
-    //   learningLanguageI: 'magyar',
-    //   nativeLanguage: 'hungarian',
-    //   cardViewModelList: [
-    //     { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
-    //   ],
-    //   name: 'asd',
-    //   userId: 8
-    // },
-    // {
-    //   id: 1,
-    //   created: new Date().toString(),
-    //   modified: new Date().toString(),
-    //   learningLanguage: 'magyar',
-    //   nativeLanguage: 'hungarian',
-    //   cardViewModelList: [
-    //     { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
-    //   ],
-    //   name: 'asd2',
-    //   userId: 8
-    // },
-    // {
-    //   id: 1,
-    //   created: new Date().toString(),
-    //   modified: new Date().toString(),
-    //   learningLanguage: 'magyar',
-    //   nativeLanguage: 'hungarian',
-    //   cardViewModelList: [
-    //     { id: 1, wordInLearningLanguage: 'asd', wordInNativeLanguage: 'asd2' }
-    //   ],
-    //   name: 'asd3',
-    //   userId: 8
-    // }
-  ];
+  cardLists: Array<CardListViewModel> = [];
   showingFullsizeImage = false;
   imageSrc: string | undefined;
 
@@ -118,8 +83,9 @@ export class ProfilePage {
     private modalController: ModalController,
     private friendshipService: FriendshipService,
     private friendshipRequestService: FriendshipRequestService,
-    private fileService: FileService,
-    private storageService: StorageService
+    protected fileService: FileService,
+    private storageService: StorageService,
+    protected topicImageSrcPipe: TopicImageSrcPipe
   ) {}
 
   ionViewWillEnter() {
@@ -153,6 +119,24 @@ export class ProfilePage {
   setActiveBadge(indexOfActiveBudge: number) {
     if (this.activeBadge !== indexOfActiveBudge) {
       this.activeBadge = indexOfActiveBudge;
+
+      switch (this.activeBadge) {
+        case BadgeEnum.friendList: {
+          this.title = this.translateService.instant('FRIENDLIST');
+          this.subtitle = this.translateService.instant('FRIENDLIST_SUBTITLE');
+          break;
+        }
+        case BadgeEnum.cards: {
+          this.title = this.translateService.instant('CARDS');
+          this.subtitle = this.translateService.instant('CARDS_SUBTITLE');
+          break;
+        }
+        default: {
+          this.title = this.translateService.instant('DETAILS');
+          this.subtitle = this.translateService.instant('DETAILS_SUBTITLE');
+          break;
+        }
+      }
     }
   }
 
@@ -323,7 +307,7 @@ export class ProfilePage {
    */
   private initialize() {
     this.loadingService
-      .showLoading(this.translateService.instant('DATA_IS_LOADING'))
+      .showLoading(this.translateService.instant('DATA_IS_LOADING_DOTDOTDOT'))
       .then(() => {
         this.createForm();
         this.loadData();
@@ -335,17 +319,6 @@ export class ProfilePage {
    */
   private loadData() {
     this.userId = this.localStorageService.getUserId();
-    // this.profileModel = {
-    //   id: this.userId!,
-    //   language: 1,
-    //   dateOfBirth: '1998-04-20',
-    //   email: 'teszt@teszt.com',
-    //   username: 'zsombi'
-    // };
-    // this.isProfileOfSomeoneElse = true;
-    // this.originalProfileModel = { ...this.profileModel };
-    // this.fillForm();
-    // this.loadingService.hideLoading();
     this.loadDataSub = this.activatedRoute.params
       .pipe(
         switchMap((params: Params) => {
@@ -353,6 +326,7 @@ export class ProfilePage {
           this.isProfileOfSomeoneElse = idFromParam
             ? this.userId !== idFromParam
             : false;
+          //this.isProfileOfSomeoneElse = true;
 
           return this.userService.getProfilePageData$Json({
             userId: idFromParam ? +idFromParam : this.userId!

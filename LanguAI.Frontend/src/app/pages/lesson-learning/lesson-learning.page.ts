@@ -29,6 +29,7 @@ export class LessonLearningPage {
   statistics: Statistics | undefined;
   showSummary = false;
   index = 0;
+  mistakes = 0;
 
   receiveExercisesSub: Subscription | undefined;
   loadQueryParamSub: Subscription | undefined;
@@ -54,8 +55,9 @@ export class LessonLearningPage {
     this.receiveExercisesSub?.unsubscribe();
   }
 
-  showContinueButton() {
+  showContinueButton(mistakes: number) {
     this.showOverlay = true;
+    this.mistakes += mistakes;
   }
 
   nextExercise() {
@@ -63,10 +65,8 @@ export class LessonLearningPage {
     if (this.index === this.exerciseList?.length - 1) {
       //TODO statisztikánál kéne majd, hogy hány hiba, hány jó
       this.statistics = {
-        allAnswer: this.exerciseList?.length,
-        correctAnswer: this.exerciseList?.length,
         time: this.timePipe.transform(this.timerService.getTime()),
-        mistakes: 1
+        mistakes: this.mistakes
       };
       this.showSummary = true;
     } else {
@@ -84,48 +84,82 @@ export class LessonLearningPage {
    * Get query params and generate the exercises
    */
   private async generateExercises() {
-    await this.loadingService.showLoading(
-      this.translateService.instant(
-        'GENERATING_THE_EXERCISES_IT_MAY_TAKE_A_WHILE'
-      )
-    );
-    this.receiveExercisesSub = this.activatedRoute.queryParamMap
-      .pipe(
-        switchMap((params: ParamMap) => {
-          const description = params.get('description');
-          const cardListId = params.get('cardListId');
-
-          if (description && cardListId) {
-            return this.chatGPTService.receiveExercisesFromChatGpt$Json({
-              LanguageLevel: this.languageLevelPipe.transform(
-                this.localStorageService.getLevelOfCurrentLanguage() ??
-                  undefined,
-                true
-              ),
-              TopicDescription: description ?? '',
-              UserId: this.localStorageService.getUserId()!,
-              CardListId: +cardListId
-            });
+    this.exerciseList = [
+      {
+        firstPartOfTheSentence: 'asdassdaasdads asdas dasd dsadas',
+        lastPartOfTheSentence: 'asdasdasdasd asdasdsa asd',
+        correctWord: 'this',
+        words: ['asd', 'this', 'asdasd', 'asdasdasd'],
+        isCorrectAndTextSentences: [
+          {
+            isCorrect: false,
+            text: 'asdassdaasdads asdas dasd dsadas this asdasdasdasd asdasdsa asd'
+          },
+          {
+            isCorrect: false,
+            text: 'asdassdaasdads asdas dasd dsadas this asdasdasdasd asdasdsa asd'
+          },
+          {
+            isCorrect: false,
+            text: 'asdassdaasdads asdas dasd dsadas this asdasdasdasd asdasdsa asd'
+          },
+          {
+            isCorrect: true,
+            text: 'asdassdaasdads asdas dasd dsadas this asdasdasdasd asdasdsa asd'
           }
+        ],
+        mainSentence: 'This is a longer sentence hehe.',
+        exerciseType: ExerciseTypeEnum.MistakeCorrectingExercise,
+        isActive: true,
+        wordPairingExercise: [
+          { wordInLearningLanguage: 'asd', wordInNativeLanguage: 'dsa' },
+          { wordInLearningLanguage: 'asdasd', wordInNativeLanguage: 'dsadsa' },
+          {
+            wordInLearningLanguage: 'asdasdasd',
+            wordInNativeLanguage: 'dsadsadsa'
+          },
+          {
+            wordInLearningLanguage: 'asdasdasdasd',
+            wordInNativeLanguage: 'dsadsadsadsa'
+          }
+        ]
+      }
+    ];
+    // await this.loadingService.showLoading(
+    //   this.translateService.instant(
+    //     'GENERATING_THE_EXERCISES_IT_MAY_TAKE_A_WHILE'
+    //   )
+    // );
+    // this.receiveExercisesSub = this.activatedRoute.queryParamMap
+    //   .pipe(
+    //     switchMap((params: ParamMap) => {
+    //       const topicId = params.get('topic-id');
 
-          this.loadingService.hideLoading();
-          return EMPTY;
-        })
-      )
-      .subscribe({
-        next: (res: Array<ExerciseViewModel>) => {
-          this.exerciseList = [...res];
-          this.index = 0;
-          this.isLoading = false;
-          this.loadingService.hideLoading();
-        },
-        error: () => {
-          this.loadingService.hideLoading();
-          this.isLoading = false;
-          this.toastrService.presentErrorToast(
-            this.translateService.instant('UNSUCCESSFUL_GENERATE_EXERCISE')
-          );
-        }
-      });
+    //       if (topicId) {
+    //         return this.chatGPTService.receiveExercisesFromChatGpt$Json({
+    //           topicId: +topicId
+    //         });
+    //       }
+
+    //       this.loadingService.hideLoading();
+    //       return EMPTY;
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: (res: Array<ExerciseViewModel>) => {
+    //       this.exerciseList = [...res];
+    //       this.index = 0;
+    //       this.isLoading = false;
+    //       this.loadingService.hideLoading();
+    //       this.timerService.setTimer();
+    //     },
+    //     error: () => {
+    //       this.loadingService.hideLoading();
+    //       this.isLoading = false;
+    //       this.toastrService.presentErrorToast(
+    //         this.translateService.instant('UNSUCCESSFUL_GENERATE_EXERCISE')
+    //       );
+    //     }
+    //   });
   }
 }

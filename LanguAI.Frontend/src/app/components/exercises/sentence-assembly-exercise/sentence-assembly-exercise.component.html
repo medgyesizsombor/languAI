@@ -1,42 +1,50 @@
-<ion-row class="exercise-title">
-  <ion-label>
-    {{ 'MAKE_A_SENTENCE_FROM_THIS_WORDS' | translate }}
-  </ion-label>
-</ion-row>
-<div #container>
-  <ion-row class="ion-margin-bottom">
-    <ion-card class="ion-padding py-24px no-shadow h-250px w-100">
-      <div class="d-flex ion-align-items-start ion-wrap">
-        <ion-card
-          class="word-cards no-shadow dark-background m-1"
-          *ngFor="let word of clickedWords; let index = index"
-          (click)="putWord(index, true)">
+<div class="ion-padding-horizontal">
+  <ion-row class="exercise-title">
+    <ion-label>
+      {{ 'MAKE_A_SENTENCE_FROM_THIS_WORDS' | translate }}
+    </ion-label>
+  </ion-row>
+  <div #container>
+    <ion-row class="ion-margin-bottom">
+      <ion-card class="ion-padding h-250px w-100">
+        <div class="d-flex ion-align-items-start ion-wrap">
+          <ion-card
+            mode="md"
+            [ngStyle]="{ background: colors[index % colors.length] }"
+            class="word-cards no-shadow dark-background m-1"
+            *ngFor="let word of clickedWords; let index = index"
+            (click)="putWord(index, true)">
+            <ion-card-content class="ion-no-padding" mode="md">
+              {{ word.text }}
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-card>
+    </ion-row>
+    <ion-row
+      class="d-flex ion-align-items-center ion-justify-content-center word-cards-row">
+      <ion-card
+        class="word-cards m-1"
+        [disabled]="word.clicked"
+        *ngFor="
+          let word of exercise?.sentenceAssemblyExerciseSentence;
+          let index = index
+        "
+        (click)="putWord(index)">
+        <span [ngClass]="{ invisible: word.clicked }">
           {{ word.text }}
-        </ion-card>
-      </div>
-    </ion-card>
-  </ion-row>
-  <ion-row
-    class="d-flex ion-align-items-center ion-justify-content-center word-cards-row">
-    <ion-card
-      class="word-cards m-1"
-      [disabled]="word.clicked"
-      *ngFor="
-        let word of exercise?.sentenceAssemblyExerciseSentence;
-        let index = index
-      "
-      (click)="putWord(index)">
-      <span [ngClass]="{ invisible: word.clicked }">
-        {{ word.text }}
-      </span>
-    </ion-card>
-  </ion-row>
-  <ion-row class="d-flex ion-align-items-center ion-justify-content-center">
-    <ion-button
-      class="check-button"
-      [disabled]="!clickedWords.length"
-      (click)="check()">
-      {{ 'CHECK' | translate }}
-    </ion-button>
-  </ion-row>
+        </span>
+      </ion-card>
+    </ion-row>
+    <ion-row class="d-flex ion-align-items-center ion-justify-content-center">
+      <ion-button
+        mode="md"
+        mode="md"
+        class="check-button ion-activated no-shadow"
+        [disabled]="!clickedWords.length"
+        (click)="check()">
+        {{ 'CHECK' | translate }}
+      </ion-button>
+    </ion-row>
+  </div>
 </div>

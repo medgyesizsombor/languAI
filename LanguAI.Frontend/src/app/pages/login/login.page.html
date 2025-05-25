@@ -1,52 +1,42 @@
+<!--TODO valamit kezdeni az error szöveggel, mert a passwordnél ha kattintok, hiba jön, ha a username nem jó-->
 <ion-content class="ion-padding" [fullscreen]="true">
   <h1 class="ion-text-center">LanguAI</h1>
   <ion-img src="../../../assets/icon/small_logo.png"></ion-img>
   <form *ngIf="loginForm" [formGroup]="loginForm">
-    <ion-row>
-      <ion-col class="ion-margin-horizontal">
+    <ion-list>
+      <ion-item lines="none" class="ion-margin-bottom">
         <ion-input
           type="text"
-          id="username"
           class="form-control"
           formControlName="username"
           placeholder="{{ 'USERNAME' | translate}}"
-          (ionChange)="modelChange()"></ion-input>
-        <span
-          *ngIf="isUsernameDirty && loginForm.get('username')?.hasError('required')"
-          class="error-text">
-          {{ 'USERNAME_IS_REQUIRED' | translate }}
-        </span>
-        <span
-          *ngIf="isUsernameDirty && loginForm.get('username')?.hasError('minlength')"
-          class="error-text">
-          {{ 'MIN_6_CHARACTERS' | translate }}
-        </span>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-padding-bottom">
-      <ion-col class="ion-margin-horizontal">
+          (ionBlur)="modelChange()"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
         <ion-input
           type="password"
-          id="password"
           class="form-control"
           formControlName="password"
           placeholder="{{ 'PASSWORD' | translate}}"
-          (ionChange)="modelChange(false)"></ion-input>
-        <span
-          *ngIf="isPasswordDirty && loginForm.get('password')?.hasError('required')"
+          (ionBlur)="modelChange(false)"></ion-input>
+        <!-- <ion-label
+          *ngIf="loginForm.get('password')?.dirty && loginForm.get('password')?.hasError('required')"
           class="error-text">
           {{ 'PASSWORD_IS_REQUIRED' | translate }}
-        </span>
-        <span
-          *ngIf="isPasswordDirty && loginForm.get('password')?.hasError('minlength')"
+        </ion-label>
+        <ion-label
+          *ngIf="loginForm.get('password')?.dirty && loginForm.get('password')?.hasError('minlength')"
           class="error-text">
           {{ 'MIN_6_CHARACTERS' | translate }}
-        </span>
-      </ion-col>
-    </ion-row>
+        </ion-label> -->
+      </ion-item>
+    </ion-list>
+
     <ion-row>
       <ion-col>
         <ion-button
+          mode="md"
           class="ion-padding-horizontal primary-button w-100"
           (click)="login()">
           {{'SIGN_IN' | translate}}
@@ -54,19 +44,23 @@
       </ion-col>
     </ion-row>
     <ion-row>
+      <!-- <ion-label
+          *ngIf="loginForm.get('username')?.dirty && loginForm.get('username')?.hasError('required')"
+          class="error-text">
+          {{ 'USERNAME_IS_REQUIRED' | translate }}
+        </ion-label>
+        <ion-label
+          *ngIf="loginForm.get('username')?.dirty && loginForm.get('username')?.hasError('minlength')"
+          class="error-text">
+          {{ 'MIN_6_CHARACTERS' | translate }}
+        </ion-label> -->
       <ion-col>
         <ion-button
+          mode="md"
           class="ion-padding-horizontal secondary-button w-100"
           [routerLink]="['/register']">
           {{'SIGN_UP' | translate }}
         </ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-label class="fs-14">
-          {{'CONTINUE_WITHOUT_SIGN_IN' | translate}}
-        </ion-label>
       </ion-col>
     </ion-row>
   </form>

@@ -3,7 +3,7 @@ import { LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class LoadingService {
   loading: HTMLIonLoadingElement | undefined;
@@ -15,9 +15,12 @@ export class LoadingService {
 
   async showLoading(message?: string): Promise<void> {
     this.loading = await this.loadingController.create({
+      mode: 'md',
+      cssClass: 'loader',
+      spinner: 'bubbles',
       message: message?.length
         ? message
-        : this.translateService.instant('DATA_IS_LOADING'),
+        : this.translateService.instant('DATA_IS_LOADING_DOTDOTDOT')
     });
 
     this.loading.present();

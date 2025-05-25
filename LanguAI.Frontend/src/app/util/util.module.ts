@@ -29,6 +29,8 @@ import { AvatarComponent } from '../components/avatar/avatar.component';
 import { TimePipe } from './pipes/time.pipe';
 import { LearningPipe } from './pipes/learning.pipe';
 import { NewCardlistModalComponent } from '../components/modals/new-cardlist/new-cardlist-modal.component';
+import { TopicImageSrcPipe } from './pipes/topic-image-src.pipe';
+import { CardlistLanguagePipe } from './pipes/cardlist-language.pipe';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -58,7 +60,9 @@ export function createTranslateLoader(http: HttpClient) {
     AvatarComponent,
     TimePipe,
     LearningPipe,
-    NewCardlistModalComponent
+    NewCardlistModalComponent,
+    TopicImageSrcPipe,
+    CardlistLanguagePipe
   ],
   imports: [
     CommonModule,
@@ -93,8 +97,16 @@ export function createTranslateLoader(http: HttpClient) {
     AvatarComponent,
     TimePipe,
     LearningPipe,
-    NewCardlistModalComponent
+    NewCardlistModalComponent,
+    TopicImageSrcPipe,
+    CardlistLanguagePipe
   ],
-  providers: [LanguageLevelPipe, TimePipe, LearningPipe]
+  providers: [
+    LanguageLevelPipe,
+    TimePipe,
+    LearningPipe,
+    TopicImageSrcPipe,
+    CardlistLanguagePipe
+  ]
 })
 export class UtilModule {}

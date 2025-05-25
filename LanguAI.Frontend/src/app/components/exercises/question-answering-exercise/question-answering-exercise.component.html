@@ -1,23 +1,38 @@
-<ion-row class="exercise-title">
-  <ion-label>
-    {{ 'ANSWER_THE_QUESTION' | translate }}
-  </ion-label>
-</ion-row>
-<div #container>
-  <ion-row class="ion-margin-bottom">
-    <ion-card class="ion-padding py-24px no-shadow h-250px w-100">
-      <div class="d-flex ion-align-items-start">
-        <ion-card class="word-card no-shadow dark-background m-1 w-100">
-          <span class="me-1">{{ exercise?.mainSentence }}</span>
-        </ion-card>
-      </div>
-    </ion-card>
+<div class="ion-padding-horizontal">
+  <ion-row class="exercise-title">
+    <ion-label>
+      {{ 'ANSWER_THE_QUESTION' | translate }}
+    </ion-label>
   </ion-row>
   <ion-row
-    *ngFor="let sentence of exercise?.isCorrectAndTextSentences"
-    class="words-container">
-    <ion-card class="word-card" (click)="checkSentence(sentence)">
-      {{ sentence.text }}
+    class="ion-text-center w-100 ion-justify-content-center ion-margin-bottom">
+    <ion-label>
+      {{ 'THIS_IS_THE_QUESTION' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row class="ion-margin-bottom ion-text-center">
+    <ion-card class="ion-padding w-100 no-shadow">
+      <span class="me-1">{{ exercise?.mainSentence }}</span>
     </ion-card>
   </ion-row>
+  <ion-row class="ion-justify-content-center ion-margin-bottom ion-text-center">
+    <ion-label>
+      {{ 'WHICH_IS_THE_ANSWER_FOR_THE_QUESTION_QUESTION' | translate }}
+    </ion-label>
+  </ion-row>
+  <div #container>
+    <ion-row
+      *ngFor="
+        let sentence of exercise?.isCorrectAndTextSentences;
+        let index = index
+      "
+      class="words-container ion-margin-bottom ion-text-center">
+      <ion-card
+        class="word-card"
+        (click)="checkSentence(sentence)"
+        [ngStyle]="{ background: colors[index % colors.length] }">
+        {{ sentence.text }}
+      </ion-card>
+    </ion-row>
+  </div>
 </div>

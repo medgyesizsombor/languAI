@@ -99,7 +99,7 @@ const routes: Routes = [
     canActivate: [LearningGuardFunction]
   },
   {
-    path: CARD_NAVIGATION + '/:cardId',
+    path: CARD_NAVIGATION + '/:card-id',
     loadChildren: () =>
       import('./pages/card/card.module').then(m => m.CardPageModule),
     canActivate: [LearningGuardFunction]
@@ -120,6 +120,13 @@ const routes: Routes = [
   },
   {
     path: LESSON_LEARNING_NAVIGATION,
+    loadChildren: () =>
+      import('./pages/lesson-learning/lesson-learning.module').then(
+        m => m.LessonLearningPageModule
+      )
+  },
+  {
+    path: LESSON_LEARNING_NAVIGATION + '/:topic-id',
     loadChildren: () =>
       import('./pages/lesson-learning/lesson-learning.module').then(
         m => m.LessonLearningPageModule

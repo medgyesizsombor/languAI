@@ -10,6 +10,7 @@ import { CardListViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
 import { NewCardlistModalComponent } from 'src/app/components/modals/new-cardlist/new-cardlist-modal.component';
 import { CardlistsSortEnum } from 'src/app/util/enums/cardlists-sort-enum';
+import { TopicImageSrcPipe } from 'src/app/util/pipes/topic-image-src.pipe';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -45,12 +46,14 @@ export class CardListsPage {
     private translateService: TranslateService,
     private alertService: AlertService,
     private navController: NavController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    protected topicImageSrcPipe: TopicImageSrcPipe
   ) {}
 
   ionViewWillEnter() {
     this.userId = this.localStorageService.getUserId();
     this.loadCardLists();
+    // this.addCardList();
   }
 
   ionViewDidLeave() {
@@ -61,6 +64,7 @@ export class CardListsPage {
 
   async addCardList() {
     const modal = await this.modalController.create({
+      mode: 'md',
       component: NewCardlistModalComponent,
       componentProps: {
         suggestedName: this.suggestedName

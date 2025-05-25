@@ -1,40 +1,21 @@
 $a: 100%;
-$b: 16px;
-
-ion-header {
-  background-color: #f4eeff;
-}
+$b: 24px;
 
 ion-title {
   margin: 0 12px;
 }
 
-ion-fab {
-  &-button::part(native) {
-    background-color: #f4eeff;
-    color: #424242;
-
-    > ion-icon {
-      display: none;
-    }
-  }
-}
-
 .left-fab {
-  top: -1px;
+  top: 10px;
+  left: 6px;
 }
 
 .right-fab {
-  top: 0;
+  top: 6px;
   left: calc(#{$a} - #{$b});
 
   &-container {
-    top: 12px;
+    top: 14px;
     left: calc(#{$a} - #{$b});
   }
-}
-
-.fab-button-small {
-    height: 32px;
-    width: 32px;
 }

@@ -1,4 +1,58 @@
 <app-header
   title="{{ 'LEADERBOARD' | translate}}"
   [showBackArrow]="true"></app-header>
-<ion-content></ion-content>
+<ion-content>
+  <ion-row>
+    <ion-col
+      class="ion-justify-content-center d-flex"
+      *ngFor="let data of top1Data; let index = index">
+      <ion-card class="top-1-card">
+        <ion-card-header>
+          <app-avatar
+            class="ion-justify-content-center d-flex"
+            [heightInPx]="80"
+            [widthInPx]="80"
+            [marginClass]="null"
+            [imageSrc]="fileService.getImageSrc(data.image?.contentAsString, data.image?.type)"></app-avatar>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row class="ion-justify-content-center"><span>1</span></ion-row>
+          <ion-row
+            class="ion-justify-content-center hidden-text ion-text-center">
+            <span class="hidden-text"></span>
+            {{ data.username }}
+          </ion-row>
+          <ion-row class="ion-justify-content-center">
+            {{'PTS' | translate : {points: data.points} }}
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <div class="ion-padding">
+    <ion-card
+      *ngFor="let data of lowerleaderboardData; let index = index"
+      class="lower-points-card w-100">
+      <ion-row class="ion-align-items-center ion-padding-horizontal">
+        <ion-col size="auto" class="d-flex ion-justify-content-center me-4">
+          {{ index + 2 }}
+        </ion-col>
+        <ion-col size="auto" class="d-flex ion-justify-content-center me-2">
+          <app-avatar
+            [heightInPx]="40"
+            [widthInPx]="40"
+            [imageSrc]="fileService.getImageSrc(data.image?.contentAsString, data.image?.type)"></app-avatar>
+        </ion-col>
+        <ion-col class="ion-justify-content-start me-4 hidden-text">
+          <span class="hidden-text">
+            {{ data.userId === currentUserId ? ('YOU' | translate) :
+            data.username }}
+          </span>
+        </ion-col>
+        <ion-col size="auto" class="d-flex ion-justify-content-end">
+          {{'PTS' | translate : {points: data.points} }}
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+</ion-content>

@@ -6,7 +6,10 @@
 
 <ion-content [fullscreen]="true">
   <ng-container *ngIf="!isLoading">
-    <ion-list class="pt-0" *ngIf="learnings?.length; else missingLearnings">
+    <ion-list
+      mode="md"
+      class="pt-0"
+      *ngIf="learnings?.length; else missingLearnings">
       <ion-item
         lines="none"
         *ngFor="let learning of learnings; let index = index"

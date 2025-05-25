@@ -3,7 +3,7 @@
   justify-content: start;
   width: 75%;
   height: 12px;
-  background-color: #e4d5ff;
+  background-color: hsl(229, 50%, 98%);
   border-radius: 36px;
 }
 
@@ -16,4 +16,8 @@
 .toolbar-content {
   display: flex;
   justify-content: center;
+}
+
+ion-toolbar {
+  --background: #dcd6f7;
 }

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -31,7 +32,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
   @Input() statistics: Statistics | undefined;
   @Output() navigateToLessonsEmit = new EventEmitter<void>();
-  exp: number = 0;
+  exp: number = 100;
   showStreakAnimation = true;
   streak: number = 0;
   showNavigateToLessons = false;
@@ -46,7 +47,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
     private toastrService: ToastrService,
-    private animationService: AnimationService
+    private animationService: AnimationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -78,30 +80,28 @@ export class SummaryComponent implements OnInit, OnDestroy {
    * Calculate the experience by the mistakes
    */
   private async calculateAndSaveGameplay() {
-    await this.loadingService.showLoading('CALCULATE_AND_SAVE_GAMEPLAY');
-    if (
-      this.statistics?.allAnswer &&
-      (this.statistics?.mistakes === 0 || this.statistics?.mistakes)
-    ) {
-      this.exp = this.statistics?.allAnswer - this.statistics?.mistakes;
+    // await this.loadingService.showLoading('CALCULATE_AND_SAVE_GAMEPLAY');
+    if (this.statistics?.mistakes === 0 || this.statistics?.mistakes) {
+      this.exp = 100 - this.statistics?.mistakes * 5;
+      this.cdr.detectChanges();
     }
 
-    this.saveGameplaySub = this.gameplayService
-      .saveGameplay$Json({
-        body: { point: 3, userId: this.localStorageService.getUserId()! }
-      })
-      .subscribe({
-        next: (streakChanged: boolean) => {
-          if (streakChanged) {
-            this.streak = this.localStorageService.getStreak();
-            this.showStreakAnimation = true;
-          }
-          this.loadingService.hideLoading();
-        },
-        error: () => {
-          this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast('ERROR_WHILE_SAVING_GAMEPLAY');
-        }
-      });
+    // this.saveGameplaySub = this.gameplayService
+    //   .saveGameplay$Json({
+    //     body: { point: this.exp, userId: this.localStorageService.getUserId()! }
+    //   })
+    //   .subscribe({
+    //     next: (streakChanged: boolean) => {
+    //       if (streakChanged) {
+    //         this.streak = this.localStorageService.getStreak();
+    //         this.showStreakAnimation = true;
+    //       }
+    //       this.loadingService.hideLoading();
+    //     },
+    //     error: () => {
+    //       this.loadingService.hideLoading();
+    //       this.toastrService.presentErrorToast('ERROR_WHILE_SAVING_GAMEPLAY');
+    //     }
+    //   });
   }
 }

@@ -32,11 +32,13 @@
   </ion-row>
   <ion-row class="ion-justify-content-center ion-padding-top">
     <ion-button
+      mode="md"
       *ngIf="!showStreakAnimation || showNavigateToLessons"
       (click)="navigateToLessons()">
       {{ 'RETURN_TO_LESSONS' | translate }}
     </ion-button>
     <ion-button
+      mode="md"
       *ngIf="showStreakAnimation && !showNavigateToLessons"
       (click)="startAnimation()">
       {{ 'OK' | translate }}

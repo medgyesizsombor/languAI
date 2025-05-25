@@ -49,11 +49,11 @@ public class FriendshipController : ControllerBase
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetFriendList")]
-    public ActionResult<List<IntSelectorModel>> GetFriendList(int userId)
+    public async Task<ActionResult<List<IntSelectorModel>>> GetFriendListAsync(int userId, bool showChatGPT = false)
     {
         try
         {
-            return Ok(_friendshipService.GetFriendList(userId));
+            return Ok(await _friendshipService.GetFriendListAsync(userId));
         }
         catch (Exception e)
         {

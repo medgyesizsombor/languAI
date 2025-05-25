@@ -44,6 +44,7 @@
     <ion-row>
       <ion-col>
         <ion-button
+          mode="md"
           [disabled]="!hasCardChanged"
           class="ion-padding-horizontal primary-button w-100"
           (click)="save()">
@@ -54,6 +55,7 @@
     <ion-row *ngIf="cardId">
       <ion-col>
         <ion-button
+          mode="md"
           class="ion-padding-horizontal secondary-button w-100"
           (click)="deleteCard()">
           {{'DELETE' | translate }}

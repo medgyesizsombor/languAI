@@ -1,4 +1,7 @@
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content
+  [fullscreen]="true"
+  class="ion-padding"
+  [style.--ion-background-color]="!showSummary ? '#dcd6f7' : null">
   <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="exerciseList?.length; else missingExercises">
       <ng-container *ngIf="!showSummary; else showSummaryTemplate">
@@ -9,33 +12,31 @@
         <ng-container *ngFor="let exercise of exerciseList">
           <app-missing-word-exercise
             [exercise]="exercise"
-            (showContinueButton)="showContinueButton()"
+            (showContinueButton)="showContinueButton($event)"
             *ngIf="exercise.exerciseType === exerciseTypeEnum.MissingWordExercise
             && exercise.isActive"></app-missing-word-exercise>
           <app-sentence-assembly-exercise
             [exercise]="exercise"
-            (showContinueButton)="showContinueButton()"
+            (showContinueButton)="showContinueButton($event)"
             *ngIf="exercise.exerciseType === exerciseTypeEnum.SentenceAssemblyExercise
             && exercise.isActive"></app-sentence-assembly-exercise>
           <app-word-pairing-exercise
             [exercise]="exercise"
-            (showContinueButton)="showContinueButton()"
+            (showContinueButton)="showContinueButton($event)"
             *ngIf="exercise.exerciseType === exerciseTypeEnum.WordPairingExercise
             && exercise.isActive"></app-word-pairing-exercise>
           <app-mistake-correcting-exercise
             [exercise]="exercise"
-            (showContinueButton)="showContinueButton()"
+            (showContinueButton)="showContinueButton($event)"
             *ngIf="exercise.exerciseType === exerciseTypeEnum.MistakeCorrectingExercise
             && exercise.isActive"></app-mistake-correcting-exercise>
           <app-question-answering-exercise
             [exercise]="exercise"
-            (showContinueButton)="showContinueButton()"
+            (showContinueButton)="showContinueButton($event)"
             *ngIf="exercise.exerciseType === exerciseTypeEnum.QuestionAnsweringExercise
             && exercise.isActive"></app-question-answering-exercise>
           <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
-            <button
-              class="continue-button no-shadow"
-              (click)="nextExercise()">
+            <button class="continue-button no-shadow" (click)="nextExercise()">
               {{ 'CONTINUE' | translate }}
             </button>
           </div>
@@ -51,5 +52,7 @@
 <ng-template #missingExercises></ng-template>
 
 <ng-template #showSummaryTemplate>
-  <app-summary [statistics]="statistics" (navigateToLessonsEmit)="navigateToLessons()"></app-summary>
+  <app-summary
+    [statistics]="statistics"
+    (navigateToLessonsEmit)="navigateToLessons()"></app-summary>
 </ng-template>

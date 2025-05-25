@@ -3,14 +3,17 @@ using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Friendship;
+using LanguAI.Backend.ViewModels.Image;
 using LanguAI.Backend.ViewModels.SelectorModel;
+using LanguAI.Backend.ViewModels.User;
+using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
 
 public interface IFriendshipService
 {
     bool RequestFriendship(int currentUserId, int recipientId);
-    List<IntSelectorModel> GetFriendList(int userId);
+    Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool showChatGPT = false);
     FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId);
     FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
     bool ReceivingFriendshipRequest(int friendshipRequestId, FriendshipStatusEnum status);
@@ -24,8 +27,13 @@ public interface IFriendshipService
 
 public class FriendshipService : BaseService, IFriendshipService
 {
-    public FriendshipService(LanguAIDataContext context) : base(context)
+    private readonly IMessageService _messageService;
+    private readonly IStorageService _storageService;
+    private readonly int CHATGPT_ID = 2;
+    public FriendshipService(LanguAIDataContext context, IMessageService messageService, IStorageService storageService) : base(context)
     {
+        _messageService = messageService;
+        _storageService = storageService;
     }
 
     /// <summary>
@@ -79,10 +87,13 @@ public class FriendshipService : BaseService, IFriendshipService
     /// </summary>
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
-    public List<IntSelectorModel> GetFriendList(int userId)
+    public async Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool showChatGPT = false)
     {
-        return _context.Friendship
-            .Where(f => (f.RequesterId == userId || f.RecipientId == userId)
+        var result = new List<OtherUserViewModel>();
+        var friendSelectorModel = _context.Friendship
+            .Include(f => f.Requester)
+            .Include(f => f.Recipient)
+            .Where(f => ((f.RequesterId == userId || f.RecipientId == userId) && f.Requester.IsActive && f.Recipient.IsActive)
                 && f.Status == FriendshipStatusEnum.Accepted)
             .Select(f => new IntSelectorModel
             {
@@ -90,6 +101,44 @@ public class FriendshipService : BaseService, IFriendshipService
                 Name = f.RequesterId == userId ? f.Recipient.Username : f.Requester.Username
             })
             .ToList();
+
+        for (int i = 0; i < friendSelectorModel.Count; i++)
+        {
+            if (showChatGPT == false && friendSelectorModel[i].Id == CHATGPT_ID) continue;
+
+            User user = _context.User
+                .Include(u => u.Image)
+                .FirstOrDefault(u => u.Id == userId
+                    && u.IsActive);
+
+            string pictureContentAsString = null;
+            if (user.ImageId != null)
+            {
+                var bytes = await _storageService.DownloadBlob((int)user.ImageId);
+                pictureContentAsString = Convert.ToBase64String(bytes);
+            }
+
+            var friend = new OtherUserViewModel
+            {
+                UserId = friendSelectorModel[i].Id,
+                Username = friendSelectorModel[i].Name,
+                LastMessage = _messageService.GetLastMessageByUserIds(userId, friendSelectorModel[i].Id),
+                ProfilePicture = string.IsNullOrEmpty(pictureContentAsString)
+                ? null
+                : new ImageViewModel
+                {
+                    ContentAsString = pictureContentAsString,
+                    Id = user.ImageId,
+                    Name = user.Image.Name,
+                    Type = user.Image.Type,
+                }
+            };
+            
+            result.Add(friend);
+        }
+        
+
+        return result;
     }
 
     /// <summary>

@@ -1,9 +1,10 @@
 <app-header
   [showAddButton]="true"
   [title]="title"
-  (addButtonEmit)="navigateToPost()"></app-header>
+  (addButtonEmit)="navigateToPost()"
+  [subtitle]="('FORUM_SUBTITLE' | translate)"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngIf="!isLoading; else loader">
+  <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="posts.length; else missingPosts">
       <app-post-component
         *ngFor="let post of posts"
@@ -26,14 +27,10 @@
       {{ 'IF_YOU_WOULD_LIKE_TO_SEE_MORE_POSTS_SEARCH_FOR_FRIEND' | translate }}
     </p>
     <div class="ion-text-center">
-      <ion-button (click)="searchForFriend()">
+      <ion-button mode="md" (click)="searchForFriend()">
         <ion-icon name="search-outline"></ion-icon>
         {{ 'DISCOVER_FRIENDS' | translate }}
       </ion-button>
     </div>
   </div>
-</ng-template>
-
-<ng-template #loader>
-  <app-loader></app-loader>
 </ng-template>

@@ -1,7 +1,9 @@
 ion-datetime-button::part(native) {
-  background: #f4eeff;
+  background: hsl(229, 50%, 98%);
   border: none;
   color: #424872;
+  padding: 4px 8px;
+  margin: 0;
 }
 
 ion-datetime {
@@ -14,4 +16,39 @@ ion-datetime {
 
 ion-img {
   height: 120px;
+}
+
+ion-input {
+  border-radius: 8px;
+  --padding-start: 8px;
+  --padding-right: 8px;
+}
+
+.datetime-button-col {
+  border-radius: 8px;
+  padding: 5px 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+ion-datetime::part(calendar-day) {
+  color: #424872;
+  box-shadow: none !important;
+}
+
+ion-datetime::part(calendar-day today) {
+  border: 1px solid #424872;
+}
+
+ion-datetime::part(calendar-day):focus,
+ion-datetime::part(calendar-day):active,
+ion-datetime::part(calendar-day calendar-day-active):active,
+ion-datetime::part(calendar-day[aria-selected='true']) {
+  color: hsl(229, 50%, 98%) !important;
+  background: #424872;
+}
+
+.calendar-day.calendar-day-active {
+  border: 1px solid black;
+  background: black;
 }
