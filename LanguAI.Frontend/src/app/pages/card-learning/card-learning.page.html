@@ -16,10 +16,10 @@
     </div>
     <div class="button-container">
       <div class="buttons">
-        <ion-button mode="md" (click)="setScore(false)">
+        <ion-button class="error-button" mode="md" (click)="setScore(false)">
           {{ 'MISSED' | translate }}
         </ion-button>
-        <ion-button mode="md" (click)="setScore()">
+        <ion-button class="success-button" mode="md" (click)="setScore()">
           {{ 'SUCCESS' | translate }}
         </ion-button>
       </div>

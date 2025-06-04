@@ -9,6 +9,7 @@ import { AccessEnum } from 'src/api/models';
 import { LanguageEnum } from '../enums/language-enum';
 import { CardlistsSortEnum } from '../enums/cardlists-sort-enum';
 import { RoleBooleanDataViewModel } from '../models/role-boolean-data-view-model';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,17 @@ export class AlertService {
     private userService: UserService,
     private localStorageService: LocalStorageService
   ) {}
+
+  async showErrorAlert(
+    form: FormGroup<any> | undefined,
+    isRegisterForm = true
+  ) {
+    if (form && isRegisterForm) {
+      await this.showRegisterAlert(form);
+    } else if (form && !isRegisterForm) {
+      await this.showLoginAlert(form);
+    }
+  }
 
   /**
    * Show remove alert
@@ -157,7 +169,7 @@ export class AlertService {
       this.alert = await this.alertController.create({
         mode: 'md',
         header: this.translateService.instant('CHANGES_ARE_NOT_SAVED'),
-        subHeader: this.translateService.instant(
+        message: this.translateService.instant(
           'IF_YOU_QUIT_YOUR_CHANGES_WONT_BE_SAVED'
         ),
         cssClass: 'ion-input',
@@ -867,10 +879,128 @@ export class AlertService {
     });
   }
 
+    /**
+   * Show not existing learning alert
+   */
+  async showNotExistingLearningAlert(): Promise<boolean> {
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        mode: 'md',
+        header: this.translateService.instant('ATTENTION_TITLE'),
+        message: this.translateService.instant(
+          'FIRST_YOU_HAVE_TO_CREATE_A_LEARNING_WOULD_YOU_LIKE_TO_GO_THERE_QUESTION'
+        ),
+        buttons: [
+          {
+            text: this.translateService.instant('NO'),
+            role: 'cancel',
+            handler: () => {
+              resolve(false);
+            }
+          },
+          {
+            text: this.translateService.instant('CONFIRM'),
+            role: 'confirm',
+            handler: () => {
+              resolve(true);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
   /**
    * The name is not taken
    */
   private isNameValid(title: string, namesOfCardLists: Array<string>): boolean {
     return !namesOfCardLists.includes(title);
+  }
+
+  private async showRegisterAlert(registerForm: FormGroup<any> | undefined) {
+    const errors: Array<string> = [];
+    if (registerForm?.get('username')?.errors?.['required']) {
+      errors.push(this.translateService.instant('USERNAME_IS_REQUIRED'));
+    }
+    if (registerForm?.get('email')?.errors?.['required']) {
+      errors.push(this.translateService.instant('EMAIL_IS_REQUIRED'));
+    }
+    if (registerForm?.get('dateOfBirth')?.errors?.['required']) {
+      errors.push(this.translateService.instant('BIRTHDAY_IS_REQUIRED'));
+    }
+    if (registerForm?.get('password')?.errors?.['required']) {
+      errors.push(this.translateService.instant('PASSWORD_IS_REQUIRED'));
+    }
+    if (registerForm?.get('confirmPassword')?.errors?.['required']) {
+      errors.push(
+        this.translateService.instant('CONFIRM_PASSWORD_IS_REQUIRED')
+      );
+    }
+    if (
+      registerForm?.get('confirmPassword')?.value !==
+      registerForm?.get('password')?.value
+    ) {
+      errors.push(
+        this.translateService.instant('THE_PASSWORDS_ARE_NOT_THE_SAME')
+      );
+    }
+
+    const message = errors.join(', ');
+
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        mode: 'md',
+        header: this.translateService.instant('ATTENTION_TITLE'),
+        message: this.translateService.instant('ERRORS_IN_THE_FORM', {
+          errors: message.toLowerCase()
+        }),
+        buttons: [
+          {
+            text: this.translateService.instant('OK'),
+            role: 'confirm',
+            handler: () => {
+              resolve(true);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
+  }
+
+  private async showLoginAlert(loginForm: FormGroup<any> | undefined) {
+    const errors: Array<string> = [];
+    if (loginForm?.get('username')?.errors?.['required']) {
+      errors.push(this.translateService.instant('USERNAME_IS_REQUIRED'));
+    }
+    if (loginForm?.get('password')?.errors?.['required']) {
+      errors.push(this.translateService.instant('PASSWORD_IS_REQUIRED'));
+    }
+
+    const message = errors.join(', ');
+
+    return new Promise(async resolve => {
+      this.alert = await this.alertController.create({
+        mode: 'md',
+        header: this.translateService.instant('ATTENTION_TITLE'),
+        message: this.translateService.instant('ERRORS_IN_THE_FORM', {
+          errors: message.toLowerCase()
+        }),
+        buttons: [
+          {
+            text: this.translateService.instant('OK'),
+            role: 'confirm',
+            handler: () => {
+              resolve(true);
+            }
+          }
+        ]
+      });
+
+      this.alert.present();
+    });
   }
 }

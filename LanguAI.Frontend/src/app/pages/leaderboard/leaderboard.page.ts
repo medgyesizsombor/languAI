@@ -36,13 +36,9 @@ export class LeaderboardPage implements OnInit {
     this.currentUserId = this.localStorageService.getUserId()!;
     this.gameplayService.getWeeklyLeaderboard$Json().subscribe({
       next: (res: Array<LeaderboardUserViewModel>) => {
-        console.log(res);
         this.top1Data = [...res].slice(0, 1);
-        console.log(this.top1Data);
-        console.log([...res]);
         this.lowerleaderboardData = [...res].slice(1, res.length);
         //this.lowerleaderboardData = [...res];
-        console.log(this.lowerleaderboardData);
         this.loadingService.hideLoading();
       },
       error: () => {

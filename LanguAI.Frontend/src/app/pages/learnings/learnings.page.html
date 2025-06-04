@@ -1,37 +1,63 @@
 <app-header
   [showBackArrow]="true"
   [title]="('LEARNINGS' | translate)"
+  [subtitle]="('LEARNINGS_DETAILS' | translate)"
   [showAddButton]="true"
   (addButtonEmit)="addLearning()"></app-header>
 
 <ion-content [fullscreen]="true">
   <ng-container *ngIf="!isLoading">
-    <ion-list
-      mode="md"
-      class="pt-0"
-      *ngIf="learnings?.length; else missingLearnings">
-      <ion-item
-        lines="none"
-        *ngFor="let learning of learnings; let index = index"
-        (click)="changeActiveLearning(learning.id!)">
-        <ion-row class="w-100 ion-justify-content-between">
-          <ion-col class="ion-align-items-center d-flex">
-            {{ learning | languageName }} - {{ learning.languageLevel |
-            languageLevel }}
-          </ion-col>
-          <ion-col
-            size="auto"
-            *ngIf="learning.isActive"
-            class="ion-align-items-center d-flex fs-28">
-            <ion-icon name="checkmark-outline"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-item>
-    </ion-list>
+    <ng-container *ngIf="learnings?.length; else missingLearnings">
+      <ion-row
+        class="ion-padding ion-margin-bottom ion-justify-content-center"
+        *ngFor="let learning of learnings">
+        <ion-card class="ion-padding w-100">
+          <ion-row>
+            <ion-col class="ion-align-items-center d-flex">
+              {{ learning | languageName }} - {{ learning.languageLevel |
+              languageLevel }}
+            </ion-col>
+            <ion-col
+              size="auto"
+              *ngIf="learning.isActive"
+              class="ion-align-items-center d-flex fs-28">
+              <ion-icon name="checkmark-outline"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-row>
+      <!-- <ion-list mode="md" class="pt-0">
+        <ion-item
+          lines="none"
+          *ngFor="let learning of learnings; let index = index"
+          (click)="changeActiveLearning(learning.id!)">
+          <ion-row class="w-100 ion-justify-content-between">
+            <ion-col class="ion-align-items-center d-flex">
+              {{ learning | languageName }} - {{ learning.languageLevel |
+              languageLevel }}
+            </ion-col>
+            <ion-col
+              size="auto"
+              *ngIf="learning.isActive"
+              class="ion-align-items-center d-flex fs-28">
+              <ion-icon name="checkmark-outline"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </ion-list> -->
+    </ng-container>
   </ng-container>
 </ion-content>
 
 <ng-template #missingLearnings>
-  <ion-label>{{ 'YOU_DONT_HAVE_ANY_LEARNINGS_YET' | translate }}</ion-label>
-  <ion-label>{{ '' | translate }}</ion-label>
+  <ion-row class="ion-justify-content-center ion-padding-top">
+    <ion-label class="ion-text-center">
+      {{ 'YOU_DONT_HAVE_ANY_LEARNINGS_YET' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row class="ion-justify-content-center ion-padding-top">
+    <ion-label class="ion-text-center">
+      {{ 'YOU_CAN_CREATE_WITH_THE_PLUS_SIGN' | translate }}
+    </ion-label>
+  </ion-row>
 </ng-template>

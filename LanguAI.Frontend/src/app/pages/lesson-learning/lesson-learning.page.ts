@@ -27,7 +27,7 @@ export class LessonLearningPage {
   showOverlay = false;
   isLoading = false;
   statistics: Statistics | undefined;
-  showSummary = false;
+  showSummary = true;
   index = 0;
   mistakes = 0;
 
@@ -63,7 +63,6 @@ export class LessonLearningPage {
   nextExercise() {
     this.exerciseList[this.index].isActive = false;
     if (this.index === this.exerciseList?.length - 1) {
-      //TODO statisztikánál kéne majd, hogy hány hiba, hány jó
       this.statistics = {
         time: this.timePipe.transform(this.timerService.getTime()),
         mistakes: this.mistakes
@@ -125,6 +124,11 @@ export class LessonLearningPage {
         ]
       }
     ];
+
+    this.statistics = {
+      time: this.timePipe.transform(this.timerService.getTime()),
+      mistakes: this.mistakes
+    };
     // await this.loadingService.showLoading(
     //   this.translateService.instant(
     //     'GENERATING_THE_EXERCISES_IT_MAY_TAKE_A_WHILE'

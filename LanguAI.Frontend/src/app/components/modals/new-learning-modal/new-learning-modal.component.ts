@@ -69,7 +69,8 @@ export class NewLearningModalComponent implements OnInit, OnDestroy {
   private createForm() {
     this.newLearningForm = this.formBuilder.group({
       languageId: [
-        HUNGARIAN_LANGUAGE_CODE === this.localStorageService.getLanguageCode()
+        HUNGARIAN_LANGUAGE_CODE ===
+        this.localStorageService.getMobileLanguageCode()
           ? ENGLISH_LANGUAGE_ID
           : HUNGARIAN_LANGUAGE_ID,
         [Validators.required]
@@ -97,7 +98,7 @@ export class NewLearningModalComponent implements OnInit, OnDestroy {
     this.loadLanguagesSub = this.languageService
       .getAllLanguage$Json({
         languageCode:
-          this.localStorageService.getLanguageCode() ??
+          this.localStorageService.getMobileLanguageCode() ??
           this.translateService.getDefaultLang()
       })
       .subscribe({

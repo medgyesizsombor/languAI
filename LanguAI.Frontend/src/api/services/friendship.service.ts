@@ -9,6 +9,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteFriendship } from '../fn/friendship/delete-friendship';
+import { DeleteFriendship$Params } from '../fn/friendship/delete-friendship';
 import { deletePendingRequest } from '../fn/friendship/delete-pending-request';
 import { DeletePendingRequest$Params } from '../fn/friendship/delete-pending-request';
 import { FriendshipRequestViewModel } from '../models/friendship-request-view-model';
@@ -34,7 +36,7 @@ import { getNumberOfFriendshipRequest$Json } from '../fn/friendship/get-number-o
 import { GetNumberOfFriendshipRequest$Json$Params } from '../fn/friendship/get-number-of-friendship-request-json';
 import { getNumberOfFriendshipRequest$Plain } from '../fn/friendship/get-number-of-friendship-request-plain';
 import { GetNumberOfFriendshipRequest$Plain$Params } from '../fn/friendship/get-number-of-friendship-request-plain';
-import { IntSelectorModel } from '../models/int-selector-model';
+import { OtherUserViewModel } from '../models/other-user-view-model';
 import { reactFriendshipRequest$Json } from '../fn/friendship/react-friendship-request-json';
 import { ReactFriendshipRequest$Json$Params } from '../fn/friendship/react-friendship-request-json';
 import { reactFriendshipRequest$Plain } from '../fn/friendship/react-friendship-request-plain';
@@ -107,7 +109,7 @@ export class FriendshipService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFriendList$Plain$Response(params?: GetFriendList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<IntSelectorModel>>> {
+  getFriendList$Plain$Response(params?: GetFriendList$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OtherUserViewModel>>> {
     return getFriendList$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -117,9 +119,9 @@ export class FriendshipService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFriendList$Plain(params?: GetFriendList$Plain$Params, context?: HttpContext): Observable<Array<IntSelectorModel>> {
+  getFriendList$Plain(params?: GetFriendList$Plain$Params, context?: HttpContext): Observable<Array<OtherUserViewModel>> {
     return this.getFriendList$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<IntSelectorModel>>): Array<IntSelectorModel> => r.body)
+      map((r: StrictHttpResponse<Array<OtherUserViewModel>>): Array<OtherUserViewModel> => r.body)
     );
   }
 
@@ -129,7 +131,7 @@ export class FriendshipService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFriendList$Json$Response(params?: GetFriendList$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<IntSelectorModel>>> {
+  getFriendList$Json$Response(params?: GetFriendList$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OtherUserViewModel>>> {
     return getFriendList$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -139,9 +141,9 @@ export class FriendshipService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFriendList$Json(params?: GetFriendList$Json$Params, context?: HttpContext): Observable<Array<IntSelectorModel>> {
+  getFriendList$Json(params?: GetFriendList$Json$Params, context?: HttpContext): Observable<Array<OtherUserViewModel>> {
     return this.getFriendList$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<IntSelectorModel>>): Array<IntSelectorModel> => r.body)
+      map((r: StrictHttpResponse<Array<OtherUserViewModel>>): Array<OtherUserViewModel> => r.body)
     );
   }
 
@@ -401,6 +403,31 @@ export class FriendshipService extends BaseService {
    */
   deletePendingRequest(params?: DeletePendingRequest$Params, context?: HttpContext): Observable<void> {
     return this.deletePendingRequest$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteFriendship()` */
+  static readonly DeleteFriendshipPath = '/Friendship/DeleteFriendship';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteFriendship()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFriendship$Response(params?: DeleteFriendship$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteFriendship(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteFriendship$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFriendship(params?: DeleteFriendship$Params, context?: HttpContext): Observable<void> {
+    return this.deleteFriendship$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }

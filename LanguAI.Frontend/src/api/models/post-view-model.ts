@@ -14,5 +14,6 @@ export interface PostViewModel {
   numberOfComments?: number;
   numberOfLikes?: number;
   userId?: number;
+  userProfilePicture?: ImageViewModel;
   username?: string | null;
 }

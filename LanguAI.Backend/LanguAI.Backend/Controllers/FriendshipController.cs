@@ -2,6 +2,7 @@
 using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Friendship;
 using LanguAI.Backend.ViewModels.SelectorModel;
+using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
@@ -49,11 +50,11 @@ public class FriendshipController : ControllerBase
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetFriendList")]
-    public async Task<ActionResult<List<IntSelectorModel>>> GetFriendListAsync(int userId, bool showChatGPT = false)
+    public async Task<ActionResult<List<OtherUserViewModel>>> GetFriendListAsync(int userId, bool showChatGPT = false)
     {
         try
         {
-            return Ok(await _friendshipService.GetFriendListAsync(userId));
+            return Ok(await _friendshipService.GetFriendListAsync(userId, showChatGPT));
         }
         catch (Exception e)
         {
@@ -175,6 +176,25 @@ public class FriendshipController : ControllerBase
         try
         {
             _friendshipService.DeletePendingRequest((int)currentUserId, otherUserId);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest();
+        }
+    }
+
+    [HttpDelete(Name = "DeleteFriendship")]
+    public ActionResult DeleteFriendship(int otherUserId)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        try
+        {
+            _friendshipService.DeleteFriendship((int)currentUserId, otherUserId);
 
             return Ok();
         }

@@ -19,7 +19,6 @@ import { UserInteractionService } from 'src/app/util/services/user-interaction.s
 })
 export class PostPage {
   commentForm: FormGroup | undefined;
-  isAnyChanges = false;
   post: PostViewModel | undefined;
   isValid = false;
   isLoading = false;

@@ -1,11 +1,20 @@
-<ng-container>
+<ng-container class="background">
   <ion-row class="exercise-title">
-    <ion-label>
+    <ion-label mode="md">
       {{ 'SUMMARY' | translate }}
     </ion-label>
   </ion-row>
-  <!-- TODO képet iderakni -->
-  <ion-row class="ion-justify-content-center">KÉP IDE</ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-img
+      class="ion-padding-bottom"
+      src="../../../assets/icon/small_logo.png"></ion-img>
+  </ion-row>
+
+  <ion-row class="ion-justify-content-center">
+    <ion-label class="ion-text-center summary-text" mode="md">
+      {{ exp | summaryText }}
+    </ion-label>
+  </ion-row>
   <ion-row
     *ngIf="statistics"
     class="ion-justify-content-around ion-padding-top">
@@ -30,20 +39,6 @@
       </ion-card>
     </ion-col>
   </ion-row>
-  <ion-row class="ion-justify-content-center ion-padding-top">
-    <ion-button
-      mode="md"
-      *ngIf="!showStreakAnimation || showNavigateToLessons"
-      (click)="navigateToLessons()">
-      {{ 'RETURN_TO_LESSONS' | translate }}
-    </ion-button>
-    <ion-button
-      mode="md"
-      *ngIf="showStreakAnimation && !showNavigateToLessons"
-      (click)="startAnimation()">
-      {{ 'OK' | translate }}
-    </ion-button>
-  </ion-row>
   <ion-card #previousStreakCard class="streak-cards secondary-card">
     <ion-card-content
       class="fs-24 d-flex ion-justify-content-center ion-align-items-center">
@@ -58,4 +53,20 @@
       <ion-icon class="error-color fs-32" name="flame-outline"></ion-icon>
     </ion-card-content>
   </ion-card>
+  <ion-row class="ion-justify-content-center ion-padding-top">
+    <ion-button
+      class="primary-button"
+      mode="md"
+      *ngIf="!showStreakAnimation || showNavigateToLessons"
+      (click)="navigateToLessons()">
+      {{ 'RETURN_TO_LESSONS' | translate }}
+    </ion-button>
+    <ion-button
+      class="primary-button"
+      mode="md"
+      *ngIf="showStreakAnimation && !showNavigateToLessons"
+      (click)="navigateToLessons()">
+      {{ 'OK' | translate }}
+    </ion-button>
+  </ion-row>
 </ng-container>

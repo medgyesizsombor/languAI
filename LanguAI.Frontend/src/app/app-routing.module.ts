@@ -166,7 +166,7 @@ const routes: Routes = [
       )
   },
   {
-    path: FULLSIZE_IMAGE_NAVIGATION,
+    path: FULLSIZE_IMAGE_NAVIGATION + '/:image-id',
     loadChildren: () =>
       import('./pages/fullsize-image/fullsize-image.module').then(
         m => m.FullsizeImagePageModule

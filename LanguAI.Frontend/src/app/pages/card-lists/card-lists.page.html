@@ -4,68 +4,51 @@
   (addButtonEmit)="addCardList()"
   [subtitle]="('CARD_LISTS_SUBTITLE' | translate)"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <!-- <ion-list
-    mode="md"
-    *ngIf="!isLoading"
-    class="d-flex ion-wrap ion-justify-content-center ion-no-padding"> -->
-  <ion-row class="ion-justify-content-between">
-    <ion-col
-      size="11"
-      class="d-flex ion-align-items-center ion-margin-bottom">
-      <ion-searchbar
-        mode="md"
-        show-clear-button="always"
-        clear-icon="trash-bin-outline"
-        placeholder="{{ 'SEARCH_DOTDOTDOT' | translate }}"
-        (ionInput)="search($event)"
-        (ionClear)="clearSearchbar()"
-        class="ion-no-padding box-shadow"></ion-searchbar>
-    </ion-col>
-    <ion-col
-      size="auto"
-      class="d-flex ion-align-items-center ion-justify-content-end ms-2 ion-margin-bottom"
-      (click)="openSortModal()">
-      <ion-icon class="fs-24" name="funnel-outline"></ion-icon>
-    </ion-col>
-  </ion-row>
-  <ion-card
-    (click)="openCardList(cardList.id!)"
-    [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(cardList?.topicId!)}.jpg)`"
-    class="topic-card ion-margin-bottom ion-margin-horizontal card-background-medium-color outline-text"
-    *ngFor="let cardList of cardLists">
-    <div class="overlay"></div>
-    <ion-card-header class="fs-22 light-color">
-      {{ cardList | topicName }}
-    </ion-card-header>
-    <ion-card-content class="light-color">
-      <ion-label class="light-color">
-        {{ cardList.created | date:'YYYY. MM. dd' }}
-      </ion-label>
-      <br />
-      <ion-label class="light-color">
-        {{ cardList | cardlistLanguagePipe }}
-      </ion-label>
-    </ion-card-content>
-  </ion-card>
-  <!-- <ion-card
-      class="border-2"
-      *ngFor="let cardList of cardLists"
-      (click)="openCardList(cardList.id!)">
-      <ion-card-header class="ion-text-center border-2-bottom-line">
+  <div class="filter-container w-100">
+    <ion-row class="ion-justify-content-between filter-row">
+      <ion-col
+        size="11"
+        class="d-flex ion-align-items-center ion-margin-bottom">
+        <ion-searchbar
+          mode="md"
+          show-clear-button="always"
+          clear-icon="trash-outline"
+          placeholder="{{ 'SEARCH_DOTDOTDOT' | translate }}"
+          (ionInput)="search($event)"
+          (ionClear)="clearSearchbar()"
+          class="ion-no-padding box-shadow"></ion-searchbar>
+      </ion-col>
+      <ion-col
+        size="auto"
+        class="d-flex ion-align-items-center ion-justify-content-end ms-2 ion-margin-bottom"
+        (click)="openSortModal()">
+        <ion-icon class="fs-24" name="funnel-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-row *ngFor="let cardList of cardLists" class="card-row">
+    <ion-card
+      (click)="openCardList(cardList.id!)"
+      [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(cardList?.topicId!)}.jpg)`"
+      class="topic-card ion-margin-bottom card-background-medium-color w-100 outline-text">
+      <div class="overlay"></div>
+      <ion-card-header class="fs-22 light-color">
         {{ cardList.name }}
       </ion-card-header>
-      <ion-card-content>
-        <ion-row>
-          <ion-label class="w-100">{{ cardList.name }}</ion-label>
-        </ion-row>
-        <ion-row>
-          <ion-label class="w-100">
-            {{ cardList.created | date:'YYYY. MM. dd' }}
-          </ion-label>
-        </ion-row>
+      <ion-card-content class="light-color">
+        <ion-label class="light-color">
+          {{ cardList | cardlistLanguagePipe }}
+        </ion-label>
+        <br />
+        <!-- TODO WRITE OUT TOPIC NAME -->
+        <ion-label class="light-color">asd</ion-label>
+        <br />
+        <ion-label class="light-color">
+          {{ cardList.created | date:'YYYY. MM. dd' }}
+        </ion-label>
       </ion-card-content>
-    </ion-card> -->
-  <!-- </ion-list> -->
+    </ion-card>
+  </ion-row>
 </ion-content>
 
 <ng-template #missingCardList>

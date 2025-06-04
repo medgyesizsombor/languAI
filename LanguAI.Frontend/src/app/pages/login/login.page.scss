@@ -4,7 +4,22 @@ ion-img {
 
 ion-input {
   border-radius: 8px;
-  border: 1px solid black;
   --padding-start: 8px;
-  --padding-end: 8px;
+  --padding-right: 8px;
+  background-color: hsl(229, 50%, 95%);
+}
+
+.text-col {
+  padding: 5px 16px 0px 16px;
+}
+
+@media only screen and (min-width: 632px) {
+  form {
+    display: flex;
+    justify-content: center;
+  }
+
+  ion-card {
+    width: 600px;
+  }
 }

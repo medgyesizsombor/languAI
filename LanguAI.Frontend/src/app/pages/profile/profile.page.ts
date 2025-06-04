@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import {
   CARD_LIST_NAVIGATION,
   MESSAGE_NAVIGATION,
-  PROFILE_NAVIGATION,
-  PROFILE_TITLE
+  PROFILE_NAVIGATION
 } from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -17,14 +16,13 @@ import {
   CardListViewModel,
   FriendshipViewModel,
   ImageViewModel,
-  ProfilePageDataViewModel,
-  UserDiscoveryViewModel
+  ProfilePageDataViewModel
 } from 'src/api/models';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
-import { ModalController, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { BadgeEnum } from 'src/app/util/enums/badge-enum';
 import { FriendshipStatusEnum } from 'src/api/models';
@@ -48,8 +46,7 @@ export class ProfilePage {
   originalProfileModel: ProfilePageDataViewModel = {};
   userId: number | null | undefined;
   isProfileOfSomeoneElse: boolean | undefined;
-  activeBadge = BadgeEnum.friendList;
-  friendList: Array<UserDiscoveryViewModel> = [];
+  activeBadge = BadgeEnum.details;
   friendshipStatus: FriendshipStatusEnum | undefined;
   friendshipStatusEnum = FriendshipStatusEnum;
   friendshipViewModel: FriendshipViewModel | undefined;
@@ -70,6 +67,8 @@ export class ProfilePage {
    */
   badgeEnum = BadgeEnum;
 
+  hasProfileChanged = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
@@ -80,7 +79,6 @@ export class ProfilePage {
     private navController: NavController,
     private alertService: AlertService,
     private activatedRoute: ActivatedRoute,
-    private modalController: ModalController,
     private friendshipService: FriendshipService,
     private friendshipRequestService: FriendshipRequestService,
     protected fileService: FileService,
@@ -111,6 +109,8 @@ export class ProfilePage {
     ['username', 'email', 'dateOfBirth'].forEach(control => {
       this.profileForm?.controls[control][method]();
     });
+
+    this.modelChanged();
   }
 
   /**
@@ -227,6 +227,27 @@ export class ProfilePage {
   }
 
   /**
+   * Navigate back without saving
+   */
+  navigateBackWithoutSaving(quit: boolean) {
+    if (quit) {
+      this.navController.back();
+    }
+  }
+
+  modelChanged() {
+    const originalProfileModelAsString = JSON.stringify({
+      username: this.originalProfileModel.user?.username,
+      email: this.originalProfileModel.user?.email,
+      dateOfBirth: this.originalProfileModel.user?.dateOfBirth
+    });
+    const profileModelAsString = JSON.stringify({ ...this.profileForm?.value });
+
+    this.hasProfileChanged =
+      originalProfileModelAsString !== profileModelAsString;
+  }
+
+  /**
    * React friendship request
    * Default value true
    */
@@ -302,6 +323,24 @@ export class ProfilePage {
       });
   }
 
+  async removeFromTheFriendList(otherUserId: number) {
+    await this.loadingService.showLoading('FRIENDSHIP_DELETE_DOTDOTDOT');
+
+    this.friendshipService.deleteFriendship({ otherUserId }).subscribe({
+      next: () => {
+        this.profileModel.friendList = this.profileModel?.friendList?.filter(
+          f => f.userId !== otherUserId
+        );
+        this.loadingService.hideLoading();
+        this.toastrService.presentSuccessToast('FRIENDSHIP_DELETE_SUCCESS');
+      },
+      error: () => {
+        this.loadingService.hideLoading();
+        this.toastrService.presentErrorToast('FRIENDSHIO_DELETE_ERROR');
+      }
+    });
+  }
+
   /**
    * Initialize
    */
@@ -337,6 +376,7 @@ export class ProfilePage {
           this.fillForm();
           if (!this.isProfileOfSomeoneElse) {
             this.originalProfileModel = { ...this.profileModel };
+
             this.imageSrc = this.fileService.getImageSrc(
               this.originalProfileModel?.user?.profilePicture?.contentAsString,
               this.originalProfileModel?.user?.profilePicture?.type

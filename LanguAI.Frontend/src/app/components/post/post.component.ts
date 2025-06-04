@@ -1,12 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PostViewModel } from 'src/api/models';
 import { PostService } from 'src/api/services';
 import { RoleBooleanDataViewModel } from 'src/app/util/models/role-boolean-data-view-model';
 import { AlertService } from 'src/app/util/services/alert.service';
+import { FileService } from 'src/app/util/services/file.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
+import { FULLSIZE_IMAGE_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-post-component',
@@ -32,7 +35,9 @@ export class PostComponent implements OnInit {
     private postService: PostService,
     private loadingService: LoadingService,
     private translateService: TranslateService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private router: Router,
+    protected fileService: FileService
   ) {
     this.userId = this.localStorageService.getUserId();
   }
@@ -45,6 +50,10 @@ export class PostComponent implements OnInit {
 
   navigateToPost() {
     this.navigateButtonEmit.emit(this.post?.id!);
+  }
+
+  openInFullsize(post: PostViewModel) {
+    this.router.navigate([FULLSIZE_IMAGE_NAVIGATION + '/' + post.image?.id]);
   }
 
   async editPost() {

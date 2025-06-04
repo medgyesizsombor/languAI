@@ -211,7 +211,10 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId)
     {
-        return _context.CardList.Include(c => c.Cards)
+        return _context.CardList
+            .Include(c => c.Cards)
+            .Include(c => c.NativeLanguage)
+            .Include(c => c.LearningLanguage)
             .Where(c => c.UserId == otherUserId
                     && !c.IsDeleted
                     && (c.Access == AccessEnum.Public

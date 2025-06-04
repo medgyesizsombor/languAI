@@ -23,6 +23,7 @@ public interface IFriendshipService
     int? GetNumberOfFriendshipRequest(int currentUserId);
     List<UserDiscoveryViewModel> GetListOfDiscoverableUser(int userId);
     void DeletePendingRequest(int currentUserId, int otherUserId);
+    void DeleteFriendship(int currentUserId, int otherUserId);
 }
 
 public class FriendshipService : BaseService, IFriendshipService
@@ -371,9 +372,22 @@ public class FriendshipService : BaseService, IFriendshipService
     /// <param name="otherUserId">Other user's Id</param>
     public void DeletePendingRequest(int currentUserId, int otherUserId)
     {
-        var friendship = _context.Friendship.FirstOrDefault(f => f.Requester.Id == currentUserId && f.RecipientId == otherUserId);
+        var friendship = _context.Friendship.FirstOrDefault(f => f.RequesterId == currentUserId && f.RecipientId == otherUserId);
 
-        if (friendship == null) return;
+        if (friendship == null) throw new Exception(nameof(friendship));
+
+        _context.Friendship.Remove(friendship);
+        _context.SaveChanges();
+    }
+
+    public void DeleteFriendship(int currentUserId, int otherUserId)
+    {
+        var friendship = _context.Friendship
+            .FirstOrDefault(f => ((f.RequesterId == currentUserId && f.RecipientId == otherUserId)
+            || (f.RequesterId == otherUserId && f.RecipientId == currentUserId))
+            && f.Status == FriendshipStatusEnum.Accepted);
+
+        if (friendship == null) throw new Exception(nameof(friendship));
 
         _context.Friendship.Remove(friendship);
         _context.SaveChanges();

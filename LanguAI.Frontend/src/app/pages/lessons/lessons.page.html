@@ -9,35 +9,40 @@
   <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="topicList?.length; else missingCardList">
       <!-- TOPIC CARD-->
-      <ion-card
-        (click)="startExercises(topic.id!)"
-        [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(topic.id!)}.jpg)`"
-        class="topic-card ion-margin-bottom ion-margin-horizontal card-background-medium-color outline-text"
-        *ngFor="let topic of topicList">
-        <div class="overlay"></div>
-        <ion-card-header class="fs-22 light-color">
-          {{ topic | topicName }}
-        </ion-card-header>
-        <ion-card-content class="light-color">
-          {{ topic.description }}
-        </ion-card-content>
-      </ion-card>
+      <ion-row *ngFor="let topic of topicList" class="card-row">
+        <ion-card
+          (click)="startExercises(topic.id!)"
+          [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(topic.id!)}.jpg)`"
+          class="topic-card ion-margin-bottom ion-margin-horizontal card-background-medium-color outline-text w-100">
+          <div class="overlay"></div>
+          <ion-card-header class="fs-22 light-color">
+            {{ topic | topicName }}
+          </ion-card-header>
+          <ion-card-content class="light-color">
+            {{ topic.description }}
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
     </ng-container>
   </ng-container>
 </ion-content>
 
 <ng-template #missingCardList>
-  <ion-row>
-    <ion-label>
+  <ion-row
+    class="ion-justify-content-center ion-padding-bottom ion-padding-horizontal">
+    <ion-label mode="md" class="ion-text-center">
       {{'YOU_MUST_HAVE_AT_LEAST_ONE_CARDLIST_TO_DO_EXERCISES' | translate}}
     </ion-label>
   </ion-row>
-  <ion-row>
-    <ion-button
-      mode="md"
-      class="primary-button no-shadow"
-      (click)="navigateToCardListsPage()">
-      {{ 'NAVIGATE_TO_CARDLISTS_PAGE' | translate }}
-    </ion-button>
+  <ion-row class="ion-justify-content-center ion-padding-horizontal">
+    <ion-label
+      [routerLink]="['/card-lists']"
+      class="line me-1 ion-text-center"
+      mode="md">
+      {{ 'HERE' | translate | titlecase}}
+    </ion-label>
+    <ion-label mode="md" class="ion-text-center">
+      {{ 'YOU_CAN_CREATE_A_CARDLIST' | translate}}
+    </ion-label>
   </ion-row>
 </ng-template>

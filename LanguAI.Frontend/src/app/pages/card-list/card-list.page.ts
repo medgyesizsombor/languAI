@@ -33,6 +33,8 @@ export class CardListPage {
   title = '';
   isCardListOfOtherUser = false;
 
+  //TODO edit-button-position
+
   getCardListSub: Subscription | undefined;
   saveCardsSub: Subscription | undefined;
   changeAccessOfCardListSub: Subscription | undefined;
@@ -275,9 +277,11 @@ export class CardListPage {
    * Open the card
    */
   openCard(index: number) {
-    this.navController.navigateForward(
-      CARD_NAVIGATION + '/' + this.cards[index].id
-    );
+    if (!this.isCardListOfOtherUser) {
+      this.navController.navigateForward(
+        CARD_NAVIGATION + '/' + this.cards[index].id
+      );
+    }
   }
 
   /**

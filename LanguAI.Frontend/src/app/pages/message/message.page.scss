@@ -1,10 +1,11 @@
 form {
-  background-color: #f4eeff;
+  background-color: hsl(229, 50%, 98%);
 }
 
 ion-card {
   padding: 10px 14px 8px 14px;
   border-radius: 13px / 20px;
+  max-width: 600px;
 }
 
 .received-card {
@@ -42,4 +43,11 @@ ion-col {
 
 .unsent-message {
   opacity: 0.5;
+}
+
+ion-input {
+  border-radius: 8px;
+  --padding-start: 8px;
+  --padding-right: 8px;
+  background-color: hsl(229, 50%, 95%);
 }

@@ -4,16 +4,60 @@
   (addButtonEmit)="newMessage()"
   [subtitle]="('MESSAGES_SUBTITLE' | translate)"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-list mode="md" class="pt-0" *ngIf="!isLoading; else loader">
-    <ion-item
-      lines="none"
-      *ngFor="let friend of friendList; let index = index"
-      (click)="openMessage(friend.id)">
-      {{ friend.name }}
-    </ion-item>
-  </ion-list>
+  <ng-container *ngIf="!friendList?.length; else missingFriendList">
+    <ion-row
+      class="card-row ion-padding-bottom"
+      *ngFor="let friend of friendList">
+      <ion-card class="w-100 ion-padding" (click)="openMessage(friend.userId)">
+        <ion-row class="align-item-center">
+          <ion-col size="auto" class="ion-padding-end">
+            <app-avatar
+              [marginClass]="null"
+              [widthInPx]="60"
+              [heightInPx]="60"
+              [imageSrc]="fileService.getImageSrc(friend.profilePicture?.contentAsString,friend.profilePicture?.type)"></app-avatar>
+          </ion-col>
+          <ion-col class="data-col">
+            <ion-row>
+              <ion-label mode="md" class="fs-16">
+                {{ friend.username }}
+              </ion-label>
+            </ion-row>
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+              <ion-col class="hidden-text message-text">
+                <ion-label class="fs-13 hidden-text">
+                  {{ friend.lastMessage?.senderUsername }}: {{
+                  friend.lastMessage?.text}}
+                </ion-label>
+              </ion-col>
+              <ion-col size="auto" class="message-time">
+                <ion-label mode="md" class="fs-13">
+                  {{ friend.lastMessage?.sentAt! | timeAgo }}
+                </ion-label>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-row>
+  </ng-container>
 </ion-content>
 
-<ng-template #loader>
-  <app-loader [message]="('CHATS_ARE_LOADING' | translate)"></app-loader>
+<ng-template #missingFriendList>
+  <ion-row>
+    <ion-label class="w-100 ion-text-center">
+      {{ 'YOU_DONT_HAVE_ANY_FRIENDS' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-label
+      mode="md"
+      [routerLink]="['/search-new-friends']"
+      class="line me-1 ion-text-center">
+      {{ 'HERE' | translate | titlecase }}
+    </ion-label>
+    <ion-label mode="md" class="ion-text-center">
+      {{ 'YOU_CAN_SEARCH_FOR_FRIENDS' | translate | lowercase }}
+    </ion-label>
+  </ion-row>
 </ng-template>

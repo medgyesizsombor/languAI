@@ -69,38 +69,37 @@ export class CardLearningPage {
   /**
    * Loading the data
    */
-  private loadData() {
-    this.loadingService.showLoading().then(() => {
-      this.activatedRoute.params
-        .pipe(
-          switchMap((params: Params) => {
-            this.cardListId = params['id'];
+  private async loadData() {
+    await this.loadingService.showLoading();
+    this.activatedRoute.params
+      .pipe(
+        switchMap((params: Params) => {
+          this.cardListId = params['id'];
 
-            if (!this.cardListId) {
-              this.loadingService.hideLoading();
-              return EMPTY;
-            }
-
-            return this.cardService.getCardsOfCardList$Json({
-              cardListId: this.cardListId
-            });
-          })
-        )
-        .subscribe({
-          next: (cards: Array<CardViewModel>) => {
+          if (!this.cardListId) {
             this.loadingService.hideLoading();
-            if (cards?.length) {
-              this.cards = [...cards];
-            }
-          },
-          error: () => {
-            this.loadingService.hideLoading();
-            this.toastrService.presentErrorToast(
-              this.translateService.instant('DATA_ERROR')
-            );
+            return EMPTY;
           }
-        });
-    });
+
+          return this.cardService.getCardsOfCardList$Json({
+            cardListId: this.cardListId
+          });
+        })
+      )
+      .subscribe({
+        next: (cards: Array<CardViewModel>) => {
+          this.loadingService.hideLoading();
+          if (cards?.length) {
+            this.cards = [...cards];
+          }
+        },
+        error: () => {
+          this.loadingService.hideLoading();
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('DATA_ERROR')
+          );
+        }
+      });
   }
 
   /**

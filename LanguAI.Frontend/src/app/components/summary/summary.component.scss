@@ -6,8 +6,9 @@
 }
 
 .streak-cards {
+  z-index: 100000;
   position: absolute;
-  top: calc(50vh - 75px);
+  top: calc(50vh + 12px);
   left: calc(50vw - 75px);
   transition: none;
   width: 150px;
@@ -16,4 +17,16 @@
   justify-content: center;
   align-items: center;
   visibility: hidden;
+}
+
+ion-card {
+  background-color: hsl(229, 50%, 98%);
+}
+
+ion-img {
+  height: 120px;
+}
+
+.summary-text {
+  max-width: 600px;
 }

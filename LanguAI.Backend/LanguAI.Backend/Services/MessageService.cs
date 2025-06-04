@@ -101,8 +101,9 @@ public class MessageService : BaseService, IMessageService
             {
                 SenderUsername = m.SenderId == userId ? m.Sender.Username : m.Recipient.Username,
                 SentAt = m.SentAt,
+                Text = m.Text
             })
-            .OrderBy(m => m.SentAt)
+            .OrderByDescending(m => m.SentAt)
             .FirstOrDefault();
     }
 }

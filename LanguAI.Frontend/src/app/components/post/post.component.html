@@ -1,58 +1,64 @@
-<div>
-  <ion-row class="ion-padding-bottom">
-    <ion-card class="w-100">
-      <ion-card-header>
-        <ion-row class="d-flex ion-align-items-center avatar-row">
-          <ion-col size="10" class="d-flex ion-align-items-center">
-            <ion-avatar>
-              <ion-img
-                src="https://api.hvg.hu/Img/4B5CE600-76FE-4FA2-AC62-7B04F6640281/1e145cd8-6242-4f13-a506-db057fee9bcb.jpg"
-                alt="The Wisconsin State Capitol building in Madison, WI at night"></ion-img>
-            </ion-avatar>
-            <ion-label class="fs-14">{{ post?.username }}</ion-label>
-          </ion-col>
-          <ion-col
-            *ngIf="post?.userId === userId"
-            class="d-flex ion-align-items-center ion-justify-content-end">
-            <ion-icon
-              name="ellipsis-horizontal-outline"
-              (click)="editPost()"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-card-header>
+<ion-card class="w-100" *ngIf="post">
+  <ion-card-header class="first-header">
+    <ion-row class="d-flex ion-align-items-center avatar-row underline">
+      <ion-col size="10" class="d-flex ion-align-items-center">
+        <app-avatar
+          [heightInPx]="40"
+          [widthInPx]="40"
+          [imageSrc]="
+            fileService.getImageSrc(
+              post.userProfilePicture?.contentAsString,
+              post.userProfilePicture?.type
+            )
+          "></app-avatar>
+        <ion-label class="fs-16">{{ post.username }}</ion-label>
+      </ion-col>
+      <ion-col
+        *ngIf="post?.userId === userId"
+        class="d-flex ion-align-items-center ion-justify-content-end">
+        <ion-icon
+          class="fs-20"
+          name="ellipsis-horizontal-outline"
+          (click)="editPost()"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-card-header>
 
-      <ion-card-header *ngIf="post?.image?.contentAsString?.length">
-        <app-image
-          [imageString]="post?.image?.contentAsString"
-          [type]="post?.image?.type"></app-image>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-row>
-          <ion-label class="mb-4">{{ post?.content }}</ion-label>
-        </ion-row>
-        <ion-row class="d-flex ion-justify-content-end underline">
-          <ion-label class="fs-11">
-            {{ post?.created | date : 'YYYY. MM. dd HH:mm' }}
-          </ion-label>
-        </ion-row>
-        <ion-row class="mt-3">
-          <div
-            [ngClass]="{ 'liked-chip': post?.liked }"
-            class="action-button d-flex align-item-center me-2 fs-16"
-            (click)="like()">
-            <span class="me-1">{{ post?.numberOfLikes }}</span>
-            <ion-icon *ngIf="!post?.liked" name="heart-outline"></ion-icon>
-            <ion-icon *ngIf="post?.liked" name="heart"></ion-icon>
-          </div>
-          <div
-            *ngIf="showCommentButton"
-            class="action-button d-flex align-item-center"
-            (click)="navigateToPost()">
-            <span class="me-1">{{ post?.numberOfComments }}</span>
-            <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-          </div>
-        </ion-row>
-      </ion-card-content>
-    </ion-card>
-  </ion-row>
-</div>
+  <ion-card-content>
+    <ion-row>
+      <ion-label class="mt-2 mb-2 fs-16">{{ post.content }}</ion-label>
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center ion-padding-bottom">
+      <app-image
+        (click)="openInFullsize(post)"
+        [scssClass]="'forum-image'"
+        *ngIf="post?.image?.contentAsString"
+        [imageString]="post.image?.contentAsString"
+        [type]="post.image?.type"></app-image>
+    </ion-row>
+
+    <ion-row class="d-flex ion-justify-content-end underline">
+      <ion-label class="fs-11">
+        {{ post.created | date : 'YYYY. MM. dd HH:mm' }}
+      </ion-label>
+    </ion-row>
+    <ion-row class="mt-3">
+      <div
+        [ngClass]="{ 'liked-chip': post.liked }"
+        class="action-button d-flex align-item-center me-2 fs-16"
+        (click)="like()">
+        <span class="me-1">{{ post.numberOfLikes }}</span>
+        <ion-icon *ngIf="!post?.liked" name="heart-outline"></ion-icon>
+        <ion-icon *ngIf="post?.liked" name="heart"></ion-icon>
+      </div>
+      <div
+        *ngIf="showCommentButton"
+        class="action-button d-flex align-item-center fs-16"
+        (click)="navigateToPost()">
+        <span class="me-1">{{ post.numberOfComments }}</span>
+        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      </div>
+    </ion-row>
+  </ion-card-content>
+</ion-card>

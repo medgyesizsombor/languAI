@@ -47,11 +47,11 @@ export class CardSwiperComponent implements OnInit, OnChanges {
     }, 1000);
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ionViewWillEnter() {
     this.useSwipe();
   }
-
-  ionViewWillEnter() {}
 
   private useSwipe() {
     this.deck?.forEach(d => {

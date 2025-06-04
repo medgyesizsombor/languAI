@@ -17,7 +17,8 @@ import { LocalStorageService } from 'src/app/util/services/localstorage.service'
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
   CARD_LIST_NAVIGATION,
-  HUNGARIAN_LANGUAGE_CODE
+  HUNGARIAN_LANGUAGE_CODE,
+  LEARNINGS_NAVIGATION
 } from 'src/app/util/util.constants';
 
 @Component({
@@ -53,7 +54,7 @@ export class CardListsPage {
   ionViewWillEnter() {
     this.userId = this.localStorageService.getUserId();
     this.loadCardLists();
-    // this.addCardList();
+    //this.addCardList();
   }
 
   ionViewDidLeave() {
@@ -63,48 +64,60 @@ export class CardListsPage {
   }
 
   async addCardList() {
-    const modal = await this.modalController.create({
-      mode: 'md',
-      component: NewCardlistModalComponent,
-      componentProps: {
-        suggestedName: this.suggestedName
-      }
-    });
-    await modal.present();
+    if (this.localStorageService.getCurrentLearning()) {
+      const modal = await this.modalController.create({
+        mode: 'md',
+        component: NewCardlistModalComponent,
+        componentProps: {
+          suggestedName: this.suggestedName
+        }
+      });
+      await modal.present();
 
-    const { data } = await modal.onDidDismiss();
-    if (data) {
-      const currentLearning = this.localStorageService.getCurrentLearning();
+      const { data } = await modal.onDidDismiss();
+      if (data) {
+        const currentLearning = this.localStorageService.getCurrentLearning();
 
-      if (data.name.length) {
-        this.loadingService.showLoading('CREATING_CARD_LIST').then(() => {
-          this.createCardListSub = this.cardService
-            .saveCardList$Json({
-              body: {
-                userId: this.localStorageService.getUserId()!,
-                learningLanguageId: currentLearning?.learningLanguageId,
-                nativeLanguageId: currentLearning?.nativeLanguageId,
-                name: data.name,
-                topicId: data.topicId
-              }
-            })
-            .subscribe({
-              next: cardListId => {
-                this.generateSuggestedCardListName();
-                this.loadingService.hideLoading();
-                if (cardListId) {
-                  this.openCardList(cardListId);
-                } else {
+        if (data.name.length) {
+          this.loadingService.showLoading('CREATING_CARD_LIST').then(() => {
+            this.createCardListSub = this.cardService
+              .saveCardList$Json({
+                body: {
+                  userId: this.localStorageService.getUserId()!,
+                  learningLanguageId: currentLearning?.learningLanguageId,
+                  nativeLanguageId: currentLearning?.nativeLanguageId,
+                  name: data.name,
+                  topicId: data.topicId
+                }
+              })
+              .subscribe({
+                next: cardListId => {
+                  this.generateSuggestedCardListName();
+                  this.loadingService.hideLoading();
+                  if (cardListId) {
+                    this.openCardList(cardListId);
+                  } else {
+                    this.translateService.instant(
+                      'ERROR_WHILE_SAVING_CARD_LIST'
+                    );
+                  }
+                },
+                error: () => {
+                  this.loadingService.hideLoading();
                   this.translateService.instant('ERROR_WHILE_SAVING_CARD_LIST');
                 }
-              },
-              error: () => {
-                this.loadingService.hideLoading();
-                this.translateService.instant('ERROR_WHILE_SAVING_CARD_LIST');
-              }
-            });
-        });
+              });
+          });
+        }
       }
+    } else {
+      await this.alertService
+        .showNotExistingLearningAlert()
+        .then((navigate: boolean) => {
+          if (navigate) {
+            this.navController.navigateForward(LEARNINGS_NAVIGATION);
+          }
+        });
     }
   }
 

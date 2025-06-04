@@ -1,15 +1,15 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { UserDataViewModel } from 'src/api/models';
 import { AuthenticationService, UserService } from 'src/api/services';
+import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,6 @@ export class LoginPage {
   loginForm: FormGroup | undefined;
   isUsernameDirty = false;
   isPasswordDirty = false;
-  id: string = '';
 
   authenticationSub: Subscription | undefined;
 
@@ -34,11 +33,11 @@ export class LoginPage {
     private toastrService: ToastrService,
     private router: Router,
     private userService: UserService,
-    private cdr: ChangeDetectorRef
+    private alertService: AlertService
   ) {}
 
-  ionViewWillEnter() {
-    this.id = uuidv4();
+  async ionViewWillEnter() {
+    await this.loadingService.showLoading();
     this.createForm();
   }
 
@@ -64,7 +63,7 @@ export class LoginPage {
         })
         .pipe(
           switchMap((res: string) => {
-            if (res?.length > 0) {
+            if (res?.length) {
               this.toastrService.presentSuccessToast(
                 this.translateService.instant('SUCCESSFUL_SIGN_IN')
               );
@@ -104,23 +103,8 @@ export class LoginPage {
             );
           }
         });
-    }
-  }
-
-  /**
-   * Model change detection
-   */
-  modelChange(isUsernameChanged = true) {
-    if (isUsernameChanged) {
-      this.isUsernameDirty = true;
-      setTimeout(() => {
-        this.cdr.detectChanges();
-      }, 50);
     } else {
-      this.isPasswordDirty = true;
-      setTimeout(() => {
-        this.cdr.detectChanges();
-      }, 50);
+      await this.alertService.showErrorAlert(this.loginForm, false);
     }
   }
 
@@ -128,13 +112,12 @@ export class LoginPage {
    * Create the form
    */
   private createForm() {
-    this.loginForm = this.formBuilder.group(
-      {
-        username: ['', [Validators.required, Validators.minLength(6)]],
-        password: ['', [Validators.required, Validators.minLength(6)]]
-      },
-      { updateOn: 'blur' }
-    );
+    this.loginForm = this.formBuilder.group({
+      username: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+
+    this.loadingService.hideLoading();
   }
 
   /**

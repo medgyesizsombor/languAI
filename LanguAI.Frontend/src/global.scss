@@ -100,6 +100,11 @@ ion-loading.loader {
   --background: #a6b1e1;
 }
 
+.line {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 ion-input {
   --placeholder-color: #424872 !important;
   --placeholder-opacity: 0.5 !important;
@@ -108,6 +113,7 @@ ion-input {
   --highlight-color-invalid: none !important;
   --highlight-color-valid: none !important;
   --highlight-color: none !important;
+  color: #424872 !important;
 }
 
 ion-textarea {
@@ -120,18 +126,16 @@ ion-textarea {
 }
 
 .box-shadow {
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
-    rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
-    rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+  // box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
+  //   rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
+  //   rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
 }
 
 ion-card {
   color: hsl(233, 27%, 23.2%);
-  ;
   margin: 0;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
-    rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
-    rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
   border-radius: 20px;
 
   >.overlay {
@@ -157,6 +161,7 @@ ion-card {
   --border-color: #a6b1e1;
   --border-style: solid;
   --border-width: 1px;
+  --border-radius: 8px;
 
   &-outline {
     --background: inherit;
@@ -164,6 +169,7 @@ ion-card {
     --border-color: #a6b1e1;
     --border-style: solid;
     --border-width: 1px;
+    --border-radius: 8px;
   }
 }
 
@@ -265,6 +271,10 @@ ion-card {
 
   &t-4 {
     margin-top: 16px;
+  }
+
+  &b-2 {
+    margin-bottom: 8px;
   }
 
   &b-3 {
@@ -445,6 +455,20 @@ ion-card {
   --box-shadow: none;
 }
 
+.error-button {
+  --background: #d20062;
+  --border-width: 1px;
+  --color: hsl(229, 50%, 98%);
+  --border-radius: 8px;
+}
+
+.success-button {
+  --background: #83c0c1;
+  --border-width: 1px;
+  --color: hsl(229, 50%, 98%);
+  --border-radius: 8px;
+}
+
 .success-toastr {
   --background: #83c0c1;
   --color: #4b4a50;
@@ -477,9 +501,11 @@ ion-backdrop {
 
 .alert {
   &-wrapper {
-    background: hsl(229, 50%, 98%);
+    background: hsl(229, 50%, 98%) !important;
     box-shadow: none !important;
-    border: 1px solid #424872;
+    border: none;
+    max-width: 250px !important;
+    border-radius: 8px !important;
   }
 
   &-message {
@@ -592,7 +618,7 @@ ion-chip {
 
 .hidden-text {
   overflow: hidden;
-  text-wrap: nowrap;
+ white-space: nowrap;
   text-overflow: ellipsis;
 }
 
@@ -605,4 +631,10 @@ ion-chip {
     #424872 -0.416147px 0.909297px 0px, #424872 -0.989992px 0.14112px 0px,
     #424872 -0.653644px -0.756802px 0px, #424872 0.283662px -0.958924px 0px,
     #424872 0.96017px -0.279415px 0px;
+}
+
+@media only screen and (min-width: 632px) {
+  ion-tab-button {
+    max-width: 135px;
+  }
 }

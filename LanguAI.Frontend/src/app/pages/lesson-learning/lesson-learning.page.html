@@ -1,7 +1,4 @@
-<ion-content
-  [fullscreen]="true"
-  class="ion-padding"
-  [style.--ion-background-color]="!showSummary ? '#dcd6f7' : null">
+<ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="exerciseList?.length; else missingExercises">
       <ng-container *ngIf="!showSummary; else showSummaryTemplate">
@@ -48,8 +45,29 @@
 
 <ng-template #saveButton></ng-template>
 
-<!-- TODO -->
-<ng-template #missingExercises></ng-template>
+<ng-template #missingExercises>
+  <ion-row class="ion-margin-bottom">
+    <ion-label mode="md" class="w-100 ion-text-center fs-24">
+      {{ 'ERROR' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row class="ion-margin-bottom">
+    <ion-label mode="md" class="w-100 ion-text-center">
+      {{ 'ERROR_EXERCISE_CREATING' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-label
+      mode="md"
+      [routerLink]="['/lessons']"
+      class="line me-1 ion-text-center">
+      {{ 'HERE' | translate | titlecase }}
+    </ion-label>
+    <ion-label mode="md" class="ion-text-center">
+      {{ 'YOU_CAN_GO_BACK_TO_HOME_PAGE' | translate | lowercase }}
+    </ion-label>
+  </ion-row>
+</ng-template>
 
 <ng-template #showSummaryTemplate>
   <app-summary

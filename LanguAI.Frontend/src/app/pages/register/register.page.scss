@@ -1,9 +1,13 @@
 ion-datetime-button::part(native) {
-  background: hsl(229, 50%, 98%);
+  background: hsl(229, 50%, 95%);
   border: none;
   color: #424872;
   padding: 4px 8px;
   margin: 0;
+}
+
+h1 {
+  color: #424872;
 }
 
 ion-datetime {
@@ -22,6 +26,7 @@ ion-input {
   border-radius: 8px;
   --padding-start: 8px;
   --padding-right: 8px;
+  background-color: hsl(229, 50%, 95%);
 }
 
 .datetime-button-col {
@@ -29,6 +34,7 @@ ion-input {
   padding: 5px 0;
   margin-top: 5px;
   margin-bottom: 5px;
+  background-color: hsl(229, 50%, 95%);
 }
 
 ion-datetime::part(calendar-day) {
@@ -51,4 +57,19 @@ ion-datetime::part(calendar-day[aria-selected='true']) {
 .calendar-day.calendar-day-active {
   border: 1px solid black;
   background: black;
+}
+
+.text-col {
+  padding: 5px 16px 0px 16px;
+}
+
+@media only screen and (min-width: 632px) {
+  form {
+    display: flex;
+    justify-content: center;
+  }
+
+  ion-card {
+    width: 600px;
+  }
 }

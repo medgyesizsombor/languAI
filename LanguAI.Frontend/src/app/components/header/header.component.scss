@@ -1,21 +1,34 @@
 $a: 100%;
-$b: 24px;
+$b: 26px;
 
 ion-title {
   margin: 0 12px;
+  font-size: 24px;
 }
 
 .left-fab {
-  top: 10px;
+  top: 6px;
   left: 6px;
 }
 
 .right-fab {
-  top: 6px;
+  top: 0;
   left: calc(#{$a} - #{$b});
 
   &-container {
     top: 14px;
     left: calc(#{$a} - #{$b});
+  }
+}
+
+@media only screen and (min-width: 632px) {
+  .right-fab {
+    &-container {
+      left: calc(50% + 290px);
+    }
+  }
+
+  .top-left-fab-container {
+    left: calc(50% - 320px);
   }
 }

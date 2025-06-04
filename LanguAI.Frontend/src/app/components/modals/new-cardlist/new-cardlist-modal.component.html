@@ -3,44 +3,50 @@
   [title]="'CREATE_CARDLIST' | translate"></app-header>
 
 <ion-content class="ion-padding">
-  <ng-container *ngIf="!isLoading">
+  <div class="form-container">
     <form *ngIf="newCardlistForm" [formGroup]="newCardlistForm" class="px-4">
-      <ion-input
-        type="text"
-        id="name"
-        class="form-control"
-        label="{{ 'NAME' | translate }}"
-        labelPlacement="stacked"
-        formControlName="name"></ion-input>
+      <ion-card class="ion-padding">
+        <ion-row class="ion-margin-bottom">
+          <ion-input
+            type="text"
+            id="name"
+            class="form-control"
+            label="{{ 'NAME' | translate }}"
+            labelPlacement="stacked"
+            formControlName="name"></ion-input>
+        </ion-row>
 
-      <ion-select
-        okText="{{ 'CONFIRM' | translate }}"
-        cancelText="{{ 'CANCEL' | translate }}"
-        formControlName="topicId"
-        [label]="'TOPIC' | translate"
-        label-placement="stacked">
-        <ion-select-option *ngFor="let topic of topicList" [value]="topic.id">
-          {{ topic.name }}
-        </ion-select-option>
-      </ion-select>
+        <ion-select
+          class="ion-margin-bottom"
+          okText="{{ 'CONFIRM' | translate }}"
+          cancelText="{{ 'CANCEL' | translate }}"
+          formControlName="topicId"
+          [label]="'TOPIC' | translate"
+          label-placement="stacked"
+          placeholder="{{ 'SELECT_A_TOPIC' | translate }}">
+          <ion-select-option *ngFor="let topic of topicList" [value]="topic.id">
+            {{ topic.name }}
+          </ion-select-option>
+        </ion-select>
 
-      <ion-row class="ion-margin-bottom w-100">
-        <ion-button
-          mode="md"
-          class="primary-button no-shadow w-100"
-          (click)="confirm()">
-          {{ 'CONFIRM' | translate }}
-        </ion-button>
-      </ion-row>
+        <ion-row class="ion-margin-bottom w-100">
+          <ion-button
+            mode="md"
+            class="primary-button no-shadow w-100"
+            (click)="confirm()">
+            {{ 'CONFIRM' | translate }}
+          </ion-button>
+        </ion-row>
 
-      <ion-row class="w-100">
-        <ion-button
-          mode="md"
-          class="error-outline-button w-100"
-          (click)="dismiss()">
-          {{ 'CANCEL' | translate }}
-        </ion-button>
-      </ion-row>
+        <ion-row class="w-100">
+          <ion-button
+            mode="md"
+            class="error-button w-100 no-shadow"
+            (click)="dismiss()">
+            {{ 'CANCEL' | translate }}
+          </ion-button>
+        </ion-row>
+      </ion-card>
     </form>
-  </ng-container>
+  </div>
 </ion-content>
