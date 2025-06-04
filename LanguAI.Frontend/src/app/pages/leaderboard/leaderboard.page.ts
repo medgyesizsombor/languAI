@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LeaderboardUserViewModel } from 'src/api/models';
 import { GameplayService } from 'src/api/services';
+import { FileService } from 'src/app/util/services/file.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
+import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 
 @Component({
@@ -12,13 +14,17 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   standalone: false
 })
 export class LeaderboardPage implements OnInit {
-  leaderboard: Array<LeaderboardUserViewModel> = [];
+  lowerleaderboardData: Array<LeaderboardUserViewModel> = [];
+  top1Data: Array<LeaderboardUserViewModel> = [];
+  currentUserId: number | undefined;
 
   constructor(
     private translateService: TranslateService,
     private loadingService: LoadingService,
     private toastrService: ToastrService,
-    private gameplayService: GameplayService
+    private gameplayService: GameplayService,
+    protected fileService: FileService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -27,9 +33,12 @@ export class LeaderboardPage implements OnInit {
 
   async loadLeaderboard() {
     await this.loadingService.showLoading('LEADERBOARD_LOADING');
+    this.currentUserId = this.localStorageService.getUserId()!;
     this.gameplayService.getWeeklyLeaderboard$Json().subscribe({
       next: (res: Array<LeaderboardUserViewModel>) => {
-        this.leaderboard = [...res];
+        this.top1Data = [...res].slice(0, 1);
+        this.lowerleaderboardData = [...res].slice(1, res.length);
+        //this.lowerleaderboardData = [...res];
         this.loadingService.hideLoading();
       },
       error: () => {

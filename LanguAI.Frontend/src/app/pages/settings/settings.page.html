@@ -1,79 +1,127 @@
 <app-header [title]="title"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-row class="mx-4">
-    <ion-col size="auto">
-      <app-avatar class="me-2 d-flex" [imageSrc]="imageSrc"></app-avatar>
-    </ion-col>
-    <ion-col class="ion-justify-content-between ion-align-items-center d-grid">
-      <ion-row>{{ profile?.username }}</ion-row>
-      <ion-row>{{ profile?.email}}</ion-row>
-    </ion-col>
-  </ion-row>
-
   <ion-row
     (click)="navigate(settingsNavigationEnum.profile)"
-    class="settings-row mx-4 mt-3">
-    <ion-col size="auto" class="align-item-center fs-24 me-2">
-      <ion-icon name="person-outline"></ion-icon>
-    </ion-col>
-    <ion-col>{{ 'MY_PROFILE' | translate }}</ion-col>
+    class="card-row mx-4 mt-3">
+    <ion-card class="w-100">
+      <ion-card-header>
+        <span class="d-flex ion-justify-content-center">
+          <ion-icon class="fs-24 me-2" name="person-outline"></ion-icon>
+          <ion-label class="fs-16">{{ 'MY_PROFILE' | translate }}</ion-label>
+        </span>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label class="fs-13 ion-text-center">
+          {{ 'MY_PROFILE_DETAILS' | translate }}
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
   </ion-row>
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.notifications)"
-    class="settings-row mx-4 mt-3">
-    <ion-col size="auto" class="align-item-center fs-24 me-2">
-      <ion-icon name="notifications-outline"></ion-icon>
-      <ion-badge
-        *ngIf="numberOfFriendshipRequest"
-        id="notifications-badge"
-        color="danger">
-        {{ numberOfFriendshipRequest}}
-      </ion-badge>
-    </ion-col>
-    <ion-col>{{ 'NOTIFICATION' | translate }}</ion-col>
+    class="card-row mx-4 mt-3">
+    <ion-card class="w-100">
+      <ion-card-header>
+        <span class="d-flex ion-justify-content-center">
+          <ion-icon class="fs-24 me-2" name="notifications-outline"></ion-icon>
+          <ion-badge
+            mode="md"
+            *ngIf="numberOfFriendshipRequest"
+            id="notifications-badge"
+            color="danger">
+            {{ numberOfFriendshipRequest}}
+          </ion-badge>
+
+          <ion-label class="fs-16">{{ 'NOTIFICATION' | translate }}</ion-label>
+        </span>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label class="fs-13 ion-text-center">
+          {{ 'NOTIFICATION_DETAILS' | translate }}
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
   </ion-row>
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.discoverFriends)"
-    class="settings-row mx-4 mt-3">
-    <ion-col size="auto" class="align-item-center fs-24 me-2">
-      <ion-icon name="search-outline"></ion-icon>
-    </ion-col>
-    <ion-col>{{ 'DISCOVER_FRIENDS' | translate }}</ion-col>
+    class="card-row mx-4 mt-3">
+    <ion-card class="w-100">
+      <ion-card-header>
+        <span class="d-flex ion-justify-content-center">
+          <ion-icon class="fs-24 me-2" name="search-outline"></ion-icon>
+          <ion-label class="fs-16">
+            {{ 'DISCOVER_FRIENDS' | translate }}
+          </ion-label>
+        </span>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label class="fs-13 ion-text-center">
+          {{ 'DISCOVER_FRIENDS_DETAILS' | translate }}
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
   </ion-row>
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.leaderboard)"
-    class="settings-row mx-4 mt-3">
-    <ion-col size="auto" class="align-item-center fs-24 me-2">
-      <ion-icon name="stats-chart-outline"></ion-icon>
-    </ion-col>
-    <ion-col>{{ 'LEADERBOARD' | translate }}</ion-col>
+    class="card-row mx-4 mt-3">
+    <ion-card class="w-100">
+      <ion-card-header>
+        <span class="d-flex ion-justify-content-center">
+          <ion-icon class="fs-24 me-2" name="search-outline"></ion-icon>
+          <ion-label class="fs-16">{{ 'LEADERBOARD' | translate }}</ion-label>
+        </span>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label class="fs-13 ion-text-center">
+          {{ 'LEADERBOARD_DETAILS' | translate }}
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
   </ion-row>
 
-  <ion-row (click)="openLanguageModal()" class="settings-row mx-4 mt-3">
-    <ion-col size="auto" class="align-item-center fs-24 me-2">
-      <ion-icon name="phone-portrait-outline"></ion-icon>
-    </ion-col>
-    <ion-col>{{ 'LANGUAGE_OF_APPLICATION' | translate }}</ion-col>
+  <ion-row (click)="openLanguageModal()" class="card-row mx-4 mt-3">
+    <ion-card class="w-100">
+      <ion-card-header>
+        <span class="d-flex ion-justify-content-center">
+          <ion-icon class="fs-24 me-2" name="phone-portrait-outline"></ion-icon>
+          <ion-label class="fs-16">
+            {{ 'LANGUAGE_OF_APPLICATION' | translate }}
+          </ion-label>
+        </span>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label class="fs-13 ion-text-center">
+          {{ 'LANGUAGE_OF_APPLICATION_DETAILS' | translate }}
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
   </ion-row>
 
   <ion-row
     (click)="navigate(settingsNavigationEnum.learnings)"
-    class="settings-row mx-4 mt-3">
-    <ion-col size="auto" class="align-item-center fs-24 me-2">
-      <ion-icon name="language-outline"></ion-icon>
-    </ion-col>
-    <ion-col>{{ 'LEARNINGS' | translate }}</ion-col>
+    class="card-row mx-4 mt-3">
+    <ion-card class="w-100">
+      <ion-card-header>
+        <span class="d-flex ion-justify-content-center">
+          <ion-icon class="fs-24 me-2" name="language-outline"></ion-icon>
+          <ion-label class="fs-16">{{ 'LEARNINGS' | translate }}</ion-label>
+        </span>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label class="fs-13 ion-text-center">
+          {{ 'LEARNINGS_DETAILS' | translate }}
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
   </ion-row>
 
   <ion-row class="mx-4 mt-4">
     <ion-col class="ion-text-center">
-      <ion-button
-        class="primary-button-outline w-100 no-shadow"
-        (click)="logout()">
+      <ion-button mode="md" class="primary-button w-100" (click)="logout()">
         {{'SIGN_OUT' | translate}}
       </ion-button>
     </ion-col>
@@ -82,7 +130,8 @@
   <ion-row class="mx-4">
     <ion-col class="ion-text-center">
       <ion-button
-        class="error-outline-button w-100 no-shadow"
+        mode="md"
+        class="error-button w-100"
         (click)="deleteProfile()">
         {{'DELETE_PROFILE' | translate}}
       </ion-button>

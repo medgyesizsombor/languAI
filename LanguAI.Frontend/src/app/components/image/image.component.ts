@@ -15,6 +15,7 @@ import {
 export class ImageComponent implements OnInit, OnChanges {
   @Input() imageString: string | undefined | null;
   @Input() type: string | undefined | null;
+  @Input() scssClass: string | null = null;
 
   imageSrc: string | undefined;
 

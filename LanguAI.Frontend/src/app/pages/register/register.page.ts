@@ -5,6 +5,7 @@ import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { RegistrationService } from 'src/api/services';
+import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
@@ -20,7 +21,6 @@ import {
 })
 export class RegisterPage {
   registerForm: FormGroup | undefined;
-
   today = new Date().toISOString();
 
   registerSub: Subscription | undefined;
@@ -32,10 +32,12 @@ export class RegisterPage {
     private translateService: TranslateService,
     private toastrService: ToastrService,
     private router: Router,
-    private navController: NavController
+    private navController: NavController,
+    private alertService: AlertService
   ) {}
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    await this.loadingService.showLoading();
     this.createForm();
   }
 
@@ -85,6 +87,8 @@ export class RegisterPage {
             );
           }
         });
+    } else {
+      await this.alertService.showErrorAlert(this.registerForm);
     }
   }
 
@@ -98,11 +102,13 @@ export class RegisterPage {
   private createForm() {
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', Validators.required, Validators.email],
       dateOfBirth: [new Date().toISOString(), Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     });
+
+    this.loadingService.hideLoading();
   }
 
   /**

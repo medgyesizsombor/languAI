@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { TopicOfCurrentLearningViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
+import { TopicImageSrcPipe } from 'src/app/util/pipes/topic-image-src.pipe';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -34,7 +35,8 @@ export class LessonsPage {
     private toastrService: ToastrService,
     private cardService: CardService,
     private navController: NavController,
-    private alertService: AlertService
+    private alertService: AlertService,
+    protected topicImageSrcPipe: TopicImageSrcPipe
   ) {}
 
   ionViewWillEnter() {
@@ -76,8 +78,10 @@ export class LessonsPage {
   /**
    * Start exercises
    */
-  startExercises() {
-    // TODO: Start exercises
+  startExercises(topicId: number) {
+    this.navController.navigateForward(LESSON_LEARNING_NAVIGATION, {
+      queryParams: { topicId }
+    });
   }
 
   navigateToLessonLearningPage(

@@ -279,7 +279,7 @@ public class UserService : BaseService, IUserService
             var result = new ProfilePageDataViewModel();
             result.User = await GetUserById(userId);
             result.CardList = _cardService.GetCardListsOfOtherUserByUserId(currentUserId, userId);
-            result.FriendList = _friendshipService.GetFriendList(userId);
+            result.FriendList = await _friendshipService.GetFriendListAsync(userId);
 
             return result;
         }

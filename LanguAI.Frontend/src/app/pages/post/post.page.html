@@ -1,47 +1,45 @@
 <app-header
   [title]="post?.username ?? ''"
   [showBackArrow]="true"
-  [showSavingMissed]="isAnyChanges"
+  [showSavingMissed]="commentForm?.controls?.['comment']?.value?.length"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 <ion-content class="ion-padding">
-  <ng-container *ngIf="!isLoading; else loader"></ng-container>
-  <app-post-component
-    [post]="post"
-    (likeButtonEmit)="like($event)"
-    [showCommentButton]="false"></app-post-component>
-  <app-comment
-    *ngFor="let comment of post?.comments"
-    [comment]="comment"
-    (likeButtonEmit)="like($event)"
-    (deleteButtonEmit)="deleteComment($event)">
-    {{ comment.text}}
-  </app-comment>
+  <ng-container *ngIf="!isLoading">
+    <ion-row class="card-row ion-margin-bottom">
+      <app-post-component
+        class="w-100"
+        [post]="post"
+        (likeButtonEmit)="like($event)"
+        [showCommentButton]="false"></app-post-component>
+    </ion-row>
+    <ion-row
+      *ngFor="let comment of post?.comments"
+      class="card-row ion-margin-bottom">
+      <app-comment class="w-100"
+        [comment]="comment"
+        (likeButtonEmit)="like($event)"
+        (deleteButtonEmit)="deleteComment($event)">
+        {{ comment.text}}
+      </app-comment>
+    </ion-row>
+  </ng-container>
 </ion-content>
 <ion-footer>
   <form *ngIf="commentForm" [formGroup]="commentForm">
-    <div>
-      <ion-row
-        class="input-row ion-padding-horizontal ion-align-items-center ion-justify-content-between">
-        <ion-col size="10">
-          <ion-input
-            type="text"
-            id="comment"
-            class="form-control"
-            formControlName="comment"
-            placeholder="{{ 'ENTER_A_COMMENT' | translate }}"
-            (keyup)="isCommentValid()"></ion-input>
-        </ion-col>
-        <ion-col class="d-flex ion-align-items-center" size="auto">
-          <ion-icon
-            class="fs-18"
-            (click)="sendComment()"
-            name="send"></ion-icon>
-        </ion-col>
-      </ion-row>
-    </div>
+    <ion-row
+      class="input-row ion-padding-horizontal ion-align-items-center ion-justify-content-between">
+      <ion-col class="me-4">
+        <ion-input
+          type="text"
+          id="comment"
+          class="form-control"
+          formControlName="comment"
+          placeholder="{{ 'ENTER_A_COMMENT' | translate }}"
+          (keyup)="isCommentValid()"></ion-input>
+      </ion-col>
+      <ion-col class="d-flex ion-align-items-center" size="auto">
+        <ion-icon class="fs-24" (click)="sendComment()" name="send"></ion-icon>
+      </ion-col>
+    </ion-row>
   </form>
 </ion-footer>
-
-<ng-template #loader>
-  <app-loader></app-loader>
-</ng-template>

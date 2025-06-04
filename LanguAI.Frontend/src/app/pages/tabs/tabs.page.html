@@ -1,24 +1,25 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom" class="ion-margin">
-    <ion-tab-button tab="lessons">
-      <ion-icon name="book-outline"></ion-icon>
+  <ion-tab-bar mode="md" slot="bottom">
+    <ion-tab-button mode="md" tab="lessons">
+      <ion-icon class="fs-32" name="book-outline"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="card-lists">
-      <ion-icon name="copy-outline"></ion-icon>
+    <ion-tab-button mode="md" tab="card-lists">
+      <ion-icon class="fs-32" name="copy-outline"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="forum">
-      <ion-icon name="globe-outline"></ion-icon>
+    <ion-tab-button mode="md" tab="forum">
+      <ion-icon class="fs-32" name="globe-outline"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="messages">
-      <ion-icon name="mail-outline"></ion-icon>
+    <ion-tab-button mode="md" tab="messages">
+      <ion-icon class="fs-32" name="mail-outline"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="settings">
-      <ion-icon name="settings-outline"></ion-icon>
+    <ion-tab-button mode="md" tab="settings">
+      <ion-icon class="fs-32" name="settings-outline"></ion-icon>
       <ion-badge
+        mode="md"
         *ngIf="numberOfFriendshipRequest"
         id="notifications-badge"
         color="danger">

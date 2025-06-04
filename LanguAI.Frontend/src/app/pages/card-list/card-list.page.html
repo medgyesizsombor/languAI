@@ -8,30 +8,37 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div *ngIf="!showSwiper">
-    <ion-list *ngIf="cards?.length; else missingCards">
-      <ion-item
-        *ngFor="let word of cards; let index = index"
-        lines="none"
-        class="border-bottom-line ion-no-padding ion-item-no-padding-end p-inner-v-2">
-        <ion-col class="word-col" (click)="openCard(index)">
-          <span class="me-1">{{ word.wordInNativeLanguage }}</span>
-          -
-          <span class="ms-1">{{ word.wordInLearningLanguage }}</span>
-        </ion-col>
-        <ion-col class="pe-0" size="auto">
-          <ion-icon
-            class="align-item-center fs-24 error-color"
-            (click)="removeFromList(index)"
-            name="trash-bin"></ion-icon>
-        </ion-col>
-      </ion-item>
-    </ion-list>
+    <ion-row
+      class="ion-justify-content-center ion-margin-bottom"
+      *ngFor="let word of cards; let index = index">
+      <ion-card
+        class="w-100 ion-padding word-card"
+        [ngClass]="{'ion-justify-content-center' : isCardListOfOtherUser, 'd-flex': isCardListOfOtherUser}">
+        <ion-row>
+          <ion-col class="word-col ion-text-center" (click)="openCard(index)">
+            <ion-label mode="md">
+              <span class="me-1">{{ word.wordInNativeLanguage }}</span>
+              -
+              <span class="ms-1">{{ word.wordInLearningLanguage }}</span>
+            </ion-label>
+          </ion-col>
+          <ion-col class="pe-4" size="auto" *ngIf="!isCardListOfOtherUser">
+            <ion-icon
+              class="align-item-center fs-24 error-color"
+              (click)="removeFromList(index)"
+              name="trash-outline"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-row>
   </div>
+
   <ng-container *ngIf="showSwiper">
     <app-card-swiper
       [generatedCards]="generatedCards"
       (addCardsEmit)="addCards($event)"></app-card-swiper>
   </ng-container>
+
   <app-edit-fab
     [showPlayButton]="false"
     [cardsNumber]="cards.length"

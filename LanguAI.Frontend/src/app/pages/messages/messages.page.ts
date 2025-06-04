@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MESSAGE_NAVIGATION, MESSAGES_TITLE } from '../../util/util.constants';
 import { TranslateService } from '@ngx-translate/core';
-import { IntSelectorModel } from 'src/api/models';
+import { IntSelectorModel, OtherUserViewModel } from 'src/api/models';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { FriendshipService } from 'src/api/services';
 import { ModalController, NavController } from '@ionic/angular';
@@ -10,6 +10,7 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { CreateNewMessageModalComponent } from 'src/app/components/modals/create-new-message-modal/create-new-message-modal.component';
+import { FileService } from 'src/app/util/services/file.service';
 
 @Component({
   selector: 'app-messages',
@@ -19,7 +20,7 @@ import { CreateNewMessageModalComponent } from 'src/app/components/modals/create
 })
 export class MessagesPage {
   title = this.translateService.instant(MESSAGES_TITLE);
-  friendList: Array<IntSelectorModel> = [];
+  friendList: Array<OtherUserViewModel> = [];
   isLoading = false;
 
   getFriendListSub: Subscription | undefined;
@@ -32,7 +33,8 @@ export class MessagesPage {
     private toastrService: ToastrService,
     private loadingService: LoadingService,
     private alertService: AlertService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    protected fileService: FileService
   ) {}
 
   ionViewWillEnter() {
@@ -45,6 +47,7 @@ export class MessagesPage {
 
   async newMessage() {
     const modal = await this.modalController.create({
+      mode: 'md',
       component: CreateNewMessageModalComponent,
       componentProps: {
         friendList: this.friendList
@@ -67,27 +70,27 @@ export class MessagesPage {
     }
   }
 
-  private loadFriends() {
+  private async loadFriends() {
     this.isLoading = true;
     const userId = this.localStorageService.getUserId();
-    this.loadingService.showLoading().then(() => {
-      if (userId) {
-        this.getFriendListSub = this.friendshipService
-          .getFriendList$Json({
-            userId
-          })
-          .subscribe({
-            next: (res: Array<IntSelectorModel>) => {
-              this.friendList = res;
-              this.isLoading = false;
-              this.loadingService.hideLoading();
-            },
-            error: () => {
-              this.loadingService.hideLoading();
-              this.toastrService.presentErrorToast('DATA_ERROR');
-            }
-          });
-      }
-    });
+    await this.loadingService.showLoading();
+    if (userId) {
+      this.getFriendListSub = this.friendshipService
+        .getFriendList$Json({
+          userId,
+          showChatGPT: true
+        })
+        .subscribe({
+          next: (res: Array<OtherUserViewModel>) => {
+            this.friendList = res;
+            this.isLoading = false;
+            this.loadingService.hideLoading();
+          },
+          error: () => {
+            this.loadingService.hideLoading();
+            this.toastrService.presentErrorToast('DATA_ERROR');
+          }
+        });
+    }
   }
 }

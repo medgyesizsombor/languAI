@@ -4,6 +4,8 @@
   [showBackArrow]="true"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding-horizontal">
+  <ng-container
+    *ngIf="userList?.length; else zeroDiscoverableFriendTemplate"></ng-container>
   <ion-row
     *ngFor="let user of userList; let index = index"
     class="px-2 ion-justify-content-between">
@@ -26,3 +28,11 @@
     </ion-col>
   </ion-row>
 </ion-content>
+
+<ng-template #zeroDiscoverableFriendTemplate>
+  <div class="d-flex ion-justify-content-center ion-padding-top">
+    <ion-label class="ion-text-center">
+      {{ 'CURRENTLY_THERE_IS_NOONE_YOU_COULD_MAKE_A_FRIENDSHIP' | translate }}
+    </ion-label>
+  </div>
+</ng-template>

@@ -27,4 +27,6 @@ public class PostViewModel
     public List<CommentViewModel> Comments { get; set; }
 
     public ImageViewModel Image { get; set; }
+
+    public ImageViewModel UserProfilePicture { get; set; }
 }

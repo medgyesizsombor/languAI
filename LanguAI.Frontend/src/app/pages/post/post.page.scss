@@ -1,3 +1,33 @@
 form {
-  background-color: #f4eeff;
+  background-color: hsl(229, 50%, 98%);
+}
+
+@media only screen and (min-width: 632px) {
+  .card-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  app-post-component,
+  app-comment {
+    width: auto;
+  }
+
+  .input-row {
+    width: 600px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  form {
+    justify-content: center;
+    display: flex;
+  }
+}
+
+ion-input {
+  border-radius: 8px;
+  --padding-start: 8px;
+  --padding-right: 8px;
+  background-color: hsl(229, 50%, 95%);
 }

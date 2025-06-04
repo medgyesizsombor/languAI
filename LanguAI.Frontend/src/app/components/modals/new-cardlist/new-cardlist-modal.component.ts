@@ -17,7 +17,6 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 })
 export class NewCardlistModalComponent implements OnInit, OnDestroy {
   @Input() suggestedName: string | undefined;
-  isLoading = true;
   newCardlistForm: FormGroup | undefined;
   topicList: Array<IntSelectorModel> = [];
 
@@ -85,11 +84,9 @@ export class NewCardlistModalComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: Array<IntSelectorModel>) => {
           this.topicList = [...res];
-          this.isLoading = false;
           this.loadingService.hideLoading();
         },
         error: () => {
-          this.isLoading = false;
           this.loadingService.hideLoading();
           this.toastrService.presentErrorToast(
             this.translateService.instant('UNSUCCESSFUL_CARDLIST_CREATE')

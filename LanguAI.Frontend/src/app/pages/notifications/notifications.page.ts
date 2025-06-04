@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import {
@@ -10,6 +11,7 @@ import { FriendshipRequestService } from 'src/app/util/services/friendship-reque
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
+import { PROFILE_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-notifications',
@@ -44,11 +46,12 @@ export class NotificationsPage {
     private translateService: TranslateService,
     private loadingService: LoadingService,
     private friendshipRequestService: FriendshipRequestService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private navController: NavController
   ) {}
 
   ionViewWillEnter() {
-    this.loadFriendshipRequests();
+    //this.loadFriendshipRequests();
   }
 
   ionViewDidLeave() {
@@ -56,6 +59,10 @@ export class NotificationsPage {
     this.getFriendshipRequestListSub?.unsubscribe();
     this.friendshipRequestService.numberOfFriendshipRequest =
       this.friendshipRequests.length;
+  }
+
+  navigateToProfilePage(userId: number) {
+    this.navController.navigateForward(PROFILE_NAVIGATION + '/' + userId);
   }
 
   /**

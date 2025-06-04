@@ -1,6 +1,7 @@
 <ion-avatar
+  class="box-shadow"
   [ngStyle]="{ 'width.px': widthInPx, 'height.px': heightInPx }"
-  class="me-2">
+  [ngClass]="marginClass">
   <ion-img
     *ngIf="imageSrc?.length; else missingAvatar"
     [src]="imageSrc"></ion-img>

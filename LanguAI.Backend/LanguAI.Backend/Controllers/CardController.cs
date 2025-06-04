@@ -3,7 +3,6 @@ using LanguAI.Backend.ViewModels.Card;
 using LanguAI.Backend.ViewModels.SelectorModel;
 using LanguAI.Backend.ViewModels.Topic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace LanguAI.Backend.Controllers;
 

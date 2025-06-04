@@ -2,7 +2,8 @@
 
 <ion-content>
   <form *ngIf="newMessageForm" [formGroup]="newMessageForm" class="px-4">
-    <ion-select class="pb-4"
+    <ion-select
+      class="pb-4"
       formControlName="userId"
       [label]="'USERNAME' | translate"
       label-placement="floating">
@@ -12,12 +13,18 @@
     </ion-select>
 
     <ion-row class="ion-margin-bottom w-100">
-      <ion-button class="primary-button no-shadow w-100" (click)="confirm()">
+      <ion-button
+        mode="md"
+        class="primary-button no-shadow w-100"
+        (click)="confirm()">
         {{ 'CONFIRM' | translate }}
       </ion-button>
     </ion-row>
     <ion-row class="w-100">
-      <ion-button class="error-outline-button w-100" (click)="cancel()">
+      <ion-button
+        mode="md"
+        class="error-outline-button w-100"
+        (click)="cancel()">
         {{ 'CANCEL' | translate }}
       </ion-button>
     </ion-row>

@@ -1,27 +1,14 @@
 $a: 100%;
-$b: 16px;
-
-ion-header {
-  background-color: #f4eeff;
-}
+$b: 26px;
 
 ion-title {
   margin: 0 12px;
-}
-
-ion-fab {
-  &-button::part(native) {
-    background-color: #f4eeff;
-    color: #424242;
-
-    > ion-icon {
-      display: none;
-    }
-  }
+  font-size: 24px;
 }
 
 .left-fab {
-  top: -1px;
+  top: 6px;
+  left: 6px;
 }
 
 .right-fab {
@@ -29,12 +16,19 @@ ion-fab {
   left: calc(#{$a} - #{$b});
 
   &-container {
-    top: 12px;
+    top: 14px;
     left: calc(#{$a} - #{$b});
   }
 }
 
-.fab-button-small {
-    height: 32px;
-    width: 32px;
+@media only screen and (min-width: 632px) {
+  .right-fab {
+    &-container {
+      left: calc(50% + 290px);
+    }
+  }
+
+  .top-left-fab-container {
+    left: calc(50% - 320px);
+  }
 }

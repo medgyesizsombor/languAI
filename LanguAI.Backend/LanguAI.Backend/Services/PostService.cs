@@ -84,6 +84,7 @@ public class PostService : BaseService, IPostService
     {
         var post = _context.Post
             .Include(p => p.User)
+            .ThenInclude(u => u.Image)
             .Include(p => p.Interactions)
             .Where(p => p.Id == postId
                 && !p.IsDeleted)
@@ -99,6 +100,7 @@ public class PostService : BaseService, IPostService
                 NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
                 NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0),
                 Image = p.ImageId == null ? null : new ImageViewModel { Name = p.Image.Name, Type = p.Image.Type, Id = p.ImageId },
+                UserProfilePicture = p.User.ImageId == null ? null : new ImageViewModel { Name = p.User.Image.Name, Type = p.User.Image.Type, Id = p.User.ImageId },
                 Comments = p.Interactions.Where(i => i.InteractionType == InteractionEnum.Comment && !i.IsDeleted).Select(i => new CommentViewModel
                 {
                     Id = i.Id,
@@ -118,6 +120,12 @@ public class PostService : BaseService, IPostService
         {
             var bytes = await _storageService.DownloadBlob((int)post.Image.Id);
             post.Image.ContentAsString = Convert.ToBase64String(bytes);
+        }
+
+        if (post.UserProfilePicture != null)
+        {
+            var bytes = await _storageService.DownloadBlob((int)post.UserProfilePicture.Id);
+            post.UserProfilePicture.ContentAsString = Convert.ToBase64String(bytes);
         }
 
         return post;
@@ -195,7 +203,8 @@ public class PostService : BaseService, IPostService
                 Liked = p.Interactions.Any(i => i.UserId == currentUserId && i.InteractionType == InteractionEnum.Like && i.IsDeleted == false),
                 NumberOfLikes = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Like && !i.IsDeleted) ? 1 : 0),
                 NumberOfComments = p.Interactions.Sum(i => (i.InteractionType == InteractionEnum.Comment && !i.IsDeleted) ? 1 : 0),
-                Image = p.ImageId == null ? null : new ImageViewModel { Name = p.Image.Name, Type = p.Image.Type, Id = p.ImageId }
+                Image = p.ImageId == null ? null : new ImageViewModel { Name = p.Image.Name, Type = p.Image.Type, Id = p.ImageId },
+                UserProfilePicture = p.User.ImageId == null ? null : new ImageViewModel { Name = p.User.Image.Name, Type = p.User.Image.Type, Id = p.User.ImageId }
             })
             .OrderByDescending(p => p.Created)
             .ToList();
@@ -206,6 +215,12 @@ public class PostService : BaseService, IPostService
             {
                 var bytes = await _storageService.DownloadBlob((int)post.Image.Id);
                 post.Image.ContentAsString = Convert.ToBase64String(bytes);
+            }
+
+            if (post.UserProfilePicture != null)
+            {
+                var bytes = await _storageService.DownloadBlob((int)post.UserProfilePicture.Id);
+                post.UserProfilePicture.ContentAsString = Convert.ToBase64String(bytes);
             }
         }
 

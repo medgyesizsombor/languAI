@@ -4,6 +4,21 @@ ion-avatar {
   margin-right: 6px;
 }
 
+.image-container {
+  padding-top: 0;
+}
+
+.first-header {
+  padding-bottom: 0;
+}
+
 .avatar-row {
   margin-bottom: 6px;
+  padding-bottom: 12px;
+}
+
+@media only screen and (min-width: 632px) {
+  ion-card {
+    width: 600px;
+  }
 }

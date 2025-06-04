@@ -25,8 +25,10 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
 })
 export class CreatePostPage {
   title = this.translateService.instant('CREATING_POST');
+  subtitle = this.translateService.instant('CREATING_POST_SUBTITLE');
   postForm: FormGroup | undefined;
   isPostValid = false;
+  //TODO changes
   unsavedPost = false;
   currentAccessOfPost = AccessEnum.Public;
   image: ImageViewModel | undefined;
@@ -253,6 +255,7 @@ export class CreatePostPage {
           }
 
           this.title = this.translateService.instant('EDIT_POST');
+          this.subtitle = this.translateService.instant('EDIT_POST_SUBTITLE');
           return this.postService.getPostById$Json({ postId });
         })
       )

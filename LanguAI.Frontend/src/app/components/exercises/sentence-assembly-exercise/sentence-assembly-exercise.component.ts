@@ -25,10 +25,19 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
     | undefined;
 
   @Input() exercise: ExerciseViewModel | undefined;
-  @Output() showContinueButton = new EventEmitter<void>();
+  @Output() showContinueButton = new EventEmitter<number>();
 
+  mistakes: number = 0;
   correctSentence: Array<SentenceAssemblyExerciseWord> = [];
   clickedWords: Array<SentenceAssemblyExerciseWord> = [];
+  colors: Array<string> = [
+    '#EDAFB8',
+    '#E4572E',
+    '#FDCA40',
+    '#F79824',
+    '#F1DAC4',
+    '#B185A7'
+  ];
 
   constructor(
     private animationService: AnimationService,
@@ -64,8 +73,9 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
   check() {
     const isCorrect = this.isSolutionCorrect();
     if (isCorrect) {
-      this.showContinueButton.emit();
+      this.showContinueButton.emit(this.mistakes);
     } else {
+      this.mistakes++;
       this.animationService.rotateAnimation(this.container);
     }
   }
@@ -74,13 +84,9 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
    * Load data
    */
   private async loadData() {
-    if (this.exercise?.sentenceAssemblyExerciseSentence) {
+    if (this.exercise?.mainSentence) {
       await this.loadingService.showLoading('EXERCISE_IS_LOADING');
-      this.exercise.sentenceAssemblyExerciseSentence = [
-        ...this.mapTheIndexOfWords(
-          this.exercise?.sentenceAssemblyExerciseSentence
-        )
-      ];
+      this.exercise.sentenceAssemblyExerciseSentence = [...this.mapTheWords()];
       this.correctSentence = [
         ...this.exercise.sentenceAssemblyExerciseSentence
       ];
@@ -90,10 +96,8 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
           this.exercise.sentenceAssemblyExerciseSentence
         )
       ];
-      //TODO itt módosítani kell a szavakon
+
       this.loadingService.hideLoading();
-    } else {
-      //TODO mi van, ha nem tölt be
     }
   }
 
@@ -115,20 +119,18 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
     });
   }
 
-  /**
-   * Map the index of the words
-   */
-  private mapTheIndexOfWords(
-    sentence: Array<SentenceAssemblyExerciseWord>
-  ): Array<SentenceAssemblyExerciseWord> {
-    if (sentence?.length) {
-      return sentence.map((s: SentenceAssemblyExerciseWord, i: number) => {
-        s.index = i;
-        return s;
-      });
-    } else {
-      return [];
+  private mapTheWords(): Array<SentenceAssemblyExerciseWord> {
+    const words = this.exercise?.mainSentence?.split(' ');
+
+    if (words?.length) {
+      return words?.map((text, index) => ({
+        clicked: false,
+        index,
+        text
+      }));
     }
+
+    return [];
   }
 
   /**

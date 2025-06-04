@@ -1,10 +1,9 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
-  OnDestroy,
-  OnInit,
   Output,
   ViewChild
 } from '@angular/core';
@@ -23,7 +22,7 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   styleUrls: ['./summary.component.scss'],
   standalone: false
 })
-export class SummaryComponent implements OnInit, OnDestroy {
+export class SummaryComponent {
   @ViewChild('previousStreakCard', { read: ElementRef })
   previousStreakCard!: ElementRef<HTMLIonCardElement>;
   @ViewChild('newStreakCard', { read: ElementRef })
@@ -31,8 +30,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
   @Input() statistics: Statistics | undefined;
   @Output() navigateToLessonsEmit = new EventEmitter<void>();
-  exp: number = 0;
+  exp: number = 100;
   showStreakAnimation = true;
+  wasStreakAnimationSeen = false;
   streak: number = 0;
   showNavigateToLessons = false;
 
@@ -46,62 +46,62 @@ export class SummaryComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private loadingService: LoadingService,
     private toastrService: ToastrService,
-    private animationService: AnimationService
+    private animationService: AnimationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
-    // this.calculateAndSaveGameplay();
-  }
-
-  ngAfterViewInit() {
+  ionViewDidEnter() {
     this.calculateAndSaveGameplay();
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
     this.saveGameplaySub?.unsubscribe();
   }
 
-  async startAnimation() {
-    await this.animationService.streakAnimation(
-      this.previousStreakCard,
-      this.newStreakCard
-    );
-
-    this.showNavigateToLessons = true;
-  }
-
   navigateToLessons() {
-    this.navigateToLessonsEmit.emit();
+    if (this.showStreakAnimation && !this.wasStreakAnimationSeen) {
+      this.startAnimation();
+      this.wasStreakAnimationSeen = true;
+    } else {
+      this.navigateToLessonsEmit.emit();
+    }
   }
 
   /**
    * Calculate the experience by the mistakes
    */
   private async calculateAndSaveGameplay() {
-    await this.loadingService.showLoading('CALCULATE_AND_SAVE_GAMEPLAY');
-    if (
-      this.statistics?.allAnswer &&
-      (this.statistics?.mistakes === 0 || this.statistics?.mistakes)
-    ) {
-      this.exp = this.statistics?.allAnswer - this.statistics?.mistakes;
+    //await this.loadingService.showLoading('CALCULATE_AND_SAVE_GAMEPLAY');
+    if (this.statistics?.mistakes === 0 || this.statistics?.mistakes) {
+      this.exp = 100 - this.statistics?.mistakes * 5;
+      this.cdr.detectChanges();
     }
 
-    this.saveGameplaySub = this.gameplayService
-      .saveGameplay$Json({
-        body: { point: 3, userId: this.localStorageService.getUserId()! }
-      })
-      .subscribe({
-        next: (streakChanged: boolean) => {
-          if (streakChanged) {
-            this.streak = this.localStorageService.getStreak();
-            this.showStreakAnimation = true;
-          }
-          this.loadingService.hideLoading();
-        },
-        error: () => {
-          this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast('ERROR_WHILE_SAVING_GAMEPLAY');
-        }
-      });
+    // this.saveGameplaySub = this.gameplayService
+    //   .saveGameplay$Json({
+    //     body: { point: this.exp, userId: this.localStorageService.getUserId()! }
+    //   })
+    //   .subscribe({
+    //     next: (streakChanged: boolean) => {
+    //       if (streakChanged) {
+    //         this.streak = this.localStorageService.getStreak();
+    //         this.showStreakAnimation = true;
+    //       }
+    //       this.loadingService.hideLoading();
+    //     },
+    //     error: () => {
+    //       this.loadingService.hideLoading();
+    //       this.toastrService.presentErrorToast('ERROR_WHILE_SAVING_GAMEPLAY');
+    //     }
+    //   });
+  }
+
+  private async startAnimation() {
+    await this.animationService.streakAnimation(
+      this.previousStreakCard,
+      this.newStreakCard
+    );
+
+    this.showNavigateToLessons = true;
   }
 }

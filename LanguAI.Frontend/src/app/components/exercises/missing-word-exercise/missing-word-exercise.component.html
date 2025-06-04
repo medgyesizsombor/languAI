@@ -1,33 +1,51 @@
-<ion-row class="exercise-title">
-  <ion-label>
-    {{ 'CLICK_ON_THE_MISSING_WORD' | translate }}
-  </ion-label>
-</ion-row>
+<div>
+  <ion-row class="exercise-title">
+    <ion-label class="ion-text-center">
+      {{ 'CLICK_ON_THE_MISSING_WORD' | translate }}
+    </ion-label>
+  </ion-row>
 
-<div #container>
   <div class="row ion-margin-bottom">
-    <ion-card class="ion-padding py-24px no-shadow">
-      <div class="d-flex ion-align-items-center">
-        <span>
-          <span class="me-1">{{ exercise?.firstPartOfTheSentence }}</span>
-          <div *ngIf="!isCorrect; else correct" class="blank me-1"></div>
-          <span>{{ exercise?.lastPartOfTheSentence }}</span>
-        </span>
+    <ion-card class="ion-padding no-shadow">
+      <div class="ion-align-items-center label-container">
+        <ion-label class="ion-padding-bottom ion-text-center">
+          {{ exercise?.firstPartOfTheSentence }}
+        </ion-label>
+        <div
+          *ngIf="!isCorrect; else correct"
+          class="d-flex ion-justify-content-center">
+          <span class="blank">
+            <span style="visibility: hidden">
+              {{ exercise?.correctWord }}
+            </span>
+          </span>
+        </div>
+        <ion-label class="ion-padding-top ion-text-center">
+          {{ exercise?.lastPartOfTheSentence }}
+        </ion-label>
       </div>
     </ion-card>
   </div>
-  <div class="row missing-words-container">
-    <ion-card
-      class="missing-words"
-      *ngFor="let word of exercise?.words"
-      (click)="checkWord(word)">
-      {{ word }}
-    </ion-card>
+
+  <div #container>
+    <div class="row missing-words-container">
+      <ion-card
+        [ngStyle]="{ background: colors[index % colors.length] }"
+        class="missing-words ion-text-center"
+        *ngFor="let word of exercise?.words; let index = index"
+        (click)="checkWord(word)">
+        {{ word }}
+      </ion-card>
+    </div>
   </div>
 </div>
 
 <ng-template #correct>
-  <div class="correct-blank me-1">
-    {{ exercise?.correctWord }}
+  <div class="d-flex ion-justify-content-center">
+    <span class="correct-blank">
+      <span>
+        {{ exercise?.correctWord }}
+      </span>
+    </span>
   </div>
 </ng-template>

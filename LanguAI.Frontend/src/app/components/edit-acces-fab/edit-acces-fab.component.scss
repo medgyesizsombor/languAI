@@ -1,8 +1,10 @@
-ion-fab-button::part(native) {
-    background-color: #f4eeff;
-    color: #a6b1e1;
-  
+ion-fab {
+  > ion-fab-button {
+    --background: #424872;
     > ion-icon {
-      --ionicon-stroke-width: 40px;
+      background-color: #424872;
+      color: hsl(229, 50%, 98%);
+      border-radius: 50px;
     }
   }
+}

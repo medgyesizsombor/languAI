@@ -1,0 +1,27 @@
+ion-card {
+  max-width: 600px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: center;
+}
+
+.message-label {
+  width: 100%;
+  display: block;
+}
+
+.message-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message-text {
+  padding-right: 10px;
+}
+
+.data-col {
+  width: calc(100% - 92px);
+}

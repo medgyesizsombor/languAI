@@ -1,12 +1,16 @@
 .blank {
-  width: 100px;
-  height: 20px;
-  background-color: #eef9ff;
+  width: fit-content;
+  min-width: 100px;
+  padding: 0 16px;
+  height: 24px;
+  background-color: #cdcecf;
   border-radius: 6px;
+  display: inline-block;
+  border: 1px solid #424872;
 }
 
 ion-card {
-  background-color: #dcd6f7;
+  background-color: hsl(229, 50%, 98%);
   border-radius: 8px;
 }
 
@@ -18,20 +22,27 @@ ion-card {
   width: fit-content;
   padding: 4px 16px;
   border-radius: 6px;
+  min-width: 100px;
 }
 
 .missing-words-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  justify-items: center;
   justify-content: center;
 }
 
 .correct-blank {
-  width: 100px;
-  height: 20px;
-  background-color: #A6B1E1;
+  min-width: 100px;
+  width: fit-content;
+  height: 24px;
+  padding: 0 16px;
+  background-color: #83c0c1;
   border-radius: 6px;
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.label-container {
+  display: grid;
 }

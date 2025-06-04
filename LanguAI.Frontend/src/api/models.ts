@@ -2,8 +2,6 @@
 /* eslint-disable */
 export { AccessEnum } from './models/access-enum';
 export { AuthenticateRequestViewModel } from './models/authenticate-request-view-model';
-export { Card } from './models/card';
-export { CardList } from './models/card-list';
 export { CardListViewModel } from './models/card-list-view-model';
 export { CardViewModel } from './models/card-view-model';
 export { ChangeAccessOfCardListViewModel } from './models/change-access-of-card-list-view-model';
@@ -13,26 +11,21 @@ export { DeleteCommentRequestViewModel } from './models/delete-comment-request-v
 export { DislikeRequestViewModel } from './models/dislike-request-view-model';
 export { ExerciseTypeEnum } from './models/exercise-type-enum';
 export { ExerciseViewModel } from './models/exercise-view-model';
-export { Friendship } from './models/friendship';
 export { FriendshipRequestViewModel } from './models/friendship-request-view-model';
 export { FriendshipStatusEnum } from './models/friendship-status-enum';
 export { FriendshipViewModel } from './models/friendship-view-model';
-export { Gameplay } from './models/gameplay';
-export { Image } from './models/image';
 export { ImageViewModel } from './models/image-view-model';
-export { Interaction } from './models/interaction';
 export { InteractionEnum } from './models/interaction-enum';
 export { IntSelectorModel } from './models/int-selector-model';
 export { IsCorrectAndTextSentenceViewModel } from './models/is-correct-and-text-sentence-view-model';
 export { Language } from './models/language';
 export { LanguageLevelEnum } from './models/language-level-enum';
+export { LastMessageViewModel } from './models/last-message-view-model';
 export { LeaderboardUserViewModel } from './models/leaderboard-user-view-model';
-export { Learning } from './models/learning';
 export { LearningViewModel } from './models/learning-view-model';
-export { Message } from './models/message';
 export { MessageStatusEnum } from './models/message-status-enum';
 export { MessageViewModel } from './models/message-view-model';
-export { Post } from './models/post';
+export { OtherUserViewModel } from './models/other-user-view-model';
 export { PostViewModel } from './models/post-view-model';
 export { ProfilePageDataViewModel } from './models/profile-page-data-view-model';
 export { RegisterRequestViewModel } from './models/register-request-view-model';
@@ -44,9 +37,7 @@ export { SaveLearningRequestViewModel } from './models/save-learning-request-vie
 export { SavePostRequest } from './models/save-post-request';
 export { SaveUserRequest } from './models/save-user-request';
 export { SentenceAssemblyExerciseWord } from './models/sentence-assembly-exercise-word';
-export { Topic } from './models/topic';
 export { TopicOfCurrentLearningViewModel } from './models/topic-of-current-learning-view-model';
-export { User } from './models/user';
 export { UserDataViewModel } from './models/user-data-view-model';
 export { UserDiscoveryViewModel } from './models/user-discovery-view-model';
 export { UserViewModel } from './models/user-view-model';

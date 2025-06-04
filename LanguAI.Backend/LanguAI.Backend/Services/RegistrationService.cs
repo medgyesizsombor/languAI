@@ -25,8 +25,6 @@ public class RegistrationService : BaseService, IRegistrationService
     /// <returns></returns>
     public int? Register(RegisterRequestViewModel request)
     {
-        try
-        {
             if (_context.User
                 .Any(u => u.IsActive
                     && (u.Username == request.Username || u.Email == request.Email)))
@@ -49,13 +47,6 @@ public class RegistrationService : BaseService, IRegistrationService
             _context.SaveChanges();
 
             return user.Id;
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
-
-
     }
 }
 

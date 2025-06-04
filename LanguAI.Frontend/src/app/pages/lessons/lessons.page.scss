@@ -1,3 +1,24 @@
 .topic-name {
   background: #a6b1e1;
 }
+
+.topic-card {
+  height: 150px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media only screen and (min-width: 632px) {
+  ion-card {
+    width: 600px;
+  }
+
+  ion-content {
+    justify-content: center;
+  }
+
+  .card-row {
+    display: flex;
+    justify-content: center;
+  }
+}

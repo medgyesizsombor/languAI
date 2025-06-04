@@ -26,6 +26,7 @@ public interface ICardService
     void DeleteCardById(int cardId);
     List<IntSelectorModel> GetAllTopicsByCurrentLearning(int learningId);
     void SaveCard(CardViewModel card);
+    public string GetLanguageWordsAsOneStringByTopicId(int topicId, int userId, bool learningLanguage = true);
 }
 
 public class CardService : BaseService, ICardService
@@ -189,6 +190,8 @@ public class CardService : BaseService, ICardService
         {
             return _context.CardList
                  .Include(c => c.Cards)
+                 .Include(c => c.LearningLanguage)
+                 .Include(c => c.NativeLanguage)
                  .Where(c => c.UserId == userId
                         && !c.IsDeleted)
                  .Select(c => ConvertCardListToCardListViewModel(c))
@@ -208,7 +211,10 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public List<CardListViewModel> GetCardListsOfOtherUserByUserId(int currentUserId, int otherUserId)
     {
-        return _context.CardList.Include(c => c.Cards)
+        return _context.CardList
+            .Include(c => c.Cards)
+            .Include(c => c.NativeLanguage)
+            .Include(c => c.LearningLanguage)
             .Where(c => c.UserId == otherUserId
                     && !c.IsDeleted
                     && (c.Access == AccessEnum.Public
@@ -317,6 +323,33 @@ public class CardService : BaseService, ICardService
             .Where(c => c.CardListId == cardListId)
             .Select(c => learningLanguage == true ? c.WordInLearningLanguage : c.WordInNativeLanguage)
             .ToList();
+
+        return string.Join(", ", wordList);
+    }
+
+    /// <summary>
+    /// Get language words by id of topic
+    /// </summary>
+    /// <param name="topicId"></param>
+    /// <returns></returns>
+    public string GetLanguageWordsAsOneStringByTopicId(int topicId, int userId, bool learningLanguage = true)
+    {
+        var cardListsByTopic = _context.CardList
+            .Include(cl => cl.Cards)
+            .Where(cl => cl.TopicId == topicId 
+                && cl.UserId == userId
+                && !cl.IsDeleted)
+            .ToList();
+
+        var wordList = new List<string>();
+
+        foreach (var cardList in cardListsByTopic)
+        {
+            foreach (var card in cardList.Cards)
+            {
+                wordList.Add(learningLanguage == true ? card.WordInLearningLanguage : card.WordInNativeLanguage);
+            }
+        }
 
         return string.Join(", ", wordList);
     }

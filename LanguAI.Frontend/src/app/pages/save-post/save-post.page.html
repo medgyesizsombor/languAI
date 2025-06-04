@@ -3,44 +3,50 @@
   [showSaveButton]="isPostValid"
   (saveButtonEmit)="savePost()"
   [showBackArrow]="true"
+  [subtitle]="subtitle"
   [showSavingMissed]="unsavedPost"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 <ion-content class="ion-padding">
-  <ion-card>
-    <form *ngIf="postForm" [formGroup]="postForm">
-      <ion-row
-        class="input-row ion-padding-horizontal ion-justify-content-between pt-2">
-        <ion-textarea
-          [spellcheck]="false"
-          [autoGrow]="true"
-          [maxlength]="250"
-          [counter]="true"
-          autocapitalize="sentences"
-          id="text"
-          class="form-control"
-          formControlName="text"
-          placeholder="{{ 'WRITE_HERE_THE_CONTEXT_OF_POST' | translate }}"
-          (keyup)="isValid()"></ion-textarea>
-      </ion-row>
-      <ng-container *ngIf="!this.image; else imageTemplate">
-        <ion-row class="ion-justify-content-between">
-          <ion-item lines="none">
-            <ion-icon
-              name="image-outline"
-              (click)="openImageModal()"></ion-icon>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-icon
-              name="help-outline"
-              (click)="openChatGPTModal()"></ion-icon>
-          </ion-item>
+  <div class="card-row">
+    <ion-card mode="md" class="w-100">
+      <form *ngIf="postForm" [formGroup]="postForm">
+        <ion-row
+          class="input-row ion-padding-horizontal ion-justify-content-between pt-2">
+          <ion-textarea
+            mode="md"
+            [spellcheck]="false"
+            [autoGrow]="true"
+            [maxlength]="250"
+            [counter]="true"
+            autocapitalize="sentences"
+            id="text"
+            class="form-control"
+            formControlName="text"
+            placeholder="{{ 'WRITE_HERE_THE_CONTEXT_OF_POST' | translate }}"
+            (keyup)="isValid()"></ion-textarea>
         </ion-row>
-      </ng-container>
-    </form>
-  </ion-card>
-  <app-edit-acces-fab
-    [currentAccess]="currentAccessOfPost"
-    (changeAccessEmit)="changeAccess($event)"></app-edit-acces-fab>
+        <ng-container *ngIf="!this.image; else imageTemplate">
+          <ion-row class="ion-justify-content-between">
+            <ion-item mode="md" lines="none">
+              <ion-icon
+                mode="md"
+                name="image-outline"
+                (click)="openImageModal()"></ion-icon>
+            </ion-item>
+            <ion-item mode="md" lines="none">
+              <ion-icon
+                mode="md"
+                name="help-outline"
+                (click)="openChatGPTModal()"></ion-icon>
+            </ion-item>
+          </ion-row>
+        </ng-container>
+      </form>
+    </ion-card>
+    <app-edit-acces-fab
+      [currentAccess]="currentAccessOfPost"
+      (changeAccessEmit)="changeAccess($event)"></app-edit-acces-fab>
+  </div>
 </ion-content>
 
 <ng-template #imageTemplate>
@@ -51,6 +57,7 @@
       [imageString]="image?.contentAsString"
       [type]="image?.type"></app-image>
     <ion-icon
+      mode="md"
       class="fs-20 error-color"
       name="trash-outline"
       (click)="removeImage()"></ion-icon>

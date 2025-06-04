@@ -1,30 +1,10 @@
-ion-icon {
-  color: #a6b1e1;
-  --ionicon-stroke-width: 40px;
-}
-
-ion-fab-list {
-  margin-bottom: 52px;
-}
-
-.close-icon {
-  color: #a6b1e1;
-  --ionicon-stroke-width: 40px;
-}
-
-ion-fab-button::part(native) {
-  background-color: #f4eeff;
-  color: #a6b1e1;
-
-  > ion-icon {
-    --ionicon-stroke-width: 40px;
-  }
-}
-
-ion-fab-button.fab-button-close-active {
-  color: #a6b1e1;
-
-  > ion-icon {
-    --ionicon-stroke-width: 40px;
+ion-fab {
+  > ion-fab-button {
+    --background: #424872;
+    > ion-icon {
+      background-color: #424872;
+      color: hsl(229, 50%, 98%);
+      border-radius: 50px;
+    }
   }
 }

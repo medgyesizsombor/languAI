@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommentViewModel } from 'src/api/models';
+import { FileService } from 'src/app/util/services/file.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 
 @Component({
@@ -15,7 +16,10 @@ export class CommentComponent implements OnInit {
 
   userId: number | undefined;
 
-  constructor(private localStorageService: LocalStorageService) {}
+  constructor(
+    private localStorageService: LocalStorageService,
+    protected fileService: FileService
+  ) {}
 
   ngOnInit() {
     this.userId = this.localStorageService.getUserId()!;

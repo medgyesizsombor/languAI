@@ -7,6 +7,10 @@
   <ion-row size="6" *ngFor="let word of originalWords; let index = index">
     <ion-col class="d-flex ion-justify-content-center">
       <ion-card
+        [ngStyle]="{
+          background: leftColors[index % leftColors.length],
+          'box-shadow': nativeWords[index].paired ? 'none' : null
+        }"
         class="word-card"
         [ngClass]="{ clicked: clickedWord?.text === word.wordInNativeLanguage }"
         [disabled]="nativeWords[index].paired"
@@ -16,6 +20,10 @@
     </ion-col>
     <ion-col class="d-flex ion-justify-content-center">
       <ion-card
+        [ngStyle]="{
+          background: rigthColors[index % rigthColors.length],
+          'box-shadow': learningWords[index].paired ? 'none' : null
+        }"
         class="word-card"
         [ngClass]="{
           clicked: clickedWord?.text === learningWords[index].text

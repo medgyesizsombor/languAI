@@ -11,6 +11,7 @@ import { AlertService } from 'src/app/util/services/alert.service';
 })
 export class HeaderComponent {
   @Input() title = '';
+  @Input() subtitle = '';
   @Input() navigationLink = '';
   @Input() useNavController = false;
   @Input() showBackArrow = false;
@@ -19,6 +20,7 @@ export class HeaderComponent {
   @Input() showSavingMissed = false;
   @Input() showSendingMissed = false;
   @Input() showMessageButton = false;
+  @Input() fontSizeClass: string | null = 'fs-32';
 
   @Output() saveButtonEmit = new EventEmitter<void>();
   @Output() addButtonEmit = new EventEmitter<void>();

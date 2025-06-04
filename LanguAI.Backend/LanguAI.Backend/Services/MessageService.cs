@@ -3,6 +3,7 @@ using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Message;
+using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
 
@@ -10,6 +11,7 @@ public interface IMessageService
 {
     bool SendMessage(MessageViewModel request);
     List<MessageViewModel> GetMessageListByUserId(int userId, int friendId);
+    LastMessageViewModel GetLastMessageByUserIds(int userId, int otherUserId);
 }
 
 public class MessageService : BaseService, IMessageService
@@ -71,9 +73,6 @@ public class MessageService : BaseService, IMessageService
     /// <returns></returns>
     public List<MessageViewModel> GetMessageListByUserId(int userId, int friendId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-        ArgumentNullException.ThrowIfNull(friendId);
-
         return _context.Message
             .Where(m =>
                 (m.SenderId == userId && m.RecipientId == friendId)
@@ -88,5 +87,23 @@ public class MessageService : BaseService, IMessageService
             })
             .OrderBy(m => m.SentAt)
             .ToList();
+    }
+
+    public LastMessageViewModel GetLastMessageByUserIds(int userId, int otherUserId)
+    {
+        return _context.Message
+            .Include(m => m.Sender)
+            .Include(m => m.Recipient)
+            .Where(m =>
+                (m.SenderId == userId && m.RecipientId == otherUserId)
+                || (m.SenderId == otherUserId && m.RecipientId == userId))
+            .Select(m => new LastMessageViewModel
+            {
+                SenderUsername = m.SenderId == userId ? m.Sender.Username : m.Recipient.Username,
+                SentAt = m.SentAt,
+                Text = m.Text
+            })
+            .OrderByDescending(m => m.SentAt)
+            .FirstOrDefault();
     }
 }

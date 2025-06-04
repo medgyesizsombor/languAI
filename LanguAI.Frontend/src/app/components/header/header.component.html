@@ -1,23 +1,29 @@
-<ion-header class="ion-no-border px-4 py-1">
-  <ion-toolbar class="ion-text-center ion-no-padding">
-    <div class="absolute" *ngIf="showBackArrow">
+<ion-header class="ion-no-border" mode="md">
+  <ion-toolbar mode="md" class="ion-text-center ion-no-padding">
+    <div class="absolute top-left-fab-container" *ngIf="showBackArrow">
       <ion-fab class="left-fab">
         <ion-fab-button
-          size="small"
           class="no-shadow ion-no-margin"
           (click)="navigateBack()">
-          <ion-icon class="fs-28" name="arrow-back-outline"></ion-icon>
+          <ion-icon class="fs-32" name="arrow-back-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </div>
-    <ion-title>{{ title }}</ion-title>
+    <ion-title
+      [ngClass]="fontSizeClass"
+      class="ion-no-padding ion-padding-top dark-color">
+      {{ title }}
+    </ion-title>
+    <ion-label *ngIf="subtitle.length" class="fs-13 dark-color">
+      {{ subtitle }}
+    </ion-label>
     <div class="absolute right-fab-container" *ngIf="showSaveButton">
       <ion-fab class="right-fab" horizontal="end">
         <ion-fab-button
           size="small"
           class="no-shadow ion-no-margin"
           (click)="saveButtonEmit.emit()">
-          <ion-icon class="fs-28" name="save-outline"></ion-icon>
+          <ion-icon class="fs-32" name="save-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </div>
@@ -27,7 +33,7 @@
           size="small"
           class="no-shadow ion-no-margin"
           (click)="addButtonEmit.emit()">
-          <ion-icon class="fs-28" name="add-outline"></ion-icon>
+          <ion-icon class="fs-32" name="add-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </div>
@@ -37,7 +43,7 @@
           size="small"
           class="no-shadow ion-no-margin"
           (click)="sendMessageButtonEmit.emit()">
-          <ion-icon name="mail-outline"></ion-icon>
+          <ion-icon class="fs-32" name="mail-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </div>

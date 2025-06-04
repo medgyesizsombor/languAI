@@ -47,11 +47,11 @@ public class GameplayController : ControllerBase
     }
 
     [HttpGet(Name = "GetWeeklyLeaderboard")]
-    public ActionResult<List<LeaderboardUserViewModel>> GetWeeklyLeaderboard()
+    public async Task<ActionResult<List<LeaderboardUserViewModel>>> GetWeeklyLeaderboardAsync()
     {
         try
         {
-            return Ok(_gameplayService.GetWeeklyLeaderboard());
+            return Ok(await _gameplayService.GetWeeklyLeaderboardAsync());
         }
         catch (Exception e)
         {

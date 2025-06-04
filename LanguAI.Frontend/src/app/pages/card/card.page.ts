@@ -128,7 +128,7 @@ export class CardPage {
     this.getCardSub = this.activatedRoute.params
       .pipe(
         switchMap((params: Params) => {
-          this.cardId = params['cardId'];
+          this.cardId = params['card-id'];
 
           if (!this.cardId) {
             this.loadingService.hideLoading();
