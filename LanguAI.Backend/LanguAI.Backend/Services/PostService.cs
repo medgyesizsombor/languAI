@@ -22,10 +22,12 @@ public interface IPostService
 public class PostService : BaseService, IPostService
 {
     private readonly IStorageService _storageService;
+    private readonly IUserService _userService;
 
-    public PostService(LanguAIDataContext context, IStorageService storageService) : base(context)
+    public PostService(LanguAIDataContext context, IStorageService storageService, IUserService userService) : base(context)
     {
         _storageService = storageService;
+        _userService = userService;
     }
 
     /// <summary>
@@ -86,6 +88,8 @@ public class PostService : BaseService, IPostService
             .Include(p => p.User)
             .ThenInclude(u => u.Image)
             .Include(p => p.Interactions)
+            .ThenInclude(i => i.User)
+            .ThenInclude(u => u.Image)
             .Where(p => p.Id == postId
                 && !p.IsDeleted)
             .Select(p => new PostViewModel
@@ -108,13 +112,17 @@ public class PostService : BaseService, IPostService
                     Liked = i.ChildInteractions.Any(ci => ci.ParentInteractionId == i.Id && !ci.IsDeleted && ci.UserId == currentUserId),
                     NumberOfLikes = i.ChildInteractions.Sum(ci => (ci.InteractionType == InteractionEnum.Like && !ci.IsDeleted) ? 1 : 0),
                     UserId = i.UserId,
-                    Text = i.Content,
-                    Username = i.User.Username
+                    Text = i.Content
                 })
                 .OrderBy(p => p.Created)
                 .ToList()
             })
             .FirstOrDefault();
+
+        post.Comments.ForEach(async c =>
+        {
+            c.User = await _userService.GetUserById(c.UserId);
+        });
 
         if (post.Image != null)
         {

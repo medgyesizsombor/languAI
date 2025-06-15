@@ -4,44 +4,51 @@
   (addButtonEmit)="newMessage()"
   [subtitle]="('MESSAGES_SUBTITLE' | translate)"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngIf="!friendList?.length; else missingFriendList">
-    <ion-row
-      class="card-row ion-padding-bottom"
-      *ngFor="let friend of friendList">
-      <ion-card class="w-100 ion-padding" (click)="openMessage(friend.userId)">
-        <ion-row class="align-item-center">
-          <ion-col size="auto" class="ion-padding-end">
-            <app-avatar
-              [marginClass]="null"
-              [widthInPx]="60"
-              [heightInPx]="60"
-              [imageSrc]="fileService.getImageSrc(friend.profilePicture?.contentAsString,friend.profilePicture?.type)"></app-avatar>
-          </ion-col>
-          <ion-col class="data-col">
-            <ion-row>
-              <ion-label mode="md" class="fs-16">
-                {{ friend.username }}
-              </ion-label>
-            </ion-row>
-            <ion-row class="ion-justify-content-between ion-align-items-center">
-              <ion-col class="hidden-text message-text">
-                <ion-label class="fs-13 hidden-text">
-                  {{ friend.lastMessage?.senderUsername }}: {{
-                  friend.lastMessage?.text}}
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="friendList?.length; else missingFriendList">
+      <ion-row
+        class="card-row ion-padding-bottom"
+        *ngFor="let friend of friendList">
+        <ion-card
+          class="w-100 ion-padding"
+          (click)="openMessage(friend.userId)">
+          <ion-row class="align-item-center">
+            <ion-col size="auto" class="ion-padding-end">
+              <app-avatar
+                [marginClass]="null"
+                [widthInPx]="60"
+                [heightInPx]="60"
+                [imageSrc]="fileService.getImageSrc(friend.profilePicture?.contentAsString, friend.profilePicture?.type)"></app-avatar>
+            </ion-col>
+            <ion-col class="data-col">
+              <ion-row>
+                <ion-label mode="md" class="fs-16">
+                  {{ friend.username }}
                 </ion-label>
-              </ion-col>
-              <ion-col size="auto" class="message-time">
-                <ion-label mode="md" class="fs-13">
-                  {{ friend.lastMessage?.sentAt! | timeAgo }}
-                </ion-label>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-        </ion-row>
-      </ion-card>
-    </ion-row>
+              </ion-row>
+              <ion-row
+                class="ion-justify-content-between ion-align-items-center">
+                <ion-col class="hidden-text message-text">
+                  <ion-label class="fs-13 hidden-text">
+                    {{ friend.lastMessage?.senderUsername }}: {{
+                    friend.lastMessage?.text}}
+                  </ion-label>
+                </ion-col>
+                <ion-col size="auto" class="message-time">
+                  <ion-label mode="md" class="fs-13">
+                    {{ friend.lastMessage?.sentAt! | timeAgo }}
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-row>
+    </ng-container>
   </ng-container>
 </ion-content>
+
+<app-footer></app-footer>
 
 <ng-template #missingFriendList>
   <ion-row>

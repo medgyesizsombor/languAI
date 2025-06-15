@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -33,15 +34,20 @@ export class ForumPage {
     private translateService: TranslateService,
     private navController: NavController,
     private localStorageService: LocalStorageService,
-    private userInteractionService: UserInteractionService
+    private userInteractionService: UserInteractionService,
+    private router: Router
   ) {}
 
   ionViewWillEnter() {
-    //FORUM is not loading every open
     this.loadPosts();
   }
 
-  ionViewDidLeave() {
+  onTabChange(event: CustomEvent) {
+    if (event.detail.tab === 'forum') {
+    }
+  }
+
+  ionViewWillLeave() {
     this.getPostsSub?.unsubscribe();
   }
 
@@ -70,7 +76,7 @@ export class ForumPage {
     } else {
       url = SAVE_POST_NAVIGATION;
     }
-    this.navController.navigateForward(url);
+    this.router.navigate([url]);
   }
 
   /**

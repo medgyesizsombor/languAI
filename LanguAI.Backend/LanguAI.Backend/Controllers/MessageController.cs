@@ -1,5 +1,6 @@
 ﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Message;
+using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
@@ -11,11 +12,8 @@ public class MessageController : ControllerBase
     private readonly IMessageService _messageService;
     private readonly IAuthenticationService _authenticationService;
 
-    private readonly ILogger _logger;
-
-    public MessageController(ILogger<MessageController> logger, IMessageService messageService, IAuthenticationService authenticationService)
+    public MessageController(IMessageService messageService, IAuthenticationService authenticationService)
     {
-        _logger = logger;
         _messageService = messageService;
         _authenticationService = authenticationService;
     }
@@ -30,15 +28,7 @@ public class MessageController : ControllerBase
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        try
-        {
-            return Ok(_messageService.SendMessage(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_messageService.SendMessage(request));
     }
 
     /// <summary>
@@ -52,14 +42,6 @@ public class MessageController : ControllerBase
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        try
-        {
-            return Ok(_messageService.GetMessageListByUserId((int)currentUserId, friendId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_messageService.GetMessageListByUserId((int)currentUserId, friendId));
     }
 }

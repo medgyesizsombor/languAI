@@ -13,11 +13,8 @@ public class LearningController : ControllerBase
     private readonly IAuthenticationService _authenticationService;
     private readonly ILearningService _learningService;
 
-    private readonly ILogger _logger;
-
-    public LearningController(ILogger<LearningController> logger, IAuthenticationService authenticationService, ILearningService learningService)
+    public LearningController(IAuthenticationService authenticationService, ILearningService learningService)
     {
-        _logger = logger;
         _authenticationService = authenticationService;
         _learningService = learningService;
     }
@@ -36,15 +33,7 @@ public class LearningController : ControllerBase
 
         if (currentUserId != request.UserId) throw new ArgumentException();
 
-        try
-        {
-            return Ok(_learningService.SaveLearning(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_learningService.SaveLearning(request));
     }
 
     /// <summary>
@@ -57,15 +46,7 @@ public class LearningController : ControllerBase
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        try
-        {
-            return Ok(_learningService.GetLearningsOfUser((int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_learningService.GetLearningsOfUser((int)currentUserId));
     }
 
     /// <summary>
@@ -82,14 +63,6 @@ public class LearningController : ControllerBase
 
         if (currentUserId != userId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(_learningService.ChangeActiveLearning(userId, learningId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_learningService.ChangeActiveLearning(userId, learningId));
     }
 }

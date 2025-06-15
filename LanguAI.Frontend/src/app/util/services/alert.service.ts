@@ -10,6 +10,10 @@ import { LanguageEnum } from '../enums/language-enum';
 import { CardlistsSortEnum } from '../enums/cardlists-sort-enum';
 import { RoleBooleanDataViewModel } from '../models/role-boolean-data-view-model';
 import { FormGroup } from '@angular/forms';
+import {
+  ENGLISH_LANGUAGE_CODE,
+  HUNGARIAN_LANGUAGE_CODE
+} from '../util.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -586,7 +590,11 @@ export class AlertService {
             text: this.translateService.instant('CONFIRM'),
             role: 'confirm',
             handler: data => {
-              resolve(data === LanguageEnum.hungarian ? 'hu' : 'en');
+              resolve(
+                data === LanguageEnum.hungarian
+                  ? HUNGARIAN_LANGUAGE_CODE
+                  : ENGLISH_LANGUAGE_CODE
+              );
             }
           }
         ]
@@ -879,7 +887,7 @@ export class AlertService {
     });
   }
 
-    /**
+  /**
    * Show not existing learning alert
    */
   async showNotExistingLearningAlert(): Promise<boolean> {

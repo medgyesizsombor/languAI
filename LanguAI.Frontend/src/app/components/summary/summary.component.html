@@ -17,8 +17,8 @@
   </ion-row>
   <ion-row
     *ngIf="statistics"
-    class="ion-justify-content-around ion-padding-top">
-    <ion-col size="5">
+    class="ion-justify-content-center ion-padding-top">
+    <ion-col class="summary-col ion-margin-end">
       <ion-card>
         <ion-card-title class="time-card-header">
           {{ 'TIME' | translate }}
@@ -28,7 +28,7 @@
         </ion-card-content>
       </ion-card>
     </ion-col>
-    <ion-col size="5">
+    <ion-col class="summary-col">
       <ion-card>
         <ion-card-title class="time-card-header">
           {{ 'EXP' | translate }}
@@ -58,14 +58,14 @@
       class="primary-button"
       mode="md"
       *ngIf="!showStreakAnimation || showNavigateToLessons"
-      (click)="navigateToLessons()">
+      (click)="navigateBack()">
       {{ 'RETURN_TO_LESSONS' | translate }}
     </ion-button>
     <ion-button
       class="primary-button"
       mode="md"
       *ngIf="showStreakAnimation && !showNavigateToLessons"
-      (click)="navigateToLessons()">
+      (click)="navigateBack()">
       {{ 'OK' | translate }}
     </ion-button>
   </ion-row>

@@ -1,8 +1,8 @@
 ﻿using LanguAI.Backend.Core;
-using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Message;
+using LanguAI.Backend.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;

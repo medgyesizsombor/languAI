@@ -33,6 +33,7 @@ import { TopicImageSrcPipe } from './pipes/topic-image-src.pipe';
 import { CardlistLanguagePipe } from './pipes/cardlist-language.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { SummaryTextPipe } from './pipes/summary-text.pipe';
+import { FooterComponent } from '../components/footer/footer.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -66,7 +67,8 @@ export function createTranslateLoader(http: HttpClient) {
     TopicImageSrcPipe,
     CardlistLanguagePipe,
     TimeAgoPipe,
-    SummaryTextPipe
+    SummaryTextPipe,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -105,7 +107,8 @@ export function createTranslateLoader(http: HttpClient) {
     TopicImageSrcPipe,
     CardlistLanguagePipe,
     TimeAgoPipe,
-    SummaryTextPipe
+    SummaryTextPipe,
+    FooterComponent
   ],
   providers: [
     LanguageLevelPipe,

@@ -21,9 +21,6 @@ public class User
     public string PasswordHash { get; set; }
 
     [Required]
-    public int Language { get; set; }
-
-    [Required]
     public bool IsActive { get; set; } = true;
 
     public int Streak { get; set; } = 0;

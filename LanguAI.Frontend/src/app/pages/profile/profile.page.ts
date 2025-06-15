@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {
   CARD_LIST_NAVIGATION,
   MESSAGE_NAVIGATION,
-  PROFILE_NAVIGATION
+  PROFILE_NAVIGATION,
+  SETTINGS_NAVIGATION
 } from '../../util/util.constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
@@ -60,6 +61,7 @@ export class ProfilePage {
   loadDataSub: Subscription | undefined;
   saveSub: Subscription | undefined;
 
+  navigateBackRouter = SETTINGS_NAVIGATION;
   isLoading = true;
 
   /**
@@ -90,7 +92,7 @@ export class ProfilePage {
     this.initialize();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.getUserSub?.unsubscribe();
     this.saveSub?.unsubscribe();
     this.loadDataSub?.unsubscribe();
@@ -282,13 +284,17 @@ export class ProfilePage {
             this.loadData();
           } else {
             this.toastrService.presentErrorToast(
-              'UNSUCCESSFUL_CHANGING_PROFILE_PICTURE'
+              this.translateService.instant(
+                'UNSUCCESSFUL_CHANGING_PROFILE_PICTURE'
+              )
             );
           }
         },
         error: () => {
           this.toastrService.presentErrorToast(
-            'UNSUCCESSFUL_CHANGING_PROFILE_PICTURE'
+            this.translateService.instant(
+              'UNSUCCESSFUL_CHANGING_PROFILE_PICTURE'
+            )
           );
         }
       });
@@ -324,7 +330,9 @@ export class ProfilePage {
   }
 
   async removeFromTheFriendList(otherUserId: number) {
-    await this.loadingService.showLoading('FRIENDSHIP_DELETE_DOTDOTDOT');
+    await this.loadingService.showLoading(
+      this.translateService.instant('FRIENDSHIP_DELETE_DOTDOTDOT')
+    );
 
     this.friendshipService.deleteFriendship({ otherUserId }).subscribe({
       next: () => {
@@ -332,11 +340,15 @@ export class ProfilePage {
           f => f.userId !== otherUserId
         );
         this.loadingService.hideLoading();
-        this.toastrService.presentSuccessToast('FRIENDSHIP_DELETE_SUCCESS');
+        this.toastrService.presentSuccessToast(
+          this.translateService.instant('FRIENDSHIP_DELETE_SUCCESS')
+        );
       },
       error: () => {
         this.loadingService.hideLoading();
-        this.toastrService.presentErrorToast('FRIENDSHIO_DELETE_ERROR');
+        this.toastrService.presentErrorToast(
+          this.translateService.instant('FRIENDSHIO_DELETE_ERROR')
+        );
       }
     });
   }
@@ -400,7 +412,9 @@ export class ProfilePage {
         error: () => {
           this.loadingService.hideLoading();
           this.isLoading = false;
-          this.toastrService.presentErrorToast('DATA_ERROR');
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('DATA_ERROR')
+          );
         }
       });
   }

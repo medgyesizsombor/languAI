@@ -56,7 +56,7 @@ public class CardService : BaseService, ICardService
         List<CardViewModel> result = await _chatGPTService.GenerateWordsForCards
             (currentLearning.NativeLanguageName,
             currentLearning.LearningLanguageName,
-            cardList.TopicId,
+            cardList.Topic.TopicId,
             cardList.CardViewModelList);
 
         return result;
@@ -115,7 +115,6 @@ public class CardService : BaseService, ICardService
     /// <returns></returns>
     public bool SaveCards(SaveCardRequest request)
     {
-        //TODO: Only the owner can save
         ArgumentNullException.ThrowIfNull(request);
 
         List<Card> oldCards = _context.Card.Where(c => c.CardListId == request.CardListId).ToList();
@@ -173,6 +172,9 @@ public class CardService : BaseService, ICardService
     {
         var cardList = _context.CardList
             .Include(c => c.Cards)
+            .Include(c => c.NativeLanguage)
+            .Include(c => c.LearningLanguage)
+            .Include(c => c.Topic)
             .FirstOrDefault(c => c.Id == cardListId);
 
         return ConvertCardListToCardListViewModel(cardList);
@@ -192,6 +194,7 @@ public class CardService : BaseService, ICardService
                  .Include(c => c.Cards)
                  .Include(c => c.LearningLanguage)
                  .Include(c => c.NativeLanguage)
+                 .Include(c => c.Topic)
                  .Where(c => c.UserId == userId
                         && !c.IsDeleted)
                  .Select(c => ConvertCardListToCardListViewModel(c))
@@ -215,6 +218,7 @@ public class CardService : BaseService, ICardService
             .Include(c => c.Cards)
             .Include(c => c.NativeLanguage)
             .Include(c => c.LearningLanguage)
+            .Include(c => c.Topic)
             .Where(c => c.UserId == otherUserId
                     && !c.IsDeleted
                     && (c.Access == AccessEnum.Public
@@ -336,7 +340,7 @@ public class CardService : BaseService, ICardService
     {
         var cardListsByTopic = _context.CardList
             .Include(cl => cl.Cards)
-            .Where(cl => cl.TopicId == topicId 
+            .Where(cl => cl.TopicId == topicId
                 && cl.UserId == userId
                 && !cl.IsDeleted)
             .ToList();
@@ -532,7 +536,7 @@ public class CardService : BaseService, ICardService
             NativeLanguage = cardList.NativeLanguage,
             UserId = cardList.UserId,
             Access = cardList.Access,
-            TopicId = cardList.TopicId
+            Topic = TopicService.GetTopicViewModel(cardList.Topic)
         };
     }
 }

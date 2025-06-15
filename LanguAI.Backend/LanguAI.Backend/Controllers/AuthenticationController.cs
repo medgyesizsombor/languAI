@@ -9,12 +9,10 @@ namespace LanguAI.Backend.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
-    private readonly ILogger _logger;
 
-    public AuthenticationController(IAuthenticationService authenticationService, ILogger<AuthenticationController> logger)
+    public AuthenticationController(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
-        _logger = logger;
     }
 
     /// <summary>
@@ -27,15 +25,7 @@ public class AuthenticationController : ControllerBase
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        try
-        {
-            return Ok(_authenticationService.Authenticate(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(null);
-        }
+        return Ok(_authenticationService.Authenticate(request));
     }
 }
 

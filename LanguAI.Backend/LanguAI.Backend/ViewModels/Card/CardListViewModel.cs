@@ -1,5 +1,6 @@
 ﻿using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
+using LanguAI.Backend.ViewModels.Topic;
 
 namespace LanguAI.Backend.ViewModels.Card;
 
@@ -23,5 +24,5 @@ public class CardListViewModel
 
     public List<CardViewModel> CardViewModelList { get; set; } = new List<CardViewModel>();
 
-    public int TopicId { get; set; }
+    public TopicViewModel Topic { get; set; }
 }

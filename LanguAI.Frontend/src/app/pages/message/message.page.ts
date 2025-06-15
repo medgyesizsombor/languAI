@@ -9,7 +9,7 @@ import { MessageViewModel } from 'src/api/models/message-view-model';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import { CHAT_GPT_ID } from 'src/app/util/util.constants';
+import { CHAT_GPT_ID, MESSAGES_NAVIGATION } from 'src/app/util/util.constants';
 import { IonContent, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/util/services/alert.service';
 
@@ -29,6 +29,7 @@ export class MessagePage {
   otherUser: UserViewModel | undefined;
   isValid = false;
   messageStatusEnum = MessageStatusEnum;
+  navigateBackRouter = MESSAGES_NAVIGATION;
 
   loadDataSub: Subscription | undefined;
   sendMessageSub: Subscription | undefined;
@@ -54,7 +55,7 @@ export class MessagePage {
     this.loadMessages();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.loadDataSub?.unsubscribe();
     this.sendMessageSub?.unsubscribe();
   }

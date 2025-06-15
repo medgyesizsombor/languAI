@@ -9,7 +9,10 @@ import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import { HUNGARIAN_LANGUAGE_ID } from 'src/app/util/util.constants';
+import {
+  HUNGARIAN_LANGUAGE_ID,
+  SETTINGS_NAVIGATION
+} from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-learnings',
@@ -22,6 +25,7 @@ export class LearningPage {
   learnings: Array<LearningViewModel> | undefined;
   languageId: number | null = null;
   hungarianLanguageId = HUNGARIAN_LANGUAGE_ID;
+  navigateBackRouter = SETTINGS_NAVIGATION;
 
   getLearningsSub: Subscription | undefined;
   loadLearningsSub: Subscription | undefined;
@@ -41,7 +45,7 @@ export class LearningPage {
     this.loadLearnings();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.getLearningsSub?.unsubscribe();
     this.loadLearningsSub?.unsubscribe();
     this.saveLearningSub?.unsubscribe();
@@ -108,7 +112,7 @@ export class LearningPage {
             languageId: data.languageId,
             languageLevel: data.languageLevel,
             userId: this.localStorageService.getUserId()!,
-            nativeLanguageId: this.localStorageService.getLanguageId()!
+            nativeLanguageId: this.localStorageService.getMobileLanguageId()!
           }
         })
         .subscribe({
@@ -118,6 +122,7 @@ export class LearningPage {
               this.toastrService.presentSuccessToast(
                 this.translateService.instant('SUCCESSFUL_SAVING_LEARNING')
               );
+              this.loadLearnings();
             } else {
               this.loadingService.hideLoading();
               this.toastrService.presentErrorToast(
@@ -159,7 +164,10 @@ export class LearningPage {
               this.learnings?.forEach(l => (l.isActive = false));
 
               activeLearning.isActive = true;
+
+              this.localStorageService.setCurrentLearning(activeLearning);
             }
+
             this.loadingService.hideLoading();
           } else {
             this.loadingService.hideLoading();

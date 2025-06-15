@@ -10,6 +10,7 @@ import {
   LANGUAGE_ID,
   LEVEL_OF_CURRENT_LANGUAGE,
   MOBILE_LANGUAGE_CODE,
+  MOBILE_LANGUAGE_ID,
   NUMBER_OF_FRIENDSHIP_REQUEST,
   STREAK,
   USER_ID
@@ -173,7 +174,7 @@ export class LocalStorageService {
   /**
    * Set Id of native language
    */
-  setLangugageId(languageId: number) {
+  setLanguageId(languageId: number) {
     if (languageId) {
       localStorage.setItem(LANGUAGE_ID, languageId.toString());
       return true;
@@ -205,7 +206,7 @@ export class LocalStorageService {
   /**
    * Set Code  of language
    */
-  setLangugageCode(languageCode: string) {
+  setLanguageCode(languageCode: string) {
     if (languageCode) {
       localStorage.setItem(LANGUAGE_CODE, languageCode);
       return true;
@@ -264,8 +265,8 @@ export class LocalStorageService {
    * Set native languages by code
    */
   setNativeLanguagesByCode(languageCode = HUNGARIAN_LANGUAGE_CODE) {
-    this.setLangugageCode(languageCode);
-    this.setLangugageId(
+    this.setMobileLanguageCode(languageCode);
+    this.setMobileLanguageId(
       languageCode === HUNGARIAN_LANGUAGE_CODE
         ? HUNGARIAN_LANGUAGE_ID
         : ENGLISH_LANGUAGE_ID
@@ -276,8 +277,8 @@ export class LocalStorageService {
    * Set native languages by id
    */
   setNativeLanguagesById(languageId = HUNGARIAN_LANGUAGE_ID) {
-    this.setLangugageId(languageId);
-    this.setLangugageCode(
+    this.setLanguageId(languageId);
+    this.setLanguageCode(
       languageId === HUNGARIAN_LANGUAGE_ID
         ? HUNGARIAN_LANGUAGE_CODE
         : ENGLISH_LANGUAGE_CODE
@@ -319,9 +320,9 @@ export class LocalStorageService {
   }
 
   /**
-   * Set Code  of language
+   * Set Code of language
    */
-  setMobileLangugageCode(languageCode: string) {
+  setMobileLanguageCode(languageCode: string) {
     if (languageCode) {
       localStorage.setItem(MOBILE_LANGUAGE_CODE, languageCode);
       return true;
@@ -331,10 +332,41 @@ export class LocalStorageService {
   }
 
   /**
-   * Get Id of language
+   * Set Id of native language
+   */
+  setMobileLanguageId(languageId: number) {
+    if (languageId) {
+      localStorage.setItem(MOBILE_LANGUAGE_ID, languageId.toString());
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get Code of language
    */
   getMobileLanguageCode(): string | null {
     return localStorage.getItem(MOBILE_LANGUAGE_CODE);
+  }
+
+  setMobileLanguageByCode(languageCode: string) {
+    this.setMobileLanguageCode(languageCode);
+    this.setMobileLanguageId(
+      languageCode === HUNGARIAN_LANGUAGE_CODE
+        ? HUNGARIAN_LANGUAGE_ID
+        : ENGLISH_LANGUAGE_ID
+    );
+  }
+
+  getMobileLanguageId(): number | null {
+    const languageId = localStorage.getItem(MOBILE_LANGUAGE_ID);
+
+    if (languageId?.length) {
+      return +languageId;
+    }
+
+    return null;
   }
 
   /**

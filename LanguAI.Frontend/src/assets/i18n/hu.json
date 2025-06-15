@@ -351,5 +351,19 @@
   "GREAT_RESULT_TEXT": "Jó lett!",
   "EXCELLENT_RESULT_TEXT": "Szuper vagy!",
   "PERFECT_RESULT_TEXT": "Tökéletes a megoldásod!",
-  "MISSING_EXP": "Hiányzó tapasztalatpont!"
+  "MISSING_EXP": "Hiányzó tapasztalatpont!",
+  "ERROR_POST_PHRASING": "Hiba történt a bejegyzés megfogalmazása közben!",
+  "ERROR_POST_CORRECTION": "Hiba történt a bejegyzés kijavítása közben!",
+  "LEADERBOARD_LOADING": "Ranglista betöltése...",
+  "NEW_MESSAGE": "Új üzenet",
+  "SELECT_A_FRIEND": "Válassz ki egy barátodat",
+  "JUST_NOW": "Éppen most",
+  "NOT_FOUND_TITLE": "Hiba",
+  "NOT_FOUND_SUBTITLE": "404",
+  "NOT_FOUND_CONTENT": "Sajnálom, de a keresett oldal nem létezik",
+  "UNSUCCESSFUL_SAVING_LEARNING": "Sikertelen a tanulmányok mentése",
+  "SUCCESSFUL_SAVING_LEARNING": "Sikeres a tanulmányok mentése",
+  "YOU_CAN_ADD_CARD_LIST_WITH_THE_PLUS_SIGN": "A plusz jel segítségével tudsz hozzáadni szókártya gyűjteményt",
+  "SUCCESS_DELETING_POST": "Sikeresen törlődött a bejegyzés",
+  "ERROR_WHILE_DELETING_POST": "Hiba történt a bejegyzés törlése közben"
 }

@@ -46,7 +46,7 @@ export class CardPage {
     this.initialize();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.getCardSub?.unsubscribe();
     this.deleteCardSub?.unsubscribe();
     this.getCardSub?.unsubscribe();
@@ -66,7 +66,9 @@ export class CardPage {
         },
         error: () => {
           this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast('ERROR_WHILE_DELETING');
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('ERROR_WHILE_DELETING')
+          );
         }
       });
   }

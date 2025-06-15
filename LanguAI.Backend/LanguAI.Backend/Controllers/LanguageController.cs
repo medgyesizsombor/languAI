@@ -9,11 +9,8 @@ namespace LanguAI.Backend.Controllers;
 public class LanguageController : Controller
 {
     private readonly ILanguageService _languageService;
-
-    private readonly ILogger _logger;
-    public LanguageController(ILogger<LanguageController> logger, ILanguageService languageService)
+    public LanguageController(ILanguageService languageService)
     {
-        _logger = logger;
         _languageService = languageService;
     }
 
@@ -27,15 +24,7 @@ public class LanguageController : Controller
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(languageCode);
 
-        try
-        {
-            return Ok(_languageService.GetAllLanguage(languageCode));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_languageService.GetAllLanguage(languageCode));
     }
 
 }

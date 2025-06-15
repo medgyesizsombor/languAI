@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/util/services/alert.service';
+import { LESSONS_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,6 @@ import { AlertService } from 'src/app/util/services/alert.service';
 export class HeaderComponent {
   @Input() title = '';
   @Input() subtitle = '';
-  @Input() navigationLink = '';
   @Input() useNavController = false;
   @Input() showBackArrow = false;
   @Input() showSaveButton = false;
@@ -21,17 +21,15 @@ export class HeaderComponent {
   @Input() showSendingMissed = false;
   @Input() showMessageButton = false;
   @Input() fontSizeClass: string | null = 'fs-32';
+  @Input() navigateBackRouter = LESSONS_NAVIGATION;
 
   @Output() saveButtonEmit = new EventEmitter<void>();
   @Output() addButtonEmit = new EventEmitter<void>();
   @Output() navigateBackWithoutSavingEmit = new EventEmitter<boolean>();
   @Output() sendMessageButtonEmit = new EventEmitter<void>();
 
-  //TODO: mentés hiányában visszagomb
-
   constructor(
     private router: Router,
-    private navController: NavController,
     private alertService: AlertService
   ) {}
 
@@ -53,11 +51,7 @@ export class HeaderComponent {
         }
       });
     } else {
-      if (this.navigationLink.length) {
-        this.router.navigate(['/', this.navigationLink]);
-      } else {
-        this.navController.pop();
-      }
+      this.router.navigate(['/' + this.navigateBackRouter]);
     }
   }
 }

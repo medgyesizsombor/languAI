@@ -1,6 +1,4 @@
-﻿using LanguAI.Backend.Core.Enums;
-
-namespace LanguAI.Backend.ViewModels.Topic;
+﻿namespace LanguAI.Backend.ViewModels.Topic;
 
 public class TopicForExerciseViewModel
 {

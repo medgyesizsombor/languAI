@@ -9,6 +9,4 @@ public class RegisterRequestViewModel
     public string Email { get; set; }
 
     public DateTime DateOfBirth { get; set; }
-
-    public int Language { get; set; }
 }

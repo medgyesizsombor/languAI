@@ -6,7 +6,6 @@ export interface UserViewModel {
   email?: string | null;
   id?: number;
   isActive?: boolean;
-  language?: number;
   profilePicture?: ImageViewModel;
   streak?: number;
   username?: string | null;

@@ -38,6 +38,7 @@ export { SavePostRequest } from './models/save-post-request';
 export { SaveUserRequest } from './models/save-user-request';
 export { SentenceAssemblyExerciseWord } from './models/sentence-assembly-exercise-word';
 export { TopicOfCurrentLearningViewModel } from './models/topic-of-current-learning-view-model';
+export { TopicViewModel } from './models/topic-view-model';
 export { UserDataViewModel } from './models/user-data-view-model';
 export { UserDiscoveryViewModel } from './models/user-discovery-view-model';
 export { UserViewModel } from './models/user-view-model';

@@ -39,7 +39,6 @@ public class RegistrationService : BaseService, IRegistrationService
                 Username = request.Username,
                 DateOfBirth = request.DateOfBirth,
                 PasswordHash = password,
-                Language = request.Language,
                 Email = request.Email
             };
 

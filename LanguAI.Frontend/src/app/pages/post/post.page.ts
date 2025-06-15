@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
@@ -10,6 +10,7 @@ import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import { UserInteractionService } from 'src/app/util/services/user-interaction.service';
+import { FORUM_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-post',
@@ -22,6 +23,7 @@ export class PostPage {
   post: PostViewModel | undefined;
   isValid = false;
   isLoading = false;
+  navigateBackRouter = FORUM_NAVIGATION;
 
   sendCommentSub: Subscription | undefined;
   getPostSub: Subscription | undefined;
@@ -34,6 +36,7 @@ export class PostPage {
     private activatedRoute: ActivatedRoute,
     private userInteractionService: UserInteractionService,
     private formBuilder: FormBuilder,
+    private router: Router,
     private navController: NavController,
     private interactionService: InteractionService,
     private localStorageService: LocalStorageService
@@ -77,7 +80,7 @@ export class PostPage {
    */
   navigateBackWithoutSaving(quit: boolean) {
     if (quit) {
-      this.navController.back();
+      this.router.navigate([this.navigateBackRouter]);
     }
   }
 

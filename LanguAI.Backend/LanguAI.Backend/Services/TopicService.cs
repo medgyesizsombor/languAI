@@ -1,5 +1,6 @@
 ﻿using LanguAI.Backend.Core;
 using LanguAI.Backend.Core.Enums;
+using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Topic;
 
@@ -26,6 +27,15 @@ public class TopicService : BaseService, ITopicService
             Name = topic.Name,
             LanguageLevel = Enum.GetName(typeof(LanguageLevelEnum), topic.LanguageLevel)
         };
+    }
 
+    public static TopicViewModel GetTopicViewModel(Topic topic)
+    {
+        return new TopicViewModel
+        {
+            Name = topic.Name,
+            NameInHun = topic.NameInHun,
+            TopicId = topic.Id
+        };
     }
 }

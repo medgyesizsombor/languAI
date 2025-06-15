@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
+  HUNGARIAN_LANGUAGE_CODE,
   LEADERBOARD_NAVIGATION,
   LEARNINGS_NAVIGATION,
   LOGIN_NAVIGATION,
   NOTIFICATIONS_NAVIGATION,
   PROFILE_NAVIGATION,
-  SEARCH_NEW_FRIENDS_NAVIGATION,
-  SETTINGS_TITLE
+  SEARCH_NEW_FRIENDS_NAVIGATION
 } from '../../util/util.constants';
 import { UserService } from 'src/api/services';
 import { Router } from '@angular/router';
@@ -21,8 +21,7 @@ import { SettingsNavigationEnum } from 'src/app/util/enums/settings-navigation-e
 import { Capacitor } from '@capacitor/core';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LanguageEnum } from 'src/app/util/enums/language-enum';
-import { UserViewModel } from 'src/api/models';
-import { FileService } from 'src/app/util/services/file.service';
+import { FooterComponent } from 'src/app/components/footer/footer.component';
 
 @Component({
   selector: 'app-settings',
@@ -30,11 +29,10 @@ import { FileService } from 'src/app/util/services/file.service';
   styleUrls: ['./settings.page.scss'],
   standalone: false
 })
-export class SettingsPage implements OnInit {
-  title = this.translateService.instant(SETTINGS_TITLE);
+export class SettingsPage {
+  @ViewChild('footer') footer: FooterComponent | undefined;
+
   numberOfFriendshipRequest = 0;
-  imageSrc: string | undefined;
-  profile: UserViewModel | undefined;
 
   //Flag to use the enum in the template
   settingsNavigationEnum = SettingsNavigationEnum;
@@ -50,35 +48,14 @@ export class SettingsPage implements OnInit {
     private loadingService: LoadingService,
     private toastrService: ToastrService,
     private friendshipRequestService: FriendshipRequestService,
-    private alertService: AlertService,
-    private fileService: FileService
+    private alertService: AlertService
   ) {}
 
-  async ngOnInit() {
-    await this.loadingService.showLoading();
+  async ionViewWillEnter() {
     this.loadData();
-    this.userService
-      .getUserById$Json({ userId: this.localStorageService.getUserId()! })
-      .subscribe({
-        next: (res: UserViewModel) => {
-          if (res) {
-            this.profile = { ...res };
-            this.imageSrc = this.fileService.getImageSrc(
-              this.profile.profilePicture?.contentAsString,
-              this.profile.profilePicture?.type
-            );
-          } else {
-            this.toastrService.presentErrorToast('ERROR_WHILE_LOADING_USER');
-          }
-          this.loadingService.hideLoading();
-        },
-        error: () => {
-          this.toastrService.presentErrorToast('ERROR_WHILE_LOADING_USER');
-        }
-      });
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.deleteUserSub?.unsubscribe();
   }
 
@@ -150,14 +127,14 @@ export class SettingsPage implements OnInit {
    */
   async openLanguageModal() {
     const currentLanguage =
-      this.translateService.currentLang === 'hu'
+      this.translateService.currentLang === HUNGARIAN_LANGUAGE_CODE
         ? LanguageEnum.hungarian
         : LanguageEnum.english;
     this.alertService
       .showLanguageAlert(currentLanguage)
       .then((lang: string | null) => {
         if (lang && this.translateService.currentLang !== lang) {
-          this.localStorageService.setMobileLangugageCode(lang);
+          this.localStorageService.setMobileLanguageByCode(lang);
           this.translateService.use(lang);
         }
       });
@@ -171,8 +148,18 @@ export class SettingsPage implements OnInit {
     this.router.navigate(['/' + LOGIN_NAVIGATION]);
   }
 
-  private loadData() {
-    this.numberOfFriendshipRequest =
-      this.friendshipRequestService.numberOfFriendshipRequest;
+  private async loadData() {
+    await this.loadingService.showLoading();
+    this.footer?.ngOnInit();
+    this.friendshipRequestService
+      .getFriendshipRequest()
+      .then((res: number) => {
+        this.numberOfFriendshipRequest = res;
+        this.loadingService.hideLoading();
+      })
+      .catch(() => {
+        this.numberOfFriendshipRequest = 0;
+        this.loadingService.hideLoading();
+      });
   }
 }

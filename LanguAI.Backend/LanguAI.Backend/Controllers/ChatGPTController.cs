@@ -55,38 +55,30 @@ public class ChatGPTController : ControllerBase
     [HttpPost(Name = "SendMessageToChatGPT")]
     public async Task<ActionResult<MessageViewModel>> SendMessageToChatGPT(MessageViewModel message)
     {
-        try
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        if (message == null || string.IsNullOrEmpty(message.Text))
         {
-            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-            ArgumentNullException.ThrowIfNull(currentUserId);
-
-            if (message == null || string.IsNullOrEmpty(message.Text))
-            {
-                throw new ArgumentNullException();
-            }
-
-            if (message.SenderId != currentUserId)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            bool successSendingMessageToChatGPT = _messageService.SendMessage(message);
-
-            if (!successSendingMessageToChatGPT) return null;
-
-            var response = await _chatGPTService.GetResponseToConversation(message.SenderId);
-
-            var successReceivingMessageFromChatGPT = _messageService.SendMessage(response);
-
-            if (!successReceivingMessageFromChatGPT) return null;
-
-            return response;
+            throw new ArgumentNullException();
         }
-        catch (Exception e)
+
+        if (message.SenderId != currentUserId)
         {
-            _logger.LogError(e.Message);
-            return null;
+            throw new UnauthorizedAccessException();
         }
+
+        bool successSendingMessageToChatGPT = _messageService.SendMessage(message);
+
+        if (!successSendingMessageToChatGPT) return null;
+
+        var response = await _chatGPTService.GetResponseToConversation(message.SenderId);
+
+        var successReceivingMessageFromChatGPT = _messageService.SendMessage(response);
+
+        if (!successReceivingMessageFromChatGPT) return null;
+
+        return response;
     }
 
     //TODO: REFAKT Exception
@@ -97,24 +89,16 @@ public class ChatGPTController : ControllerBase
     [HttpPost(Name = "ReceiveMessageFromChatGPT")]
     public async Task<ActionResult<MessageViewModel>> ReceiveMessageFromChatGPT()
     {
-        try
-        {
-            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-            ArgumentNullException.ThrowIfNull(currentUserId);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
 
-            var response = await _chatGPTService.GetResponseToConversation((int)currentUserId);
+        var response = await _chatGPTService.GetResponseToConversation((int)currentUserId);
 
-            var successReceivingMessageFromChatGPT = _messageService.SendMessage(response);
+        var successReceivingMessageFromChatGPT = _messageService.SendMessage(response);
 
-            if (!successReceivingMessageFromChatGPT) return null;
+        if (!successReceivingMessageFromChatGPT) return null; //TODO Error
 
-            return response;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return null;
-        }
+        return response;
     }
 
     /// <summary>
@@ -125,31 +109,23 @@ public class ChatGPTController : ControllerBase
     [HttpGet(Name = "ReceiveExercisesFromChatGPT")]
     public async Task<ActionResult<List<ExerciseViewModel>>> ReceiveExercisesFromChatGPTAsync(int topicId)
     {
-        try
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        ArgumentNullException.ThrowIfNull(currentUserId);
+
+        var topic = _topicService.GetTopicById(topicId);
+        var wordsInLearningLanguage = _cardService.GetLanguageWordsAsOneStringByTopicId(topicId, (int)currentUserId);
+        var wordsInNativeLanguage = _cardService.GetLanguageWordsAsOneStringByTopicId(topicId, (int)currentUserId, false);
+
+        var request = new ExerciseRequestViewModel
         {
-            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-            ArgumentNullException.ThrowIfNull(currentUserId);
+            TopicDescription = topic.Description,
+            UserId = (int)currentUserId,
+            LanguageLevel = topic.LanguageLevel
+        };
 
-            var topic = _topicService.GetTopicById(topicId);
-            var wordsInLearningLanguage = _cardService.GetLanguageWordsAsOneStringByTopicId(topicId, (int)currentUserId);
-            var wordsInNativeLanguage = _cardService.GetLanguageWordsAsOneStringByTopicId(topicId, (int)currentUserId, false);
+        var exercises = await _chatGPTService.ReceiveExercisesFromChatGPT(request, wordsInLearningLanguage, wordsInNativeLanguage);
 
-            var request = new ExerciseRequestViewModel
-            {
-                TopicDescription = topic.Description,
-                UserId = (int)currentUserId,
-                LanguageLevel = topic.LanguageLevel
-            };
-
-            var exercises = await _chatGPTService.ReceiveExercisesFromChatGPT(request, wordsInLearningLanguage, wordsInNativeLanguage);
-
-            return Ok(exercises);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(exercises);
     }
 
     /// <summary>
@@ -160,16 +136,9 @@ public class ChatGPTController : ControllerBase
     [HttpGet(Name = "GetPostCorrectionFromChatGPT")]
     public async Task<ActionResult<string>> GetPostCorrectionFromChatGPT(string text)
     {
-        try
-        {
-            var response = await _chatGPTService.GetPostCorrectionFromChatGPT(text);
+        var response = await _chatGPTService.GetPostCorrectionFromChatGPT(text);
 
-            return Ok(response);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        return Ok(response);
     }
 
     /// <summary>
@@ -180,16 +149,8 @@ public class ChatGPTController : ControllerBase
     [HttpGet(Name = "GetPostPhrasing")]
     public async Task<ActionResult<string>> GetPostPhrasing(string about)
     {
-        try
-        {
-            var response = await _chatGPTService.GetPostPhrasing(about);
+        var response = await _chatGPTService.GetPostPhrasing(about);
 
-            return Ok(response);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(response);
     }
 }

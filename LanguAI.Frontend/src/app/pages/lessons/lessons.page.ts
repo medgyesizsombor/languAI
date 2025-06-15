@@ -45,7 +45,7 @@ export class LessonsPage {
     }
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.getCardListsOfCurrentUserSub?.unsubscribe();
   }
 

@@ -1,19 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import {
-  FriendshipStatusEnum,
-  UserDiscoveryViewModel,
-  UserViewModel
-} from 'src/api/models';
+import { FriendshipStatusEnum, UserDiscoveryViewModel } from 'src/api/models';
 import { FriendshipService } from 'src/api/services';
 import { AlertService } from 'src/app/util/services/alert.service';
+import { FileService } from 'src/app/util/services/file.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
   PROFILE_NAVIGATION,
-  SEARCH_NEW_FRIENDS_TITLE
+  SEARCH_NEW_FRIENDS_TITLE,
+  SETTINGS_NAVIGATION
 } from 'src/app/util/util.constants';
 
 @Component({
@@ -22,9 +20,11 @@ import {
   styleUrls: ['./search-for-new-friends.page.scss'],
   standalone: false
 })
-export class SearchForNewFriendsPage implements OnInit, OnDestroy {
+export class SearchForNewFriendsPage {
   title = this.translateService.instant(SEARCH_NEW_FRIENDS_TITLE);
   userList: Array<UserDiscoveryViewModel> = [];
+  navigateBackRouter = SETTINGS_NAVIGATION;
+  isLoading = true;
 
   sendFriendshipRequestSub: Subscription | undefined;
   deletePendingRequestSub: Subscription | undefined;
@@ -38,14 +38,15 @@ export class SearchForNewFriendsPage implements OnInit, OnDestroy {
     private friendshipService: FriendshipService,
     private toastrService: ToastrService,
     private navController: NavController,
-    private alertService: AlertService
+    private alertService: AlertService,
+    protected fileService: FileService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.loadUsers();
   }
 
-  ngOnDestroy() {
+  ionViewWillLeave() {
     this.sendFriendshipRequestSub?.unsubscribe();
     this.deletePendingRequestSub?.unsubscribe();
     this.getListOfDiscoverableUserSub?.unsubscribe();
@@ -143,13 +144,17 @@ export class SearchForNewFriendsPage implements OnInit, OnDestroy {
     this.getListOfDiscoverableUserSub = this.friendshipService
       .getListOfDiscoverableUser$Json()
       .subscribe({
-        next: users => {
+        next: (users: Array<UserDiscoveryViewModel>) => {
           this.userList = [...users];
+          this.isLoading = false;
           this.loadingService.hideLoading();
         },
         error: () => {
+          this.isLoading = false;
           this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast('USERS_COULDNT_BE_LOADED');
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('USERS_COULDNT_BE_LOADED')
+          );
         }
       });
   }

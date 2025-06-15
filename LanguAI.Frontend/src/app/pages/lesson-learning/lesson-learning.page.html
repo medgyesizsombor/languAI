@@ -43,8 +43,6 @@
   </ng-container>
 </ion-content>
 
-<ng-template #saveButton></ng-template>
-
 <ng-template #missingExercises>
   <ion-row class="ion-margin-bottom">
     <ion-label mode="md" class="w-100 ion-text-center fs-24">
@@ -72,5 +70,5 @@
 <ng-template #showSummaryTemplate>
   <app-summary
     [statistics]="statistics"
-    (navigateToLessonsEmit)="navigateToLessons()"></app-summary>
+    (navigateBackEmit)="navigateToLessons()"></app-summary>
 </ng-template>

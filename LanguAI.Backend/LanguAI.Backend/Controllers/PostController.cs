@@ -10,11 +10,9 @@ public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
     private readonly IAuthenticationService _authenticationService;
-    private readonly ILogger _logger;
 
-    public PostController(ILogger<PostController> logger, IPostService postService, IAuthenticationService authenticationService)
+    public PostController(IPostService postService, IAuthenticationService authenticationService)
     {
-        _logger = logger;
         _postService = postService;
         _authenticationService = authenticationService;
     }
@@ -26,15 +24,7 @@ public class PostController : ControllerBase
     [HttpGet(Name = "GetAllPost")]
     public ActionResult<List<PostViewModel>> GetAllPost()
     {
-        try
-        {
-            return Ok(_postService.GetAllPost());
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_postService.GetAllPost());
     }
 
     /// <summary>
@@ -47,15 +37,7 @@ public class PostController : ControllerBase
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        try
-        {
-            return Ok(_postService.GetPosts(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_postService.GetPosts(request));
     }
 
     /// <summary>
@@ -69,15 +51,7 @@ public class PostController : ControllerBase
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        try
-        {
-            return Ok(await _postService.GetPostById(postId, (int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(await _postService.GetPostById(postId, (int)currentUserId));
     }
 
     /// <summary>
@@ -94,15 +68,7 @@ public class PostController : ControllerBase
 
         if (currentUserId != request.UserId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(_postService.SavePost(request, (int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_postService.SavePost(request, (int)currentUserId));
     }
 
     /// <summary>
@@ -118,15 +84,7 @@ public class PostController : ControllerBase
 
         if (currentUserId != userId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(await _postService.GetPostsFromForum(userId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(await _postService.GetPostsFromForum(userId));
     }
 
     [HttpPost(Name = "SoftDeletePost")]
@@ -135,19 +93,10 @@ public class PostController : ControllerBase
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        try
-        {
+        if (currentUserId != userId) throw new UnauthorizedAccessException();
 
-            if (currentUserId != userId) throw new UnauthorizedAccessException();
+        _postService.SoftDeletePost(postId, userId);
 
-            _postService.SoftDeletePost(postId, userId);
-
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok();
     }
 }

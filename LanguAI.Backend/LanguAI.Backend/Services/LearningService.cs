@@ -15,7 +15,6 @@ public interface ILearningService
 }
 public class LearningService : BaseService, ILearningService
 {
-    private readonly IAuthenticationService _authenticationService;
     public LearningService(LanguAIDataContext context) : base(context) { }
 
     /// <summary>
@@ -84,8 +83,6 @@ public class LearningService : BaseService, ILearningService
     /// <returns></returns>
     public List<LearningViewModel> GetLearningsOfUser(int userId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-
         return _context.Learning
             .Include(l => l.LearningLanguage)
             .Where(l => l.UserId == userId)
@@ -114,9 +111,6 @@ public class LearningService : BaseService, ILearningService
     /// <returns></returns>
     public bool ChangeActiveLearning(int userId, int learningId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-        ArgumentNullException.ThrowIfNull(learningId);
-
         using var transaction = _context.Database.BeginTransaction();
 
         try
@@ -174,9 +168,6 @@ public class LearningService : BaseService, ILearningService
     /// <returns></returns>
     private bool SetOtherLearningsInactive(int userId, int learningId)
     {
-        ArgumentNullException.ThrowIfNull(userId);
-        ArgumentNullException.ThrowIfNull(learningId);
-
         var activeLearnings = _context.Learning
             .Where(l => l.UserId == userId
                 && l.IsActive

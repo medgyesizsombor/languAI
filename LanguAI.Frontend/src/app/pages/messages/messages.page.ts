@@ -21,7 +21,7 @@ import { FileService } from 'src/app/util/services/file.service';
 export class MessagesPage {
   title = this.translateService.instant(MESSAGES_TITLE);
   friendList: Array<OtherUserViewModel> = [];
-  isLoading = false;
+  isLoading = true;
 
   getFriendListSub: Subscription | undefined;
 
@@ -41,7 +41,7 @@ export class MessagesPage {
     this.loadFriends();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.getFriendListSub?.unsubscribe();
   }
 
@@ -66,12 +66,13 @@ export class MessagesPage {
     if (id) {
       this.navController.navigateForward(MESSAGE_NAVIGATION + '/' + id);
     } else {
-      this.toastrService.presentErrorToast('MESSAGE_NAVIGATION_ERROR');
+      this.toastrService.presentErrorToast(
+        this.translateService.instant('MESSAGE_NAVIGATION_ERROR')
+      );
     }
   }
 
   private async loadFriends() {
-    this.isLoading = true;
     const userId = this.localStorageService.getUserId();
     await this.loadingService.showLoading();
     if (userId) {
@@ -82,13 +83,23 @@ export class MessagesPage {
         })
         .subscribe({
           next: (res: Array<OtherUserViewModel>) => {
-            this.friendList = res;
+            const filteredFriendlist = res.filter(f => f.lastMessage);
+
+            this.friendList = filteredFriendlist.sort((a, b) =>
+              new Date(a.lastMessage!.sentAt!).getTime() <
+              new Date(b.lastMessage!.sentAt!).getTime()
+                ? -1
+                : 1
+            );
+
             this.isLoading = false;
             this.loadingService.hideLoading();
           },
           error: () => {
             this.loadingService.hideLoading();
-            this.toastrService.presentErrorToast('DATA_ERROR');
+            this.toastrService.presentErrorToast(
+              this.translateService.instant('DATA_ERROR')
+            );
           }
         });
     }

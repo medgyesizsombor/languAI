@@ -2,16 +2,16 @@
   <ion-card-header>
     <ion-row class="d-flex ion-align-items-center avatar-row underline">
       <ion-col class="d-flex ion-align-items-center">
-        <!-- <app-avatar
+        <app-avatar
           [heightInPx]="40"
           [widthInPx]="40"
           [imageSrc]="
             fileService.getImageSrc(
-              post.userProfilePicture?.contentAsString,
-              post.userProfilePicture?.type
+              comment.user?.profilePicture?.contentAsString,
+              comment.user?.profilePicture?.type
             )
-          "></app-avatar> -->
-        <ion-label class="fs-16">{{ comment.username }}</ion-label>
+          "></app-avatar>
+        <ion-label class="fs-16">{{ comment.user?.username }}</ion-label>
       </ion-col>
       <ion-col
         size="auto"
@@ -46,26 +46,4 @@
       </div>
     </ion-row>
   </ion-card-content>
-
-  <!-- TODO NEW-->
-  <!-- <ion-row>
-    <ion-card class="w-100">
-      <ion-row>
-        <ion-label>{{ comment?.text }}</ion-label>
-      </ion-row>
-      <ion-row class="d-flex ion-justify-content-end">
-        <ion-label class="fs-11">
-          {{ comment?.created | date : 'YYYY. MM. dd HH:mm' }}
-        </ion-label>
-      </ion-row>
-    </ion-card>
-  </ion-row>
-  <ion-row class="mb-4">
-    <ion-chip
-      [ngClass]="{ 'liked-chip': comment?.liked }"
-      class="action-button"
-      (click)="like()">
-      <ion-icon name="heart-outline"></ion-icon>
-    </ion-chip>
-  </ion-row> -->
 </ion-card>

@@ -11,7 +11,10 @@ import { FriendshipRequestService } from 'src/app/util/services/friendship-reque
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import { PROFILE_NAVIGATION } from 'src/app/util/util.constants';
+import {
+  PROFILE_NAVIGATION,
+  SETTINGS_NAVIGATION
+} from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-notifications',
@@ -20,20 +23,8 @@ import { PROFILE_NAVIGATION } from 'src/app/util/util.constants';
   standalone: false
 })
 export class NotificationsPage {
-  friendshipRequests: Array<FriendshipRequestViewModel> = [
-    {
-      created: Date().toString(),
-      id: 2,
-      requesterName: 'random',
-      requesterId: 8
-    },
-    {
-      created: Date().toString(),
-      id: 2,
-      requesterName: 'random',
-      requesterId: 8
-    }
-  ];
+  friendshipRequests: Array<FriendshipRequestViewModel> = [];
+  navigateBackRouter = SETTINGS_NAVIGATION;
 
   friendshipStatusEnum = FriendshipStatusEnum;
 
@@ -51,10 +42,10 @@ export class NotificationsPage {
   ) {}
 
   ionViewWillEnter() {
-    //this.loadFriendshipRequests();
+    this.loadFriendshipRequests();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.reactFriendshipRequestSub?.unsubscribe();
     this.getFriendshipRequestListSub?.unsubscribe();
     this.friendshipRequestService.numberOfFriendshipRequest =
@@ -73,7 +64,7 @@ export class NotificationsPage {
       .reactFriendshipRequest(accept, requesterId)
       .subscribe((res: FriendshipStatusEnum) => {
         if (res !== FriendshipStatusEnum.Requested) {
-          this.friendshipRequests.filter(f => f.requesterId !== requesterId);
+          this.loadFriendshipRequests();
         }
       });
   }

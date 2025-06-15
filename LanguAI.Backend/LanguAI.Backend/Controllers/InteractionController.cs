@@ -13,13 +13,8 @@ public class InteractionController : ControllerBase
     private readonly IAuthenticationService _authenticationService;
     private readonly IInteractionService _interactionService;
 
-    private readonly ILogger _logger;
-
-    public InteractionController(ILogger<InteractionController> logger,
-        IAuthenticationService authenticationService,
-        IInteractionService interactionService)
+    public InteractionController(IAuthenticationService authenticationService, IInteractionService interactionService)
     {
-        _logger = logger;
         _interactionService = interactionService;
         _authenticationService = authenticationService;
     }
@@ -38,15 +33,7 @@ public class InteractionController : ControllerBase
 
         if (request.UserId != currentUserId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(_interactionService.SaveInteraction(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_interactionService.SaveInteraction(request));
     }
 
     /// <summary>
@@ -63,15 +50,7 @@ public class InteractionController : ControllerBase
 
         if (request.UserId != currentUserId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(_interactionService.Dislike(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_interactionService.Dislike(request));
     }
 
     /// <summary>
@@ -88,14 +67,6 @@ public class InteractionController : ControllerBase
 
         if (request.UserId != currentUserId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(_interactionService.DeleteComment(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_interactionService.DeleteComment(request));
     }
 }

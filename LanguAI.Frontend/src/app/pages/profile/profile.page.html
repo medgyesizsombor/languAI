@@ -5,6 +5,7 @@
   (sendMessageButtonEmit)="navigateToChat()"
   [showSavingMissed]="hasProfileChanged"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"
+  [navigateBackRouter]="navigateBackRouter"
   [subtitle]="subtitle"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
@@ -257,7 +258,7 @@
         <ion-card
           mode="md"
           (click)="openCardList(cardList.id!)"
-          [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(cardList?.topicId!)}.jpg)`"
+          [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(cardList?.topic?.topicId!)}.jpg)`"
           class="topic-card ion-margin-bottom ion-margin-horizontal card-background-medium-color outline-text card-list-card">
           <div class="overlay"></div>
           <ion-card-header class="fs-22 light-color">
@@ -265,12 +266,14 @@
           </ion-card-header>
           <ion-card-content class="light-color">
             <ion-label class="light-color">
+              {{ cardList.topic! | topicName }}
+            </ion-label>
+            <br />
+            <ion-label class="light-color">
               {{ cardList | cardlistLanguagePipe }}
             </ion-label>
             <br />
-            <!-- TODO WRITE OUT TOPIC NAME -->
-            <ion-label class="light-color">asd</ion-label>
-            <br />
+
             <ion-label class="light-color">
               {{ cardList.created | date:'YYYY. MM. dd' }}
             </ion-label>
@@ -296,7 +299,11 @@
     </ng-template>
 
     <ng-template #zeroFriendTemplate>
-      {{ 'USER_DOESNT_HAVE_ANY_FRIENDS' | translate }}
+      <ion-row class="ion-justify-content-center">
+        <ion-label class="ion-text-center">
+          {{ 'USER_DOESNT_HAVE_ANY_FRIENDS' | translate }}
+        </ion-label>
+      </ion-row>
     </ng-template>
   </ng-container>
 </ion-content>

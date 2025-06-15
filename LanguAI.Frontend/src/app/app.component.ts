@@ -45,7 +45,7 @@ export class AppComponent {
         this.translateService.defaultLang
     );
     this.localStorageService.getMobileLanguageCode() ??
-      this.localStorageService.setMobileLangugageCode(
+      this.localStorageService.setMobileLanguageByCode(
         this.translateService.defaultLang
       );
     if (this.localStorageService.getJwtToken()?.length) {

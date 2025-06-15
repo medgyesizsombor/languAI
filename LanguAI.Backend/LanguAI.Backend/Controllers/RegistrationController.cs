@@ -10,15 +10,11 @@ public class RegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
     private readonly IFriendshipService _friendshipService;
-    private readonly ILogger _logger;
 
-    public RegistrationController(IRegistrationService registrationService,
-        IFriendshipService friendshipService,
-        ILogger<RegistrationController> logger)
+    public RegistrationController(IRegistrationService registrationService, IFriendshipService friendshipService)
     {
         _registrationService = registrationService;
         _friendshipService = friendshipService;
-        _logger = logger;
     }
 
     /// <summary>
@@ -31,23 +27,15 @@ public class RegistrationController : ControllerBase
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        try
+        int? userId = _registrationService.Register(request);
+
+        if (userId == null)
         {
-            int? userId = _registrationService.Register(request);
-
-            if (userId == null)
-            {
-                return false;
-            }
-
-            bool isRegistrationSuccessful = _friendshipService.CreateFriendshipWithChatGPT((int)userId);
-
-            return isRegistrationSuccessful;
+            return false;
         }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+
+        bool isRegistrationSuccessful = _friendshipService.CreateFriendshipWithChatGPT((int)userId);
+
+        return isRegistrationSuccessful;
     }
 }
