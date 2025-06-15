@@ -2,10 +2,9 @@
   [title]="('LESSONS_TITLE' | translate)"
   [showAddButton]="true"
   [subtitle]="('LESSONS_SUBTITLE' | translate)"
-  (addButtonEmit)="moreTopic()"
-  class="ion-margin-bottom"></app-header>
+  (addButtonEmit)="moreTopic()"></app-header>
 
-<ion-content [fullscreen]="true" class="mt-3">
+<ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="topicList?.length; else missingCardList">
       <!-- TOPIC CARD-->
@@ -13,7 +12,7 @@
         <ion-card
           (click)="startExercises(topic.id!)"
           [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(topic.id!)}.jpg)`"
-          class="topic-card ion-margin-bottom ion-margin-horizontal card-background-medium-color outline-text w-100">
+          class="topic-card ion-margin-bottom card-background-medium-color outline-text w-100">
           <div class="overlay"></div>
           <ion-card-header class="fs-22 light-color">
             {{ topic | topicName }}
@@ -26,6 +25,8 @@
     </ng-container>
   </ng-container>
 </ion-content>
+
+<app-footer></app-footer>
 
 <ng-template #missingCardList>
   <ion-row

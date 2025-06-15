@@ -8,7 +8,7 @@
 .streak-cards {
   z-index: 100000;
   position: absolute;
-  top: calc(50vh + 12px);
+  top: calc(50vh + 34px);
   left: calc(50vw - 75px);
   transition: none;
   width: 150px;
@@ -29,4 +29,13 @@ ion-img {
 
 .summary-text {
   max-width: 600px;
+}
+
+.summary-col {
+  max-width: 400px !important;
+}
+
+.primary-button {
+  width: 100%;
+  max-width: 816px;
 }

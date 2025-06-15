@@ -51,7 +51,7 @@ export class LessonLearningPage {
     this.generateExercises();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.receiveExercisesSub?.unsubscribe();
   }
 
@@ -67,6 +67,7 @@ export class LessonLearningPage {
         time: this.timePipe.transform(this.timerService.getTime()),
         mistakes: this.mistakes
       };
+      this.timerService.clearTimer();
       this.showSummary = true;
     } else {
       this.index++;

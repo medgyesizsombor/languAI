@@ -1,0 +1,27 @@
+<app-header
+  [showBackArrow]="true"
+  [title]="('NOT_FOUND_TITLE' | translate)"
+  [navigateBackRouter]="navigateBackRouter"
+  [subtitle]="('NOT_FOUND_SUBTITLE' | translate)"></app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-row class="ion-justify-content-center">
+    <h1 class="ion-text-center">404</h1>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-label class="ion-text-center">
+      {{ 'NOT_FOUND_CONTENT' | translate }}
+    </ion-label>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-label
+      mode="md"
+      [routerLink]="['/' + navigateBackRouter]"
+      class="line me-1 ion-text-center">
+      {{ 'HERE' | translate | titlecase }}
+    </ion-label>
+    <ion-label mode="md" class="ion-text-center">
+      {{ 'YOU_CAN_GO_BACK_TO_HOME_PAGE' | translate | lowercase }}
+    </ion-label>
+  </ion-row>
+</ion-content>

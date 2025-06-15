@@ -133,7 +133,5 @@ public partial class LanguAIDataContext : DbContext
             .WithOne(i => i.User)
             .HasForeignKey<User>(u => u.ImageId)
             .OnDelete(DeleteBehavior.SetNull);
-
-        //TODO rethink the DeleteBehaviors whether should be soft delete or normal delete
     }
 }

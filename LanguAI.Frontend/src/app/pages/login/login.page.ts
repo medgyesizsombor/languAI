@@ -41,7 +41,7 @@ export class LoginPage {
     this.createForm();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.authenticationSub?.unsubscribe();
   }
 
@@ -92,14 +92,14 @@ export class LoginPage {
             } else {
               this.loadingService.hideLoading();
               this.toastrService.presentErrorToast(
-                'UNSUCCESSFUL_LOADING_USERS_DATA'
+                this.translateService.instant('UNSUCCESSFUL_LOADING_USERS_DATA')
               );
             }
           },
           error: () => {
             this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
-              'UNSUCCESSFUL_LOADING_USERS_DATA'
+              this.translateService.instant('UNSUCCESSFUL_LOADING_USERS_DATA')
             );
           }
         });

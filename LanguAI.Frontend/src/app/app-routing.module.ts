@@ -6,7 +6,6 @@ import {
   CARD_LISTS_NAVIGATION,
   CARD_NAVIGATION,
   FORUM_NAVIGATION,
-  FULLSIZE_IMAGE_NAVIGATION,
   LEADERBOARD_NAVIGATION,
   LEARNINGS_NAVIGATION,
   LESSON_LEARNING_NAVIGATION,
@@ -14,6 +13,7 @@ import {
   LOGIN_NAVIGATION,
   MESSAGE_NAVIGATION,
   MESSAGES_NAVIGATION,
+  NOT_FOUND_NAVIGATION,
   NOTIFICATIONS_NAVIGATION,
   POST_NAVIGATION,
   PROFILE_NAVIGATION,
@@ -22,21 +22,15 @@ import {
   SEARCH_NEW_FRIENDS_NAVIGATION,
   SETTINGS_NAVIGATION
 } from './util/util.constants';
-import { LearningGuardFunction } from './util/guards/learning.guard';
 import { LoginGuardFunction } from './util/guards/login.guard';
 import { AuthGuardFunction } from './util/guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () =>
-      import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
-  },
-  {
     path: LESSONS_NAVIGATION,
     loadChildren: () =>
       import('./pages/lessons/lessons.module').then(m => m.LessonsPageModule),
-    canActivate: [LearningGuardFunction]
+    canActivate: [AuthGuardFunction]
   },
   {
     path: LOGIN_NAVIGATION,
@@ -62,17 +56,24 @@ const routes: Routes = [
   {
     path: FORUM_NAVIGATION,
     loadChildren: () =>
-      import('./pages/forum/forum.module').then(m => m.ForumPageModule)
+      import('./pages/forum/forum.module').then(m => m.ForumPageModule),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: MESSAGES_NAVIGATION,
     loadChildren: () =>
-      import('./pages/messages/messages.module').then(m => m.MessagesPageModule)
+      import('./pages/messages/messages.module').then(
+        m => m.MessagesPageModule
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: SETTINGS_NAVIGATION,
     loadChildren: () =>
-      import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
+      import('./pages/settings/settings.module').then(
+        m => m.SettingsPageModule
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: PROFILE_NAVIGATION,
@@ -90,102 +91,120 @@ const routes: Routes = [
     path: POST_NAVIGATION + '/:id',
     loadChildren: () =>
       import('./pages/post/post.module').then(m => m.PostPageModule),
-    canActivate: [LearningGuardFunction]
+    canActivate: [AuthGuardFunction]
   },
   {
     path: CARD_NAVIGATION,
     loadChildren: () =>
       import('./pages/card/card.module').then(m => m.CardPageModule),
-    canActivate: [LearningGuardFunction]
+    canActivate: [AuthGuardFunction]
   },
   {
     path: CARD_NAVIGATION + '/:card-id',
     loadChildren: () =>
       import('./pages/card/card.module').then(m => m.CardPageModule),
-    canActivate: [LearningGuardFunction]
+    canActivate: [AuthGuardFunction]
   },
   {
     path: CARD_LIST_NAVIGATION + '/:id',
     loadChildren: () =>
       import('./pages/card-list/card-list.module').then(
         m => m.CardListPageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: CARD_LEARNING_NAVIGATION + '/:id',
     loadChildren: () =>
       import('./pages/card-learning/card-learning.module').then(
         m => m.CardLearningPageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: LESSON_LEARNING_NAVIGATION,
     loadChildren: () =>
       import('./pages/lesson-learning/lesson-learning.module').then(
         m => m.LessonLearningPageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: LESSON_LEARNING_NAVIGATION + '/:topic-id',
     loadChildren: () =>
       import('./pages/lesson-learning/lesson-learning.module').then(
         m => m.LessonLearningPageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: MESSAGE_NAVIGATION + '/:id',
     loadChildren: () =>
-      import('./pages/message/message.module').then(m => m.MessagePageModule)
+      import('./pages/message/message.module').then(m => m.MessagePageModule),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: NOTIFICATIONS_NAVIGATION,
     loadChildren: () =>
       import('./pages/notifications/notifications.module').then(
         m => m.NotificationsPageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: SAVE_POST_NAVIGATION,
     loadChildren: () =>
       import('./pages/save-post/save-post.module').then(
         m => m.CreatePostPageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: SAVE_POST_NAVIGATION + '/:post-id',
     loadChildren: () =>
       import('./pages/save-post/save-post.module').then(
         m => m.CreatePostPageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: LEARNINGS_NAVIGATION,
     loadChildren: () =>
       import('./pages/learnings/learnings.module').then(
         m => m.LearningPageModule
-      )
-  },
-  {
-    path: FULLSIZE_IMAGE_NAVIGATION + '/:image-id',
-    loadChildren: () =>
-      import('./pages/fullsize-image/fullsize-image.module').then(
-        m => m.FullsizeImagePageModule
-      )
+      ),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: SEARCH_NEW_FRIENDS_NAVIGATION,
     loadChildren: () =>
       import(
         './pages/search-for-new-friends/search-for-new-friends.module'
-      ).then(m => m.SearchForNewFriendsPageModule)
+      ).then(m => m.SearchForNewFriendsPageModule),
+    canActivate: [AuthGuardFunction]
   },
   {
     path: LEADERBOARD_NAVIGATION,
     loadChildren: () =>
       import('./pages/leaderboard/leaderboard.module').then(
         m => m.LeaderboardPageModule
-      )
-  }
+      ),
+    canActivate: [AuthGuardFunction]
+  },
+  {
+    path: NOT_FOUND_NAVIGATION,
+    loadChildren: () =>
+      import('./pages/not-found/not-found.module').then(
+        m => m.NotFoundPageModule
+      ),
+    canActivate: [AuthGuardFunction]
+  },
+  {
+    path: '',
+    redirectTo: LESSONS_NAVIGATION,
+    pathMatch: 'full'
+  },
+  { path: '**', redirectTo: NOT_FOUND_NAVIGATION, pathMatch: 'full' }
 ];
 @NgModule({
   imports: [

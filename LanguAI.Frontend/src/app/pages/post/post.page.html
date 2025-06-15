@@ -2,6 +2,7 @@
   [title]="post?.username ?? ''"
   [showBackArrow]="true"
   [showSavingMissed]="commentForm?.controls?.['comment']?.value?.length"
+  [navigateBackRouter]="navigateBackRouter"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 <ion-content class="ion-padding">
   <ng-container *ngIf="!isLoading">

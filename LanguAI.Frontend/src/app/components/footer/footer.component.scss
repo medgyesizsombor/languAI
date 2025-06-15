@@ -1,0 +1,30 @@
+#notifications-badge {
+  top: 4px;
+  position: absolute;
+  left: calc(50% + 4px);
+}
+
+ion-col {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+ion-footer {
+  background: #424872;
+  color: hsl(229, 50%, 98%);
+}
+
+.buttons-row {
+  max-width: 700px;
+  width: 100%;
+}
+
+.row-container {
+  padding: 8px 0;
+  justify-content: center;
+}
+
+.active-page {
+  color: #a6b1e1;
+}

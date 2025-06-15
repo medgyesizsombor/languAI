@@ -30,6 +30,8 @@ public class Startup
         services.ConfigureHealthCheck();
 
         services.ConfigureSwagger();
+
+        services.AddTransient<ExceptionMiddleware>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -52,6 +54,8 @@ public class Startup
 
         app.EnableCors();
 
+        app.UseMiddleware<ExceptionMiddleware>();
+
         app.UseRouting();
 
         app.UseAuthentication();
@@ -69,7 +73,5 @@ public class Startup
                 await context.Response.WriteAsync("Server is running.");
             });
         });
-
-        app.UseMiddleware<ExceptionMiddleware>();
     }
 }

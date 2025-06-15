@@ -1,9 +1,9 @@
-<app-header [title]="title"></app-header>
+<app-header title="{{ 'SETTINGS_TITLE' | translate }}"></app-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
   <ion-row
     (click)="navigate(settingsNavigationEnum.profile)"
-    class="card-row mx-4 mt-3">
+    class="card-row mx-4 mt-4">
     <ion-card class="w-100">
       <ion-card-header>
         <span class="d-flex ion-justify-content-center">
@@ -138,3 +138,5 @@
     </ion-col>
   </ion-row>
 </ion-content>
+
+<app-footer #footer></app-footer>

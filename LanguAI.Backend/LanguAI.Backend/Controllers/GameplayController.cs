@@ -10,15 +10,11 @@ public class GameplayController : ControllerBase
 {
     private readonly IGameplayService _gameplayService;
     private readonly IAuthenticationService _authenticationService;
-    private readonly ILogger _logger;
 
-    public GameplayController(IGameplayService gameplayService,
-        IAuthenticationService authenticationService,
-        ILogger<GameplayController> logger)
+    public GameplayController(IGameplayService gameplayService, IAuthenticationService authenticationService)
     {
         _gameplayService = gameplayService;
         _authenticationService = authenticationService;
-        _logger = logger;
     }
 
     /// <summary>
@@ -35,28 +31,12 @@ public class GameplayController : ControllerBase
 
         if (request.UserId != userId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(_gameplayService.SaveGameplay(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(null);
-        }
+        return Ok(_gameplayService.SaveGameplay(request));
     }
 
     [HttpGet(Name = "GetWeeklyLeaderboard")]
     public async Task<ActionResult<List<LeaderboardUserViewModel>>> GetWeeklyLeaderboardAsync()
     {
-        try
-        {
-            return Ok(await _gameplayService.GetWeeklyLeaderboardAsync());
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(await _gameplayService.GetWeeklyLeaderboardAsync());
     }
 }

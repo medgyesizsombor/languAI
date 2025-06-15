@@ -41,7 +41,7 @@ export class RegisterPage {
     this.createForm();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.registerSub?.unsubscribe();
   }
 
@@ -51,15 +51,13 @@ export class RegisterPage {
         this.translateService.instant('REGISTRATION_DOTDOTDOT')
       );
 
-      //TODO: Ország selecttel majd kipótolni
       this.registerSub = this.registrationService
         .register$Json({
           body: {
             username: this.registerForm?.get('username')?.value,
             email: this.registerForm?.get('email')?.value,
             dateOfBirth: this.registerForm?.get('dateOfBirth')?.value,
-            password: this.registerForm?.get('password')?.value,
-            language: 1
+            password: this.registerForm?.get('password')?.value
           }
         })
         .subscribe({

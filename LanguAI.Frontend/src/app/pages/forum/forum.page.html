@@ -7,7 +7,8 @@
   <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="posts.length; else missingPosts">
       <ion-row *ngFor="let post of posts" class="card-row ion-padding-bottom">
-        <app-post-component class="w-100"
+        <app-post-component
+          class="w-100"
           [post]="post"
           [navigate]="true"
           (likeButtonEmit)="like($event)"
@@ -18,6 +19,8 @@
     </ng-container>
   </ng-container>
 </ion-content>
+
+<app-footer></app-footer>
 
 <ng-template #missingPosts>
   <div class="w-100">

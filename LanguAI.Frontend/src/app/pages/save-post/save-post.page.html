@@ -4,7 +4,8 @@
   (saveButtonEmit)="savePost()"
   [showBackArrow]="true"
   [subtitle]="subtitle"
-  [showSavingMissed]="unsavedPost"
+  [navigateBackRouter]="navigateBackRouter"
+  [showSavingMissed]="postForm?.controls?.['text']?.value?.length"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 <ion-content class="ion-padding">
   <div class="card-row">

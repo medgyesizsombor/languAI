@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, of, Subscription, switchMap } from 'rxjs';
@@ -16,6 +16,7 @@ import { FileService } from 'src/app/util/services/file.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
+import { FORUM_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-save-post',
@@ -28,12 +29,11 @@ export class CreatePostPage {
   subtitle = this.translateService.instant('CREATING_POST_SUBTITLE');
   postForm: FormGroup | undefined;
   isPostValid = false;
-  //TODO changes
-  unsavedPost = false;
   currentAccessOfPost = AccessEnum.Public;
   image: ImageViewModel | undefined;
   imageSrc: string | undefined;
   postId: number | undefined;
+  navigateBackRouter = FORUM_NAVIGATION;
 
   savePostSub: Subscription | undefined;
   getPostCorrectionFromChatGptSub: Subscription | undefined;
@@ -52,7 +52,8 @@ export class CreatePostPage {
     private fileService: FileService,
     private storageService: StorageService,
     private chatGPTService: ChatGptService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ionViewWillEnter() {
@@ -60,7 +61,7 @@ export class CreatePostPage {
     this.loadPost();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.savePostSub?.unsubscribe();
     this.getPostCorrectionFromChatGptSub?.unsubscribe();
     this.getPostPhrasingSub?.unsubscribe();
@@ -135,7 +136,7 @@ export class CreatePostPage {
    */
   navigateBackWithoutSaving(quit: boolean) {
     if (quit) {
-      this.navController.back();
+      this.router.navigate([this.navigateBackRouter]);
     }
   }
 
@@ -188,12 +189,16 @@ export class CreatePostPage {
                       this.loadingService.hideLoading();
                     } else {
                       this.loadingService.hideLoading();
-                      this.toastrService.presentErrorToast('/TODO');
+                      this.toastrService.presentErrorToast(
+                        this.translateService.instant('ERROR_POST_PHRASING')
+                      );
                     }
                   },
                   error: () => {
                     this.loadingService.hideLoading();
-                    this.toastrService.presentErrorToast('/TODO');
+                    this.toastrService.presentErrorToast(
+                      this.translateService.instant('ERROR_POST_PHRASING')
+                    );
                   }
                 });
             }
@@ -212,12 +217,16 @@ export class CreatePostPage {
                   this.loadingService.hideLoading();
                 } else {
                   this.loadingService.hideLoading();
-                  this.toastrService.presentErrorToast('/TODO');
+                  this.toastrService.presentErrorToast(
+                    this.translateService.instant('ERROR_POST_CORRECTION')
+                  );
                 }
               },
               error: () => {
                 this.loadingService.hideLoading();
-                this.toastrService.presentErrorToast('/TODO');
+                this.toastrService.presentErrorToast(
+                  this.translateService.instant('ERROR_POST_CORRECTION')
+                );
               }
             });
         } else {
@@ -266,7 +275,9 @@ export class CreatePostPage {
         },
         error: () => {
           this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast('ERROR_WHILE_LOADING_POST');
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('ERROR_WHILE_LOADING_POST')
+          );
         }
       });
   }

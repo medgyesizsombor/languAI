@@ -13,7 +13,7 @@ namespace LanguAI.Backend.Services;
 public interface IFriendshipService
 {
     bool RequestFriendship(int currentUserId, int recipientId);
-    Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool showChatGPT = false);
+    Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool isMessagePage = false);
     FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId);
     FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
     bool ReceivingFriendshipRequest(int friendshipRequestId, FriendshipStatusEnum status);
@@ -21,7 +21,7 @@ public interface IFriendshipService
     bool CreateFriendshipWithChatGPT(int userId);
     List<FriendshipRequestViewModel> GetFriendshipRequestList(int currentUserId);
     int? GetNumberOfFriendshipRequest(int currentUserId);
-    List<UserDiscoveryViewModel> GetListOfDiscoverableUser(int userId);
+    Task<List<UserDiscoveryViewModel>> GetListOfDiscoverableUserAsync(int userId);
     void DeletePendingRequest(int currentUserId, int otherUserId);
     void DeleteFriendship(int currentUserId, int otherUserId);
 }
@@ -54,25 +54,38 @@ public class FriendshipService : BaseService, IFriendshipService
                 .Where(u => u.Id == recipientId && u.IsActive)
                 .FirstOrDefault();
 
-            bool isExistingFriendship = _context.Friendship
-                .Any(f => (f.RequesterId == currentUserId
+            var isExistingFriendship = _context.Friendship
+                .FirstOrDefault(f => (f.RequesterId == currentUserId
                                 && f.RecipientId == recipientId)
                             || (f.RequesterId == recipientId
                                 && f.RecipientId == currentUserId));
 
-            if (requester == null || recipient == null || isExistingFriendship)
+            if (requester == null || recipient == null || isExistingFriendship?.Status == FriendshipStatusEnum.Accepted)
             {
                 return false;
             }
 
-            Friendship friendship = new Friendship
-            {
-                RecipientId = recipientId,
-                RequesterId = currentUserId,
-                Created = DateTime.Now
-            };
+            Friendship friendship;
 
-            _context.Friendship.Add(friendship);
+            if (isExistingFriendship != null)
+            {
+                friendship = isExistingFriendship;
+                friendship.Status = FriendshipStatusEnum.Requested;
+            }
+            else
+            {
+                friendship = new Friendship { };
+            }
+
+            friendship.RecipientId = recipientId;
+            friendship.RequesterId = currentUserId;
+            friendship.Created = DateTime.Now;
+
+            if (isExistingFriendship == null)
+            {
+                _context.Friendship.Add(friendship);
+            }
+
             _context.SaveChanges();
 
             return true;
@@ -88,7 +101,7 @@ public class FriendshipService : BaseService, IFriendshipService
     /// </summary>
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
-    public async Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool showChatGPT = false)
+    public async Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool isMessagePage = false)
     {
         var result = new List<OtherUserViewModel>();
         var friendSelectorModel = _context.Friendship
@@ -105,11 +118,11 @@ public class FriendshipService : BaseService, IFriendshipService
 
         for (int i = 0; i < friendSelectorModel.Count; i++)
         {
-            if (showChatGPT == false && friendSelectorModel[i].Id == CHATGPT_ID) continue;
+            if (isMessagePage == false && friendSelectorModel[i].Id == CHATGPT_ID) continue;
 
             User user = _context.User
                 .Include(u => u.Image)
-                .FirstOrDefault(u => u.Id == userId
+                .FirstOrDefault(u => u.Id == friendSelectorModel[i].Id
                     && u.IsActive);
 
             string pictureContentAsString = null;
@@ -134,12 +147,13 @@ public class FriendshipService : BaseService, IFriendshipService
                     Type = user.Image.Type,
                 }
             };
-            
+
             result.Add(friend);
         }
-        
 
-        return result;
+        return isMessagePage
+            ? result.OrderByDescending(r => r.LastMessage?.SentAt).ToList()
+            : result.OrderBy(r => r.Username).ToList();
     }
 
     /// <summary>
@@ -322,7 +336,7 @@ public class FriendshipService : BaseService, IFriendshipService
         }
     }
 
-    public List<UserDiscoveryViewModel> GetListOfDiscoverableUser(int userId)
+    public async Task<List<UserDiscoveryViewModel>> GetListOfDiscoverableUserAsync(int userId)
     {
         var listOfFriendsId = new List<int>();
 
@@ -347,7 +361,9 @@ public class FriendshipService : BaseService, IFriendshipService
             .Select(f => f.RecipientId)
             .ToList();
 
-        return _context.User
+        //TODO átírni
+
+        var users = _context.User
             .Where(u => !acceptedFriendshipIds.Contains(u.Id) &&
             (
                 (!receivedFriendshipIds.Contains(u.Id)
@@ -360,9 +376,45 @@ public class FriendshipService : BaseService, IFriendshipService
             {
                 UserId = u.Id,
                 Username = u.Username,
-                FriendshipStatusEnum = GetFriendshipStatusEnum(u.Id, currentUserfriendships)
+                FriendshipStatusEnum = GetFriendshipStatusEnum(u.Id, currentUserfriendships),
+
             })
             .ToList();
+
+        for (int i = 0; i < users.Count; i++)
+        {
+            User user = _context.User
+                .Include(u => u.Image)
+                .FirstOrDefault(u => u.Id == users[i].UserId
+                    && u.IsActive);
+
+            string pictureContentAsString = null;
+            if (user.ImageId != null)
+            {
+                var bytes = await _storageService.DownloadBlob((int)user.ImageId);
+                pictureContentAsString = Convert.ToBase64String(bytes);
+            }
+
+            var friend = new UserDiscoveryViewModel
+            {
+                UserId = users[i].UserId,
+                Username = users[i].Username,
+                FriendshipStatusEnum = users[i].FriendshipStatusEnum,
+                ProfilePicture = string.IsNullOrEmpty(pictureContentAsString)
+                ? null
+                : new ImageViewModel
+                {
+                    ContentAsString = pictureContentAsString,
+                    Id = user.ImageId,
+                    Name = user.Image.Name,
+                    Type = user.Image.Type,
+                }
+            };
+
+            result.Add(friend);
+        }
+
+        return result;
     }
 
     /// <summary>

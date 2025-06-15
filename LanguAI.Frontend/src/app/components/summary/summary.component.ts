@@ -4,10 +4,12 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild
 } from '@angular/core';
 import { Animation } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { GameplayService } from 'src/api/services';
 import { Statistics } from 'src/app/util/models/statistic-view-model';
@@ -22,14 +24,16 @@ import { ToastrService } from 'src/app/util/services/toastr.service';
   styleUrls: ['./summary.component.scss'],
   standalone: false
 })
-export class SummaryComponent {
+export class SummaryComponent implements OnInit {
   @ViewChild('previousStreakCard', { read: ElementRef })
   previousStreakCard!: ElementRef<HTMLIonCardElement>;
   @ViewChild('newStreakCard', { read: ElementRef })
   newStreakCard!: ElementRef<HTMLIonCardElement>;
 
   @Input() statistics: Statistics | undefined;
-  @Output() navigateToLessonsEmit = new EventEmitter<void>();
+  @Input() returnButtonTitle =
+    this.translateService.instant('RETURN_TO_LESSONS');
+  @Output() navigateBackEmit = new EventEmitter<void>();
   exp: number = 100;
   showStreakAnimation = true;
   wasStreakAnimationSeen = false;
@@ -47,23 +51,27 @@ export class SummaryComponent {
     private loadingService: LoadingService,
     private toastrService: ToastrService,
     private animationService: AnimationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translateService: TranslateService
   ) {}
 
-  ionViewDidEnter() {
+  ngOnInit() {
     this.calculateAndSaveGameplay();
   }
 
-  ionViewDidLeave() {
+  ionViewWillEnter() {
+  }
+
+  ionViewWillLeave() {
     this.saveGameplaySub?.unsubscribe();
   }
 
-  navigateToLessons() {
+  navigateBack() {
     if (this.showStreakAnimation && !this.wasStreakAnimationSeen) {
       this.startAnimation();
       this.wasStreakAnimationSeen = true;
     } else {
-      this.navigateToLessonsEmit.emit();
+      this.navigateBackEmit.emit();
     }
   }
 
@@ -73,7 +81,10 @@ export class SummaryComponent {
   private async calculateAndSaveGameplay() {
     //await this.loadingService.showLoading('CALCULATE_AND_SAVE_GAMEPLAY');
     if (this.statistics?.mistakes === 0 || this.statistics?.mistakes) {
-      this.exp = 100 - this.statistics?.mistakes * 5;
+      this.exp =
+        100 - this.statistics?.mistakes * 5 <= 0
+          ? 0
+          : 100 - this.statistics?.mistakes * 5;
       this.cdr.detectChanges();
     }
 

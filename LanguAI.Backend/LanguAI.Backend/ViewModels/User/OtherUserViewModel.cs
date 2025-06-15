@@ -7,8 +7,6 @@ public class OtherUserViewModel
 {
     public int UserId { get; set; }
     public string Username { get; set; }
-
     public ImageViewModel ProfilePicture { get; set; }
-
     public LastMessageViewModel LastMessage { get; set; }
 }

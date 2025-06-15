@@ -15,7 +15,7 @@ export const LoginGuardFunction: CanActivateFn = (
   const localStorageService = inject(LocalStorageService);
   const navController = inject(NavController);
 
-  if (!localStorageService.getLanguageCode()?.length) {
+  if (!localStorageService.getJwtToken()?.length) {
     return true;
   } else {
     navController.navigateForward(['/' + LESSONS_NAVIGATION]);

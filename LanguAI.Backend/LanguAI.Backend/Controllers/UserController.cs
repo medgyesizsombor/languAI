@@ -28,15 +28,7 @@ public class UserController : ControllerBase
     [HttpGet(Name = "GetAllUsers")]
     public ActionResult<List<UserViewModel>> GetAllUsers()
     {
-        try
-        {
-            return Ok(_userService.GetAllUsers());
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_userService.GetAllUsers());
     }
 
     /// <summary>
@@ -47,19 +39,11 @@ public class UserController : ControllerBase
     [HttpGet(Name = "GetUserById")]
     public async Task<ActionResult<UserViewModel>> GetUserById(int userId)
     {
-        try
-        {
-            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
 
-            ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(currentUserId);
 
-            return Ok(await _userService.GetUserById(userId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(await _userService.GetUserById(userId));
     }
 
     /// <summary>
@@ -69,19 +53,11 @@ public class UserController : ControllerBase
     [HttpGet(Name = "GetCurrentUser")]
     public async Task<ActionResult<UserViewModel>> GetCurrentUser()
     {
-        try
-        {
-            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
 
-            ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(currentUserId);
 
-            return Ok(await _userService.GetUserById((int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(await _userService.GetUserById((int)currentUserId));
     }
 
     /// <summary>
@@ -97,15 +73,7 @@ public class UserController : ControllerBase
         ArgumentNullException.ThrowIfNull(request);
         if (request.Id != currentUserId) throw new ArgumentException("You can't edit other's profile");
 
-        try
-        {
-            return Ok(_userService.SaveUser(request, (int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_userService.SaveUser(request, (int)currentUserId));
     }
 
     /// <summary>
@@ -120,20 +88,12 @@ public class UserController : ControllerBase
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
 
-        try
+        if (request.UserId != currentUserId)
         {
-            if (request.UserId != currentUserId)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            throw new UnauthorizedAccessException();
+        }
 
-            return Ok(_userService.ChangePassword(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_userService.ChangePassword(request));
     }
 
     /// <summary>
@@ -147,15 +107,7 @@ public class UserController : ControllerBase
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        try
-        {
-            return Ok(_userService.DeleteUser((int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_userService.DeleteUser((int)currentUserId));
     }
 
     /// <summary>
@@ -168,15 +120,7 @@ public class UserController : ControllerBase
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        try
-        {
-            return Ok(_userService.GetStreakOfCurrentUser((int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_userService.GetStreakOfCurrentUser((int)currentUserId));
     }
 
     /// <summary>
@@ -189,20 +133,13 @@ public class UserController : ControllerBase
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
-        try
-        {
-            return Ok(_userService.GetDataOfUser((int)currentUserId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_userService.GetDataOfUser((int)currentUserId));
     }
 
     [HttpPost(Name = "SetProfilePicture")]
     public ActionResult<bool> SetProfilePicture(int imageId)
     {
+        //TODO ezt átírni
         var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
         ArgumentNullException.ThrowIfNull(currentUserId);
 
@@ -229,19 +166,10 @@ public class UserController : ControllerBase
     [HttpGet(Name = "GetProfilePageData")]
     public async Task<ActionResult<ProfilePageDataViewModel>> GetProfilePageDataByIdAsync(int userId)
     {
-        try
-        {
-            var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
 
-            ArgumentNullException.ThrowIfNull(currentUserId);
+        ArgumentNullException.ThrowIfNull(currentUserId);
 
-            return Ok(await _userService.GetProfilePageDataByIdAsync((int)currentUserId, userId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
-
+        return Ok(await _userService.GetProfilePageDataByIdAsync((int)currentUserId, userId));
     }
 }

@@ -48,8 +48,7 @@ public class UserService : BaseService, IUserService
         {
             Id = u.Id,
             Username = u.Username,
-            DateOfBirth = u.DateOfBirth,
-            Language = u.Language
+            DateOfBirth = u.DateOfBirth
         }).ToList();
     }
 
@@ -81,7 +80,6 @@ public class UserService : BaseService, IUserService
         {
             Id = user.Id,
             Username = user.Username,
-            Language = user.Language,
             DateOfBirth = user.DateOfBirth,
             Email = user.Email,
             IsActive = user.IsActive,
@@ -247,7 +245,6 @@ public class UserService : BaseService, IUserService
         return new UserDataViewModel
         {
             DateOfBirth = user.DateOfBirth,
-            LanguageId = user.Language,
             Streak = user.Streak,
             Username = user.Username,
             Id = userId,

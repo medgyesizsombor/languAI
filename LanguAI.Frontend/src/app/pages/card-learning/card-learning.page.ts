@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
+import { Statistics } from 'src/app/util/models/statistic-view-model';
+import { TimePipe } from 'src/app/util/pipes/time.pipe';
 import { LoadingService } from 'src/app/util/services/loading.service';
+import { TimerService } from 'src/app/util/services/timer.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
+import { CARD_LIST_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-card-learning',
@@ -21,6 +25,9 @@ export class CardLearningPage {
   isFlipped = false;
   currentCardIndex = 0;
   progress = 0;
+  statistics: Statistics | undefined;
+  showSummary = false;
+  mistakes = 0;
 
   getCardsOfCardListSub: Subscription | undefined;
 
@@ -30,14 +37,17 @@ export class CardLearningPage {
     private cardService: CardService,
     private toastrService: ToastrService,
     private translateService: TranslateService,
-    private navController: NavController
+    private navController: NavController,
+    private router: Router,
+    private timePipe: TimePipe,
+    private timerService: TimerService
   ) {}
 
   ionViewWillEnter() {
     this.loadData();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.getCardsOfCardListSub?.unsubscribe();
   }
 
@@ -45,8 +55,8 @@ export class CardLearningPage {
    * Set score, default is success
    */
   setScore(success = true) {
-    if (success) {
-      this.score++;
+    if (!success) {
+      this.mistakes++;
     }
 
     if (this.currentCardIndex === this.cards?.length - 1) {
@@ -64,6 +74,10 @@ export class CardLearningPage {
    */
   flipCard() {
     this.isFlipped = !this.isFlipped;
+  }
+
+  navigateBack() {
+    this.router.navigate([CARD_LIST_NAVIGATION + '/' + this.cardListId]);
   }
 
   /**
@@ -90,7 +104,15 @@ export class CardLearningPage {
         next: (cards: Array<CardViewModel>) => {
           this.loadingService.hideLoading();
           if (cards?.length) {
-            this.cards = [...cards];
+            // this.cards = [...cards];
+            this.cards = [
+              {
+                id: 1,
+                wordInLearningLanguage: 'asd',
+                wordInNativeLanguage: 'dsa'
+              }
+            ];
+            this.timerService.setTimer();
           }
         },
         error: () => {
@@ -106,7 +128,11 @@ export class CardLearningPage {
    * If this is the last card, returns with the cards
    */
   private lastCardHandler() {
-    //TODO streak növelése
-    this.navController.pop();
+    this.statistics = {
+      time: this.timePipe.transform(this.timerService.getTime()),
+      mistakes: this.mistakes
+    };
+    this.timerService.clearTimer();
+    this.showSummary = true;
   }
 }

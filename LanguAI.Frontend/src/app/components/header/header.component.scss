@@ -1,9 +1,19 @@
 $a: 100%;
 $b: 26px;
 
+ion-header {
+  background-color: hsl(229, 50%, 98%);
+  border-radius: 0 0 20px 20px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+}
+
 ion-title {
   margin: 0 12px;
   font-size: 24px;
+}
+
+.top-left-fab-container {
+  top: 0;
 }
 
 .left-fab {
@@ -24,7 +34,7 @@ ion-title {
 @media only screen and (min-width: 632px) {
   .right-fab {
     &-container {
-      left: calc(50% + 290px);
+      left: calc(50% + 292px);
     }
   }
 

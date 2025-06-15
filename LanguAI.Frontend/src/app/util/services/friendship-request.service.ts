@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FriendshipRequestService {
-  numberOfFriendshipRequest = 5;
+  numberOfFriendshipRequest = 0;
 
   constructor(
     private friendshipService: FriendshipService,
@@ -22,51 +22,31 @@ export class FriendshipRequestService {
     private translateService: TranslateService
   ) {}
 
-  async checkFriendshipRequest() {
-    // async checkIncomingMessages() {
-    //   return setInterval(() => {
-    //     if (this.localDataService.getUserId()) {
-    //       this.messageService
-    //         .messageGetOldestIncomingMessage({
-    //           driverId: this.localDataService.getUserId()
-    //         })
-    //         .subscribe({
-    //           next: message => {
-    //             if (
-    //               message !== null &&
-    //               !this.localDataService.isMessageNotified(message.uzenetId)
-    //             ) {
-    //               this.msgSubject.next(message);
-    //             }
-    //           },
-    //           error: err => {
-    //             console.log(err);
-    //           }
-    //         });
-    //     }
-    //   }, this.messageCheckRefreshRate);
-    // }
-    // return setInterval(this.getFriendshipRequest, 3600000);
-  }
-
-  async getFriendshipRequest() {
-    // return setInterval(() => {
-    //   if (this.localstorageService.getUserId()) {
-    //     this.friendshipService.getNumberOfFriendshipRequest$Json().subscribe({
-    //       next: (res: number | null) => {
-    //         if (res) {
-    //           this.localstorageService.setNumberOfFriendshipRequest(res);
-    //         } else {
-    //           this.localstorageService.removeNumberOfFriendshipRequest();
-    //         }
-    //       },
-    //       error: () => {
-    //         this.toastrService.presentErrorToast('NOTIFICATION_ERROR');
-    //         this.localstorageService.removeNumberOfFriendshipRequest();
-    //       }
-    //     });
-    //   }
-    // }, 3600000);
+  async getFriendshipRequest(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      if (this.localstorageService.getUserId()) {
+        this.friendshipService.getNumberOfFriendshipRequest$Json().subscribe({
+          next: (res: number | null) => {
+            if (res) {
+              this.localstorageService.setNumberOfFriendshipRequest(res);
+              resolve(res);
+            } else {
+              this.localstorageService.removeNumberOfFriendshipRequest();
+              resolve(0);
+            }
+          },
+          error: () => {
+            this.toastrService.presentErrorToast(
+              this.translateService.instant('NOTIFICATION_ERROR')
+            );
+            this.localstorageService.removeNumberOfFriendshipRequest();
+            reject(0);
+          }
+        });
+      } else {
+        reject(0);
+      }
+    });
   }
 
   /**

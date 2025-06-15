@@ -9,7 +9,6 @@ import { FileService } from 'src/app/util/services/file.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
 import { LocalStorageService } from 'src/app/util/services/localstorage.service';
 import { ToastrService } from 'src/app/util/services/toastr.service';
-import { FULLSIZE_IMAGE_NAVIGATION } from 'src/app/util/util.constants';
 
 @Component({
   selector: 'app-post-component',
@@ -53,7 +52,7 @@ export class PostComponent implements OnInit {
   }
 
   openInFullsize(post: PostViewModel) {
-    this.router.navigate([FULLSIZE_IMAGE_NAVIGATION + '/' + post.image?.id]);
+    // this.router.navigate([FULLSIZE_IMAGE_NAVIGATION + '/' + post.image?.id]);
   }
 
   async editPost() {
@@ -64,7 +63,8 @@ export class PostComponent implements OnInit {
           //True is the edit
           if (res.data) {
             this.editButtonEmit.emit(this.post?.id!);
-          } else {
+            //False is the delete
+          } else if (res.data === false) {
             await this.loadingService.showLoading(
               this.translateService.instant('POST_DELETE_LOADING')
             );
@@ -77,7 +77,7 @@ export class PostComponent implements OnInit {
                 next: () => {
                   this.loadingService.hideLoading();
                   this.toastrService.presentSuccessToast(
-                    'SUCCESS_DELETING_POST'
+                    this.translateService.instant('SUCCESS_DELETING_POST')
                   );
                   this.removeButtonEmit.emit(this.post?.id!);
                 },
@@ -89,6 +89,7 @@ export class PostComponent implements OnInit {
                 }
               });
           }
+          // And the other events are not important for us
         }
       });
   }

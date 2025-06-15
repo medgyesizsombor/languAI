@@ -1,0 +1,9 @@
+ion-select {
+  --highlight-color-focused: none;
+  --highlight-color-invalid: none;
+  --highlight-color-valid: none;
+  border-radius: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: hsl(229, 50%, 95%);
+}

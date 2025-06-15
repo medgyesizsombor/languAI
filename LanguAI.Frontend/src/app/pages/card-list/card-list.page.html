@@ -4,6 +4,7 @@
   (saveButtonEmit)="saveCards()"
   [showBackArrow]="true"
   [showSavingMissed]="hasCardChanged"
+  [navigateBackRouter]="navigateBackRouter"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">

@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { AccessEnum, CardListViewModel, CardViewModel } from 'src/api/models';
 import { CardService } from 'src/api/services';
-import { NewCardlistModalComponent } from 'src/app/components/modals/new-cardlist/new-cardlist-modal.component';
 import { LanguageLevelPipe } from 'src/app/util/pipes/language-level.pipe';
 import { AlertService } from 'src/app/util/services/alert.service';
 import { LoadingService } from 'src/app/util/services/loading.service';
@@ -13,6 +12,7 @@ import { LocalStorageService } from 'src/app/util/services/localstorage.service'
 import { ToastrService } from 'src/app/util/services/toastr.service';
 import {
   CARD_LEARNING_NAVIGATION,
+  CARD_LISTS_NAVIGATION,
   CARD_NAVIGATION
 } from 'src/app/util/util.constants';
 
@@ -32,8 +32,7 @@ export class CardListPage {
   hasCardChanged = false;
   title = '';
   isCardListOfOtherUser = false;
-
-  //TODO edit-button-position
+  navigateBackRouter = CARD_LISTS_NAVIGATION;
 
   getCardListSub: Subscription | undefined;
   saveCardsSub: Subscription | undefined;
@@ -136,14 +135,20 @@ export class CardListPage {
           next: (success: boolean) => {
             this.loadingService.hideLoading();
             if (success) {
-              this.toastrService.presentSuccessToast('SAVING_SUCCESSFULL');
+              this.toastrService.presentSuccessToast(
+                this.translateService.instant('SAVING_SUCCESSFULL')
+              );
               this.hasCardChanged = false;
             } else {
-              this.toastrService.presentErrorToast('UNSUCCESSFULL_SAVING');
+              this.toastrService.presentErrorToast(
+                this.translateService.instant('UNSUCCESSFULL_SAVING')
+              );
             }
           },
           error: () => {
-            this.toastrService.presentErrorToast('UNSUCCESSFULL_SAVING');
+            this.toastrService.presentErrorToast(
+              this.translateService.instant('UNSUCCESSFULL_SAVING')
+            );
             this.loadingService.hideLoading();
           }
         });
@@ -176,17 +181,19 @@ export class CardListPage {
    */
   async learnCards() {
     if (this.hasCardChanged) {
-      await this.alertService.showSavingMissedAlert().then((quit: boolean) => {
-        if (quit) {
-          if (this.cards.length >= 30) {
-            this.navController.navigateForward(
-              CARD_LEARNING_NAVIGATION + '/' + this.cardListId
-            );
-          } else {
-            this.alertService.showTooFewCardsAlert();
+      await this.alertService
+        .showSavingMissedAlert()
+        .then(async (quit: boolean) => {
+          if (quit) {
+            if (this.cards.length >= 30) {
+              this.navController.navigateForward(
+                CARD_LEARNING_NAVIGATION + '/' + this.cardListId
+              );
+            } else {
+              await this.alertService.showTooFewCardsAlert();
+            }
           }
-        }
-      });
+        });
     }
 
     if (this.cards.length >= 30) {

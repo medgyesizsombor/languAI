@@ -18,4 +18,8 @@ export class TimerService {
   getTime(): number {
     return this.seconds;
   }
+
+  clearTimer() {
+    clearInterval(this.interval);
+  }
 }

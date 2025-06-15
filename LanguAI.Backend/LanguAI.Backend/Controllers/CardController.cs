@@ -210,20 +210,12 @@ public class CardController : ControllerBase
         ArgumentNullException.ThrowIfNull(currentUserId);
         ArgumentNullException.ThrowIfNull(request);
 
-        try
+        if (request.UserId != currentUserId)
         {
-            if (request.UserId != currentUserId)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            throw new UnauthorizedAccessException();
+        }
 
-            return Ok(_cardService.ChangeAccessOfCardList(request));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(false);
-        }
+        return Ok(_cardService.ChangeAccessOfCardList(request));
     }
 
     /// <summary>
@@ -239,15 +231,7 @@ public class CardController : ControllerBase
 
         if (currentUserId != userId) throw new UnauthorizedAccessException();
 
-        try
-        {
-            return Ok(_cardService.GetCardListOfCurrentLearningGroupByTopic(userId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_cardService.GetCardListOfCurrentLearningGroupByTopic(userId));
     }
 
     /// <summary>
@@ -257,15 +241,7 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetCardById")]
     public ActionResult<CardViewModel> GetCardById(int cardId)
     {
-        try
-        {
-            return Ok(_cardService.GetCardById(cardId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_cardService.GetCardById(cardId));
     }
 
     /// <summary>
@@ -275,16 +251,8 @@ public class CardController : ControllerBase
     [HttpDelete(Name = "DeleteCardById")]
     public ActionResult DeleteCardById(int cardId)
     {
-        try
-        {
-            _cardService.DeleteCardById(cardId);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        _cardService.DeleteCardById(cardId);
+        return Ok();
     }
 
     /// <summary>
@@ -295,15 +263,7 @@ public class CardController : ControllerBase
     [HttpGet(Name = "GetAllTopicsByCurrentLearning")]
     public ActionResult<List<IntSelectorModel>> GetAllTopicsByCurrentLearning(int learningId)
     {
-        try
-        {
-            return Ok(_cardService.GetAllTopicsByCurrentLearning(learningId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        return Ok(_cardService.GetAllTopicsByCurrentLearning(learningId));
     }
 
     [HttpPost(Name = "SaveCard")]
@@ -316,16 +276,7 @@ public class CardController : ControllerBase
             throw new ArgumentNullException("One of the word is missing");
         }
 
-        try
-        {
-            _cardService.SaveCard(request);
-
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return BadRequest(e.Message);
-        }
+        _cardService.SaveCard(request);
+        return Ok();
     }
 }

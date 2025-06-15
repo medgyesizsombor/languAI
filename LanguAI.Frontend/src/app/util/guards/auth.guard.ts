@@ -6,7 +6,10 @@ import {
 } from '@angular/router';
 import { LocalStorageService } from '../services/localstorage.service';
 import { inject } from '@angular/core';
-import { LOGIN_NAVIGATION } from '../util.constants';
+import {
+  LEARNINGS_NAVIGATION,
+  LOGIN_NAVIGATION
+} from '../util.constants';
 
 export const AuthGuardFunction: CanActivateFn = (
   next: ActivatedRouteSnapshot,
@@ -16,6 +19,14 @@ export const AuthGuardFunction: CanActivateFn = (
   const router = inject(Router);
 
   if (localStorageService.getJwtToken()?.length) {
+    if (!localStorageService.getCurrentLearning()) {
+      if (state.url.substring(1) === LEARNINGS_NAVIGATION) {
+        return true;
+      } else {
+        router.navigate(['/' + LEARNINGS_NAVIGATION]);
+      }
+    }
+
     return true;
   } else {
     router.navigate(['/' + LOGIN_NAVIGATION]);

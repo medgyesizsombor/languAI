@@ -5,14 +5,8 @@ ion-list {
 
 app-edit-fab {
   position: fixed;
-  top: calc(100dvh - 74px);
-  right: calc(70px);
-}
-
-app-edit-fab {
-  position: fixed;
-  top: calc(100dvh - 66px);
-  right: 71px;
+  top: calc(100dvh - 62px);
+  left: calc(100% - 66px);
 }
 
 app-edit-acces-fab {
@@ -26,18 +20,8 @@ app-edit-acces-fab {
   max-width: 500px;
 }
 
-// app-edit-acces-fab {
-//   position: absolute;
-//   top: calc(100dvh - 165px);
-//   left: 8px;
-// }
-
-// @media only screen and (min-width: 632px) {
-//   ion-card {
-//     width: 600px;
-//   }
-
-//   app-edit-acces-fab {
-//     left: calc(50% - 320px + 12px);
-//   }
-// }
+@media only screen and (min-width: 632px) {
+  app-edit-fab {
+    left: calc(50% + 262px);
+  }
+}

@@ -1,21 +1,19 @@
 ﻿namespace LanguAI.Backend.Utils;
 
-public class ExceptionMiddleware
+public class ExceptionMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionMiddleware> _logger;
 
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    public ExceptionMiddleware(ILogger<ExceptionMiddleware> logger)
     {
-        _next = next;
         _logger = logger;
     }
-
-    public async Task Invoke(HttpContext context)
+     
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception e)
         {

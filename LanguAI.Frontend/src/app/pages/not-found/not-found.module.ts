@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { FullsizeImagePageRoutingModule } from './fullsize-image-routing.module';
+import { NotFoundPageRoutingModule } from './not-found-routing.module';
 
-import { FullsizeImagePage } from './fullsize-image.page';
+import { NotFoundPage } from './not-found.page';
 import { UtilModule } from 'src/app/util/util.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { UtilModule } from 'src/app/util/util.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    FullsizeImagePageRoutingModule,
+    NotFoundPageRoutingModule,
     UtilModule
   ],
-  declarations: [FullsizeImagePage]
+  declarations: [NotFoundPage],
 })
-export class FullsizeImagePageModule {}
+export class NotFoundPageModule {}

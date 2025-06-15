@@ -57,7 +57,7 @@ export class CardListsPage {
     //this.addCardList();
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.cardLists = [];
     this.getCardListsOfCurrentUserSub?.unsubscribe();
     this.createCardListSub?.unsubscribe();
