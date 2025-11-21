@@ -21,6 +21,7 @@ import { FileService } from 'src/app/util/services/file.service';
 export class MessagesPage {
   title = this.translateService.instant(MESSAGES_TITLE);
   friendList: Array<OtherUserViewModel> = [];
+  messageList: Array<OtherUserViewModel> = [];
   isLoading = true;
 
   getFriendListSub: Subscription | undefined;
@@ -79,13 +80,15 @@ export class MessagesPage {
       this.getFriendListSub = this.friendshipService
         .getFriendList$Json({
           userId,
-          showChatGPT: true
+          showChatGPT: true,
+          isMessagePage: true
         })
         .subscribe({
           next: (res: Array<OtherUserViewModel>) => {
-            const filteredFriendlist = res.filter(f => f.lastMessage);
+            this.friendList = [...res];
+            const filteredMessageList = [...res].filter(f => f.lastMessage);
 
-            this.friendList = filteredFriendlist.sort((a, b) =>
+            this.messageList = filteredMessageList.sort((a, b) =>
               new Date(a.lastMessage!.sentAt!).getTime() <
               new Date(b.lastMessage!.sentAt!).getTime()
                 ? -1

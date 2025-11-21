@@ -30,6 +30,8 @@ export class CardPage {
 
   cardForm: FormGroup | undefined;
 
+  navigateBackRouter = CARD_LIST_NAVIGATION;
+
   constructor(
     private cardService: CardService,
     private translateService: TranslateService,
@@ -131,6 +133,10 @@ export class CardPage {
       .pipe(
         switchMap((params: Params) => {
           this.cardId = params['card-id'];
+          this.cardListId = params['card-list-id'];
+          this.navigateBackRouter = this.navigateBackRouter + '/' + this.cardListId;
+
+          console.log(this.navigateBackRouter)
 
           if (!this.cardId) {
             this.loadingService.hideLoading();

@@ -8,6 +8,7 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { ExerciseViewModel } from 'src/api/models';
 import { SentenceAssemblyExerciseWord } from 'src/api/models/sentence-assembly-exercise-word';
 import { AnimationService } from 'src/app/util/services/animation.service';
@@ -41,7 +42,8 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
 
   constructor(
     private animationService: AnimationService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -85,7 +87,9 @@ export class SentenceAssemblyExerciseComponent implements OnInit {
    */
   private async loadData() {
     if (this.exercise?.mainSentence) {
-      await this.loadingService.showLoading('EXERCISE_IS_LOADING');
+      await this.loadingService.showLoading(
+        this.translateService.instant('EXERCISE_IS_LOADING')
+      );
       this.exercise.sentenceAssemblyExerciseSentence = [...this.mapTheWords()];
       this.correctSentence = [
         ...this.exercise.sentenceAssemblyExerciseSentence

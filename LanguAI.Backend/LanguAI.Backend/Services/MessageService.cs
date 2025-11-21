@@ -2,7 +2,6 @@
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Message;
-using LanguAI.Backend.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanguAI.Backend.Services;
@@ -16,9 +15,7 @@ public interface IMessageService
 
 public class MessageService : BaseService, IMessageService
 {
-    public MessageService(LanguAIDataContext context) : base(context)
-    {
-    }
+    public MessageService(LanguAIDataContext context) : base(context) { }
 
     /// <summary>
     /// Send message

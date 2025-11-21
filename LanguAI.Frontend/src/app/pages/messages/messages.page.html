@@ -5,10 +5,10 @@
   [subtitle]="('MESSAGES_SUBTITLE' | translate)"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngIf="!isLoading">
-    <ng-container *ngIf="friendList?.length; else missingFriendList">
+    <ng-container *ngIf="messageList.length; else missingMessageList">
       <ion-row
         class="card-row ion-padding-bottom"
-        *ngFor="let friend of friendList">
+        *ngFor="let friend of messageList">
         <ion-card
           class="w-100 ion-padding"
           (click)="openMessage(friend.userId)">
@@ -50,7 +50,7 @@
 
 <app-footer></app-footer>
 
-<ng-template #missingFriendList>
+<ng-template #missingMessageList>
   <ion-row>
     <ion-label class="w-100 ion-text-center">
       {{ 'YOU_DONT_HAVE_ANY_FRIENDS' | translate }}

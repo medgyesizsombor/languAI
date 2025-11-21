@@ -34,7 +34,7 @@ export class SummaryComponent implements OnInit {
   @Input() returnButtonTitle =
     this.translateService.instant('RETURN_TO_LESSONS');
   @Output() navigateBackEmit = new EventEmitter<void>();
-  exp: number = 100;
+  exp: number | undefined;
   showStreakAnimation = true;
   wasStreakAnimationSeen = false;
   streak: number = 0;
@@ -60,6 +60,7 @@ export class SummaryComponent implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.calculateAndSaveGameplay();
   }
 
   ionViewWillLeave() {
@@ -79,15 +80,11 @@ export class SummaryComponent implements OnInit {
    * Calculate the experience by the mistakes
    */
   private async calculateAndSaveGameplay() {
-    //await this.loadingService.showLoading('CALCULATE_AND_SAVE_GAMEPLAY');
-    if (this.statistics?.mistakes === 0 || this.statistics?.mistakes) {
-      this.exp =
-        100 - this.statistics?.mistakes * 5 <= 0
-          ? 0
-          : 100 - this.statistics?.mistakes * 5;
-      this.cdr.detectChanges();
-    }
+    await this.loadingService.showLoading(
+      'CALCULATE_AND_SAVE_GAMEPLAY_DOTDOTDOT'
+    );
 
+    this.exp = this.statistics?.exp;
     // this.saveGameplaySub = this.gameplayService
     //   .saveGameplay$Json({
     //     body: { point: this.exp, userId: this.localStorageService.getUserId()! }
@@ -105,6 +102,8 @@ export class SummaryComponent implements OnInit {
     //       this.toastrService.presentErrorToast('ERROR_WHILE_SAVING_GAMEPLAY');
     //     }
     //   });
+
+      this.loadingService.hideLoading();
   }
 
   private async startAnimation() {

@@ -13,7 +13,7 @@ namespace LanguAI.Backend.Services;
 public interface IFriendshipService
 {
     bool RequestFriendship(int currentUserId, int recipientId);
-    Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool isMessagePage = false);
+    Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool isMessagePage = false, bool showChatGPT = false);
     FriendshipViewModel GetFriendshipByUserId(int currentUserId, int otherUserId);
     FriendshipStatusEnum ReactFriendshipRequest(int recipientId, int requesterId, FriendshipStatusEnum friendshipStatus);
     bool ReceivingFriendshipRequest(int friendshipRequestId, FriendshipStatusEnum status);
@@ -101,9 +101,9 @@ public class FriendshipService : BaseService, IFriendshipService
     /// </summary>
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
-    public async Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool isMessagePage = false)
+    public async Task<List<OtherUserViewModel>> GetFriendListAsync(int userId, bool isMessagePage = false, bool showChatGPT = false)
     {
-        var result = new List<OtherUserViewModel>();
+        List<OtherUserViewModel> result = [];
         var friendSelectorModel = _context.Friendship
             .Include(f => f.Requester)
             .Include(f => f.Recipient)
@@ -118,7 +118,7 @@ public class FriendshipService : BaseService, IFriendshipService
 
         for (int i = 0; i < friendSelectorModel.Count; i++)
         {
-            if (isMessagePage == false && friendSelectorModel[i].Id == CHATGPT_ID) continue;
+            if (showChatGPT == false && friendSelectorModel[i].Id == CHATGPT_ID) continue;
 
             User user = _context.User
                 .Include(u => u.Image)
@@ -180,14 +180,13 @@ public class FriendshipService : BaseService, IFriendshipService
             })
             .FirstOrDefault();
 
-
         return friendship;
     }
 
     /// <summary>
     /// React the friendship request
     /// </summary>
-    /// <param name="recipientId">Id of the friendship request Recipient</param>
+    /// <param name="currentUserId">Id of the current user</param>
     /// <param name="requesterId">Id of the friendship requester</param>
     /// <param name="friendshipStatus">Reacted friendship status</param>
     /// <returns></returns>
