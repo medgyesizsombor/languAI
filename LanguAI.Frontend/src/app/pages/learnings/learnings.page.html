@@ -4,44 +4,46 @@
   [title]="('LEARNINGS' | translate)"
   [subtitle]="('LEARNINGS_DETAILS' | translate)"
   [showAddButton]="true"
-  (addButtonEmit)="addLearning()"></app-header>
+(addButtonEmit)="addLearning()"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngIf="!isLoading">
-    <ng-container *ngIf="learnings?.length; else missingLearnings">
-      <ion-row
-        class="ion-margin-bottom ion-justify-content-center"
-        *ngFor="let learning of learnings">
-        <ion-card
-          class="ion-padding w-100"
-          (click)="changeActiveLearning(learning.id!)">
-          <ion-row>
-            <ion-col class="ion-align-items-center d-flex">
-              {{ learning | languageName }} - {{ learning.languageLevel |
-              languageLevel }}
-            </ion-col>
-            <ion-col
-              size="auto"
-              *ngIf="learning.isActive"
-              class="ion-align-items-center icon-col d-flex fs-28">
-              <ion-icon name="checkmark-outline"></ion-icon>
-            </ion-col>
-          </ion-row>
-        </ion-card>
+  @if (!isLoading) {
+    @if (learnings?.length) {
+      @for (learning of learnings; track learning) {
+        <ion-row
+          class="ion-margin-bottom ion-justify-content-center"
+          >
+          <ion-card
+            class="ion-padding w-100"
+            (click)="changeActiveLearning(learning.id!)">
+            <ion-row>
+              <ion-col class="ion-align-items-center d-flex">
+                {{ learning | languageName }} - {{ learning.languageLevel |
+                languageLevel }}
+              </ion-col>
+              @if (learning.isActive) {
+                <ion-col
+                  size="auto"
+                  class="ion-align-items-center icon-col d-flex fs-28">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </ion-col>
+              }
+            </ion-row>
+          </ion-card>
+        </ion-row>
+      }
+    } @else {
+      <ion-row class="ion-justify-content-center ion-padding-top">
+        <ion-label class="ion-text-center">
+          {{ 'YOU_DONT_HAVE_ANY_LEARNINGS_YET' | translate }}
+        </ion-label>
       </ion-row>
-    </ng-container>
-  </ng-container>
+      <ion-row class="ion-justify-content-center ion-padding-top">
+        <ion-label class="ion-text-center">
+          {{ 'YOU_CAN_CREATE_WITH_THE_PLUS_SIGN' | translate }}
+        </ion-label>
+      </ion-row>
+    }
+  }
 </ion-content>
 
-<ng-template #missingLearnings>
-  <ion-row class="ion-justify-content-center ion-padding-top">
-    <ion-label class="ion-text-center">
-      {{ 'YOU_DONT_HAVE_ANY_LEARNINGS_YET' | translate }}
-    </ion-label>
-  </ion-row>
-  <ion-row class="ion-justify-content-center ion-padding-top">
-    <ion-label class="ion-text-center">
-      {{ 'YOU_CAN_CREATE_WITH_THE_PLUS_SIGN' | translate }}
-    </ion-label>
-  </ion-row>
-</ng-template>

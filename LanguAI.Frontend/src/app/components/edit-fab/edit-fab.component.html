@@ -3,19 +3,18 @@
     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
   </ion-fab-button>
   <ion-fab-list side="top">
-    <ng-container *ngIf="!isCardListOfOtherUser; else copyButton">
+    @if (!isCardListOfOtherUser) {
       <ion-fab-button (click)="playButtonEmit.emit()">
         <ion-icon name="copy-outline"></ion-icon>
       </ion-fab-button>
       <ion-fab-button (click)="addButtonEmit.emit()">
         <ion-icon class="fs-32" name="add"></ion-icon>
       </ion-fab-button>
-    </ng-container>
+    } @else {
+      <ion-fab-button (click)="copyButtonEmit.emit()">
+        <ion-icon class="fs-32" name="cut-outline"></ion-icon>
+      </ion-fab-button>
+    }
   </ion-fab-list>
 </ion-fab>
 
-<ng-template #copyButton>
-  <ion-fab-button (click)="copyButtonEmit.emit()">
-    <ion-icon class="fs-32" name="cut-outline"></ion-icon>
-  </ion-fab-button>
-</ng-template>

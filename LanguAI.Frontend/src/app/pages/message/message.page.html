@@ -3,46 +3,50 @@
   [showBackArrow]="true"
   [navigateBackRouter]="navigateBackRouter"
   [showSendingMissed]="chatForm?.controls?.['message']?.value?.length"
-  (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
+(navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 <ion-content #content>
-  <ion-row
-    class="ion-margin-top message-row"
-    *ngFor="let message of messages"
-    [ngClass]="message.senderId === userId ? 'own-row' : 'received-row'">
-    <ion-card
-      class="d-flex ion-align-items-center"
-      [ngClass]="{ 'own-card': message.senderId === userId, 'received-card': message.senderId !== userId, 'unsent-message': message.senderId === userId && message.status === messageStatusEnum.Unsent }"
-      (click)="message.status === messageStatusEnum.Unsent ? resendMessage(message) : null">
-      {{ message.text }}
-      <ion-icon
-        *ngIf="message.status === messageStatusEnum.Unsent"
-        class="fs-18 ms-1"
-        name="repeat-outline"></ion-icon>
-    </ion-card>
-  </ion-row>
+  @for (message of messages; track message) {
+    <ion-row
+      class="ion-margin-top message-row"
+      [ngClass]="message.senderId === userId ? 'own-row' : 'received-row'">
+      <ion-card
+        class="d-flex ion-align-items-center"
+        [ngClass]="{ 'own-card': message.senderId === userId, 'received-card': message.senderId !== userId, 'unsent-message': message.senderId === userId && message.status === messageStatusEnum.Unsent }"
+        (click)="message.status === messageStatusEnum.Unsent ? resendMessage(message) : null">
+        {{ message.text }}
+        @if (message.status === messageStatusEnum.Unsent) {
+          <ion-icon
+            class="fs-18 ms-1"
+          name="repeat-outline"></ion-icon>
+        }
+      </ion-card>
+    </ion-row>
+  }
 </ion-content>
 
 <ion-footer>
-  <form *ngIf="chatForm" [formGroup]="chatForm">
-    <div>
-      <ion-row
-        class="input-row ion-padding-horizontal ion-justify-content-between">
-        <ion-col class="me-4">
-          <ion-input
-            type="text"
-            id="message"
-            class="form-control"
-            formControlName="message"
-            placeholder="{{ 'ENTER_A_MESSAGE' | translate }}"
+  @if (chatForm) {
+    <form [formGroup]="chatForm">
+      <div>
+        <ion-row
+          class="input-row ion-padding-horizontal ion-justify-content-between">
+          <ion-col class="me-4">
+            <ion-input
+              type="text"
+              id="message"
+              class="form-control"
+              formControlName="message"
+              placeholder="{{ 'ENTER_A_MESSAGE' | translate }}"
             (keyup)="isMessageValid()"></ion-input>
-        </ion-col>
-        <ion-col class="send-button" size="auto">
-          <ion-icon
-            class="fs-18"
-            (click)="sendMessage()"
+          </ion-col>
+          <ion-col class="send-button" size="auto">
+            <ion-icon
+              class="fs-18"
+              (click)="sendMessage()"
             name="send"></ion-icon>
-        </ion-col>
-      </ion-row>
-    </div>
-  </form>
+          </ion-col>
+        </ion-row>
+      </div>
+    </form>
+  }
 </ion-footer>

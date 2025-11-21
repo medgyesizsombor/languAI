@@ -11,15 +11,24 @@
         <ion-label class="ion-padding-bottom ion-text-center">
           {{ exercise?.firstPartOfTheSentence }}
         </ion-label>
-        <div
-          *ngIf="!isCorrect; else correct"
-          class="d-flex ion-justify-content-center">
-          <span class="blank">
-            <span style="visibility: hidden">
-              {{ exercise?.correctWord }}
+        @if (!isCorrect) {
+          <div
+            class="d-flex ion-justify-content-center">
+            <span class="blank">
+              <span style="visibility: hidden">
+                {{ exercise?.correctWord }}
+              </span>
             </span>
-          </span>
-        </div>
+          </div>
+        } @else {
+          <div class="d-flex ion-justify-content-center">
+            <span class="correct-blank">
+              <span>
+                {{ exercise?.correctWord }}
+              </span>
+            </span>
+          </div>
+        }
         <ion-label class="ion-padding-top ion-text-center">
           {{ exercise?.lastPartOfTheSentence }}
         </ion-label>
@@ -29,23 +38,15 @@
 
   <div #container>
     <div class="row missing-words-container">
-      <ion-card
-        [ngStyle]="{ background: colors[index % colors.length] }"
-        class="missing-words ion-text-center"
-        *ngFor="let word of exercise?.words; let index = index"
-        (click)="checkWord(word)">
-        {{ word }}
-      </ion-card>
+      @for (word of exercise?.words; track word; let index = $index) {
+        <ion-card
+          [ngStyle]="{ background: colors[index % colors.length] }"
+          class="missing-words ion-text-center"
+          (click)="checkWord(word)">
+          {{ word }}
+        </ion-card>
+      }
     </div>
   </div>
 </div>
 
-<ng-template #correct>
-  <div class="d-flex ion-justify-content-center">
-    <span class="correct-blank">
-      <span>
-        {{ exercise?.correctWord }}
-      </span>
-    </span>
-  </div>
-</ng-template>

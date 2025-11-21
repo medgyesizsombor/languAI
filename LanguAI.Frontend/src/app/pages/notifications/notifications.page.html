@@ -2,39 +2,39 @@
   [useNavController]="true"
   [showBackArrow]="true"
   [navigateBackRouter]="navigateBackRouter"
-  title="{{ 'NOTIFICATIONS_TITLE' | translate }}"></app-header>
+title="{{ 'NOTIFICATIONS_TITLE' | translate }}"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container
-    *ngIf="friendshipRequests?.length; else missingFriendshipRequest">
-    <ion-row
-      class="ion-justify-content-center d-flex ion-margin-bottom"
-      *ngFor="let friendshipRequest of friendshipRequests; let index = index">
-      <ion-card mode="md" class="w-100 ion-padding">
-        <ion-row>
-          <ion-col>{{ friendshipRequest.requesterName }}</ion-col>
-          <ion-col size="auto">
-            <ion-icon
-              mode="md"
-              class="me-4 fs-20"
-              (click)="reactFriendshipRequest(friendshipRequest.requesterId!)"
+  @if (friendshipRequests.length) {
+    @for (friendshipRequest of friendshipRequests; track friendshipRequest; let index = $index) {
+      <ion-row
+        class="ion-justify-content-center d-flex ion-margin-bottom"
+        >
+        <ion-card mode="md" class="w-100 ion-padding">
+          <ion-row>
+            <ion-col>{{ friendshipRequest.requesterName }}</ion-col>
+            <ion-col size="auto">
+              <ion-icon
+                mode="md"
+                class="me-4 fs-20"
+                (click)="reactFriendshipRequest(friendshipRequest.requesterId!)"
               name="person-add-outline"></ion-icon>
-            <ion-icon
-              mode="md"
-              class="fs-20"
-              (click)="reactFriendshipRequest(friendshipRequest.requesterId!, false)"
+              <ion-icon
+                mode="md"
+                class="fs-20"
+                (click)="reactFriendshipRequest(friendshipRequest.requesterId!, false)"
               name="trash-outline"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-row>
+    }
+  } @else {
+    <ion-row>
+      <ion-label class="w-100 ion-text-center">
+        {{ 'THERE_ARE_NO_FRIENDSHIP_REQUESTS_WAITING_FOR_YOU' | translate }}
+      </ion-label>
     </ion-row>
-  </ng-container>
+  }
 </ion-content>
 
-<ng-template #missingFriendshipRequest>
-  <ion-row>
-    <ion-label class="w-100 ion-text-center">
-      {{ 'THERE_ARE_NO_FRIENDSHIP_REQUESTS_WAITING_FOR_YOU' | translate }}
-    </ion-label>
-  </ion-row>
-</ng-template>

@@ -1,74 +1,86 @@
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngIf="!isLoading">
-    <ng-container *ngIf="exerciseList.length; else missingExercises">
-      <ng-container *ngIf="!showSummary; else showSummaryTemplate">
+  @if (!isLoading) {
+    @if (exerciseList.length) {
+      @if (!showSummary) {
         <ion-header class="ion-no-border">
           <app-progress-bar [progress]="progress"></app-progress-bar>
         </ion-header>
-        <div *ngIf="showOverlay" class="overlay"></div>
-        <ng-container *ngFor="let exercise of exerciseList">
-          <app-missing-word-exercise
-            [exercise]="exercise"
-            (showContinueButton)="showContinueButton($event)"
-            *ngIf="exercise.exerciseType === exerciseTypeEnum.MissingWordExercise
-            && exercise.isActive"></app-missing-word-exercise>
-          <app-sentence-assembly-exercise
-            [exercise]="exercise"
-            (showContinueButton)="showContinueButton($event)"
-            *ngIf="exercise.exerciseType === exerciseTypeEnum.SentenceAssemblyExercise
-            && exercise.isActive"></app-sentence-assembly-exercise>
-          <app-word-pairing-exercise
-            [exercise]="exercise"
-            (showContinueButton)="showContinueButton($event)"
-            *ngIf="exercise.exerciseType === exerciseTypeEnum.WordPairingExercise
-            && exercise.isActive"></app-word-pairing-exercise>
-          <app-mistake-correcting-exercise
-            [exercise]="exercise"
-            (showContinueButton)="showContinueButton($event)"
-            *ngIf="exercise.exerciseType === exerciseTypeEnum.MistakeCorrectingExercise
-            && exercise.isActive"></app-mistake-correcting-exercise>
-          <app-question-answering-exercise
-            [exercise]="exercise"
-            (showContinueButton)="showContinueButton($event)"
-            *ngIf="exercise.exerciseType === exerciseTypeEnum.QuestionAnsweringExercise
-            && exercise.isActive"></app-question-answering-exercise>
-          <div *ngIf="showOverlay" class="ion-justify-content-center d-flex">
-            <button class="continue-button no-shadow" (click)="nextExercise()">
-              {{ 'CONTINUE' | translate }}
-            </button>
-          </div>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </ng-container>
+        @if (showOverlay) {
+          <div class="overlay"></div>
+        }
+        @for (exercise of exerciseList; track exercise) {
+          @if (exercise.exerciseType === exerciseTypeEnum.MissingWordExercise
+            && exercise.isActive) {
+            <app-missing-word-exercise
+              [exercise]="exercise"
+              (showContinueButton)="showContinueButton($event)"
+            ></app-missing-word-exercise>
+          }
+          @if (exercise.exerciseType === exerciseTypeEnum.SentenceAssemblyExercise
+            && exercise.isActive) {
+            <app-sentence-assembly-exercise
+              [exercise]="exercise"
+              (showContinueButton)="showContinueButton($event)"
+            ></app-sentence-assembly-exercise>
+          }
+          @if (exercise.exerciseType === exerciseTypeEnum.WordPairingExercise
+            && exercise.isActive) {
+            <app-word-pairing-exercise
+              [exercise]="exercise"
+              (showContinueButton)="showContinueButton($event)"
+            ></app-word-pairing-exercise>
+          }
+          @if (exercise.exerciseType === exerciseTypeEnum.MistakeCorrectingExercise
+            && exercise.isActive) {
+            <app-mistake-correcting-exercise
+              [exercise]="exercise"
+              (showContinueButton)="showContinueButton($event)"
+            ></app-mistake-correcting-exercise>
+          }
+          @if (exercise.exerciseType === exerciseTypeEnum.QuestionAnsweringExercise
+            && exercise.isActive) {
+            <app-question-answering-exercise
+              [exercise]="exercise"
+              (showContinueButton)="showContinueButton($event)"
+            ></app-question-answering-exercise>
+          }
+          @if (showOverlay) {
+            <div class="ion-justify-content-center d-flex">
+              <button class="continue-button no-shadow" (click)="nextExercise()">
+                {{ 'CONTINUE' | translate }}
+              </button>
+            </div>
+          }
+        }
+      } @else {
+        <app-summary
+          [statistics]="statistics"
+        (navigateBackEmit)="navigateToLessons()"></app-summary>
+      }
+    } @else {
+      <ion-row class="ion-margin-bottom">
+        <ion-label mode="md" class="w-100 ion-text-center fs-24">
+          {{ 'ERROR' | translate }}
+        </ion-label>
+      </ion-row>
+      <ion-row class="ion-margin-bottom">
+        <ion-label mode="md" class="w-100 ion-text-center">
+          {{ 'ERROR_EXERCISE_CREATING' | translate }}
+        </ion-label>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-label
+          mode="md"
+          [routerLink]="['/lessons']"
+          class="line me-1 ion-text-center">
+          {{ 'HERE' | translate | titlecase }}
+        </ion-label>
+        <ion-label mode="md" class="ion-text-center">
+          {{ 'YOU_CAN_GO_BACK_TO_HOME_PAGE' | translate | lowercase }}
+        </ion-label>
+      </ion-row>
+    }
+  }
 </ion-content>
 
-<ng-template #missingExercises>
-  <ion-row class="ion-margin-bottom">
-    <ion-label mode="md" class="w-100 ion-text-center fs-24">
-      {{ 'ERROR' | translate }}
-    </ion-label>
-  </ion-row>
-  <ion-row class="ion-margin-bottom">
-    <ion-label mode="md" class="w-100 ion-text-center">
-      {{ 'ERROR_EXERCISE_CREATING' | translate }}
-    </ion-label>
-  </ion-row>
-  <ion-row class="ion-justify-content-center">
-    <ion-label
-      mode="md"
-      [routerLink]="['/lessons']"
-      class="line me-1 ion-text-center">
-      {{ 'HERE' | translate | titlecase }}
-    </ion-label>
-    <ion-label mode="md" class="ion-text-center">
-      {{ 'YOU_CAN_GO_BACK_TO_HOME_PAGE' | translate | lowercase }}
-    </ion-label>
-  </ion-row>
-</ng-template>
 
-<ng-template #showSummaryTemplate>
-  <app-summary
-    [statistics]="statistics"
-    (navigateBackEmit)="navigateToLessons()"></app-summary>
-</ng-template>

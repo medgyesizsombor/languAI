@@ -1,51 +1,61 @@
 <ion-header class="ion-no-border ion-padding-bottom" mode="md">
   <ion-toolbar mode="md" class="ion-text-center ion-no-padding">
-    <div class="absolute top-left-fab-container" *ngIf="showBackArrow">
-      <ion-fab class="left-fab">
-        <ion-fab-button
-          class="no-shadow ion-no-margin"
-          (click)="navigateBack()">
-          <ion-icon class="fs-32" name="arrow-back-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-    </div>
+    @if (showBackArrow) {
+      <div class="absolute top-left-fab-container">
+        <ion-fab class="left-fab">
+          <ion-fab-button
+            class="no-shadow ion-no-margin"
+            (click)="navigateBack()">
+            <ion-icon class="fs-32" name="arrow-back-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </div>
+    }
     <ion-title
       [ngClass]="fontSizeClass"
       class="ion-no-padding ion-padding-top dark-color">
       {{ title }}
     </ion-title>
-    <ion-label *ngIf="subtitle.length" class="fs-13 dark-color">
-      {{ subtitle }}
-    </ion-label>
-    <div class="absolute right-fab-container" *ngIf="showSaveButton">
-      <ion-fab class="right-fab" horizontal="end">
-        <ion-fab-button
-          size="small"
-          class="no-shadow ion-no-margin"
-          (click)="saveButtonEmit.emit()">
-          <ion-icon class="fs-32" name="save-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-    </div>
-    <div class="absolute right-fab-container" *ngIf="showAddButton">
-      <ion-fab class="right-fab" horizontal="end">
-        <ion-fab-button
-          size="small"
-          class="no-shadow ion-no-margin"
-          (click)="addButtonEmit.emit()">
-          <ion-icon class="fs-32" name="add-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-    </div>
-    <div class="absolute right-fab-container" *ngIf="showMessageButton">
-      <ion-fab class="right-fab" horizontal="end">
-        <ion-fab-button
-          size="small"
-          class="no-shadow ion-no-margin"
-          (click)="sendMessageButtonEmit.emit()">
-          <ion-icon class="fs-32" name="mail-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-    </div>
+    @if (subtitle.length) {
+      <ion-label class="fs-13 dark-color">
+        {{ subtitle }}
+      </ion-label>
+    }
+    @if (showSaveButton) {
+      <div class="absolute right-fab-container">
+        <ion-fab class="right-fab" horizontal="end">
+          <ion-fab-button
+            size="small"
+            class="no-shadow ion-no-margin"
+            (click)="saveButtonEmit.emit()">
+            <ion-icon class="fs-32" name="save-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </div>
+    }
+    @if (showAddButton) {
+      <div class="absolute right-fab-container">
+        <ion-fab class="right-fab" horizontal="end">
+          <ion-fab-button
+            size="small"
+            class="no-shadow ion-no-margin"
+            (click)="addButtonEmit.emit()">
+            <ion-icon class="fs-32" name="add-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </div>
+    }
+    @if (showMessageButton) {
+      <div class="absolute right-fab-container">
+        <ion-fab class="right-fab" horizontal="end">
+          <ion-fab-button
+            size="small"
+            class="no-shadow ion-no-margin"
+            (click)="sendMessageButtonEmit.emit()">
+            <ion-icon class="fs-32" name="mail-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </div>
+    }
   </ion-toolbar>
 </ion-header>

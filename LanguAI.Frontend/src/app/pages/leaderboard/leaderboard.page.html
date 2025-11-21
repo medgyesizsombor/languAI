@@ -3,12 +3,16 @@
   title="{{ 'LEADERBOARD' | translate}}"
   [showBackArrow]="true"></app-header>
 <ion-content>
-  <ng-container
-    *ngIf="top1Data?.length; else missingLeaderboard"></ng-container>
+  @if (top1Data.length) { } @else {
+  <div class="d-flex ion-justify-content-center ion-padding-top">
+    <ion-label class="ion-text-center">
+      {{ 'NOONE_HAS_YET_PLAYED_IN_THIS_WEEK' | translate }}
+    </ion-label>
+  </div>
+  }
   <ion-row>
-    <ion-col
-      class="ion-justify-content-center d-flex"
-      *ngFor="let data of top1Data; let index = index">
+    @for (data of top1Data; track data; let index = $index) {
+    <ion-col class="ion-justify-content-center d-flex">
       <ion-card class="top-1-card">
         <ion-card-header>
           <app-avatar
@@ -31,11 +35,11 @@
         </ion-card-content>
       </ion-card>
     </ion-col>
+    }
   </ion-row>
   <div class="ion-padding">
-    <ion-card
-      *ngFor="let data of lowerleaderboardData; let index = index"
-      class="lower-points-card w-100">
+    @for (data of lowerleaderboardData; track data; let index = $index) {
+    <ion-card class="lower-points-card w-100">
       <ion-row class="ion-align-items-center ion-padding-horizontal">
         <ion-col size="auto" class="d-flex ion-justify-content-center me-4">
           {{ index + 2 }}
@@ -57,13 +61,7 @@
         </ion-col>
       </ion-row>
     </ion-card>
+    }
   </div>
 </ion-content>
 
-<ng-template #missingLeaderboard>
-  <div class="d-flex ion-justify-content-center ion-padding-top">
-    <ion-label class="ion-text-center">
-      {{ 'NOONE_HAS_YET_PLAYED_IN_THIS_WEEK' | translate }}
-    </ion-label>
-  </div>
-</ng-template>
