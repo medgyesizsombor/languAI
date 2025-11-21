@@ -7,7 +7,7 @@
   <ion-row class="ion-justify-content-center">
     <ion-img
       class="ion-padding-bottom"
-      src="../../../assets/icon/small_logo.png"></ion-img>
+    src="../../../assets/icon/small_logo.png"></ion-img>
   </ion-row>
 
   <ion-row class="ion-justify-content-center">
@@ -15,30 +15,31 @@
       {{ exp | summaryText }}
     </ion-label>
   </ion-row>
-  <ion-row
-    *ngIf="statistics"
-    class="ion-justify-content-center ion-padding-top">
-    <ion-col class="summary-col ion-margin-end">
-      <ion-card>
-        <ion-card-title class="time-card-header">
-          {{ 'TIME' | translate }}
-        </ion-card-title>
-        <ion-card-content class="ion-text-center">
-          {{ statistics.time }}
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-    <ion-col class="summary-col">
-      <ion-card>
-        <ion-card-title class="time-card-header">
-          {{ 'EXP' | translate }}
-        </ion-card-title>
-        <ion-card-content class="ion-text-center">
-          {{ exp }}
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-  </ion-row>
+  @if (statistics) {
+    <ion-row
+      class="ion-justify-content-center ion-padding-top">
+      <ion-col class="summary-col ion-margin-end">
+        <ion-card>
+          <ion-card-title class="time-card-header">
+            {{ 'TIME' | translate }}
+          </ion-card-title>
+          <ion-card-content class="ion-text-center">
+            {{ statistics.time }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col class="summary-col">
+        <ion-card>
+          <ion-card-title class="time-card-header">
+            {{ 'EXP' | translate }}
+          </ion-card-title>
+          <ion-card-content class="ion-text-center">
+            {{ exp }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  }
   <ion-card #previousStreakCard class="streak-cards secondary-card">
     <ion-card-content
       class="fs-24 d-flex ion-justify-content-center ion-align-items-center">
@@ -54,19 +55,21 @@
     </ion-card-content>
   </ion-card>
   <ion-row class="ion-justify-content-center ion-padding-top">
-    <ion-button
-      class="primary-button"
-      mode="md"
-      *ngIf="!showStreakAnimation || showNavigateToLessons"
-      (click)="navigateBack()">
-      {{ 'RETURN_TO_LESSONS' | translate }}
-    </ion-button>
-    <ion-button
-      class="primary-button"
-      mode="md"
-      *ngIf="showStreakAnimation && !showNavigateToLessons"
-      (click)="navigateBack()">
-      {{ 'OK' | translate }}
-    </ion-button>
+    @if (!showStreakAnimation || showNavigateToLessons) {
+      <ion-button
+        class="primary-button"
+        mode="md"
+        (click)="navigateBack()">
+        {{ 'RETURN_TO_LESSONS' | translate }}
+      </ion-button>
+    }
+    @if (showStreakAnimation && !showNavigateToLessons) {
+      <ion-button
+        class="primary-button"
+        mode="md"
+        (click)="navigateBack()">
+        {{ 'OK' | translate }}
+      </ion-button>
+    }
   </ion-row>
 </ng-container>

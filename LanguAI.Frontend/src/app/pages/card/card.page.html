@@ -1,73 +1,79 @@
-<app-header
-  title="{{ 'CARD_EDITING' | translate }}"
-  *ngIf="cardId; else createTemplate"
-  [showBackArrow]="true"
-  [showSavingMissed]="hasCardChanged"
-  [navigateBackRouter]="navigateBackRouter"
+@if (cardId) {
+  <app-header
+    title="{{ 'CARD_EDITING' | translate }}"
+    [showBackArrow]="true"
+    [showSavingMissed]="hasCardChanged"
+    [navigateBackRouter]="navigateBackRouter"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
+} @else {
+  <app-header title="{{ 'CARD_CREATING' | translate }}"></app-header>
+}
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <form *ngIf="cardForm" [formGroup]="cardForm">
-    <ion-card class="ion-padding details-card">
-      <ion-row class="input-row ion-margin-bottom">
-        <ion-col class="ion-margin-horizontal">
-          <ion-input
-            type="text"
-            id="wordInNativeLanguage"
-            class="form-control"
-            formControlName="wordInNativeLanguage"
-            label="{{ true | learning | translate }}"
-            labelPlacement="stacked"
+  @if (cardForm) {
+    <form [formGroup]="cardForm">
+      <ion-card class="ion-padding details-card">
+        <ion-row class="input-row ion-margin-bottom">
+          <ion-col class="ion-margin-horizontal">
+            <ion-input
+              type="text"
+              id="wordInNativeLanguage"
+              class="form-control"
+              formControlName="wordInNativeLanguage"
+              label="{{ true | learning | translate }}"
+              labelPlacement="stacked"
             (ionInput)="modelChanged($event)"></ion-input>
-          <span
-            *ngIf="cardForm.get('wordInNativeLanguage')?.hasError('required') && cardForm.get('wordInNativeLanguage')?.dirty"
-            class="error-text">
-            {{ 'FIELD_IS_REQUIRED' | translate }}
-          </span>
-        </ion-col>
-      </ion-row>
-      <ion-row class="input-row">
-        <ion-col class="ion-margin-horizontal">
-          <ion-input
-            type="wordInLearningLanguage"
-            id="wordInLearningLanguage"
-            class="form-control"
-            formControlName="wordInLearningLanguage"
-            label="{{ false | learning | translate }}"
-            labelPlacement="stacked"
+            @if (cardForm.get('wordInNativeLanguage')?.hasError('required') && cardForm.get('wordInNativeLanguage')?.dirty) {
+              <span
+                class="error-text">
+                {{ 'FIELD_IS_REQUIRED' | translate }}
+              </span>
+            }
+          </ion-col>
+        </ion-row>
+        <ion-row class="input-row">
+          <ion-col class="ion-margin-horizontal">
+            <ion-input
+              type="wordInLearningLanguage"
+              id="wordInLearningLanguage"
+              class="form-control"
+              formControlName="wordInLearningLanguage"
+              label="{{ false | learning | translate }}"
+              labelPlacement="stacked"
             (ionInput)="modelChanged($event, false)"></ion-input>
-          <span
-            *ngIf="cardForm.get('wordInLearningLanguage')?.hasError('required') && cardForm.get('wordInLearningLanguage')?.dirty"
-            class="error-text">
-            {{ 'FIELD_IS_REQUIRED' | translate }}
-          </span>
-        </ion-col>
-      </ion-row>
-      <ion-row class="pt-4">
-        <ion-col class="ion-no-padding">
-          <ion-button
-            mode="md"
-            [disabled]="!hasCardChanged"
-            class="primary-button w-100 pb-4"
-            (click)="save()">
-            {{'SAVE' | translate}}
-          </ion-button>
-        </ion-col>
-      </ion-row>
-      <ion-row *ngIf="cardId">
-        <ion-col class="ion-no-padding">
-          <ion-button
-            mode="md"
-            class="primary-button-outline w-100 no-shadow"
-            (click)="deleteCard()">
-            {{'DELETE' | translate }}
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </form>
+            @if (cardForm.get('wordInLearningLanguage')?.hasError('required') && cardForm.get('wordInLearningLanguage')?.dirty) {
+              <span
+                class="error-text">
+                {{ 'FIELD_IS_REQUIRED' | translate }}
+              </span>
+            }
+          </ion-col>
+        </ion-row>
+        <ion-row class="pt-4">
+          <ion-col class="ion-no-padding">
+            <ion-button
+              mode="md"
+              [disabled]="!hasCardChanged"
+              class="primary-button w-100 pb-4"
+              (click)="save()">
+              {{'SAVE' | translate}}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        @if (cardId) {
+          <ion-row>
+            <ion-col class="ion-no-padding">
+              <ion-button
+                mode="md"
+                class="primary-button-outline w-100 no-shadow"
+                (click)="deleteCard()">
+                {{'DELETE' | translate }}
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        }
+      </ion-card>
+    </form>
+  }
 </ion-content>
 
-<ng-template #createTemplate>
-  <app-header title="{{ 'CARD_CREATING' | translate }}"></app-header>
-</ng-template>

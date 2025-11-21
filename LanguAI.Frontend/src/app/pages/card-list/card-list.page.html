@@ -5,40 +5,46 @@
   [showBackArrow]="true"
   [showSavingMissed]="hasCardChanged"
   [navigateBackRouter]="navigateBackRouter"
-  (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
+(navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div *ngIf="!showSwiper">
-    <ion-row
-      class="ion-justify-content-center ion-margin-bottom"
-      *ngFor="let word of cards; let index = index">
-      <ion-card
-        class="w-100 ion-padding word-card"
-        [ngClass]="{'ion-justify-content-center' : isCardListOfOtherUser, 'd-flex': isCardListOfOtherUser}">
-        <ion-row>
-          <ion-col class="word-col ion-text-center" (click)="openCard(index)">
-            <ion-label mode="md">
-              <span class="me-1">{{ word.wordInNativeLanguage }}</span>
-              -
-              <span class="ms-1">{{ word.wordInLearningLanguage }}</span>
-            </ion-label>
-          </ion-col>
-          <ion-col class="pe-4" size="auto" *ngIf="!isCardListOfOtherUser">
-            <ion-icon
-              class="align-item-center fs-24 error-color"
-              (click)="removeFromList(index)"
-              name="trash-outline"></ion-icon>
-          </ion-col>
+  @if (!showSwiper) {
+    <div>
+      @for (word of cards; track word; let index = $index) {
+        <ion-row
+          class="ion-justify-content-center ion-margin-bottom"
+          >
+          <ion-card
+            class="w-100 ion-padding word-card"
+            [ngClass]="{'ion-justify-content-center' : isCardListOfOtherUser, 'd-flex': isCardListOfOtherUser}">
+            <ion-row>
+              <ion-col class="word-col ion-text-center" (click)="openCard(index)">
+                <ion-label mode="md">
+                  <span class="me-1">{{ word.wordInNativeLanguage }}</span>
+                  -
+                  <span class="ms-1">{{ word.wordInLearningLanguage }}</span>
+                </ion-label>
+              </ion-col>
+              @if (!isCardListOfOtherUser) {
+                <ion-col class="pe-4" size="auto">
+                  <ion-icon
+                    class="align-item-center fs-24 error-color"
+                    (click)="removeFromList(index)"
+                  name="trash-outline"></ion-icon>
+                </ion-col>
+              }
+            </ion-row>
+          </ion-card>
         </ion-row>
-      </ion-card>
-    </ion-row>
-  </div>
+      }
+    </div>
+  }
 
-  <ng-container *ngIf="showSwiper">
+  @if (showSwiper) {
     <app-card-swiper
       [generatedCards]="generatedCards"
-      (addCardsEmit)="addCards($event)"></app-card-swiper>
-  </ng-container>
+    (addCardsEmit)="addCards($event)"></app-card-swiper>
+  }
 
   <app-edit-fab
     [showPlayButton]="false"
@@ -46,10 +52,10 @@
     [isCardListOfOtherUser]="isCardListOfOtherUser"
     (playButtonEmit)="learnCards()"
     (addButtonEmit)="generateCards()"
-    (copyButtonEmit)="copyCards()"></app-edit-fab>
+  (copyButtonEmit)="copyCards()"></app-edit-fab>
   <app-edit-acces-fab
     [currentAccess]="accessOfCardList"
-    (changeAccessEmit)="changeAccess($event)"></app-edit-acces-fab>
+  (changeAccessEmit)="changeAccess($event)"></app-edit-acces-fab>
 </ion-content>
 
 <ng-template #missingCards>

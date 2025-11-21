@@ -8,7 +8,7 @@
           }"
           class="fs-32"
           name="book-outline"
-          (click)="navigateToPage(footerPageEnum.lessonsPage)"></ion-icon>
+        (click)="navigateToPage(footerPageEnum.lessonsPage)"></ion-icon>
       </ion-col>
       <ion-col>
         <ion-icon
@@ -17,7 +17,7 @@
           }"
           class="fs-32"
           name="copy-outline"
-          (click)="navigateToPage(footerPageEnum.cardListsPage)"></ion-icon>
+        (click)="navigateToPage(footerPageEnum.cardListsPage)"></ion-icon>
       </ion-col>
       <ion-col>
         <ion-icon
@@ -26,7 +26,7 @@
           }"
           class="fs-32"
           name="globe-outline"
-          (click)="navigateToPage(footerPageEnum.forumPage)"></ion-icon>
+        (click)="navigateToPage(footerPageEnum.forumPage)"></ion-icon>
       </ion-col>
       <ion-col>
         <ion-icon
@@ -35,7 +35,7 @@
           }"
           class="fs-32"
           name="mail-outline"
-          (click)="navigateToPage(footerPageEnum.messagesPage)"></ion-icon>
+        (click)="navigateToPage(footerPageEnum.messagesPage)"></ion-icon>
       </ion-col>
       <ion-col>
         <ion-icon
@@ -44,46 +44,47 @@
           }"
           class="fs-32"
           name="settings-outline"
-          (click)="navigateToPage(footerPageEnum.settingsPage)"></ion-icon>
-        <ion-badge
-          mode="md"
-          *ngIf="numberOfFriendshipRequest"
-          id="notifications-badge"
-          color="danger">
-          {{ numberOfFriendshipRequest }}
-        </ion-badge>
+        (click)="navigateToPage(footerPageEnum.settingsPage)"></ion-icon>
+        @if (numberOfFriendshipRequest) {
+          <ion-badge
+            mode="md"
+            id="notifications-badge"
+            color="danger">
+            {{ numberOfFriendshipRequest }}
+          </ion-badge>
+        }
       </ion-col>
     </ion-row>
   </ion-row>
 </ion-footer>
 
 <!-- <ion-tabs>
-  <ion-tab-bar mode="md" slot="bottom">
-    <ion-tab-button mode="md" tab="lessons">
-      <ion-icon class="fs-32" name="book-outline"></ion-icon>
-    </ion-tab-button>
+<ion-tab-bar mode="md" slot="bottom">
+  <ion-tab-button mode="md" tab="lessons">
+    <ion-icon class="fs-32" name="book-outline"></ion-icon>
+  </ion-tab-button>
 
-    <ion-tab-button mode="md" tab="card-lists">
-      <ion-icon class="fs-32" name="copy-outline"></ion-icon>
-    </ion-tab-button>
+  <ion-tab-button mode="md" tab="card-lists">
+    <ion-icon class="fs-32" name="copy-outline"></ion-icon>
+  </ion-tab-button>
 
-    <ion-tab-button mode="md" tab="forum">
-      <ion-icon class="fs-32" name="globe-outline"></ion-icon>
-    </ion-tab-button>
+  <ion-tab-button mode="md" tab="forum">
+    <ion-icon class="fs-32" name="globe-outline"></ion-icon>
+  </ion-tab-button>
 
-    <ion-tab-button mode="md" tab="messages">
-      <ion-icon class="fs-32" name="mail-outline"></ion-icon>
-    </ion-tab-button>
+  <ion-tab-button mode="md" tab="messages">
+    <ion-icon class="fs-32" name="mail-outline"></ion-icon>
+  </ion-tab-button>
 
-    <ion-tab-button mode="md" tab="settings">
-      <ion-icon class="fs-32" name="settings-outline"></ion-icon>
-      <ion-badge
-        mode="md"
-        *ngIf="numberOfFriendshipRequest"
-        id="notifications-badge"
-        color="danger">
-        {{ numberOfFriendshipRequest }}
-      </ion-badge>
-    </ion-tab-button>
-  </ion-tab-bar>
+  <ion-tab-button mode="md" tab="settings">
+    <ion-icon class="fs-32" name="settings-outline"></ion-icon>
+    <ion-badge
+      mode="md"
+      *ngIf="numberOfFriendshipRequest"
+      id="notifications-badge"
+      color="danger">
+      {{ numberOfFriendshipRequest }}
+    </ion-badge>
+  </ion-tab-button>
+</ion-tab-bar>
 </ion-tabs> -->

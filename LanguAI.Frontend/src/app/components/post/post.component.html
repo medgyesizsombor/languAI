@@ -1,4 +1,5 @@
-<ion-card class="w-100" *ngIf="post">
+@if (post) {
+<ion-card class="w-100">
   <ion-card-header class="first-header">
     <ion-row class="d-flex ion-align-items-center avatar-row underline">
       <ion-col size="10" class="d-flex ion-align-items-center">
@@ -13,31 +14,29 @@
           "></app-avatar>
         <ion-label class="fs-16">{{ post.username }}</ion-label>
       </ion-col>
-      <ion-col
-        *ngIf="post?.userId === userId"
-        class="d-flex ion-align-items-center ion-justify-content-end">
+      @if (post.userId === userId) {
+      <ion-col class="d-flex ion-align-items-center ion-justify-content-end">
         <ion-icon
           class="fs-20"
           name="ellipsis-horizontal-outline"
           (click)="editPost()"></ion-icon>
       </ion-col>
+      }
     </ion-row>
   </ion-card-header>
-
   <ion-card-content>
     <ion-row>
       <ion-label class="mt-2 mb-2 fs-16">{{ post.content }}</ion-label>
     </ion-row>
-
     <ion-row class="ion-justify-content-center ion-padding-bottom">
+      @if (post.image?.contentAsString) {
       <app-image
         (click)="openInFullsize(post)"
         [scssClass]="'forum-image'"
-        *ngIf="post?.image?.contentAsString"
         [imageString]="post.image?.contentAsString"
         [type]="post.image?.type"></app-image>
+      }
     </ion-row>
-
     <ion-row class="d-flex ion-justify-content-end underline">
       <ion-label class="fs-11">
         {{ post.created | date : 'YYYY. MM. dd HH:mm' }}
@@ -49,16 +48,22 @@
         class="action-button d-flex align-item-center me-2 fs-16"
         (click)="like()">
         <span class="me-1">{{ post.numberOfLikes }}</span>
-        <ion-icon *ngIf="!post?.liked" name="heart-outline"></ion-icon>
-        <ion-icon *ngIf="post?.liked" name="heart"></ion-icon>
+        @if (!post.liked) {
+        <ion-icon name="heart-outline"></ion-icon>
+        } @else {
+        <ion-icon name="heart"></ion-icon>
+        }
       </div>
+      @if (showCommentButton) {
       <div
-        *ngIf="showCommentButton"
         class="action-button d-flex align-item-center fs-16"
         (click)="navigateToPost()">
         <span class="me-1">{{ post.numberOfComments }}</span>
         <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
       </div>
+      }
     </ion-row>
   </ion-card-content>
 </ion-card>
+}
+

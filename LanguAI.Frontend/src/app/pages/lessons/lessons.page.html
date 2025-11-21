@@ -2,48 +2,49 @@
   [title]="('LESSONS_TITLE' | translate)"
   [showAddButton]="true"
   [subtitle]="('LESSONS_SUBTITLE' | translate)"
-  (addButtonEmit)="moreTopic()"></app-header>
+(addButtonEmit)="moreTopic()"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngIf="!isLoading">
-    <ng-container *ngIf="topicList?.length; else missingCardList">
+  @if (!isLoading) {
+    @if (topicList.length) {
       <!-- TOPIC CARD-->
-      <ion-row *ngFor="let topic of topicList" class="card-row">
-        <ion-card
-          (click)="startExercises(topic.id!)"
-          [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(topic.id!)}.jpg)`"
-          class="topic-card ion-margin-bottom card-background-medium-color outline-text w-100">
-          <div class="overlay"></div>
-          <ion-card-header class="fs-22 light-color">
-            {{ topic | topicName }}
-          </ion-card-header>
-          <ion-card-content class="light-color">
-            {{ topic.description }}
-          </ion-card-content>
-        </ion-card>
+      @for (topic of topicList; track topic) {
+        <ion-row class="card-row">
+          <ion-card
+            (click)="startExercises(topic.id!)"
+            [style]="`background-image: url(../../../assets/topic-images/${topicImageSrcPipe.transform(topic.id!)}.jpg)`"
+            class="topic-card ion-margin-bottom card-background-medium-color outline-text w-100">
+            <div class="overlay"></div>
+            <ion-card-header class="fs-22 light-color">
+              {{ topic | topicName }}
+            </ion-card-header>
+            <ion-card-content class="light-color">
+              {{ topic.description }}
+            </ion-card-content>
+          </ion-card>
+        </ion-row>
+      }
+    } @else {
+      <ion-row
+        class="ion-justify-content-center ion-padding-bottom ion-padding-horizontal">
+        <ion-label mode="md" class="ion-text-center">
+          {{'YOU_MUST_HAVE_AT_LEAST_ONE_CARDLIST_TO_DO_EXERCISES' | translate}}
+        </ion-label>
       </ion-row>
-    </ng-container>
-  </ng-container>
+      <ion-row class="ion-justify-content-center ion-padding-horizontal">
+        <ion-label
+          [routerLink]="['/card-lists']"
+          class="line me-1 ion-text-center"
+          mode="md">
+          {{ 'HERE' | translate | titlecase}}
+        </ion-label>
+        <ion-label mode="md" class="ion-text-center">
+          {{ 'YOU_CAN_CREATE_A_CARDLIST' | translate}}
+        </ion-label>
+      </ion-row>
+    }
+  }
 </ion-content>
 
 <app-footer></app-footer>
 
-<ng-template #missingCardList>
-  <ion-row
-    class="ion-justify-content-center ion-padding-bottom ion-padding-horizontal">
-    <ion-label mode="md" class="ion-text-center">
-      {{'YOU_MUST_HAVE_AT_LEAST_ONE_CARDLIST_TO_DO_EXERCISES' | translate}}
-    </ion-label>
-  </ion-row>
-  <ion-row class="ion-justify-content-center ion-padding-horizontal">
-    <ion-label
-      [routerLink]="['/card-lists']"
-      class="line me-1 ion-text-center"
-      mode="md">
-      {{ 'HERE' | translate | titlecase}}
-    </ion-label>
-    <ion-label mode="md" class="ion-text-center">
-      {{ 'YOU_CAN_CREATE_A_CARDLIST' | translate}}
-    </ion-label>
-  </ion-row>
-</ng-template>

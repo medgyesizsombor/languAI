@@ -6,41 +6,65 @@
   [showSavingMissed]="hasProfileChanged"
   (navigateBackWithoutSavingEmit)="navigateBackWithoutSaving($event)"
   [navigateBackRouter]="navigateBackRouter"
-  [subtitle]="subtitle"></app-header>
+[subtitle]="subtitle"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngIf="!isLoading">
+  @if (!isLoading) {
     <!-- ACTION BUTTONS -->
-    <ion-row class="pb-5" *ngIf="isProfileOfSomeoneElse">
-      <ion-col class="ion-align-items-center me-1">
-        <ion-button
-          mode="md"
-          class="primary-button request-button w-100 no-shadow"
-          (click)="friendshipViewModel?.requesterId === userId ? sendRequest() : reactFriendshipRequest()"
-          [ngSwitch]="friendshipViewModel?.status">
-          <span *ngSwitchCase="friendshipStatusEnum.Requested">
-            <span
-              *ngIf="friendshipViewModel?.requesterId === userId; else acceptFriendshipRequest">
-              {{ 'SENT_FRIEND_REQUEST' | translate }}
-            </span>
-          </span>
-          <span *ngSwitchCase="friendshipStatusEnum.Accepted">
-            {{ 'FRIEND' | translate }}
-          </span>
-          <span *ngSwitchDefault>{{ 'SEND_FRIEND_REQUEST' | translate }}</span>
-        </ion-button>
-      </ion-col>
-      <ion-col size="auto" class="pb-1">
-        <ion-button
-          mode="md"
-          class="mt-0 primary-button-outline no-shadow"
-          *ngIf="friendshipViewModel?.status === friendshipStatusEnum.Requested
-        && friendshipViewModel?.requesterId === userId; else rejectFriendshipRequest">
-          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-
+    @if (isProfileOfSomeoneElse) {
+      <ion-row class="pb-5">
+        <ion-col class="ion-align-items-center me-1">
+          <ion-button
+            mode="md"
+            class="primary-button request-button w-100 no-shadow"
+            (click)="friendshipViewModel?.requesterId === userId ? sendRequest() : reactFriendshipRequest()"
+            >
+            @switch (friendshipViewModel?.status) {
+              @case (friendshipStatusEnum.Requested) {
+                <span>
+                  @if (friendshipViewModel?.requesterId === userId) {
+                    <span
+                      >
+                      {{ 'SENT_FRIEND_REQUEST' | translate }}
+                    </span>
+                  } @else {
+                    <span (click)="reactFriendshipRequest(false)">
+                      {{ 'ACCEPT_FRIENDSHIP' | translate }}
+                    </span>
+                  }
+                </span>
+              }
+              @case (friendshipStatusEnum.Accepted) {
+                <span>
+                  {{ 'FRIEND' | translate }}
+                </span>
+              }
+              @default {
+                <span>{{ 'SEND_FRIEND_REQUEST' | translate }}</span>
+              }
+            }
+          </ion-button>
+        </ion-col>
+        <ion-col size="auto" class="pb-1">
+          @if (friendshipViewModel?.status === friendshipStatusEnum.Requested
+            && friendshipViewModel?.requesterId === userId) {
+            <ion-button
+              mode="md"
+              class="mt-0 primary-button-outline no-shadow"
+              >
+              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+            </ion-button>
+          } @else {
+            <ion-button
+              mode="md"
+              class="mt-0 error-outline-button no-shadow"
+              (click)="reactFriendshipRequest(false)">
+              <ion-icon name="close-circle-outline"></ion-icon>
+            </ion-button>
+          }
+        </ion-col>
+      </ion-row>
+    }
     <!-- BADGES -->
     <ion-row class="ion-justify-content-center pb-1">
       <ion-badge
@@ -65,196 +89,199 @@
         {{ 'CARDS' | translate }}
       </ion-badge>
     </ion-row>
-
-    <div [ngSwitch]="activeBadge">
-      <ng-container *ngSwitchCase="badgeEnum.details">
-        <ng-container *ngTemplateOutlet="detailsTemplate"></ng-container>
-      </ng-container>
-      <ng-container *ngSwitchCase="badgeEnum.friendList">
-        <ng-container *ngTemplateOutlet="friendListTemplate"></ng-container>
-      </ng-container>
-      <ng-container *ngSwitchCase="badgeEnum.cards">
-        <ng-container *ngTemplateOutlet="cardsTemplate"></ng-container>
-      </ng-container>
+    <div>
+      @switch (activeBadge) {
+        @case (badgeEnum.details) {
+          <ng-container *ngTemplateOutlet="detailsTemplate"></ng-container>
+        }
+        @case (badgeEnum.friendList) {
+          <ng-container *ngTemplateOutlet="friendListTemplate"></ng-container>
+        }
+        @case (badgeEnum.cards) {
+          <ng-container *ngTemplateOutlet="cardsTemplate"></ng-container>
+        }
+      }
     </div>
-
     <ng-template #detailsTemplate>
       <!-- DETAILS -->
-      <form *ngIf="profileForm" [formGroup]="profileForm" class="pb-5">
-        <ion-card class="ion-padding details-card">
-          <!-- PROFILE PICTURE -->
-          <ion-row class="ion-justify-content-center ion-padding-bottom">
-            <app-avatar
-              class="avatar"
-              (click)="openImageModal()"
+      @if (profileForm) {
+        <form [formGroup]="profileForm" class="pb-5">
+          <ion-card class="ion-padding details-card">
+            <!-- PROFILE PICTURE -->
+            <ion-row class="ion-justify-content-center ion-padding-bottom">
+              <app-avatar
+                class="avatar"
+                (click)="openImageModal()"
               [imageSrc]="imageSrc"></app-avatar>
-          </ion-row>
-
-          <!-- USERNAME -->
-          <ion-row class="input-row ion-margin-bottom">
-            <ion-col
-              size="auto"
-              class="align-item-center fs-24 ps-0 form-col me-4">
-              <ion-icon
-                [ngClass]="isEdit ? null : 'readonly-mode'"
+            </ion-row>
+            <!-- USERNAME -->
+            <ion-row class="input-row ion-margin-bottom">
+              <ion-col
+                size="auto"
+                class="align-item-center fs-24 ps-0 form-col me-4">
+                <ion-icon
+                  [ngClass]="isEdit ? null : 'readonly-mode'"
                 name="person-outline"></ion-icon>
-            </ion-col>
-            <ion-col class="form-col">
-              <ion-input
-                class="fs-16"
-                id="username-input"
-                name="username-input"
-                [ngClass]="isEdit ? null : 'readonly-mode'"
-                type="text"
-                [autocomplete]="false"
-                formControlName="username"
-                (ionInput)="modelChanged()"
+              </ion-col>
+              <ion-col class="form-col">
+                <ion-input
+                  class="fs-16"
+                  id="username-input"
+                  name="username-input"
+                  [ngClass]="isEdit ? null : 'readonly-mode'"
+                  type="text"
+                  [autocomplete]="false"
+                  formControlName="username"
+                  (ionInput)="modelChanged()"
                 placeholder="{{ 'USERNAME' | translate}}"></ion-input>
-            </ion-col>
-          </ion-row>
-
-          <!-- EMAIL -->
-          <ion-row class="input-row ion-margin-bottom">
-            <ion-col
-              size="auto"
-              class="align-item-center fs-24 ps-0 form-col me-4">
-              <ion-icon
-                [ngClass]="isEdit ? null : 'readonly-mode'"
+              </ion-col>
+            </ion-row>
+            <!-- EMAIL -->
+            <ion-row class="input-row ion-margin-bottom">
+              <ion-col
+                size="auto"
+                class="align-item-center fs-24 ps-0 form-col me-4">
+                <ion-icon
+                  [ngClass]="isEdit ? null : 'readonly-mode'"
                 name="mail-outline"></ion-icon>
-            </ion-col>
-            <ion-col class="form-col">
-              <ion-input
-                class="fs-16"
-                id="email-input"
-                name="email-input"
-                [ngClass]="isEdit ? null : 'readonly-mode'"
-                type="email"
-                formControlName="email"
+              </ion-col>
+              <ion-col class="form-col">
+                <ion-input
+                  class="fs-16"
+                  id="email-input"
+                  name="email-input"
+                  [ngClass]="isEdit ? null : 'readonly-mode'"
+                  type="email"
+                  formControlName="email"
                 placeholder="{{ 'EMAIL' | translate}}"></ion-input>
-            </ion-col>
-          </ion-row>
-
-          <!-- DATE OF BIRTH -->
-          <ion-row class="input-row ion-margin-bottom">
-            <ion-col
-              size="auto"
-              [ngClass]="isEdit ? null : 'readonly-mode'"
-              class="align-item-center fs-24 ps-0 form-col me-4">
-              <ion-icon name="calendar-outline"></ion-icon>
-            </ion-col>
-            <ion-col
-              class="d-flex ion-justify-content-start datetime-button-col">
-              <ion-datetime-button
-                class="ion-no-padding"
-                [disabled]="!isEdit"
+              </ion-col>
+            </ion-row>
+            <!-- DATE OF BIRTH -->
+            <ion-row class="input-row ion-margin-bottom">
+              <ion-col
+                size="auto"
+                [ngClass]="isEdit ? null : 'readonly-mode'"
+                class="align-item-center fs-24 ps-0 form-col me-4">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </ion-col>
+              <ion-col
+                class="d-flex ion-justify-content-start datetime-button-col">
+                <ion-datetime-button
+                  class="ion-no-padding"
+                  [disabled]="!isEdit"
                 datetime="datetime"></ion-datetime-button>
-              <ion-modal [keepContentsMounted]="true">
-                <ng-template>
-                  <ion-datetime
-                    #datetime
-                    formControlName="dateOfBirth"
-                    presentation="date"
-                    id="datetime"
-                    [showDefaultButtons]="true"
-                    doneText="{{ 'OK' | translate }}"
-                    cancelText="{{ 'CANCEL' | translate }}">
-                    <span slot="title">{{ 'SELECT_YOUR_BIRTHDAY' }}</span>
-                  </ion-datetime>
-                </ng-template>
-              </ion-modal>
-            </ion-col>
-          </ion-row>
-          <ng-container *ngIf="!isProfileOfSomeoneElse">
-            <ng-container *ngIf="!isEdit; else edit">
-              <ion-row>
-                <ion-button
-                  mode="md"
-                  (click)="changeEditMode()"
-                  class="primary-button w-100 pb-4 no-shadow">
-                  {{ 'EDIT_PROFILE' | translate }}
-                </ion-button>
-              </ion-row>
-              <ion-row>
-                <ion-button
-                  mode="md"
-                  (click)="changePassword()"
-                  class="primary-button-outline w-100 no-shadow">
-                  {{ 'CHANGE_PASSWORD' | translate }}
-                </ion-button>
-              </ion-row>
-            </ng-container>
-          </ng-container>
-        </ion-card>
-      </form>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime
+                      #datetime
+                      formControlName="dateOfBirth"
+                      presentation="date"
+                      id="datetime"
+                      [showDefaultButtons]="true"
+                      doneText="{{ 'OK' | translate }}"
+                      cancelText="{{ 'CANCEL' | translate }}">
+                      <span slot="title">{{ 'SELECT_YOUR_BIRTHDAY' }}</span>
+                    </ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-col>
+            </ion-row>
+            @if (!isProfileOfSomeoneElse) {
+              @if (!isEdit) {
+                <ion-row>
+                  <ion-button
+                    mode="md"
+                    (click)="changeEditMode()"
+                    class="primary-button w-100 pb-4 no-shadow">
+                    {{ 'EDIT_PROFILE' | translate }}
+                  </ion-button>
+                </ion-row>
+                <ion-row>
+                  <ion-button
+                    mode="md"
+                    (click)="changePassword()"
+                    class="primary-button-outline w-100 no-shadow">
+                    {{ 'CHANGE_PASSWORD' | translate }}
+                  </ion-button>
+                </ion-row>
+              } @else {
+                <ion-row>
+                  <ion-button
+                    mode="md"
+                    (click)="save()"
+                    class="primary-button w-100 pb-4 no-shadow">
+                    {{ 'SAVE_PROFILE' | translate }}
+                  </ion-button>
+                </ion-row>
+                <ion-row>
+                  <ion-button
+                    mode="md"
+                    class="primary-button-outline w-100 no-shadow"
+                    (click)="changeEditMode()">
+                    {{ 'CANCEL' | translate }}
+                  </ion-button>
+                </ion-row>
+              }
+            }
+          </ion-card>
+        </form>
+      }
     </ng-template>
-
-    <ng-template #edit>
-      <ion-row>
-        <ion-button
-          mode="md"
-          (click)="save()"
-          class="primary-button w-100 pb-4 no-shadow">
-          {{ 'SAVE_PROFILE' | translate }}
-        </ion-button>
-      </ion-row>
-      <ion-row>
-        <ion-button
-          mode="md"
-          class="primary-button-outline w-100 no-shadow"
-          (click)="changeEditMode()">
-          {{ 'CANCEL' | translate }}
-        </ion-button>
-      </ion-row>
-    </ng-template>
-
     <!-- FRIENDLIST -->
     <ng-template #friendListTemplate>
-      <ng-container
-        *ngIf="profileModel.friendList?.length; else zeroFriendTemplate">
-        <ion-row
-          class="card-row"
-          *ngFor="let friend of profileModel.friendList">
-          <ion-card
-            class="w-100 ion-padding friend-card"
-            (click)="navigateToUserPage(friend.userId!)">
-            <ion-row class="align-item-center">
-              <ion-col size="auto" class="ion-no-padding ion-padding-end">
-                <app-avatar
-                  [marginClass]="null"
-                  [widthInPx]="80"
-                  [heightInPx]="80"
+      @if (profileModel.friendList?.length) {
+        @for (friend of profileModel.friendList; track friend) {
+          <ion-row
+            class="card-row"
+            >
+            <ion-card
+              class="w-100 ion-padding friend-card"
+              (click)="navigateToUserPage(friend.userId!)">
+              <ion-row class="align-item-center">
+                <ion-col size="auto" class="ion-no-padding ion-padding-end">
+                  <app-avatar
+                    [marginClass]="null"
+                    [widthInPx]="80"
+                    [heightInPx]="80"
                   [imageSrc]="fileService.getImageSrc(friend.profilePicture?.contentAsString,friend.profilePicture?.type)"></app-avatar>
-              </ion-col>
-              <ion-col class="data-col">
-                <ion-row
-                  class="ion-justify-content-between ion-align-items-center">
-                  <ion-col class="hidden-text message-text">
-                    <ion-label class="fs-16 hidden-text">
-                      {{ friend.username }}
-                    </ion-label>
-                  </ion-col>
-                  <ion-col size="auto" class="d-flex">
-                    <ng-container *ngIf="!isProfileOfSomeoneElse">
-                      <!-- <ion-icon
-                      class="fs-20 me-2"
+                </ion-col>
+                <ion-col class="data-col">
+                  <ion-row
+                    class="ion-justify-content-between ion-align-items-center">
+                    <ion-col class="hidden-text message-text">
+                      <ion-label class="fs-16 hidden-text">
+                        {{ friend.username }}
+                      </ion-label>
+                    </ion-col>
+                    <ion-col size="auto" class="d-flex">
+                      @if (!isProfileOfSomeoneElse) {
+                        <!-- <ion-icon
+                        class="fs-20 me-2"
                       name="person-add-outline"></ion-icon> -->
                       <ion-icon
                         (click)="removeFromTheFriendList(friend.userId!)"
                         class="fs-20"
-                        name="trash-outline"></ion-icon>
-                    </ng-container>
+                      name="trash-outline"></ion-icon>
+                    }
                   </ion-col>
                 </ion-row>
               </ion-col>
             </ion-row>
           </ion-card>
         </ion-row>
-      </ng-container>
-    </ng-template>
-
-    <!-- CARD -->
-    <ng-template #cardsTemplate>
-      <ion-row class="card-row" *ngFor="let cardList of profileModel.cardList">
+      }
+    } @else {
+      <ion-row class="ion-justify-content-center">
+        <ion-label class="ion-text-center">
+          {{ 'USER_DOESNT_HAVE_ANY_FRIENDS' | translate }}
+        </ion-label>
+      </ion-row>
+    }
+  </ng-template>
+  <!-- CARD -->
+  <ng-template #cardsTemplate>
+    @for (cardList of profileModel.cardList; track cardList) {
+      <ion-row class="card-row">
         <ion-card
           mode="md"
           (click)="openCardList(cardList.id!)"
@@ -273,7 +300,6 @@
               {{ cardList | cardlistLanguagePipe }}
             </ion-label>
             <br />
-
             <ion-label class="light-color">
               {{ cardList.created | date:'YYYY. MM. dd' }}
             </ion-label>
@@ -281,29 +307,7 @@
           </ion-card-content>
         </ion-card>
       </ion-row>
-    </ng-template>
-
-    <ng-template #acceptFriendshipRequest>
-      <span (click)="reactFriendshipRequest(false)">
-        {{ 'ACCEPT_FRIENDSHIP' | translate }}
-      </span>
-    </ng-template>
-
-    <ng-template #rejectFriendshipRequest>
-      <ion-button
-        mode="md"
-        class="mt-0 error-outline-button no-shadow"
-        (click)="reactFriendshipRequest(false)">
-        <ion-icon name="close-circle-outline"></ion-icon>
-      </ion-button>
-    </ng-template>
-
-    <ng-template #zeroFriendTemplate>
-      <ion-row class="ion-justify-content-center">
-        <ion-label class="ion-text-center">
-          {{ 'USER_DOESNT_HAVE_ANY_FRIENDS' | translate }}
-        </ion-label>
-      </ion-row>
-    </ng-template>
-  </ng-container>
+    }
+  </ng-template>
+}
 </ion-content>
