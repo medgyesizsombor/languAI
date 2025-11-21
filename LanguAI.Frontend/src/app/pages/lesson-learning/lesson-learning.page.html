@@ -1,11 +1,11 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngIf="!isLoading">
-    <ng-container *ngIf="exerciseList?.length; else missingExercises">
+    <ng-container *ngIf="exerciseList.length; else missingExercises">
       <ng-container *ngIf="!showSummary; else showSummaryTemplate">
         <ion-header class="ion-no-border">
-          <app-progress-bar></app-progress-bar>
+          <app-progress-bar [progress]="progress"></app-progress-bar>
         </ion-header>
-        <!-- <div *ngIf="showOverlay" class="overlay"></div> -->
+        <div *ngIf="showOverlay" class="overlay"></div>
         <ng-container *ngFor="let exercise of exerciseList">
           <app-missing-word-exercise
             [exercise]="exercise"

@@ -10,6 +10,7 @@ import { OtherUserViewModel } from '../../models/other-user-view-model';
 
 export interface GetFriendList$Plain$Params {
   userId?: number;
+  isMessagePage?: boolean;
   showChatGPT?: boolean;
 }
 
@@ -17,6 +18,7 @@ export function getFriendList$Plain(http: HttpClient, rootUrl: string, params?: 
   const rb = new RequestBuilder(rootUrl, getFriendList$Plain.PATH, 'get');
   if (params) {
     rb.query('userId', params.userId, {});
+    rb.query('isMessagePage', params.isMessagePage, {});
     rb.query('showChatGPT', params.showChatGPT, {});
   }
 

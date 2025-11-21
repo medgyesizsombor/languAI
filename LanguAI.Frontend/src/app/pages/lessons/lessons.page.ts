@@ -80,7 +80,7 @@ export class LessonsPage {
    */
   startExercises(topicId: number) {
     this.navController.navigateForward(LESSON_LEARNING_NAVIGATION, {
-      queryParams: { topicId }
+      queryParams: { 'topic-id': topicId }
     });
   }
 

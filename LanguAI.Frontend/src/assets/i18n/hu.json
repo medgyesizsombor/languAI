@@ -365,5 +365,11 @@
   "SUCCESSFUL_SAVING_LEARNING": "Sikeres a tanulmányok mentése",
   "YOU_CAN_ADD_CARD_LIST_WITH_THE_PLUS_SIGN": "A plusz jel segítségével tudsz hozzáadni szókártya gyűjteményt",
   "SUCCESS_DELETING_POST": "Sikeresen törlődött a bejegyzés",
-  "ERROR_WHILE_DELETING_POST": "Hiba történt a bejegyzés törlése közben"
+  "ERROR_WHILE_DELETING_POST": "Hiba történt a bejegyzés törlése közben",
+  "CALCULATE_AND_SAVE_GAMEPLAY_DOTDOTDOT": "Pontok kiszámítása és mentése...",
+  "ERROR_WHILE_SAVING_GAMEPLAY": "Hiba történt a pontok mentése közben",
+  "MISSED": "Elrontott",
+  "SUCCES": "Helyes",
+  "UNSUCCESSFUL_LOADING_USERS_DATA": "Nem sikerült az adatok betöltése",
+  "ERROR_HAPPENED_DURING_EXP_COUNTING": "Hiba történt a tapasztalatpont számítása közben"
 }

@@ -286,7 +286,7 @@ export class CardListPage {
   openCard(index: number) {
     if (!this.isCardListOfOtherUser) {
       this.navController.navigateForward(
-        CARD_NAVIGATION + '/' + this.cards[index].id
+        CARD_NAVIGATION + '/' + this.cardListId + '/' + this.cards[index].id
       );
     }
   }

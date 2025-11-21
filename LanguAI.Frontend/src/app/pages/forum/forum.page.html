@@ -27,11 +27,11 @@
     <p class="ion-no-margin ion-padding-bottom ion-text-center">
       {{ 'MISSING_POSTS' | translate }}
     </p>
-    <p class="ion-no-margin ion-padding-bottom">
+    <p class="ion-no-margin ion-padding-bottom ion-text-center">
       {{ 'IF_YOU_WOULD_LIKE_TO_SEE_MORE_POSTS_SEARCH_FOR_FRIEND' | translate }}
     </p>
     <div class="ion-text-center">
-      <ion-button mode="md" (click)="searchForFriend()">
+      <ion-button mode="md" class="primary-button" (click)="searchForFriend()">
         <ion-icon name="search-outline"></ion-icon>
         {{ 'DISCOVER_FRIENDS' | translate }}
       </ion-button>

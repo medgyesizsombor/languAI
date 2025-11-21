@@ -4,9 +4,7 @@ using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Card;
 using LanguAI.Backend.ViewModels.Exercise;
 using LanguAI.Backend.ViewModels.Message;
-using OpenAI_API;
-using OpenAI_API.Chat;
-using OpenAI_API.Models;
+using OpenAI.Chat;
 using System.Text.Json;
 
 namespace LanguAI.Backend.Services;
@@ -39,8 +37,8 @@ public class ChatGPTService : BaseService, IChatGPTService
         var topic = _context.Topic.FirstOrDefault(t => t.Id == topicId);
 
         ArgumentNullException.ThrowIfNull(topic);
-
-        List<CardViewModel> cards = new List<CardViewModel>();
+ 
+        List<CardViewModel> cards = new();
         var nativeWordsOfExistingCards = existingCards.Select(c => c.WordInNativeLanguage).ToList();
 
         string messageFromSystem = $"You are a language teacher.\n" +
@@ -58,12 +56,13 @@ public class ChatGPTService : BaseService, IChatGPTService
             $"  -\"WordInNativeLanguage\": the native vocabulary word or expression,\n" +
             $"  -\"WordInLearningLanguage\": the translation in the target language";
         string messageFromUser = $"Generate 30 flashcards.";
-        ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
-        ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, messageFromUser);
 
-        ChatMessage result = await SendRequestToChatGPTAsync(systemMessage, userMessage);
+        var systemMessage = ChatMessage.CreateSystemMessage(messageFromSystem);
+        var userMessage = ChatMessage.CreateUserMessage(messageFromUser);
 
-        List<CardViewModel> words = JsonSerializer.Deserialize<List<CardViewModel>>(result.TextContent);
+        var result = await SendRequestToChatGPTAsync(systemMessage, userMessage);
+
+        List<CardViewModel> words = JsonSerializer.Deserialize<List<CardViewModel>>(result);
 
         words.ForEach(a => cards.Add(
             new CardViewModel
@@ -97,35 +96,28 @@ public class ChatGPTService : BaseService, IChatGPTService
             })
             .ToList();
 
-        var openai = new OpenAIAPI(EnvironmentSettings.ChatGPTApiKey);
+        var chatClient = new ChatClient("gpt-5-mini", EnvironmentSettings.ChatGPTApiKey);
 
-        List<ChatMessage> messages = new List<ChatMessage>();
+        var messages = new List<ChatMessage>();
 
         conversation.ForEach(c =>
         {
-            messages.Add(new ChatMessage
-            {
-                Role = c.SenderId == currentUserId ? ChatMessageRole.User : ChatMessageRole.Assistant,
-                TextContent = c.Text
-            });
+            messages.Add(c.SenderId == currentUserId ? ChatMessage.CreateUserMessage(c.Text) : ChatMessage.CreateAssistantMessage(c.Text));
         });
 
-        var request = new ChatRequest()
-        {
-            Messages = messages,
-            Temperature = 0.1,
-            Model = Model.ChatGPTTurbo
-        };
-
-        ChatResult result = new ChatResult();
+        string result;
 
         try
         {
-            result = await openai.Chat.CreateChatCompletionAsync(request);
+
+            ChatCompletion completion = await chatClient.CompleteChatAsync(messages);
+
+            result = completion.Content[0].Text;
+
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            throw new Exception(e.Message);
+            throw new Exception(ex.Message);
         }
 
         return new MessageViewModel
@@ -134,7 +126,7 @@ public class ChatGPTService : BaseService, IChatGPTService
             SenderId = EnvironmentSettings.ChatGPTId,
             SentAt = DateTime.Now,
             Status = MessageStatusEnum.Sent,
-            Text = result.Choices[0].Message.TextContent
+            Text = result
         };
     }
 
@@ -355,12 +347,12 @@ public class ChatGPTService : BaseService, IChatGPTService
                     break;
             }
 
-            ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
-            ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, messageFromUser);
+            var systemMessage = ChatMessage.CreateSystemMessage(messageFromSystem);
+            var userMessage = ChatMessage.CreateUserMessage(messageFromUser);
 
-            ChatMessage result = await SendRequestToChatGPTAsync(systemMessage, userMessage, 0.5);
+            var result = await SendRequestToChatGPTAsync(systemMessage, userMessage);
 
-            var response = JsonSerializer.Deserialize<ExerciseViewModel>(result.TextContent);
+            var response = JsonSerializer.Deserialize<ExerciseViewModel>(result);
 
             response.ExerciseType = exerciseType;
 
@@ -389,42 +381,6 @@ public class ChatGPTService : BaseService, IChatGPTService
     }
 
     /// <summary>
-    /// Send a request to ChatGPT API and get the response message
-    /// </summary>
-    /// <param name="systemMessage">System Message</param>
-    /// <param name="userMessage">User's message</param>
-    /// <returns></returns>
-    private async Task<ChatMessage> SendRequestToChatGPTAsync(ChatMessage systemMessage, ChatMessage userMessage, double temperature = 0.1)
-    {
-        var openai = new OpenAIAPI(EnvironmentSettings.ChatGPTApiKey);
-
-        List<ChatMessage> messages = new List<ChatMessage>(){
-            systemMessage.TextContent.Length > 0 ? systemMessage : null,
-            userMessage
-            };
-
-        var request = new ChatRequest()
-        {
-            Messages = messages,
-            Temperature = temperature,
-            Model = Model.ChatGPTTurbo_16k
-        };
-
-        ChatResult result = new ChatResult();
-
-        try
-        {
-            result = await openai.Chat.CreateChatCompletionAsync(request);
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-
-        return result.Choices[0].Message;
-    }
-
-    /// <summary>
     /// Get correction of the post
     /// </summary>
     /// <param name="text">Text of the post</param>
@@ -434,12 +390,10 @@ public class ChatGPTService : BaseService, IChatGPTService
         try
         {
             string messageFromSystem = "Correct the text for a post in the same language as the text";
-            ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
-            ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, text);
+            var systemMessage = ChatMessage.CreateSystemMessage(messageFromSystem);
+            var userMessage = ChatMessage.CreateUserMessage(text);
 
-            ChatMessage result = await SendRequestToChatGPTAsync(systemMessage, userMessage);
-
-            return result.TextContent;
+            return await SendRequestToChatGPTAsync(systemMessage, userMessage);
         }
         catch (Exception e)
         {
@@ -457,12 +411,37 @@ public class ChatGPTService : BaseService, IChatGPTService
         try
         {
             string messageFromSystem = $"Phrase a post about the text you get the language as the {about}, and it can only be maximum 250 character length";
-            ChatMessage systemMessage = new ChatMessage(ChatMessageRole.System, messageFromSystem);
-            ChatMessage userMessage = new ChatMessage(ChatMessageRole.User, about);
+            var systemMessage = ChatMessage.CreateSystemMessage(messageFromSystem);
+            var userMessage = ChatMessage.CreateUserMessage(about);
 
-            ChatMessage result = await SendRequestToChatGPTAsync(systemMessage, userMessage);
+            return await SendRequestToChatGPTAsync(systemMessage, userMessage);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 
-            return result.TextContent;
+    /// <summary>
+    /// Send a request to ChatGPT API and get the response message
+    /// </summary>
+    /// <param name="systemMessage">System Message</param>
+    /// <param name="userMessage">User's message</param>
+    /// <returns></returns>
+    private static async Task<string> SendRequestToChatGPTAsync(ChatMessage systemMessage, ChatMessage userMessage)
+    {
+        var chatClient = new ChatClient("gpt-5-mini", EnvironmentSettings.ChatGPTApiKey);
+
+        var messages = new List<ChatMessage>(){
+            systemMessage.Content.Count > 0 ? systemMessage : null,
+            userMessage
+            };
+
+        try
+        {
+            ChatCompletion completion = await chatClient.CompleteChatAsync(messages);
+
+            return completion.Content[0].Text;
         }
         catch (Exception e)
         {

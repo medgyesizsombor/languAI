@@ -89,7 +89,6 @@ export class PostComponent implements OnInit {
                 }
               });
           }
-          // And the other events are not important for us
         }
       });
   }

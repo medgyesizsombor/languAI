@@ -100,7 +100,7 @@ const routes: Routes = [
     canActivate: [AuthGuardFunction]
   },
   {
-    path: CARD_NAVIGATION + '/:card-id',
+    path: CARD_NAVIGATION + '/:card-list-id/:card-id',
     loadChildren: () =>
       import('./pages/card/card.module').then(m => m.CardPageModule),
     canActivate: [AuthGuardFunction]

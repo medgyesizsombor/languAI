@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:49655'
-  //apiUrl: "https://languai.azurewebsites.net"
+  // apiUrl: 'https://langu-ai.azurewebsites.net'
 };
 
 /*

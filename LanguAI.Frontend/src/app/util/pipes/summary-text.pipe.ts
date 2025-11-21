@@ -8,8 +8,12 @@ import { TranslateService } from '@ngx-translate/core';
 export class SummaryTextPipe implements PipeTransform {
   constructor(private translateService: TranslateService) {}
 
-  transform(exp: number): string {
-    if (exp <= 0) {
+  transform(exp: number | undefined): string {
+    if (exp == undefined) {
+      return this.translateService.instant(
+        'ERROR_HAPPENED_DURING_EXP_COUNTING'
+      );
+    } else if (exp <= 0) {
       return this.translateService.instant('REALLY_BAD_RESULT_TEXT');
     } else if (exp >= 0 && exp <= 39) {
       return this.translateService.instant('BAD_RESULT_TEXT');

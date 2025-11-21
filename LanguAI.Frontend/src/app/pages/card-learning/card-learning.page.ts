@@ -77,6 +77,7 @@ export class CardLearningPage {
   }
 
   navigateBack() {
+    this.showSummary = false;
     this.router.navigate([CARD_LIST_NAVIGATION + '/' + this.cardListId]);
   }
 
@@ -130,7 +131,7 @@ export class CardLearningPage {
   private lastCardHandler() {
     this.statistics = {
       time: this.timePipe.transform(this.timerService.getTime()),
-      mistakes: this.mistakes
+      exp: (100 - this.mistakes * 3)
     };
     this.timerService.clearTimer();
     this.showSummary = true;

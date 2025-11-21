@@ -41,9 +41,9 @@ public class FriendshipController : ControllerBase
     /// <param name="userId">User's Id</param>
     /// <returns></returns>
     [HttpGet(Name = "GetFriendList")]
-    public async Task<ActionResult<List<OtherUserViewModel>>> GetFriendListAsync(int userId, bool showChatGPT = false)
+    public async Task<ActionResult<List<OtherUserViewModel>>> GetFriendListAsync(int userId, bool isMessagePage = false, bool showChatGPT = false)
     {
-        return Ok(await _friendshipService.GetFriendListAsync(userId, showChatGPT));
+        return Ok(await _friendshipService.GetFriendListAsync(userId, isMessagePage, showChatGPT));
     }
 
     /// <summary>

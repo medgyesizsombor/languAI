@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "https://languai.azurewebsites.net"
+  apiUrl: 'https://langu-ai-server.azurewebsites.net'
 };
+
