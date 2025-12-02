@@ -132,7 +132,6 @@ export class MessagePage {
    * Load the messages, load and set the other user
    */
   private loadMessages() {
-    console.log("itt?")
     this.loadDataSub = this.activatedRoute.params
       .pipe(
         switchMap((params: Params) => {
@@ -145,7 +144,6 @@ export class MessagePage {
         }),
         switchMap((user: UserViewModel) => {
           this.otherUser = { ...user };
-          console.log(user)
 
           return this.messageService.getMessageListByUserId$Json({
             friendId: this.otherUser.id
