@@ -1,8 +1,10 @@
 ﻿using LanguAI.Backend.Core;
+using LanguAI.Backend.Core.Enums;
 using LanguAI.Backend.Core.Models;
 using LanguAI.Backend.Services.Base;
 using LanguAI.Backend.ViewModels.Message;
 using Microsoft.EntityFrameworkCore;
+using OpenAI.Assistants;
 
 namespace LanguAI.Backend.Services;
 
@@ -11,10 +13,15 @@ public interface IMessageService
     bool SendMessage(MessageViewModel request);
     List<MessageViewModel> GetMessageListByUserId(int userId, int friendId);
     LastMessageViewModel GetLastMessageByUserIds(int userId, int otherUserId);
+    Task<string> SendMessageToChatGpt(int currentUserId, string message);
 }
 
 public class MessageService : BaseService, IMessageService
 {
+    private const int CHATGPT_ID = 2;
+    private const string QUEUED = "queued";
+    private const string IN_PROGRESS = "in_progress";
+
     public MessageService(LanguAIDataContext context) : base(context) { }
 
     /// <summary>
@@ -102,5 +109,70 @@ public class MessageService : BaseService, IMessageService
             })
             .OrderByDescending(m => m.SentAt)
             .FirstOrDefault();
+    }
+
+    public async Task<string> SendMessageToChatGpt(int currentUserId, string message)
+    {
+        var threadId = _context.User.First(u => u.Id == currentUserId).ThreadId;
+
+        var messages = new List<Message>();
+
+        var userMessage = new Message
+        {
+            SenderId = currentUserId,
+            RecipientId = CHATGPT_ID,
+            SentAt = DateTime.Now,
+            Text = message
+        };
+
+        string response = null;
+
+#pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        try
+        {
+            AssistantClient assistantClient = new(EnvironmentSettings.ChatGPTApiKey);
+            var assistantCreationOptions = new AssistantCreationOptions
+            {
+                Instructions = "You are teacher, try to answer for the next question."
+            };
+
+            var assistant = await assistantClient.CreateAssistantAsync("gpt-4o-mini", assistantCreationOptions);
+
+            await assistantClient.CreateMessageAsync(threadId, MessageRole.User, [message]);
+
+            var run = await assistantClient.CreateRunAsync(threadId, assistant.Value.Id);
+
+            while (run.Value.Status == IN_PROGRESS || run.Value.Status == QUEUED)
+            {
+                await Task.Delay(500);
+                run = await assistantClient.GetRunAsync(threadId, run.Value.Id);
+            }
+
+            var messagesByThreadId = assistantClient.GetMessages(threadId);
+            response = messagesByThreadId.OrderByDescending(m => m.CreatedAt).First().Content[0].Text;
+
+            userMessage.Status = MessageStatusEnum.Sent;
+            messages.Add(userMessage);
+
+            messages.Add(new()
+            {
+                SenderId = CHATGPT_ID,
+                RecipientId = currentUserId,
+                SentAt = DateTime.Now,
+                Text = response
+            });
+        }
+        catch (Exception ex)
+        {
+            userMessage.Status = MessageStatusEnum.Unsent;
+            messages.Add(userMessage);
+            //TODO ide kell a log
+        }
+
+        _context.AddRange(messages);
+        _context.SaveChanges();
+        return response;
+
+#pragma warning restore OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 }

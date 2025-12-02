@@ -48,41 +48,6 @@ public class ChatGPTController : ControllerBase
 
     //TODO: REFAKT Exception
     /// <summary>
-    /// Send message to ChatGPT
-    /// </summary>
-    /// <param name="message">Message request</param>
-    /// <returns></returns>
-    [HttpPost(Name = "SendMessageToChatGPT")]
-    public async Task<ActionResult<MessageViewModel>> SendMessageToChatGPT(MessageViewModel message)
-    {
-        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
-        ArgumentNullException.ThrowIfNull(currentUserId);
-
-        if (message == null || string.IsNullOrEmpty(message.Text))
-        {
-            throw new ArgumentNullException();
-        }
-
-        if (message.SenderId != currentUserId)
-        {
-            throw new UnauthorizedAccessException();
-        }
-
-        bool successSendingMessageToChatGPT = _messageService.SendMessage(message);
-
-        if (!successSendingMessageToChatGPT) return null;
-
-        var response = await _chatGPTService.GetResponseToConversation(message.SenderId);
-
-        var successReceivingMessageFromChatGPT = _messageService.SendMessage(response);
-
-        if (!successReceivingMessageFromChatGPT) return null;
-
-        return response;
-    }
-
-    //TODO: REFAKT Exception
-    /// <summary>
     /// Receive message from chatGPT
     /// </summary>
     /// <returns></returns>
@@ -152,5 +117,16 @@ public class ChatGPTController : ControllerBase
         var response = await _chatGPTService.GetPostPhrasing(about);
 
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Create thread id for user
+    /// </summary>
+    [HttpGet(Name = "CreateThreadId")]
+    public void CreateThreadId()
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+
+        _chatGPTService.CreateThreadId((int)currentUserId);
     }
 }

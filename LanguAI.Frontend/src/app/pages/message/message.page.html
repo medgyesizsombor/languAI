@@ -25,8 +25,7 @@
 </ion-content>
 
 <ion-footer>
-  @if (chatForm) {
-    <form [formGroup]="chatForm">
+    <form *ngIf="chatForm" [formGroup]="chatForm">
       <div>
         <ion-row
           class="input-row ion-padding-horizontal ion-justify-content-between">
@@ -48,5 +47,4 @@
         </ion-row>
       </div>
     </form>
-  }
 </ion-footer>

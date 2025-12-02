@@ -6,16 +6,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { MessageViewModel } from '../../models/message-view-model';
 
 export interface SendMessageToChatGpt$Plain$Params {
-      body?: MessageViewModel
+  message?: string;
 }
 
-export function sendMessageToChatGpt$Plain(http: HttpClient, rootUrl: string, params?: SendMessageToChatGpt$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<MessageViewModel>> {
+export function sendMessageToChatGpt$Plain(http: HttpClient, rootUrl: string, params?: SendMessageToChatGpt$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
   const rb = new RequestBuilder(rootUrl, sendMessageToChatGpt$Plain.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.query('message', params.message, {});
   }
 
   return http.request(
@@ -23,9 +22,9 @@ export function sendMessageToChatGpt$Plain(http: HttpClient, rootUrl: string, pa
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<MessageViewModel>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }
 
-sendMessageToChatGpt$Plain.PATH = '/ChatGPT/SendMessageToChatGPT';
+sendMessageToChatGpt$Plain.PATH = '/Message/SendMessageToChatGPT';
