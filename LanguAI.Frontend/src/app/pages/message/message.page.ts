@@ -177,7 +177,7 @@ export class MessagePage {
   private async sendMessageToChatGPT() {
     if (this.isValid) {
       await this.loadingService.showLoading(
-        this.translateService.instant('SENDING_MESSAGE')
+        this.translateService.instant('SENDING_MESSAGE_IN_PROGRESS')
       );
 
       this.sendMessageSub = this.messageService
@@ -201,6 +201,8 @@ export class MessagePage {
             console.log(res);
             if (res) {
               this.messages = [...res];
+
+              this.scrollToBottom();
             } else {
               this.toastrService.presentErrorToast(
                 this.translateService.instant(
@@ -208,6 +210,7 @@ export class MessagePage {
                 )
               );
             }
+
             this.loadingService.hideLoading();
           },
           error: () => {
@@ -220,10 +223,7 @@ export class MessagePage {
             };
 
             this.messages.push({ ...newMessage });
-            setTimeout(() => {
-              this.chatForm?.controls['message'].patchValue(null);
-              this.content?.scrollToBottom();
-            }, 200);
+
             this.loadingService.hideLoading();
             this.toastrService.presentErrorToast(
               this.translateService.instant('UNSUCCESSFUL_SENDING')
@@ -233,9 +233,16 @@ export class MessagePage {
     }
   }
 
+  private scrollToBottom() {
+    setTimeout(() => {
+      this.chatForm?.controls['message'].patchValue(null);
+      this.content?.scrollToBottom();
+    }, 200);
+  }
+
   private async sendMessageToUser(again = false, message?: MessageViewModel) {
     await this.loadingService.showLoading(
-      this.translateService.instant('SENDING_MESSAGE')
+      this.translateService.instant('SENDING_MESSAGE_IN_PROGRESS')
     );
     let newMessage: MessageViewModel;
     if (again) {
@@ -277,10 +284,8 @@ export class MessagePage {
               }
             } else {
               this.messages.push({ ...newMessage });
-              setTimeout(() => {
-                this.content?.scrollToBottom();
-              }, 200);
-              this.chatForm?.controls['message'].patchValue(null);
+
+              this.scrollToBottom();
             }
             this.loadingService.hideLoading();
 
@@ -298,44 +303,19 @@ export class MessagePage {
             this.loadingService.hideLoading();
             return EMPTY;
           }
-        }),
-        switchMap((res: Array<MessageViewModel>) => {
-          this.messages = [...res];
-          setTimeout(() => {
-            this.content?.scrollToBottom();
-          }, 1000);
-          this.loadingService.hideLoading();
-
-          if (this.isChatGPT) {
-            return this.chatGPTService.receiveMessageFromChatGpt$Json({});
-          }
-          return EMPTY;
         })
       )
       .subscribe({
-        next: (res: MessageViewModel) => {
-          if (res) {
-            this.messages.push({ ...res });
-          } else {
-            this.toastrService.presentErrorToast(
-              this.translateService.instant(
-                'ERROR_RECEIVING_MESSAGE_FROM_CHATGPT'
-              )
-            );
-          }
+        next: res => {
+          this.messages = [...res];
+
+          this.scrollToBottom();
           this.loadingService.hideLoading();
         },
         error: () => {
-          newMessage.status = MessageStatusEnum.Unsent;
-          this.messages.push({ ...newMessage });
-          newMessage.sentAt = new Date().toDateString();
-          setTimeout(() => {
-            this.chatForm?.controls['message'].patchValue(null);
-            this.content?.scrollToBottom();
-          }, 200);
           this.loadingService.hideLoading();
           this.toastrService.presentErrorToast(
-            this.translateService.instant('UNSUCCESSFUL_SENDING')
+            this.translateService.instant('ERROR_LOADING_NEW_MESSAGES')
           );
         }
       });

@@ -29,23 +29,6 @@ public class ChatGPTController : ControllerBase
         _topicService = topicService;
     }
 
-    /// <summary>
-    /// Get all the post
-    /// </summary>
-    /// <returns></returns>
-    //[HttpPost(Name = "SendRequestToChatGPTAsync")]
-    //public async Task<ActionResult<ChatMessage>> SendRequestToChatGPTAsync(string message)
-    //{
-    //    try
-    //    {
-    //        return await _chatGPTService.SendRequestToChatGPTAsync(message);
-    //    }
-    //    catch (Exception)
-    //    {
-    //        return null;
-    //    }
-    //}
-
     //TODO: REFAKT Exception
     /// <summary>
     /// Receive message from chatGPT
