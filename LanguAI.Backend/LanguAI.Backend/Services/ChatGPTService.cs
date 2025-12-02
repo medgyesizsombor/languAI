@@ -16,6 +16,7 @@ public interface IChatGPTService
     Task<List<ExerciseViewModel>> ReceiveExercisesFromChatGPT(ExerciseRequestViewModel request, string learningWords, string nativeWords);
     Task<string> GetPostCorrectionFromChatGPT(string text);
     Task<string> GetPostPhrasing(string about);
+    void CreateThreadId(int currentUserId);
 }
 
 public class ChatGPTService : BaseService, IChatGPTService
@@ -37,7 +38,7 @@ public class ChatGPTService : BaseService, IChatGPTService
         var topic = _context.Topic.FirstOrDefault(t => t.Id == topicId);
 
         ArgumentNullException.ThrowIfNull(topic);
- 
+
         List<CardViewModel> cards = new();
         var nativeWordsOfExistingCards = existingCards.Select(c => c.WordInNativeLanguage).ToList();
 
@@ -447,5 +448,31 @@ public class ChatGPTService : BaseService, IChatGPTService
         {
             throw new Exception(e.Message);
         }
+    }
+
+    public void CreateThreadId(int currentUserId)
+    {
+#pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        try
+        {
+            var assistantClient = new OpenAI.Assistants.AssistantClient(EnvironmentSettings.ChatGPTApiKey);
+
+            var threadId = assistantClient.CreateThread();
+
+            var user = _context.User.FirstOrDefault(u => u.Id == currentUserId);
+
+            if (user is null) throw new Exception();
+
+            if (user.ThreadId is not null) return;
+
+            user.ThreadId = threadId.Value?.Id;
+
+            _context.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+#pragma warning restore OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 }

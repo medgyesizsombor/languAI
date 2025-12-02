@@ -18,6 +18,10 @@ import { sendMessage$Json } from '../fn/message/send-message-json';
 import { SendMessage$Json$Params } from '../fn/message/send-message-json';
 import { sendMessage$Plain } from '../fn/message/send-message-plain';
 import { SendMessage$Plain$Params } from '../fn/message/send-message-plain';
+import { sendMessageToChatGpt$Json } from '../fn/message/send-message-to-chat-gpt-json';
+import { SendMessageToChatGpt$Json$Params } from '../fn/message/send-message-to-chat-gpt-json';
+import { sendMessageToChatGpt$Plain } from '../fn/message/send-message-to-chat-gpt-plain';
+import { SendMessageToChatGpt$Plain$Params } from '../fn/message/send-message-to-chat-gpt-plain';
 
 @Injectable({ providedIn: 'root' })
 export class MessageService extends BaseService {
@@ -116,6 +120,53 @@ export class MessageService extends BaseService {
   getMessageListByUserId$Json(params?: GetMessageListByUserId$Json$Params, context?: HttpContext): Observable<Array<MessageViewModel>> {
     return this.getMessageListByUserId$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<MessageViewModel>>): Array<MessageViewModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `sendMessageToChatGpt()` */
+  static readonly SendMessageToChatGptPath = '/Message/SendMessageToChatGPT';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendMessageToChatGpt$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendMessageToChatGpt$Plain$Response(params?: SendMessageToChatGpt$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return sendMessageToChatGpt$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `sendMessageToChatGpt$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendMessageToChatGpt$Plain(params?: SendMessageToChatGpt$Plain$Params, context?: HttpContext): Observable<string> {
+    return this.sendMessageToChatGpt$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendMessageToChatGpt$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendMessageToChatGpt$Json$Response(params?: SendMessageToChatGpt$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return sendMessageToChatGpt$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `sendMessageToChatGpt$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendMessageToChatGpt$Json(params?: SendMessageToChatGpt$Json$Params, context?: HttpContext): Observable<string> {
+    return this.sendMessageToChatGpt$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 

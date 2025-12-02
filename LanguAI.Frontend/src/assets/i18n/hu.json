@@ -371,5 +371,7 @@
   "MISSED": "Elrontott",
   "SUCCES": "Helyes",
   "UNSUCCESSFUL_LOADING_USERS_DATA": "Nem sikerült az adatok betöltése",
-  "ERROR_HAPPENED_DURING_EXP_COUNTING": "Hiba történt a tapasztalatpont számítása közben"
+  "ERROR_HAPPENED_DURING_EXP_COUNTING": "Hiba történt a tapasztalatpont számítása közben",
+  "SENDING_MESSAGE_IN_PROGRESS": "Üzenet küldés folyamatban...",
+  "ERROR_LOADING_NEW_MESSAGES": "Hiba az új üzenetek betöltése közben"
 }

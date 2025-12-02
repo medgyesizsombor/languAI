@@ -30,6 +30,8 @@ public class User
     [ForeignKey(nameof(ImageId))]
     public virtual Image Image { get; set; }
 
+    public string ThreadId { get; set; }
+
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual ICollection<CardList> CardLists { get; set; } = new List<CardList>();

@@ -52,6 +52,7 @@ export class MessagePage {
     await this.loadingService.showLoading();
     this.createForm();
     this.userId = this.localStorageService.getUserId();
+    console.log(this.chatForm);
     this.loadMessages();
   }
 
@@ -66,111 +67,11 @@ export class MessagePage {
    */
   async sendMessage(again = false, message?: MessageViewModel) {
     if (this.isValid) {
-      await this.loadingService.showLoading(
-        this.translateService.instant('SENDING_MESSAGE')
-      );
-      let newMessage: MessageViewModel;
-      if (again) {
-        if (message) {
-          newMessage = { ...message, status: MessageStatusEnum.Sent };
-        } else {
-          this.loadingService.hideLoading();
-          this.toastrService.presentErrorToast(
-            this.translateService.instant('UNSUCCESSFUL_SENDING')
-          );
-          return;
-        }
+      if (this.isChatGPT) {
+        await this.sendMessageToChatGPT();
       } else {
-        newMessage = {
-          recipientId: this.otherUser?.id,
-          senderId: this.userId!,
-          status: this.isChatGPT
-            ? MessageStatusEnum.Read
-            : MessageStatusEnum.Sent,
-          text: again ? message?.text : this.chatForm?.controls['message'].value
-        };
+        await this.sendMessageToUser(again, message);
       }
-      this.sendMessageSub = this.messageService
-        .sendMessage$Json({
-          body: { ...newMessage }
-        })
-        .pipe(
-          switchMap((success: boolean) => {
-            if (success) {
-              if (again) {
-                const sentMessageIndex = this.messages.findIndex(
-                  m => m.sentAt === message?.sentAt
-                );
-                if (sentMessageIndex) {
-                  this.messages[sentMessageIndex] = {
-                    ...this.messages[sentMessageIndex],
-                    status: MessageStatusEnum.Sent
-                  };
-                }
-              } else {
-                this.messages.push({ ...newMessage });
-                setTimeout(() => {
-                  this.content?.scrollToBottom();
-                }, 200);
-                this.chatForm?.controls['message'].patchValue(null);
-              }
-              this.loadingService.hideLoading();
-
-              return this.messageService.getMessageListByUserId$Json({
-                friendId: this.otherUser?.id
-              });
-            } else {
-              newMessage.status = MessageStatusEnum.Unsent;
-              this.messages.push({ ...newMessage });
-              this.loadingService.hideLoading();
-              this.toastrService.presentErrorToast(
-                this.translateService.instant('ERROR_SENDING_MESSAGE')
-              );
-
-              this.loadingService.hideLoading();
-              return EMPTY;
-            }
-          }),
-          switchMap((res: Array<MessageViewModel>) => {
-            this.messages = [...res];
-            setTimeout(() => {
-              this.content?.scrollToBottom();
-            }, 1000);
-            this.loadingService.hideLoading();
-
-            if (this.isChatGPT) {
-              return this.chatGPTService.receiveMessageFromChatGpt$Json({});
-            }
-            return EMPTY;
-          })
-        )
-        .subscribe({
-          next: (res: MessageViewModel) => {
-            if (res) {
-              this.messages.push({ ...res });
-            } else {
-              this.toastrService.presentErrorToast(
-                this.translateService.instant(
-                  'ERROR_RECEIVING_MESSAGE_FROM_CHATGPT'
-                )
-              );
-            }
-            this.loadingService.hideLoading();
-          },
-          error: () => {
-            newMessage.status = MessageStatusEnum.Unsent;
-            this.messages.push({ ...newMessage });
-            newMessage.sentAt = new Date().toDateString();
-            setTimeout(() => {
-              this.chatForm?.controls['message'].patchValue(null);
-              this.content?.scrollToBottom();
-            }, 200);
-            this.loadingService.hideLoading();
-            this.toastrService.presentErrorToast(
-              this.translateService.instant('UNSUCCESSFUL_SENDING')
-            );
-          }
-        });
     } else {
       this.toastrService.presentErrorToast(
         this.translateService.instant('THIS_MESSAGE_DOESNT_CONTAIN_TEXT')
@@ -252,6 +153,7 @@ export class MessagePage {
       .subscribe({
         next: (res: Array<MessageViewModel>) => {
           this.messages = [...res];
+          console.log(res);
           this.loadingService.hideLoading();
 
           // Settimeout is needed!
@@ -263,6 +165,157 @@ export class MessagePage {
           this.loadingService.hideLoading();
           this.toastrService.presentErrorToast(
             this.translateService.instant('ERROR_LOADING_CHAT')
+          );
+        }
+      });
+  }
+
+  /**
+   * Send message
+   * If the other user is ChatGPT, then asking for response too
+   */
+  private async sendMessageToChatGPT() {
+    if (this.isValid) {
+      await this.loadingService.showLoading(
+        this.translateService.instant('SENDING_MESSAGE_IN_PROGRESS')
+      );
+
+      this.sendMessageSub = this.messageService
+        .sendMessageToChatGpt$Json({
+          message: this.chatForm?.controls['message'].value
+        })
+        .pipe(
+          switchMap((response: string) => {
+            console.log(response);
+            if (response?.length) {
+              return this.messageService.getMessageListByUserId$Json({
+                friendId: this.otherUser?.id
+              });
+            } else {
+              return EMPTY;
+            }
+          })
+        )
+        .subscribe({
+          next: (res: Array<MessageViewModel>) => {
+            console.log(res);
+            if (res) {
+              this.messages = [...res];
+
+              this.scrollToBottom();
+            } else {
+              this.toastrService.presentErrorToast(
+                this.translateService.instant(
+                  'ERROR_RECEIVING_MESSAGE_FROM_CHATGPT'
+                )
+              );
+            }
+
+            this.loadingService.hideLoading();
+          },
+          error: () => {
+            const newMessage: MessageViewModel = {
+              recipientId: this.otherUser?.id,
+              senderId: this.userId!,
+              status: MessageStatusEnum.Unsent,
+              text: this.chatForm?.controls['message'].value,
+              sentAt: new Date().toDateString()
+            };
+
+            this.messages.push({ ...newMessage });
+
+            this.loadingService.hideLoading();
+            this.toastrService.presentErrorToast(
+              this.translateService.instant('UNSUCCESSFUL_SENDING')
+            );
+          }
+        });
+    }
+  }
+
+  private scrollToBottom() {
+    setTimeout(() => {
+      this.chatForm?.controls['message'].patchValue(null);
+      this.content?.scrollToBottom();
+    }, 200);
+  }
+
+  private async sendMessageToUser(again = false, message?: MessageViewModel) {
+    await this.loadingService.showLoading(
+      this.translateService.instant('SENDING_MESSAGE_IN_PROGRESS')
+    );
+    let newMessage: MessageViewModel;
+    if (again) {
+      if (message) {
+        newMessage = { ...message, status: MessageStatusEnum.Sent };
+      } else {
+        this.loadingService.hideLoading();
+        this.toastrService.presentErrorToast(
+          this.translateService.instant('UNSUCCESSFUL_SENDING')
+        );
+        return;
+      }
+    } else {
+      newMessage = {
+        recipientId: this.otherUser?.id,
+        senderId: this.userId!,
+        status: this.isChatGPT
+          ? MessageStatusEnum.Read
+          : MessageStatusEnum.Sent,
+        text: again ? message?.text : this.chatForm?.controls['message'].value
+      };
+    }
+    this.sendMessageSub = this.messageService
+      .sendMessage$Json({
+        body: { ...newMessage }
+      })
+      .pipe(
+        switchMap((success: boolean) => {
+          if (success) {
+            if (again) {
+              const sentMessageIndex = this.messages.findIndex(
+                m => m.sentAt === message?.sentAt
+              );
+              if (sentMessageIndex) {
+                this.messages[sentMessageIndex] = {
+                  ...this.messages[sentMessageIndex],
+                  status: MessageStatusEnum.Sent
+                };
+              }
+            } else {
+              this.messages.push({ ...newMessage });
+
+              this.scrollToBottom();
+            }
+            this.loadingService.hideLoading();
+
+            return this.messageService.getMessageListByUserId$Json({
+              friendId: this.otherUser?.id
+            });
+          } else {
+            newMessage.status = MessageStatusEnum.Unsent;
+            this.messages.push({ ...newMessage });
+            this.loadingService.hideLoading();
+            this.toastrService.presentErrorToast(
+              this.translateService.instant('ERROR_SENDING_MESSAGE')
+            );
+
+            this.loadingService.hideLoading();
+            return EMPTY;
+          }
+        })
+      )
+      .subscribe({
+        next: res => {
+          this.messages = [...res];
+
+          this.scrollToBottom();
+          this.loadingService.hideLoading();
+        },
+        error: () => {
+          this.loadingService.hideLoading();
+          this.toastrService.presentErrorToast(
+            this.translateService.instant('ERROR_LOADING_NEW_MESSAGES')
           );
         }
       });

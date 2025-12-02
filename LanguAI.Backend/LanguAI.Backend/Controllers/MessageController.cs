@@ -1,6 +1,5 @@
 ﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Message;
-using LanguAI.Backend.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LanguAI.Backend.Controllers;
@@ -43,5 +42,38 @@ public class MessageController : ControllerBase
         ArgumentNullException.ThrowIfNull(currentUserId);
 
         return Ok(_messageService.GetMessageListByUserId((int)currentUserId, friendId));
+    }
+
+    /// <summary>
+    /// Send message to ChatGPT
+    /// </summary>
+    /// <param name="message">Message request</param>
+    /// <returns></returns>
+    [HttpPost(Name = "SendMessageToChatGPT")]
+    public async Task<ActionResult<string>> SendMessageToChatGPT(string message)
+    {
+        var currentUserId = _authenticationService.GetCurrentUserId(HttpContext);
+        
+        if (!currentUserId.HasValue) throw new ArgumentNullException(nameof(currentUserId));
+
+        ArgumentNullException.ThrowIfNull(message);
+
+        if (string.IsNullOrEmpty(message))
+        {
+            throw new ArgumentNullException();
+        }
+
+        try
+        {
+            var response = await _messageService.SendMessageToChatGpt((int)currentUserId, message);
+
+            if (string.IsNullOrEmpty(response)) throw new Exception("Didn't get response from ChatGPT");
+
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }
