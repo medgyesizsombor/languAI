@@ -1,40 +1,38 @@
 <app-header [title]="'NEW_MESSAGE' | translate"></app-header>
 
 <ion-content class="ion-padding">
-  @if (newMessageForm) {
-    <form [formGroup]="newMessageForm">
-      <ion-card class="ion-padding">
-        <ion-select
-          cancelText="{{ 'CANCEL' | translate }}"
-          class="ion-margin-bottom"
-          formControlName="userId"
-          [label]="'USERNAME' | translate"
-          label-placement="stacked"
-          placeholder="{{ 'SELECT_A_FRIEND' | translate }}">
-          @for (friend of friendList; track friend) {
-            <ion-select-option
-              [value]="friend.userId">
-              {{ friend.username }}
-            </ion-select-option>
-          }
-        </ion-select>
-        <ion-row class="ion-margin-bottom w-100">
-          <ion-button
-            mode="md"
-            class="primary-button no-shadow w-100"
-            (click)="confirm()">
-            {{ 'CONFIRM' | translate }}
-          </ion-button>
-        </ion-row>
-        <ion-row class="w-100">
-          <ion-button
-            mode="md"
-            class="error-outline-button w-100"
-            (click)="cancel()">
-            {{ 'CANCEL' | translate }}
-          </ion-button>
-        </ion-row>
-      </ion-card>
-    </form>
-  }
+  <form *ngIf="newMessageForm" [formGroup]="newMessageForm">
+    <ion-card class="ion-padding">
+      <ion-select
+        cancelText="{{ 'CANCEL' | translate }}"
+        class="ion-margin-bottom"
+        formControlName="userId"
+        [label]="'USERNAME' | translate"
+        label-placement="stacked"
+        placeholder="{{ 'SELECT_A_FRIEND' | translate }}">
+        <ion-select-option
+          *ngFor="let friend of friendList"
+          [value]="friend.userId">
+          {{ friend.username }}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-row class="ion-margin-bottom w-100">
+        <ion-button
+          mode="md"
+          class="primary-button no-shadow w-100"
+          (click)="confirm()">
+          {{ 'CONFIRM' | translate }}
+        </ion-button>
+      </ion-row>
+      <ion-row class="w-100">
+        <ion-button
+          mode="md"
+          class="error-outline-button w-100"
+          (click)="cancel()">
+          {{ 'CANCEL' | translate }}
+        </ion-button>
+      </ion-row>
+    </ion-card>
+  </form>
 </ion-content>

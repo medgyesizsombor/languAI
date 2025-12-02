@@ -1,54 +1,53 @@
-@if (comment) {
-  <ion-card class="w-100">
-    <ion-card-header>
-      <ion-row class="d-flex ion-align-items-center avatar-row underline">
-        <ion-col class="d-flex ion-align-items-center">
-          <app-avatar
-            [heightInPx]="40"
-            [widthInPx]="40"
+<ion-card *ngIf="comment" class="w-100">
+  <ion-card-header>
+    <ion-row class="d-flex ion-align-items-center avatar-row underline">
+      <ion-col class="d-flex ion-align-items-center">
+        <app-avatar
+          [heightInPx]="40"
+          [widthInPx]="40"
           [imageSrc]="
             fileService.getImageSrc(
               comment.user?.profilePicture?.contentAsString,
               comment.user?.profilePicture?.type
             )
           "></app-avatar>
-          <ion-label class="fs-16">{{ comment.user?.username }}</ion-label>
-        </ion-col>
-        @if (comment.userId === userId) {
-          <ion-col
-            size="auto"
-            class="d-flex ion-align-items-center fs-20">
-            <ion-icon
-              class="trash-icon"
-              name="trash-outline"
-            (click)="delete()"></ion-icon>
-          </ion-col>
-        }
-      </ion-row>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-row>
-        <ion-label class="mt-2 mb-2 fs-16">{{ comment.text }}</ion-label>
-      </ion-row>
-      <ion-row class="d-flex ion-justify-content-end underline">
-        <ion-label class="fs-11">
-          {{ comment.created | date : 'YYYY. MM. dd HH:mm' }}
+        <ion-label class="fs-16">
+          {{ comment.user?.username }}
         </ion-label>
-      </ion-row>
-      <ion-row class="mt-3">
-        <div
-          [ngClass]="{ 'liked-chip': comment.liked }"
-          class="action-button d-flex align-item-center me-2 fs-16"
-          (click)="like()">
-          <span class="me-1">{{ comment.numberOfLikes }}</span>
-          @if (!comment.liked) {
-            <ion-icon name="heart-outline"></ion-icon>
-          }
-          @else {
-            <ion-icon name="heart"></ion-icon>
-          }
-        </div>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-}
+      </ion-col>
+      <ion-col
+        size="auto"
+        *ngIf="comment.userId === userId"
+        class="d-flex ion-align-items-center fs-20">
+        <ion-icon
+          class="trash-icon"
+          name="trash-outline"
+          (click)="delete()"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-row>
+      <ion-label class="mt-2 mb-2 fs-16">
+        {{ comment.text }}
+      </ion-label>
+    </ion-row>
+
+    <ion-row class="d-flex ion-justify-content-end underline">
+      <ion-label class="fs-11">
+        {{ comment.created | date : 'YYYY. MM. dd HH:mm' }}
+      </ion-label>
+    </ion-row>
+    <ion-row class="mt-3">
+      <div
+        [ngClass]="{ 'liked-chip': comment.liked }"
+        class="action-button d-flex align-item-center me-2 fs-16"
+        (click)="like()">
+        <span class="me-1">{{ comment.numberOfLikes }}</span>
+        <ion-icon *ngIf="!comment.liked" name="heart-outline"></ion-icon>
+        <ion-icon *ngIf="comment.liked" name="heart"></ion-icon>
+      </div>
+    </ion-row>
+  </ion-card-content>
+</ion-card>

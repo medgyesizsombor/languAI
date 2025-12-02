@@ -21,18 +21,18 @@
     </ion-label>
   </ion-row>
   <div #container>
-    @for (
-      sentence of exercise?.isCorrectAndTextSentences; track
-      sentence; let index = $index) {
-      <ion-row
-        class="words-container ion-margin-bottom ion-text-center">
-        <ion-card
-          [ngStyle]="{ background: colors[index % colors.length] }"
-          class="word-card"
-          (click)="checkSentence(sentence)">
-          {{ sentence.text }}
-        </ion-card>
-      </ion-row>
-    }
+    <ion-row
+      *ngFor="
+        let sentence of exercise?.isCorrectAndTextSentences;
+        let index = index
+      "
+      class="words-container ion-margin-bottom ion-text-center">
+      <ion-card
+        [ngStyle]="{ background: colors[index % colors.length] }"
+        class="word-card"
+        (click)="checkSentence(sentence)">
+        {{ sentence.text }}
+      </ion-card>
+    </ion-row>
   </div>
 </div>

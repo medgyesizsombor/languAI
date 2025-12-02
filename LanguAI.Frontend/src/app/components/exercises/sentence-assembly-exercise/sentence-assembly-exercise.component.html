@@ -8,34 +8,33 @@
     <ion-row class="ion-margin-bottom">
       <ion-card class="ion-padding h-250px w-100">
         <div class="d-flex ion-align-items-start ion-wrap">
-          @for (word of clickedWords; track word; let index = $index) {
-            <ion-card
-              mode="md"
-              [ngStyle]="{ background: colors[index % colors.length] }"
-              class="word-cards no-shadow dark-background m-1"
-              (click)="putWord(index, true)">
-              <ion-card-content class="ion-no-padding" mode="md">
-                {{ word.text }}
-              </ion-card-content>
-            </ion-card>
-          }
+          <ion-card
+            mode="md"
+            [ngStyle]="{ background: colors[index % colors.length] }"
+            class="word-cards no-shadow dark-background m-1"
+            *ngFor="let word of clickedWords; let index = index"
+            (click)="putWord(index, true)">
+            <ion-card-content class="ion-no-padding" mode="md">
+              {{ word.text }}
+            </ion-card-content>
+          </ion-card>
         </div>
       </ion-card>
     </ion-row>
     <ion-row
       class="d-flex ion-align-items-center ion-justify-content-center word-cards-row">
-      @for (
-        word of exercise?.sentenceAssemblyExerciseSentence; track
-        word; let index = $index) {
-        <ion-card
-          class="word-cards m-1"
-          [disabled]="word.clicked"
-          (click)="putWord(index)">
-          <span [ngClass]="{ invisible: word.clicked }">
-            {{ word.text }}
-          </span>
-        </ion-card>
-      }
+      <ion-card
+        class="word-cards m-1"
+        [disabled]="word.clicked"
+        *ngFor="
+          let word of exercise?.sentenceAssemblyExerciseSentence;
+          let index = index
+        "
+        (click)="putWord(index)">
+        <span [ngClass]="{ invisible: word.clicked }">
+          {{ word.text }}
+        </span>
+      </ion-card>
     </ion-row>
     <ion-row class="d-flex ion-align-items-center ion-justify-content-center">
       <ion-button

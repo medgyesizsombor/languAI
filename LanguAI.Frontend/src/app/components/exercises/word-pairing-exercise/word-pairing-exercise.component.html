@@ -4,36 +4,34 @@
   </ion-label>
 </ion-row>
 <div #container>
-  @for (word of originalWords; track word; let index = $index) {
-    <ion-row size="6">
-      <ion-col class="d-flex ion-justify-content-center">
-        <ion-card
+  <ion-row size="6" *ngFor="let word of originalWords; let index = index">
+    <ion-col class="d-flex ion-justify-content-center">
+      <ion-card
         [ngStyle]="{
           background: leftColors[index % leftColors.length],
           'box-shadow': nativeWords[index].paired ? 'none' : null
         }"
-          class="word-card"
-          [ngClass]="{ clicked: clickedWord?.text === word.wordInNativeLanguage }"
-          [disabled]="nativeWords[index].paired"
-          (click)="wordClicked(nativeWords[index])">
-          {{ nativeWords[index].text }}
-        </ion-card>
-      </ion-col>
-      <ion-col class="d-flex ion-justify-content-center">
-        <ion-card
+        class="word-card"
+        [ngClass]="{ clicked: clickedWord?.text === word.wordInNativeLanguage }"
+        [disabled]="nativeWords[index].paired"
+        (click)="wordClicked(nativeWords[index])">
+        {{ nativeWords[index].text }}
+      </ion-card>
+    </ion-col>
+    <ion-col class="d-flex ion-justify-content-center">
+      <ion-card
         [ngStyle]="{
           background: rigthColors[index % rigthColors.length],
           'box-shadow': learningWords[index].paired ? 'none' : null
         }"
-          class="word-card"
+        class="word-card"
         [ngClass]="{
           clicked: clickedWord?.text === learningWords[index].text
         }"
-          [disabled]="learningWords[index].paired"
-          (click)="wordClicked(learningWords[index])">
-          {{ learningWords[index].text }}
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  }
+        [disabled]="learningWords[index].paired"
+        (click)="wordClicked(learningWords[index])">
+        {{ learningWords[index].text }}
+      </ion-card>
+    </ion-col>
+  </ion-row>
 </div>

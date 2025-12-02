@@ -2,84 +2,84 @@
   <h1 class="ion-text-center">LanguAI</h1>
   <ion-img
     class="ion-padding-bottom"
-  src="../../../assets/icon/small_logo.png"></ion-img>
-  @if (registerForm) {
-    <form [formGroup]="registerForm">
-      <ion-card class="ion-padding-bottom">
-        <ion-row class="ion-padding-top">
-          <ion-col class="ion-margin-horizontal">
-            <ion-input
-              mode="md"
-              type="text"
-              formControlName="username"
+    src="../../../assets/icon/small_logo.png"></ion-img>
+  <form *ngIf="registerForm" [formGroup]="registerForm">
+    <ion-card class="ion-padding-bottom">
+      <ion-row class="ion-padding-top">
+        <ion-col class="ion-margin-horizontal">
+          <ion-input
+            mode="md"
+            type="text"
+            formControlName="username"
             placeholder="{{ 'USERNAME' | translate}}"></ion-input>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="ion-margin-horizontal">
-            <ion-input
-              mode="md"
-              type="email"
-              formControlName="email"
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-margin-horizontal">
+          <ion-input
+            mode="md"
+            type="email"
+            formControlName="email"
             placeholder="{{ 'EMAIL' | translate}}"></ion-input>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col
-            class="d-flex ion-justify-content-start ion-margin-horizontal datetime-button-col"
-            id="open-modal">
-            <ion-datetime-button datetime="datetime"></ion-datetime-button>
-            <ion-modal [keepContentsMounted]="true">
-              <ng-template>
-                <ion-datetime
-                  mode="md"
-                  presentation="date"
-                  formControlName="dateOfBirth"
-                  id="datetime"
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col
+          class="d-flex ion-justify-content-start ion-margin-horizontal datetime-button-col"
+          id="open-modal">
+          <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                mode="md"
+                presentation="date"
+                formControlName="dateOfBirth"
+                id="datetime"
                 [max]="today"></ion-datetime>
-              </ng-template>
-            </ion-modal>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="ion-margin-horizontal">
-            <ion-input
-              mode="md"
-              type="password"
-              formControlName="password"
+            </ng-template>
+          </ion-modal>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-margin-horizontal">
+          <ion-input
+            mode="md"
+            type="password"
+            formControlName="password"
             placeholder="{{ 'PASSWORD' | translate}}"></ion-input>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="ion-margin-horizontal">
-            <ion-input
-              mode="md"
-              type="password"
-              formControlName="confirmPassword"
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-margin-horizontal">
+          <ion-input
+            mode="md"
+            type="password"
+            formControlName="confirmPassword"
             placeholder="{{ 'CONFIRM_PASSWORD' | translate}}"></ion-input>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="sign-up-button-col">
-            <ion-button
-              mode="md"
-              class="ion-padding-horizontal primary-button w-100 no-shadow"
-              (click)="register()">
-              {{ 'SIGN_UP' | translate }}
-            </ion-button>
-          </ion-col>
-        </ion-row>
-        <ion-row class="ion-text-center">
-          <ion-col class="text-col">
-            <ion-label mode="md">
-              {{ 'IF_YOU_HAVE_ACCOUNT_SIGN_IN' | translate }}
-            </ion-label>
-            <ion-label [routerLink]="['/login']" class="line" mode="md">
-              {{ 'HERE' | translate}}
-            </ion-label>
-          </ion-col>
-        </ion-row>
-      </ion-card>
-    </form>
-  }
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="sign-up-button-col">
+          <ion-button
+            mode="md"
+            class="ion-padding-horizontal primary-button w-100 no-shadow"
+            (click)="register()">
+            {{ 'SIGN_UP' | translate }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-text-center">
+        <ion-col class="text-col">
+          <ion-label mode="md">
+            {{ 'IF_YOU_HAVE_ACCOUNT_SIGN_IN' | translate }}
+          </ion-label>
+          <ion-label [routerLink]="['/login']" class="line" mode="md">
+            {{ 'HERE' | translate}}
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </form>
 </ion-content>
