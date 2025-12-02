@@ -2,40 +2,39 @@
   [showAddButton]="true"
   [title]="title"
   (addButtonEmit)="navigateToPost()"
-[subtitle]="('FORUM_SUBTITLE' | translate)"></app-header>
+  [subtitle]="('FORUM_SUBTITLE' | translate)"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-  @if (!isLoading) {
-    @if (posts.length) {
-      @for (post of posts; track post) {
-        <ion-row class="card-row ion-padding-bottom">
-          <app-post-component
-            class="w-100"
-            [post]="post"
-            [navigate]="true"
-            (likeButtonEmit)="like($event)"
-            (navigateButtonEmit)="navigateToPost($event)"
-            (editButtonEmit)="editPost($event)"
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="posts.length; else missingPosts">
+      <ion-row *ngFor="let post of posts" class="card-row ion-padding-bottom">
+        <app-post-component
+          class="w-100"
+          [post]="post"
+          [navigate]="true"
+          (likeButtonEmit)="like($event)"
+          (navigateButtonEmit)="navigateToPost($event)"
+          (editButtonEmit)="editPost($event)"
           (removeButtonEmit)="removePost($event)"></app-post-component>
-        </ion-row>
-      }
-    } @else {
-      <div class="w-100">
-        <p class="ion-no-margin ion-padding-bottom ion-text-center">
-          {{ 'MISSING_POSTS' | translate }}
-        </p>
-        <p class="ion-no-margin ion-padding-bottom ion-text-center">
-          {{ 'IF_YOU_WOULD_LIKE_TO_SEE_MORE_POSTS_SEARCH_FOR_FRIEND' | translate }}
-        </p>
-        <div class="ion-text-center">
-          <ion-button mode="md" class="primary-button" (click)="searchForFriend()">
-            <ion-icon name="search-outline"></ion-icon>
-            {{ 'DISCOVER_FRIENDS' | translate }}
-          </ion-button>
-        </div>
-      </div>
-    }
-  }
+      </ion-row>
+    </ng-container>
+  </ng-container>
 </ion-content>
 
 <app-footer></app-footer>
 
+<ng-template #missingPosts>
+  <div class="w-100">
+    <p class="ion-no-margin ion-padding-bottom ion-text-center">
+      {{ 'MISSING_POSTS' | translate }}
+    </p>
+    <p class="ion-no-margin ion-padding-bottom ion-text-center">
+      {{ 'IF_YOU_WOULD_LIKE_TO_SEE_MORE_POSTS_SEARCH_FOR_FRIEND' | translate }}
+    </p>
+    <div class="ion-text-center">
+      <ion-button mode="md" class="primary-button" (click)="searchForFriend()">
+        <ion-icon name="search-outline"></ion-icon>
+        {{ 'DISCOVER_FRIENDS' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ng-template>

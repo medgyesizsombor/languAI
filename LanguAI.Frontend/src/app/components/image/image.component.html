@@ -1,3 +1,4 @@
-@if (imageSrc?.length) {
-  <ion-img [ngClass]="scssClass" [src]="imageSrc"></ion-img>
-}
+<ion-img
+  [ngClass]="scssClass"
+  *ngIf="imageSrc?.length"
+  [src]="imageSrc"></ion-img>

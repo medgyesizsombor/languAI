@@ -1,23 +1,20 @@
 <ion-content [fullscreen]="true" class="ion-padding">
-  @if (!showSummary) {
+  <ng-container *ngIf="!showSummary; else showSummaryTemplate">
     <app-progress-bar [progress]="progress"></app-progress-bar>
     <div class="main-container">
-      @for (card of cards; track card; let i = $index) {
-        <div class="container">
-          @if (i === currentCardIndex) {
-            <ion-card
-              [ngClass]="{ 'flipped': isFlipped }"
-              (click)="flipCard()">
-              <ion-card-content class="front">
-                {{ card?.wordInLearningLanguage }}
-              </ion-card-content>
-              <ion-card-content class="back">
-                {{ card?.wordInNativeLanguage }}
-              </ion-card-content>
-            </ion-card>
-          }
-        </div>
-      }
+      <div class="container" *ngFor="let card of cards; let i = index">
+        <ion-card
+          *ngIf="i === currentCardIndex"
+          [ngClass]="{ 'flipped': isFlipped }"
+          (click)="flipCard()">
+          <ion-card-content class="front">
+            {{ card?.wordInLearningLanguage }}
+          </ion-card-content>
+          <ion-card-content class="back">
+            {{ card?.wordInNativeLanguage }}
+          </ion-card-content>
+        </ion-card>
+      </div>
       <div class="button-container">
         <div class="buttons">
           <ion-button class="error-button" mode="md" (click)="setScore(false)">
@@ -29,10 +26,11 @@
         </div>
       </div>
     </div>
-  } @else {
-    <app-summary
-      [statistics]="statistics"
-    (navigateBackEmit)="navigateBack()"></app-summary>
-  }
+  </ng-container>
 </ion-content>
 
+<ng-template #showSummaryTemplate>
+  <app-summary
+    [statistics]="statistics"
+    (navigateBackEmit)="navigateBack()"></app-summary>
+</ng-template>
