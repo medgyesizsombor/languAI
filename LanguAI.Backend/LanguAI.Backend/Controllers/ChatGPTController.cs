@@ -1,5 +1,4 @@
-﻿using LanguAI.Backend.Core.Enums;
-using LanguAI.Backend.Services;
+﻿using LanguAI.Backend.Services;
 using LanguAI.Backend.ViewModels.Exercise;
 using LanguAI.Backend.ViewModels.Message;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,6 @@ public class ChatGPTController : ControllerBase
     private readonly IChatGPTService _chatGPTService;
     private readonly IAuthenticationService _authenticationService;
     private readonly IMessageService _messageService;
-    private readonly ILearningService _learningService;
     private readonly ICardService _cardService;
     private readonly ITopicService _topicService;
 

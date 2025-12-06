@@ -133,5 +133,33 @@ public partial class LanguAIDataContext : DbContext
             .WithOne(i => i.User)
             .HasForeignKey<User>(u => u.ImageId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<CardList>()
+            .Property(c => c.Access)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Friendship>()
+            .Property(f => f.Status)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Interaction>()
+            .Property(i => i.InteractionType)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Learning>()
+            .Property(l => l.LanguageLevel)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Message>()
+            .Property(m => m.Status)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Post>()
+            .Property(p => p.Access)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Topic>()
+            .Property(t => t.LanguageLevel)
+            .HasConversion<string>();
     }
 }
